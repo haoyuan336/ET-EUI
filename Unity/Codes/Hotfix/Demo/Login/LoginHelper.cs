@@ -1,5 +1,5 @@
 using System;
-
+using UnityEngine;
 
 namespace ET
 {
@@ -28,13 +28,19 @@ namespace ET
                 Session gateSession = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(r2CLogin.Address));
                 gateSession.AddComponent<PingComponent>();
                 zoneScene.AddComponent<SessionComponent>().Session = gateSession;
-				
-                G2C_LoginGate g2CLoginGate = (G2C_LoginGate)await gateSession.Call(
-                    new C2G_LoginGate() { Key = r2CLogin.Key, GateId = r2CLogin.GateId});
+
+                G2C_LoginGate g2CLoginGate = (G2C_LoginGate) await gateSession.Call(
+                    new C2G_LoginGate() { Key = r2CLogin.Key, GateId = r2CLogin.GateId });
 
                 Log.Debug("登陆gate成功!");
 
-                await Game.EventSystem.PublishAsync(new EventType.LoginFinish() {ZoneScene = zoneScene});
+                await Game.EventSystem.PublishAsync(new EventType.LoginFinish() { ZoneScene = zoneScene });
+
+                // M2C_TestActorLocationResponse m2CTestActorLocationResponse =
+                //         (M2C_TestActorLocationResponse) await gateSession.Call(
+                //             new C2M_TestActorLocationRequest() { Content = "11111111111111111111111" });
+                // Log.Debug("c2m_test actor location resquest" + m2CTestActorLocationResponse.Content);
+                // gateSession.Send(new C2M_TestActorLocationMessage() { Content = "3333333333333333333333" });
             }
             catch (Exception e)
             {
@@ -47,13 +53,18 @@ namespace ET
             try
             {
                 Session session = null;
+                R2C_LoginTest r2CLoginTest = null;
                 try
                 {
                     session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(address));
+                    r2CLoginTest = (R2C_LoginTest) await session.Call(new C2R_LoginTest() { Account = "", Password = "" });
+                    Log.Debug(r2CLoginTest.key);
+                    session.Send(new C2R_SayHello() { Hello = "Hello world!" });
+                    await TimerComponent.Instance.WaitAsync(2000);
                 }
                 finally
                 {
-                    
+                    session.Dispose();
                 }
             }
             catch (Exception e)
@@ -61,6 +72,7 @@ namespace ET
                 Log.Debug(e.ToString());
                 throw;
             }
+
             await ETTask.CompletedTask;
         }
     }

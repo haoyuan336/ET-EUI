@@ -1,6 +1,4 @@
-﻿using UnityEngine.PlayerLoop;
-
-namespace ET
+﻿namespace ET
 {
     public  class ComputerAwakeSystem: AwakeSystem<Computer>
     {

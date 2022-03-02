@@ -499,4 +499,111 @@ namespace ET
 
 	}
 
+	[ResponseType(nameof(R2C_LoginTest))]
+	[Message(OuterOpcode.C2R_LoginTest)]
+	[ProtoContract]
+	public partial class C2R_LoginTest: Object, IRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public string Account { get; set; }
+
+		[ProtoMember(2)]
+		public string Password { get; set; }
+
+	}
+
+	[Message(OuterOpcode.R2C_LoginTest)]
+	[ProtoContract]
+	public partial class R2C_LoginTest: Object, IResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public string GateAddress { get; set; }
+
+		[ProtoMember(2)]
+		public string key { get; set; }
+
+	}
+
+	[Message(OuterOpcode.C2R_SayHello)]
+	[ProtoContract]
+	public partial class C2R_SayHello: Object, IMessage
+	{
+		[ProtoMember(1)]
+		public string Hello { get; set; }
+
+	}
+
+	[Message(OuterOpcode.R2C_SayGoodBye)]
+	[ProtoContract]
+	public partial class R2C_SayGoodBye: Object, IMessage
+	{
+		[ProtoMember(1)]
+		public string GoodBye { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_TestActorLocationResponse))]
+	[Message(OuterOpcode.C2M_TestActorLocationRequest)]
+	[ProtoContract]
+	public partial class C2M_TestActorLocationRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public string Content { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_TestActorLocationResponse)]
+	[ProtoContract]
+	public partial class M2C_TestActorLocationResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public string Content { get; set; }
+
+	}
+
+	[Message(OuterOpcode.C2M_TestActorLocationMessage)]
+	[ProtoContract]
+	public partial class C2M_TestActorLocationMessage: Object, IActorLocationMessage
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public string Content { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_TestActorMessage)]
+	[ProtoContract]
+	public partial class M2C_TestActorMessage: Object, IActorMessage
+	{
+		[ProtoMember(1)]
+		public string Content { get; set; }
+
+	}
+
 }
