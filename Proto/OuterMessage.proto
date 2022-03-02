@@ -6,6 +6,8 @@ message C2M_TestRequest // IActorLocationRequest
 {
 	int32 RpcId = 90;
 	string request = 1;
+	repeated string key = 2;
+	repeated string value = 3;
 }
 
 message M2C_TestResponse // IActorLocationResponse

@@ -40,6 +40,28 @@ namespace ET
             {
                 Log.Error(e);
             }
-        } 
+        }
+
+        public static async ETTask LoginTest(Scene zoneScene, string address)
+        {
+            try
+            {
+                Session session = null;
+                try
+                {
+                    session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(address));
+                }
+                finally
+                {
+                    
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Debug(e.ToString());
+                throw;
+            }
+            await ETTask.CompletedTask;
+        }
     }
 }

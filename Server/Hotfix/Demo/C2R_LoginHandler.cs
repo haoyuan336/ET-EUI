@@ -22,5 +22,7 @@ namespace ET
 			response.GateId = g2RGetLoginKey.GateId;
 			reply();
 		}
+		
+		// protected override 
 	}
 }

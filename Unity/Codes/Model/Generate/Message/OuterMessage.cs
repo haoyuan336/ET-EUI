@@ -14,6 +14,12 @@ namespace ET
 		[ProtoMember(1)]
 		public string request { get; set; }
 
+		[ProtoMember(2)]
+		public List<string> key = new List<string>();
+
+		[ProtoMember(3)]
+		public List<string> value = new List<string>();
+
 	}
 
 	[Message(OuterOpcode.M2C_TestResponse)]
