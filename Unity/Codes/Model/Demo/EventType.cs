@@ -100,5 +100,10 @@ namespace ET
         {
             public Computer Computer;
         }
+
+        public struct ShowMatchButtonUIMessage
+        {
+            public Scene zoneScene;
+        }
     }
 }

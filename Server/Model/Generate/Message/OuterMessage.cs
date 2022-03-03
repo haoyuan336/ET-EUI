@@ -606,4 +606,25 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.C2M_MatchRoomActorLocationMessage)]
+	[ProtoContract]
+	public partial class C2M_MatchRoomActorLocationMessage: Object, IActorLocationMessage
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public string Content { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_SyncCurrentMatchingCount)]
+	[ProtoContract]
+	public partial class M2C_SyncCurrentMatchingCount: Object, IActorMessage
+	{
+		[ProtoMember(1)]
+		public int Content { get; set; }
+
+	}
+
 }

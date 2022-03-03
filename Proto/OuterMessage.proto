@@ -288,3 +288,13 @@ message M2C_TestActorMessage //IActorMessage
 {
 	string Content = 1;
 }
+
+message C2M_MatchRoomActorLocationMessage //IActorLocationMessage
+{
+	int32 RpcId = 90;
+	string Content = 1;
+}
+message M2C_SyncCurrentMatchingCount	//IActorMessage
+{
+	int32 Content = 1;
+}

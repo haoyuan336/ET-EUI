@@ -7,9 +7,10 @@ namespace ET
     public sealed class Unit: Entity, IAwake<int>
     {
         public int ConfigId; //配置表id
+        public bool isMatching; //是否在匹配中
 
         [BsonIgnore]
-        public UnitType Type => (UnitType)this.Config.Type;
+        public UnitType Type => (UnitType) this.Config.Type;
 
         [BsonIgnore]
         public UnitConfig Config => UnitConfigCategory.Instance.Get(this.ConfigId);
@@ -34,13 +35,14 @@ namespace ET
         }
 
         private Quaternion rotation;
+
         public Quaternion Rotation
         {
             get => this.rotation;
             set
             {
                 this.rotation = value;
-                Game.EventSystem.Publish(new EventType.ChangeRotation() {Unit = this});
+                Game.EventSystem.Publish(new EventType.ChangeRotation() { Unit = this });
             }
         }
     }

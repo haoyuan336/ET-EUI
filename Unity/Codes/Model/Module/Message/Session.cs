@@ -153,7 +153,7 @@ namespace ET
             return ret;
         }
 
-        public async ETTask<IResponse> Call(IRequest request)
+        public async ETTask<IResponse>  Call(IRequest request)
         {
             int rpcId = ++RpcId;
             RpcInfo rpcInfo = new RpcInfo(request);

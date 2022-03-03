@@ -40,5 +40,7 @@ namespace ET
 		 public const ushort M2C_TestActorLocationResponse = 10037;
 		 public const ushort C2M_TestActorLocationMessage = 10038;
 		 public const ushort M2C_TestActorMessage = 10039;
+		 public const ushort C2M_MatchRoomActorLocationMessage = 10040;
+		 public const ushort M2C_SyncCurrentMatchingCount = 10041;
 	}
 }
