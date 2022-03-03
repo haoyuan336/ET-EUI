@@ -16,6 +16,7 @@ namespace ET
                 await zoneScene.GetComponent<ObjectWait>().Wait<WaitType.Wait_SceneChangeFinish>();
                 
                 Game.EventSystem.Publish(new EventType.EnterMapFinish() {ZoneScene = zoneScene});
+
             }
             catch (Exception e)
             {

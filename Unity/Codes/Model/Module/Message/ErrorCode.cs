@@ -12,6 +12,9 @@ namespace ET
         
         // 这里配置逻辑层的错误码
         // 110000 - 200000是抛异常的错误
+        public const int ERR_AccountOrPasswordInputIsNull = 200001;
+
+        public const int ERR_NetworkErr = 200002;
         // 200001以上不抛异常
     }
 }

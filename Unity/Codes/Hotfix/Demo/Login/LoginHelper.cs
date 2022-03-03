@@ -1,79 +1,33 @@
 using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace ET
 {
     public static class LoginHelper
     {
-        public static async ETTask Login(Scene zoneScene, string address, string account, string password)
+        public static async ETTask<int> Login(Scene zoneScene, string address, string account, string password)
         {
+            A2C_LoginAccount a2CLoginAccount = null;
+            Session session = null;
             try
             {
-                // 创建一个ETModel层的Session
-                R2C_Login r2CLogin;
-                Session session = null;
-                try
-                {
-                    session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(address));
-                    {
-                        r2CLogin = (R2C_Login) await session.Call(new C2R_Login() { Account = account, Password = password });
-                    }
-                }
-                finally
-                {
-                    session?.Dispose();
-                }
-
-                // 创建一个gate Session,并且保存到SessionComponent中
-                Session gateSession = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(r2CLogin.Address));
-                gateSession.AddComponent<PingComponent>();
-                zoneScene.AddComponent<SessionComponent>().Session = gateSession;
-
-                G2C_LoginGate g2CLoginGate = (G2C_LoginGate) await gateSession.Call(
-                    new C2G_LoginGate() { Key = r2CLogin.Key, GateId = r2CLogin.GateId });
-
-                Log.Debug("登陆gate成功!");
-
-                await Game.EventSystem.PublishAsync(new EventType.LoginFinish() { ZoneScene = zoneScene });
-
-                // M2C_TestActorLocationResponse m2CTestActorLocationResponse =
-                //         (M2C_TestActorLocationResponse) await gateSession.Call(
-                //             new C2M_TestActorLocationRequest() { Content = "11111111111111111111111" });
-                // Log.Debug("c2m_test actor location resquest" + m2CTestActorLocationResponse.Content);
-                // gateSession.Send(new C2M_TestActorLocationMessage() { Content = "3333333333333333333333" });
-            }
-            catch (Exception e)
-            {
-                Log.Error(e);
-            }
-        }
-
-        public static async ETTask LoginTest(Scene zoneScene, string address)
-        {
-            try
-            {
-                Session session = null;
-                R2C_LoginTest r2CLoginTest = null;
-                try
-                {
-                    session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(address));
-                    r2CLoginTest = (R2C_LoginTest) await session.Call(new C2R_LoginTest() { Account = "", Password = "" });
-                    Log.Debug(r2CLoginTest.key);
-                    session.Send(new C2R_SayHello() { Hello = "Hello world!" });
-                    await TimerComponent.Instance.WaitAsync(2000);
-                }
-                finally
-                {
-                    session.Dispose();
-                }
+                session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(address));
+                a2CLoginAccount = (A2C_LoginAccount) await session.Call(new C2A_LoginAccount() { AccountName = account, Password = password });
             }
             catch (Exception e)
             {
                 Log.Debug(e.ToString());
-                throw;
+                session?.Dispose();
+                return a2CLoginAccount.Error;
+            }
+
+            if (a2CLoginAccount.Error == ErrorCode.ERR_Success)
+            {
             }
 
             await ETTask.CompletedTask;
+            return ErrorCode.ERR_Success;
         }
     }
 }

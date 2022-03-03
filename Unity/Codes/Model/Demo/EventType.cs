@@ -12,8 +12,8 @@ namespace ET
         {
             public Scene ZoneScene;
         }
-        
-        
+
+
         public struct SceneChangeFinish
         {
             public Scene ZoneScene;
@@ -36,17 +36,17 @@ namespace ET
             public Scene ZoneScene;
             public long Ping;
         }
-        
+
         public struct AfterCreateZoneScene
         {
             public Scene ZoneScene;
         }
-        
+
         public struct AfterCreateCurrentScene
         {
             public Scene CurrentScene;
         }
-        
+
         public struct AfterCreateLoginScene
         {
             public Scene LoginScene;
@@ -81,7 +81,7 @@ namespace ET
         {
             public Unit Unit;
         }
-        
+
         public struct MoveStart
         {
             public Unit Unit;
@@ -104,6 +104,12 @@ namespace ET
         public struct ShowMatchButtonUIMessage
         {
             public Scene zoneScene;
+        }
+
+        public struct ReferCurrentMatchingCountText
+        {
+            public Scene zoneScene;
+            public int Count;
         }
     }
 }
