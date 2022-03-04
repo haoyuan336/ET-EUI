@@ -14,9 +14,12 @@ namespace ET
             }
 
             string token = session.DomainScene().GetComponent<TokenComponent>().Get(request.AccountId);
-            if (token == null || token.Equals(request.Token))
+            // Log.Error($"token{token}");
+            // Log.Error($"player token{request.Token}");
+            if (token == null || token != request.Token)
             {
                 response.Error = ErrorCode.ERR_TokenError;
+                Log.Error(ErrorCode.ERR_TokenError.ToString());
                 reply();
                 session.Disconnect().Coroutine();
                 return;

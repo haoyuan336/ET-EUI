@@ -19,5 +19,21 @@
         {
             self.ServerInfos.Add(serverInfo);
         }
+
+        public static void Clear(this ServerInfosComponent self)
+        {
+            self.ServerInfos.Clear();
+        }
+
+        public static void SetCurrentServerId(this ServerInfosComponent self, long value)
+        {
+            Log.Debug($"ser current server id {value}");
+            self.CurrentServerId = value;
+        }
+
+        public static long GetCurrentServerId(this ServerInfosComponent self)
+        {
+            return self.CurrentServerId;
+        }
     }
 }

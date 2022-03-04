@@ -43,6 +43,11 @@ namespace ET
             return ErrorCode.ERR_Success;
         }
 
+        public static async ETTask LoginRealServer()
+        {
+            await ETTask.CompletedTask;
+        }
+
         public static async ETTask<int> GetServerInfo(Scene zoneScene)
         {
             A2C_GetServerInfo a2CGetServerInfo = null;
@@ -57,15 +62,16 @@ namespace ET
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                Log.Error(e.ToString());
             }
 
             if (a2CGetServerInfo.Error != ErrorCode.ERR_Success)
             {
+                Log.Error(a2CGetServerInfo.Error.ToString());
                 return a2CGetServerInfo.Error;
             }
 
+            zoneScene.GetComponent<ServerInfosComponent>().Clear();
             foreach (var serinfo in a2CGetServerInfo.ServerInfoList)
             {
                 ServerInfo serverInfo = zoneScene.GetComponent<ServerInfosComponent>().AddChild<ServerInfo>();
@@ -73,6 +79,35 @@ namespace ET
                 zoneScene.GetComponent<ServerInfosComponent>().Add(serverInfo);
             }
 
+            await ETTask.CompletedTask;
+            return ErrorCode.ERR_Success;
+        }
+
+        public static async ETTask<int> GetRealmKey(Scene zoneScene)
+        {
+            A2C_GetRealmKey a2CGetRealmKey = null;
+            try
+            {
+                a2CGetRealmKey = (A2C_GetRealmKey) await zoneScene.GetComponent<SessionComponent>().Session.Call(new C2A_GetRealmKey()
+                {
+                    Token = zoneScene.GetComponent<AccountInfoComponent>().Token,
+                    AccountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId,
+                    ServerId = zoneScene.GetComponent<ServerInfosComponent>().CurrentServerId
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Debug(e.ToString());
+            }
+
+            if (a2CGetRealmKey != null && a2CGetRealmKey.Error != ErrorCode.ERR_Success)
+            {
+                Log.Debug(a2CGetRealmKey.Error.ToString());
+                return a2CGetRealmKey.Error;
+            }
+            Log.Debug("获得正确的key" + a2CGetRealmKey.RealmKey);
+
+            
             await ETTask.CompletedTask;
             return ErrorCode.ERR_Success;
         }

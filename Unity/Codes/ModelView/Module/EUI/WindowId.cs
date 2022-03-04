@@ -9,5 +9,6 @@
         WindowID_RedDot,   //红点测试界面
         WindowID_Helper,   //提示界面
         WindowID_MatchButton,     //匹配游戏界面
+        WindowID_ChooseServer,      //选择服务器页面
     }
 }

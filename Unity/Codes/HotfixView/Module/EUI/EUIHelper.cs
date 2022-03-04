@@ -175,6 +175,11 @@ namespace ET
             });
         }
 
+        // public static void AddListenerAsync(this Toggle self, Func<ETTask> action)
+        // {
+        //     // self.onValueChanged
+        // }
+
         public static void AddListener(this Toggle toggle, UnityAction<bool> selectEventHandler)
         {
             toggle.onValueChanged.RemoveAllListeners();

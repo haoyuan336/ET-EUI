@@ -33,8 +33,11 @@ namespace ET
                     return;
                 }
                 //todo 显示登录成功之后的UI
+                //登录成功，进入选择服务器页面
+                
+                
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Login);
-                self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Lobby);
+                self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_ChooseServer);
             }
             catch (Exception e)
             {
