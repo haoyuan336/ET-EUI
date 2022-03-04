@@ -11,20 +11,35 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgLogin self)
         {
-            self.View.E_LoginButton.AddListener(() => { self.OnLoginClickHandler(); });
+            // self.View.E_LoginButton.AddListener(() => { self.OnLoginClickHandler(); });
+            self.View.E_LoginButton.AddListenerAsync(() => { return self.OnLoginClickHandler(); });
         }
 
         public static void ShowWindow(this DlgLogin self, Entity contextData = null)
         {
         }
 
-        public static async void OnLoginClickHandler(this DlgLogin self)
+        public static async ETTask OnLoginClickHandler(this DlgLogin self)
         {
-            int errorCode = await LoginHelper.Login(self.DomainScene(),
-                ConstValue.LoginAddress,
-                self.View.E_AccountInputField.GetComponent<InputField>().text,
-                self.View.E_PasswordInputField.GetComponent<InputField>().text);
-            Log.Debug("View  errorcode = " + errorCode);
+            try
+            {
+                int errorCode = await LoginHelper.Login(self.DomainScene(),
+                    ConstValue.LoginAddress,
+                    self.View.E_AccountInputField.GetComponent<InputField>().text,
+                    self.View.E_PasswordInputField.GetComponent<InputField>().text);
+                Log.Debug("View  errorcode = " + errorCode);
+                if (errorCode != ErrorCode.ERR_Success)
+                {
+                    return;
+                }
+                //todo 显示登录成功之后的UI
+                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Login);
+                self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Lobby);
+            }
+            catch (Exception e)
+            {
+                Log.Debug(e.ToString());
+            }
         }
 
         public static void HideWindow(this DlgLogin self)

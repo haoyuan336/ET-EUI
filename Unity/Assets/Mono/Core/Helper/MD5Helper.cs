@@ -1,5 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Security.Cryptography;
+using System.Text;
+
 namespace ET
 {
     public static class MD5Helper
@@ -18,7 +21,10 @@ namespace ET
 
         public static string StringToMD5(string content)
         {
-            return content;
+            MD5 md5 = MD5.Create();
+            byte[] result = Encoding.Default.GetBytes(content);
+            byte[] output = md5.ComputeHash(result);
+            return BitConverter.ToString(output).Replace("-", "");
         }
     }
 }

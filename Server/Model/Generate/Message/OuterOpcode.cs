@@ -44,5 +44,8 @@ namespace ET
 		 public const ushort M2C_SyncCurrentMatchingCount = 10041;
 		 public const ushort C2A_LoginAccount = 10042;
 		 public const ushort A2C_LoginAccount = 10043;
+		 public const ushort ServerInfoProto = 10044;
+		 public const ushort C2A_GetServerInfo = 10045;
+		 public const ushort A2C_GetServerInfo = 10046;
 	}
 }
