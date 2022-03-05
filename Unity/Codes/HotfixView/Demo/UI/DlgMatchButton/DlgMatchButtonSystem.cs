@@ -7,6 +7,14 @@ using UnityEngine.UI;
 
 namespace ET
 {
+    public class DlgMatchButtonAwakeSystem: AwakeSystem<DlgMatchButton>
+    {
+        public override async void Awake(DlgMatchButton self)
+        {
+            // int errorCode = await LoginHelper.LoginGateServer(self.ZoneScene());
+        }
+    }
+
     public static class DlgMatchButtonSystem
     {
         public static void RegisterUIEvent(this DlgMatchButton self)

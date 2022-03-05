@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using ET.Account;
+using ICSharpCode.SharpZipLib;
 using UnityEngine;
 
 namespace ET
@@ -97,19 +98,63 @@ namespace ET
             }
             catch (Exception e)
             {
-                Log.Debug(e.ToString());
+                Log.Error(e.ToString());
             }
 
             if (a2CGetRealmKey != null && a2CGetRealmKey.Error != ErrorCode.ERR_Success)
             {
-                Log.Debug(a2CGetRealmKey.Error.ToString());
+                Log.Error(a2CGetRealmKey.Error.ToString());
                 return a2CGetRealmKey.Error;
             }
+
             Log.Debug("获得正确的key" + a2CGetRealmKey.RealmKey);
 
-            
+            string realmAddress = a2CGetRealmKey.RealmAddress;
+            string key = a2CGetRealmKey.RealmKey;
+            zoneScene.GetComponent<SessionComponent>().Session.Dispose();
+            zoneScene.GetComponent<AccountInfoComponent>().RealmToken = key;
+            zoneScene.GetComponent<AccountInfoComponent>().RealmAddress = realmAddress;
             await ETTask.CompletedTask;
             return ErrorCode.ERR_Success;
         }
+
+        public static async ETTask<int> EnterGame(Scene zoneScene)
+        {
+            long accountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId;
+            string realmAddRess = zoneScene.GetComponent<AccountInfoComponent>().RealmAddress;
+            string realmKey = zoneScene.GetComponent<AccountInfoComponent>().RealmToken;
+            Session session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(realmAddRess));
+            try
+            {
+                R2C_LoginRealm r2CLoginRealm = (R2C_LoginRealm) await session.Call(new C2R_LoginRealm() { Token = realmKey, AccountId = accountId });
+                if (r2CLoginRealm.Error != ErrorCode.ERR_Success)
+                {
+                    Log.Error(r2CLoginRealm.Error.ToString());
+                    return r2CLoginRealm.Error;
+                }
+                Log.Debug("enter game success" + r2CLoginRealm.GateAddress);
+                Log.Debug("enter game success" + r2CLoginRealm.GateToken);
+                zoneScene.GetComponent<AccountInfoComponent>().GateToken = r2CLoginRealm.GateToken;
+                zoneScene.GetComponent<AccountInfoComponent>().GateAddress = r2CLoginRealm.GateAddress;
+                session.Dispose();
+
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+            }
+
+            await ETTask.CompletedTask;
+            return ErrorCode.ERR_Success;
+
+        }
+
+        public static async ETTask<int> LoginGateServer(Scene zoneScene)
+        {
+            Log.Error("Login Gate Server");
+            await ETTask.CompletedTask;
+            return ErrorCode.ERR_Success;
+        }
+        
     }
 }

@@ -49,5 +49,9 @@ namespace ET
 		 public const ushort A2C_GetServerInfo = 10046;
 		 public const ushort C2A_GetRealmKey = 10047;
 		 public const ushort A2C_GetRealmKey = 10048;
+		 public const ushort A2R_GetRealmKey = 10049;
+		 public const ushort R2A_GetRealmKey = 10050;
+		 public const ushort C2R_LoginRealm = 10051;
+		 public const ushort R2C_LoginRealm = 10052;
 	}
 }

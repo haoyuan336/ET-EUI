@@ -753,4 +753,72 @@ namespace ET
 
 	}
 
+	[ResponseType(nameof(R2A_GetRealmKey))]
+	[Message(OuterOpcode.A2R_GetRealmKey)]
+	[ProtoContract]
+	public partial class A2R_GetRealmKey: Object, IActorRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.R2A_GetRealmKey)]
+	[ProtoContract]
+	public partial class R2A_GetRealmKey: Object, IActorResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public string Token { get; set; }
+
+	}
+
+	[ResponseType(nameof(R2C_LoginRealm))]
+	[Message(OuterOpcode.C2R_LoginRealm)]
+	[ProtoContract]
+	public partial class C2R_LoginRealm: Object, IRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public string Token { get; set; }
+
+	}
+
+	[Message(OuterOpcode.R2C_LoginRealm)]
+	[ProtoContract]
+	public partial class R2C_LoginRealm: Object, IResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public string GateAddress { get; set; }
+
+		[ProtoMember(2)]
+		public string GateToken { get; set; }
+
+	}
+
 }

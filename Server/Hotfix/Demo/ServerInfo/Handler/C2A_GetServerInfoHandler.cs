@@ -30,8 +30,10 @@ namespace ET
                 response.ServerInfoList.Add(serverInfo.ToMessage());
             }
 
+            response.Error = ErrorCode.ERR_Success;
+
             reply();
-            session?.Disconnect().Coroutine();
+            // session?.Disconnect().Coroutine();
 
             await ETTask.CompletedTask;
         }

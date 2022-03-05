@@ -15,7 +15,10 @@ namespace ET
                 return;
             }
 
+            //移除5s自动掉线的监听组件
             session.RemoveComponent<SessionAcceptTimeoutComponent>();
+            
+            //增加连击访问限制
             if (session.GetComponent<SessionLockComponent>() != null)
             {
                 session.Error = ErrorCode.ERR_RequestRepeatedly;

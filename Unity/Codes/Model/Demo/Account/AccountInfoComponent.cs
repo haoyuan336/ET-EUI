@@ -4,5 +4,9 @@
     {
         public string Token;
         public long AccountId;
+        public string RealmToken;
+        public string RealmAddress;
+        public string GateToken;    
+        public string GateAddress;
     }
 }

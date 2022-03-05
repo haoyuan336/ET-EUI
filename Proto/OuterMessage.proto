@@ -350,3 +350,31 @@ message A2C_GetRealmKey //IResponse
 	string RealmKey = 1;
 	string RealmAddress = 2;
 }
+//ResponseType R2A_GetRealmKey
+message A2R_GetRealmKey //IActorRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message R2A_GetRealmKey	//IActorResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	string Token = 1;
+}
+//ResponseType R2C_LoginRealm
+message C2R_LoginRealm //IRequest
+{
+	int RpcId = 90;
+	int64 AccountId = 1;
+	string Token = 2;
+}
+message R2C_LoginRealm //IResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	string GateAddress = 1;
+	string GateToken = 2;
+}

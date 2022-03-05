@@ -15,5 +15,10 @@ namespace ET
 	
 			return zoneGates[n];
 		}
+
+		public static StartSceneConfig GetReal(long serverId)
+		{
+			return StartSceneConfigCategory.Instance.Realms[(int)serverId];
+		}
 	}
 }

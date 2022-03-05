@@ -22,7 +22,7 @@ namespace ET
         public const int ERR_AccountInBlackListError = 200005; //用户再黑名单里面
         public const int ERR_AccountPasswordError = 200006; //密码错误
         public const int ERR_RequestRepeatedly = 200007; //重复请求
-        public const int ERR_TokenError = 200008;   //token错误
+        public const int ERR_TokenError = 200008; //token错误
 
         // 200001以上不抛异常
     }
