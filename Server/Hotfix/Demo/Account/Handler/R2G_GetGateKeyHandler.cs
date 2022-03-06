@@ -6,10 +6,11 @@ namespace ET
     {
         protected override async  ETTask Run(Scene unit, R2G_GetGateKey request, G2R_GetGateKey response, Action reply)
         {
-            string token = TimeHelper.ServerNow().ToString() + RandomHelper.RandomNumber(int.MinValue, int.MaxValue).ToString();
+            // string token = TimeHelper.ServerNow().ToString() + RandomHelper.RandomNumber(int.MinValue, int.MaxValue).ToString();
             unit.DomainScene().GetComponent<GateSessionKeyComponent>().Remove(request.AccountId);
-            unit.DomainScene().GetComponent<GateSessionKeyComponent>().Add(request.AccountId, token);
-            response.Token = token;
+            long key = RandomHelper.RandInt64();
+            unit.DomainScene().GetComponent<GateSessionKeyComponent>().Add(key, request.AccountId.ToString());
+            response.Key = key;
             response.Error = ErrorCode.ERR_Success;
             reply();
             await ETTask.CompletedTask;

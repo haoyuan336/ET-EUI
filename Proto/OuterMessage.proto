@@ -376,5 +376,30 @@ message R2C_LoginRealm //IResponse
 	int32 Error = 91;
 	string Message = 92;
 	string GateAddress = 1;
-	string GateToken = 2;
+	int64 GateKey = 2;
+}
+//ResponseType G2C_LoginGate
+message C2G_LoginGateRequeset //IRequest
+{
+	int RpcId = 90;
+	int64 GateKey = 1;
+	int64 AccountId = 2;
+}
+message G2C_LoginGateResponse //IResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	int64 PlayerId = 1;
+}
+//ResponseType M2C_MatchRoomResponse
+message C2M_MatchRoomRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+}
+message M2C_MatchRoomResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
 }

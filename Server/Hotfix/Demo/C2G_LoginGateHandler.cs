@@ -25,6 +25,11 @@ namespace ET
 			playerComponent.Add(player);
 			session.AddComponent<SessionPlayerComponent>().PlayerId = player.Id;
 			session.AddComponent<MailBoxComponent, MailboxType>(MailboxType.GateSession);
+			
+			
+			
+			
+			
 
 			response.PlayerId = player.Id;
 			reply();

@@ -12,6 +12,7 @@ namespace ET
         public override async void Awake(DlgMatchButton self)
         {
             // int errorCode = await LoginHelper.LoginGateServer(self.ZoneScene());
+            await ETTask.CompletedTask;
         }
     }
 
@@ -22,10 +23,11 @@ namespace ET
             self.View.E_MatchButtonButton.AddListener(() => { self.OnClickEventHandler(); });
         }
 
-        public static void OnClickEventHandler(this DlgMatchButton self)
+        public static async void OnClickEventHandler(this DlgMatchButton self)
         {
             // Log.Debug("Match Button click");
-            MatchHelper.Match(self.ZoneScene());
+            int errcode =  await MatchHelper.MatchRoom(self.ZoneScene());
+            Log.Debug("Match room message send success");
         }
 
         public static void ShowWindow(this DlgMatchButton self, Entity contextData = null)

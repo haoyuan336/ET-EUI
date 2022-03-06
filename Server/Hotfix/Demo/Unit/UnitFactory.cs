@@ -27,9 +27,9 @@ namespace ET
                 }
                 case UnitType.Diamond:
                 {
-                    // Unit unit = unitComponent.AddChildWithId<Unit, int>(id, 1001);
+                    Unit unit = unitComponent.AddChildWithId<Unit, int>(id, 1001);
                     long ramdomId = IdGenerater.Instance.GenerateId();
-                    Unit unit = unitComponent.AddChildWithId<Unit, int>(ramdomId, 1001);
+                    // Unit unit = unitComponent.AddChild<un>()
                     // unit.AddComponent<MoveComponent>();
                     unit.Position = Vector3.zero;
 

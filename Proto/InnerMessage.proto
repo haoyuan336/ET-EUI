@@ -190,5 +190,5 @@ message G2R_GetGateKey //IActorResponse
 	int32 RpcId = 90;
 	int32 Error = 91;
 	string Message = 92;
-	string Token = 1;
+	int64 Key = 1;
 }

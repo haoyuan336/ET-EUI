@@ -46,7 +46,7 @@ namespace ET
                     }
 
                     response.Error = ErrorCode.ERR_Success;
-                    response.GateToken = g2RGetGateKey.Token;
+                    response.GateKey = g2RGetGateKey.Key;
                     response.GateAddress = startSceneConfig.OuterIPPort.ToString();
                     reply();
                 }

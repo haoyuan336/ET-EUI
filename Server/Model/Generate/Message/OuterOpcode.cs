@@ -53,5 +53,9 @@ namespace ET
 		 public const ushort R2A_GetRealmKey = 10050;
 		 public const ushort C2R_LoginRealm = 10051;
 		 public const ushort R2C_LoginRealm = 10052;
+		 public const ushort C2G_LoginGateRequeset = 10053;
+		 public const ushort G2C_LoginGateResponse = 10054;
+		 public const ushort C2M_MatchRoomRequest = 10055;
+		 public const ushort M2C_MatchRoomResponse = 10056;
 	}
 }

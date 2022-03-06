@@ -132,12 +132,12 @@ namespace ET
                     Log.Error(r2CLoginRealm.Error.ToString());
                     return r2CLoginRealm.Error;
                 }
+
                 Log.Debug("enter game success" + r2CLoginRealm.GateAddress);
-                Log.Debug("enter game success" + r2CLoginRealm.GateToken);
-                zoneScene.GetComponent<AccountInfoComponent>().GateToken = r2CLoginRealm.GateToken;
+                Log.Debug("enter game success" + r2CLoginRealm.GateKey);
+                zoneScene.GetComponent<AccountInfoComponent>().GateKey = r2CLoginRealm.GateKey;
                 zoneScene.GetComponent<AccountInfoComponent>().GateAddress = r2CLoginRealm.GateAddress;
                 session.Dispose();
-
             }
             catch (Exception e)
             {
@@ -146,15 +146,38 @@ namespace ET
 
             await ETTask.CompletedTask;
             return ErrorCode.ERR_Success;
-
         }
 
         public static async ETTask<int> LoginGateServer(Scene zoneScene)
         {
-            Log.Error("Login Gate Server");
+            string gateAddress = zoneScene.GetComponent<AccountInfoComponent>().GateAddress;
+            long gateKey = zoneScene.GetComponent<AccountInfoComponent>().GateKey;
+            long accountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId;
+            Session session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(gateAddress));
+            zoneScene.GetComponent<SessionComponent>().Session = session;
+            G2C_LoginGateResponse g2CLoginGateResponse = null;
+            try
+            {
+                g2CLoginGateResponse =
+                        (G2C_LoginGateResponse) await session.Call(new C2G_LoginGateRequeset() { AccountId = accountId, GateKey = gateKey });
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.ToString());
+            }
+
+            if (g2CLoginGateResponse.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error(g2CLoginGateResponse.Error.ToString());
+                return g2CLoginGateResponse.Error;
+            }
+
+            // zoneScene.GetComponent<AccountInfoComponent>().PlayerId = g2CLoginGateResponse.PlayerId;
+
+            await EnterMapHelper.EnterMapAsync(zoneScene);
+            
             await ETTask.CompletedTask;
             return ErrorCode.ERR_Success;
         }
-        
     }
 }

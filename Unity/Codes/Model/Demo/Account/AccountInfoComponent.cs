@@ -6,7 +6,8 @@
         public long AccountId;
         public string RealmToken;
         public string RealmAddress;
-        public string GateToken;    
+        public long GateKey;    
         public string GateAddress;
+        public long PlayerId;
     }
 }

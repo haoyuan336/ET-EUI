@@ -817,7 +817,66 @@ namespace ET
 		public string GateAddress { get; set; }
 
 		[ProtoMember(2)]
-		public string GateToken { get; set; }
+		public long GateKey { get; set; }
+
+	}
+
+	[ResponseType(nameof(G2C_LoginGate))]
+	[Message(OuterOpcode.C2G_LoginGateRequeset)]
+	[ProtoContract]
+	public partial class C2G_LoginGateRequeset: Object, IRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long GateKey { get; set; }
+
+		[ProtoMember(2)]
+		public long AccountId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.G2C_LoginGateResponse)]
+	[ProtoContract]
+	public partial class G2C_LoginGateResponse: Object, IResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public long PlayerId { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_MatchRoomResponse))]
+	[Message(OuterOpcode.C2M_MatchRoomRequest)]
+	[ProtoContract]
+	public partial class C2M_MatchRoomRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_MatchRoomResponse)]
+	[ProtoContract]
+	public partial class M2C_MatchRoomResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
 
 	}
 

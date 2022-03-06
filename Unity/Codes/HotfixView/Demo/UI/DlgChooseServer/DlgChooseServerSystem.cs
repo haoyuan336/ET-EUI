@@ -14,8 +14,8 @@ namespace ET
             self.View.E_Label1Text.text = "name";
 
             await LoginHelper.GetServerInfo(self.DomainScene());
-            Text[] list = new Text[2] { self.View.E_Label1Text, self.View.E_Label2Text };
-            Toggle[] toggles = new Toggle[2] { self.View.E_Choose1Toggle, self.View.E_Choose2Toggle };
+            UnityEngine.UI.Text[] list = new UnityEngine.UI.Text[2] { self.View.E_Label1Text, self.View.E_Label2Text };
+            UnityEngine.UI.Toggle[] toggles = new UnityEngine.UI.Toggle[2] { self.View.E_Choose1Toggle, self.View.E_Choose2Toggle };
 
             int index = 0;
             // Debug.Log($"count={self.ZoneScene().GetComponent<ServerInfosComponent>().ServerInfos.Count}");
@@ -28,7 +28,7 @@ namespace ET
             }
         }
 
-        public static void AddToggleOnClickListener(this DlgChooseServer self, Toggle toggle, ServerInfo serverInfo)
+        public static void AddToggleOnClickListener(this DlgChooseServer self, UnityEngine.UI.Toggle toggle, ServerInfo serverInfo)
         {
             toggle.onValueChanged.AddListener(delegate(bool arg0)
             {
@@ -39,6 +39,12 @@ namespace ET
                     self.ZoneScene().GetComponent<ServerInfosComponent>().SetCurrentServerId(serverInfo.Id);
                 }
             });
+           
+        }
+
+        public static void ToggleClickListener(this DlgChooseServer self, bool value)
+        {
+            Log.Debug("value = " + value);
         }
 
         public static async ETTask OKOnClick(this DlgChooseServer self)
