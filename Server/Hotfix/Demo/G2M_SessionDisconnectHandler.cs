@@ -7,6 +7,8 @@
         {
              await unit.DomainScene().GetComponent<MatchComponent>().CancelMatch(unit);
 
+             
+             unit.DomainScene().GetComponent<UnitComponent>().Remove(unit.Id);
             
             await ETTask.CompletedTask;
         }

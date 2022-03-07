@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ET.Room
 {
@@ -26,6 +27,38 @@ namespace ET.Room
                 Log.Debug("sync create room message");
                 MessageHelper.SendToClient(unit, new M2C_SyncCreateRoomMessage() { InRoomIndex = unit.InRoomIndex });
             }
+            self.InitGameData();
+        }
+
+        public static void InitGameData(this Room self)
+        {
+            PvPLevelConfig pvPLevelConfig = PvPLevelConfigCategory.Instance.Get(1);
+            self.HangCount = pvPLevelConfig.HangCount;
+            self.LieCount = pvPLevelConfig.LieCount;
+            self.Diamonds = new Diamond[self.LieCount, self.HangCount];
+            List<DiamondInfo> diamondInfos = new List<DiamondInfo>();
+            for (var i = 0; i< self.HangCount; i ++)
+            {
+                for (var j = 0 ; j < self.LieCount; j ++)
+                {
+                    long id = IdGenerater.Instance.GenerateId();
+                    Diamond diamond = self.AddChildWithId<Diamond>(id);
+                    diamond.SetIndex(j,i);
+                    self.Diamonds[j, i] = diamond;
+                    diamondInfos.Add(diamond.GetMessageInfo());
+                }
+            }
+
+            
+
+            foreach (var unit in self.Units)
+            {
+                
+                MessageHelper.SendToClient(unit,new M2C_InitMapData(){DiamondInfo = diamondInfos});
+            }
+
+            
+
         }
     }
 }

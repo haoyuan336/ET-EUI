@@ -421,3 +421,17 @@ message M2C_SyncCreateRoomMessage	//IActorMessage
 	int RpcId = 90;
 	int32 InRoomIndex = 1;			//在房间里面的座位号
 }
+
+
+message DiamondInfo
+{
+	int64 Id = 1;
+	int32 HangIndex = 2;
+	int32 LieIndex = 3;
+}
+message M2C_InitMapData //IActorMessage
+{
+	//初始化地图数据
+	int RpcId = 90;
+	repeated DiamondInfo DiamondInfo = 1;
+}

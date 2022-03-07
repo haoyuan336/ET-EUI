@@ -917,4 +917,32 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.DiamondInfo)]
+	[ProtoContract]
+	public partial class DiamondInfo: Object
+	{
+		[ProtoMember(1)]
+		public long Id { get; set; }
+
+		[ProtoMember(2)]
+		public int HangIndex { get; set; }
+
+		[ProtoMember(3)]
+		public int LieIndex { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_InitMapData)]
+	[ProtoContract]
+	public partial class M2C_InitMapData: Object, IActorMessage
+	{
+//初始化地图数据
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public List<DiamondInfo> DiamondInfo = new List<DiamondInfo>();
+
+	}
+
 }

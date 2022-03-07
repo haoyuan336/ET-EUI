@@ -60,5 +60,7 @@ namespace ET
 		 public const ushort C2M_CancelMatchRoomRequest = 10057;
 		 public const ushort M2C_CancelMatchRoomResponse = 10058;
 		 public const ushort M2C_SyncCreateRoomMessage = 10059;
+		 public const ushort DiamondInfo = 10060;
+		 public const ushort M2C_InitMapData = 10061;
 	}
 }
