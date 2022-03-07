@@ -412,4 +412,5 @@ namespace ET
 
 	}
 
+// message G2M_SessionDisconnect
 }

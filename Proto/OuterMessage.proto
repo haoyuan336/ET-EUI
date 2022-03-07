@@ -403,3 +403,21 @@ message M2C_MatchRoomResponse //IActorLocationResponse
 	int32 Error = 91;
 	string Message = 92;
 }
+//ResponseType M2C_CancelMatchRoomResponse
+message C2M_CancelMatchRoomRequest  //IActorLocationRequest
+{
+	int RpcId = 90;
+}
+
+message M2C_CancelMatchRoomResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+
+message M2C_SyncCreateRoomMessage	//IActorMessage
+{
+	int RpcId = 90;
+	int32 InRoomIndex = 1;			//在房间里面的座位号
+}

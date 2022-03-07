@@ -19,18 +19,11 @@ namespace ET
 			}
 			
 			session.RemoveComponent<SessionAcceptTimeoutComponent>();
-
 			PlayerComponent playerComponent = scene.GetComponent<PlayerComponent>();
 			Player player = playerComponent.AddChild<Player, string>(account);
 			playerComponent.Add(player);
 			session.AddComponent<SessionPlayerComponent>().PlayerId = player.Id;
 			session.AddComponent<MailBoxComponent, MailboxType>(MailboxType.GateSession);
-			
-			
-			
-			
-			
-
 			response.PlayerId = player.Id;
 			reply();
 			await ETTask.CompletedTask;

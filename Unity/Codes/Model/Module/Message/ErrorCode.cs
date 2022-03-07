@@ -23,6 +23,7 @@ namespace ET
         public const int ERR_AccountPasswordError = 200006; //密码错误
         public const int ERR_RequestRepeatedly = 200007; //重复请求
         public const int ERR_TokenError = 200008; //token错误
+        public const int ERR_NotMatching = 200009; //没有再匹配游戏
 
         // 200001以上不抛异常
     }

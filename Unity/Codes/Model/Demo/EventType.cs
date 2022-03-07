@@ -13,7 +13,6 @@ namespace ET
             public Scene ZoneScene;
         }
 
-
         public struct SceneChangeFinish
         {
             public Scene ZoneScene;
@@ -110,6 +109,12 @@ namespace ET
         {
             public Scene zoneScene;
             public int Count;
+        }
+
+        public struct SyncCreateRoomMessage
+        {
+            public Scene zoneScene;
+            public int InRoomIndex;
         }
     }
 }

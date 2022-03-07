@@ -39,6 +39,23 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Text E_MatchText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_MatchText == null )
+     			{
+		    		this.m_E_MatchText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_MatchButton/E_Match");
+     			}
+     			return this.m_E_MatchText;
+     		}
+     	}
+
 		public UnityEngine.UI.Text E_MatchingCountText
      	{
      		get
@@ -60,12 +77,14 @@ namespace ET
 		{
 			this.m_E_MatchButtonButton = null;
 			this.m_E_MatchButtonImage = null;
+			this.m_E_MatchText = null;
 			this.m_E_MatchingCountText = null;
 			this.uiTransform = null;
 		}
 
 		private UnityEngine.UI.Button m_E_MatchButtonButton = null;
 		private UnityEngine.UI.Image m_E_MatchButtonImage = null;
+		private UnityEngine.UI.Text m_E_MatchText = null;
 		private UnityEngine.UI.Text m_E_MatchingCountText = null;
 		public Transform uiTransform = null;
 	}

@@ -20,4 +20,19 @@ namespace ET
             await ETTask.CompletedTask;
         }
     }
+
+    public class SyncCreateRoomMessage: AEvent<EventType.SyncCreateRoomMessage>
+    {
+        protected override async ETTask Run(EventType.SyncCreateRoomMessage a)
+        {
+
+            // Scene zoneScene = a.zoneScene;
+            // int count = a.Count;
+            // UIComponent uiComponent = zoneScene.GetComponent<UIComponent>();
+            // UIBaseWindow uiBaseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_MatchButton];
+            Scene scene = a.zoneScene;
+            scene.GetComponent<UIComponent>().HideWindow(WindowID.WindowID_MatchButton);
+            await ETTask.CompletedTask;
+        }
+    }
 }

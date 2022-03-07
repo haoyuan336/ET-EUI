@@ -1,6 +1,6 @@
 ﻿namespace ET.Room
 {
-    public class RoomComponent
+    public class RoomComponent: Entity, IAwake
     {
         
     }

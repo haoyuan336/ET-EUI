@@ -19,7 +19,7 @@ namespace ET
 
         public static async ETTask OnEnterMapClickHandler(this DlgLobby self)
         {
-            await EnterMapHelper.EnterMapAsync(self.ZoneScene());
+            await EnterMapHelper.EnterMapAsync(self.DomainScene());
             // Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             // Log.Debug("enter may async");
             // M2C_TestActorLocationResponse m2CTestActorLocationResponse = (M2C_TestActorLocationResponse) await session.Call(new C2M_TestActorLocationRequest() { Content = "11111111111111111111111" });

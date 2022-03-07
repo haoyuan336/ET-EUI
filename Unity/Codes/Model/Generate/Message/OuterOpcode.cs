@@ -57,5 +57,8 @@ namespace ET
 		 public const ushort G2C_LoginGateResponse = 10054;
 		 public const ushort C2M_MatchRoomRequest = 10055;
 		 public const ushort M2C_MatchRoomResponse = 10056;
+		 public const ushort C2M_CancelMatchRoomRequest = 10057;
+		 public const ushort M2C_CancelMatchRoomResponse = 10058;
+		 public const ushort M2C_SyncCreateRoomMessage = 10059;
 	}
 }

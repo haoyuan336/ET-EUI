@@ -2,6 +2,8 @@
 {
 	public  class DlgMatchButton :Entity,IAwake
 	{
-		public DlgMatchButtonViewComponent View { get => this.Parent.GetComponent<DlgMatchButtonViewComponent>();} 
+		public DlgMatchButtonViewComponent View { get => this.Parent.GetComponent<DlgMatchButtonViewComponent>();}
+
+		public bool IsMatching = false;
 	}
 }

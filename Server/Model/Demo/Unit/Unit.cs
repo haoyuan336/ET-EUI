@@ -7,7 +7,9 @@ namespace ET
     public sealed class Unit: Entity, IAwake<int>
     {
         public int ConfigId; //配置表id
-        public bool isMatching; //是否在匹配中
+        // public bool isMatching; //是否在匹配中
+
+        public int InRoomIndex;     //在房间里面的id
 
         [BsonIgnore]
         public UnitType Type => (UnitType) this.Config.Type;

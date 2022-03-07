@@ -880,4 +880,41 @@ namespace ET
 
 	}
 
+	[ResponseType(nameof(M2C_CancelMatchRoomResponse))]
+	[Message(OuterOpcode.C2M_CancelMatchRoomRequest)]
+	[ProtoContract]
+	public partial class C2M_CancelMatchRoomRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_CancelMatchRoomResponse)]
+	[ProtoContract]
+	public partial class M2C_CancelMatchRoomResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_SyncCreateRoomMessage)]
+	[ProtoContract]
+	public partial class M2C_SyncCreateRoomMessage: Object, IActorMessage
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public int InRoomIndex { get; set; }
+
+	}
+
 }
