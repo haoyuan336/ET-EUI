@@ -1,6 +1,4 @@
 using System.Net;
-using ET.Room;
-
 namespace ET
 {
     public static class SceneFactory
@@ -36,6 +34,7 @@ namespace ET
                     scene.AddComponent<AOIManagerComponent>();
                     scene.AddComponent<MatchComponent>();
                     scene.AddComponent<RoomComponent>();
+                    scene.AddComponent<DiamondComponent>();
                     break;
                 case SceneType.Location:
                     scene.AddComponent<LocationComponent>();

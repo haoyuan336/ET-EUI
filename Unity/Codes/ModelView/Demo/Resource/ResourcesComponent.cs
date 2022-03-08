@@ -262,7 +262,7 @@ namespace ET
             Dictionary<string, UnityEngine.Object> dict;
             if (!this.resourceCache.TryGetValue(bundleName.BundleNameToLower(), out dict))
             {
-                throw new Exception($"not found asset: {bundleName} {prefab}");
+                throw new Exception($"not found asset path: {bundleName} {prefab}");
             }
 
             UnityEngine.Object resource = null;

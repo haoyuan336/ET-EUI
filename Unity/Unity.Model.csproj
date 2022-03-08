@@ -49,9 +49,6 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\Server\Model\Demo\Room\Diamond.cs">
-      <Link>Codes\Model\Demo\Room\Diamond.cs</Link>
-    </Compile>
     <Compile Include="Codes\Model\**\*.cs" />
     <Reference Include="UnityEngine">
       <HintPath>./Temp/bin/Debug/UnityEngine.dll</HintPath>

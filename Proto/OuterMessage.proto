@@ -428,6 +428,7 @@ message DiamondInfo
 	int64 Id = 1;
 	int32 HangIndex = 2;
 	int32 LieIndex = 3;
+	int32 DiamondType = 4;
 }
 message M2C_InitMapData //IActorMessage
 {

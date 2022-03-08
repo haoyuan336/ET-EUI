@@ -16,7 +16,8 @@ namespace ET
             await LoginHelper.GetServerInfo(self.DomainScene());
             UnityEngine.UI.Text[] list = new UnityEngine.UI.Text[2] { self.View.E_Label1Text, self.View.E_Label2Text };
             UnityEngine.UI.Toggle[] toggles = new UnityEngine.UI.Toggle[2] { self.View.E_Choose1Toggle, self.View.E_Choose2Toggle };
-
+        
+            
             int index = 0;
             // Debug.Log($"count={self.ZoneScene().GetComponent<ServerInfosComponent>().ServerInfos.Count}");
             foreach (var serverInfo in self.DomainScene().GetComponent<ServerInfosComponent>().ServerInfos)

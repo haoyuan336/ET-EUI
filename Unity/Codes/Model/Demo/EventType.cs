@@ -116,5 +116,15 @@ namespace ET
             public Scene zoneScene;
             public int InRoomIndex;
         }
+
+        public struct CreateOneDiamondView
+        {
+            public Diamond Diamond;
+        }
+
+        public struct UpdateDiamondData
+        {
+            public Diamond Diamond;
+        }
     }
 }

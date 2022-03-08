@@ -5,6 +5,11 @@
         protected override async ETTask Run(Session session, M2C_InitMapData message)
         {
             Log.Debug("init map data" + message.DiamondInfo);
+
+            foreach (var diamondInfo in message.DiamondInfo)
+            {
+                session.DomainScene().GetComponent<DiamondComponent>().CreateDiamoneWithMessage(diamondInfo);
+            }
             await ETTask.CompletedTask;
         }
     }

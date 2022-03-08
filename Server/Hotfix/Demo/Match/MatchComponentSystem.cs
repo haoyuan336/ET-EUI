@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Net.NetworkInformation;
-using ET.Room;
-
 namespace ET
 {
     public class MatchComponentAwakeSystem: AwakeSystem<MatchComponent>
@@ -65,7 +63,7 @@ namespace ET
                 try
                 {
                     Unit unit = (Unit) entity;
-                    if (unit != null)
+                    if (!unit.IsDisposed)
                     {
                         MessageHelper.SendToClient(unit, new M2C_SyncCurrentMatchingCount() { Content = self.MatchingUnits.Count });
                     }

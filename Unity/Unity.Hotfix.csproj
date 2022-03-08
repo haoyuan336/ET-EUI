@@ -48,9 +48,7 @@
     <ImplicitlyExpandNETStandardFacades>false</ImplicitlyExpandNETStandardFacades>
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
-  <ItemGroup><Compile Include="..\Server\Hotfix\Demo\Room\DiamondSystem.cs">
-  <Link>Codes\Hotfix\Demo\Room\DiamondSystem.cs</Link>
-</Compile><Compile Include="Codes\Hotfix\**\*.cs" />
+  <ItemGroup><Compile Include="Codes\Hotfix\**\*.cs" />
  <Reference Include="UnityEngine">
  <HintPath>./Temp/bin/Debug/UnityEngine.dll</HintPath>
  </Reference>

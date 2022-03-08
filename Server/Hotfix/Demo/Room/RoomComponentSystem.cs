@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ET.Room
+namespace ET
 {
     public static class RoomComponentSystem
     {
