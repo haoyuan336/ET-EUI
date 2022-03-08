@@ -25,11 +25,224 @@
     </ItemGroup>
     
     <ItemGroup>
+        <Compile Include="..\..\Server\Hotfix\AppStart_Init.cs">
+          <Link>Demo\Hotfix\AppStart_Init.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Account\DisconnectHelper.cs">
+          <Link>Demo\Hotfix\Demo\Account\DisconnectHelper.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Account\Handler\A2L_LoginAccountRecordRequestHandler.cs">
+          <Link>Demo\Hotfix\Demo\Account\Handler\A2L_LoginAccountRecordRequestHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Account\Handler\A2R_GetRealmKeyHandler.cs">
+          <Link>Demo\Hotfix\Demo\Account\Handler\A2R_GetRealmKeyHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Account\Handler\C2A_GetRealmKeyHandler.cs">
+          <Link>Demo\Hotfix\Demo\Account\Handler\C2A_GetRealmKeyHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Account\Handler\C2A_LoginAccountHandler.cs">
+          <Link>Demo\Hotfix\Demo\Account\Handler\C2A_LoginAccountHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Account\Handler\C2G_LoginGateServerHandler.cs">
+          <Link>Demo\Hotfix\Demo\Account\Handler\C2G_LoginGateServerHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Account\Handler\C2R_LoginRealmHandler.cs">
+          <Link>Demo\Hotfix\Demo\Account\Handler\C2R_LoginRealmHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Account\Handler\L2G_DisconnectGateUnitHandler.cs">
+          <Link>Demo\Hotfix\Demo\Account\Handler\L2G_DisconnectGateUnitHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Account\Handler\R2G_GetGateKeyHandler.cs">
+          <Link>Demo\Hotfix\Demo\Account\Handler\R2G_GetGateKeyHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Account\LoginInfoRecordComponentSystem.cs">
+          <Link>Demo\Hotfix\Demo\Account\LoginInfoRecordComponentSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Account\TokenComponentSystem.cs">
+          <Link>Demo\Hotfix\Demo\Account\TokenComponentSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Actor_TransferHandler.cs">
+          <Link>Demo\Hotfix\Demo\Actor_TransferHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\AOI\AOIEntitySystem.cs">
+          <Link>Demo\Hotfix\Demo\AOI\AOIEntitySystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\AOI\AOIHelper.cs">
+          <Link>Demo\Hotfix\Demo\AOI\AOIHelper.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\AOI\AOIManagerComponentSystem.cs">
+          <Link>Demo\Hotfix\Demo\AOI\AOIManagerComponentSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\AOI\AOISeeCheckHelper.cs">
+          <Link>Demo\Hotfix\Demo\AOI\AOISeeCheckHelper.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\AOI\CellSystem.cs">
+          <Link>Demo\Hotfix\Demo\AOI\CellSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\AOI\ChangePosition_NotifyAOI.cs">
+          <Link>Demo\Hotfix\Demo\AOI\ChangePosition_NotifyAOI.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\C2G_EnterMapHandler.cs">
+          <Link>Demo\Hotfix\Demo\C2G_EnterMapHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\C2G_LoginGateHandler.cs">
+          <Link>Demo\Hotfix\Demo\C2G_LoginGateHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\C2M_MatchRoomHandler.cs">
+          <Link>Demo\Hotfix\Demo\C2M_MatchRoomHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\C2M_PathfindingResultHandler.cs">
+          <Link>Demo\Hotfix\Demo\C2M_PathfindingResultHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\C2M_StopHandler.cs">
+          <Link>Demo\Hotfix\Demo\C2M_StopHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\C2M_TestRobotCaseHandler.cs">
+          <Link>Demo\Hotfix\Demo\C2M_TestRobotCaseHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\C2R_LoginHandler.cs">
+          <Link>Demo\Hotfix\Demo\C2R_LoginHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\G2M_SessionDisconnectHandler.cs">
+          <Link>Demo\Hotfix\Demo\G2M_SessionDisconnectHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\M2M_UnitTransferRequestHandler.cs">
+          <Link>Demo\Hotfix\Demo\M2M_UnitTransferRequestHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Match\C2G_MatchRoomRequestHandler.cs">
+          <Link>Demo\Hotfix\Demo\Match\C2G_MatchRoomRequestHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Match\C2M_CancelMatchHandler.cs">
+          <Link>Demo\Hotfix\Demo\Match\C2M_CancelMatchHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Match\MatchComponentSystem.cs">
+          <Link>Demo\Hotfix\Demo\Match\MatchComponentSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\MessageHelper.cs">
+          <Link>Demo\Hotfix\Demo\MessageHelper.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Move\MoveHelper.cs">
+          <Link>Demo\Hotfix\Demo\Move\MoveHelper.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Move\PathFindHelper.cs">
+          <Link>Demo\Hotfix\Demo\Move\PathFindHelper.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\PlayerComponentSystem.cs">
+          <Link>Demo\Hotfix\Demo\PlayerComponentSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\R2G_GetLoginKeyHandler.cs">
+          <Link>Demo\Hotfix\Demo\R2G_GetLoginKeyHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\RealmGateAddressHelper.cs">
+          <Link>Demo\Hotfix\Demo\RealmGateAddressHelper.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Room\DiamondComponentSystem.cs">
+          <Link>Demo\Hotfix\Demo\Room\DiamondComponentSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Room\DiamondSystem.cs">
+          <Link>Demo\Hotfix\Demo\Room\DiamondSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Room\RoomComponentSystem.cs">
+          <Link>Demo\Hotfix\Demo\Room\RoomComponentSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Room\RoomSystem.cs">
+          <Link>Demo\Hotfix\Demo\Room\RoomSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Scene\C2M_TransferMapHandler.cs">
+          <Link>Demo\Hotfix\Demo\Scene\C2M_TransferMapHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Scene\SceneFactory.cs">
+          <Link>Demo\Hotfix\Demo\Scene\SceneFactory.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\ServerInfo\Handler\C2A_GetServerInfoHandler.cs">
+          <Link>Demo\Hotfix\Demo\ServerInfo\Handler\C2A_GetServerInfoHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\ServerInfo\ServerInfoManagerComponentSystem.cs">
+          <Link>Demo\Hotfix\Demo\ServerInfo\ServerInfoManagerComponentSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\SessionPlayerComponentSystem.cs">
+          <Link>Demo\Hotfix\Demo\SessionPlayerComponentSystem.cs</Link>
+        </Compile>
         <Compile Include="..\..\Server\Hotfix\Demo\Session\InnerMessageDispatcherHelper.cs">
           <Link>Server\Session\InnerMessageDispatcherHelper.cs</Link>
         </Compile>
         <Compile Include="..\..\Server\Hotfix\Demo\Session\SessionStreamDispatcherServerInner.cs">
           <Link>Server\Session\SessionStreamDispatcherServerInner.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Session\SessionStreamDispatcherServerOuter.cs">
+          <Link>Demo\Hotfix\Demo\Session\SessionStreamDispatcherServerOuter.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Transfer\TransferHelper.cs">
+          <Link>Demo\Hotfix\Demo\Transfer\TransferHelper.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Unit\UnitComponentSystem.cs">
+          <Link>Demo\Hotfix\Demo\Unit\UnitComponentSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Unit\UnitEnterSightRange_NotifyClient.cs">
+          <Link>Demo\Hotfix\Demo\Unit\UnitEnterSightRange_NotifyClient.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Unit\UnitFactory.cs">
+          <Link>Demo\Hotfix\Demo\Unit\UnitFactory.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Unit\UnitHelper.cs">
+          <Link>Demo\Hotfix\Demo\Unit\UnitHelper.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Unit\UnitLeaveSightRange_NotifyClient.cs">
+          <Link>Demo\Hotfix\Demo\Unit\UnitLeaveSightRange_NotifyClient.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Demo\Unit\UnitSystem.cs">
+          <Link>Demo\Hotfix\Demo\Unit\UnitSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Handler\C2G_PingHandler.cs">
+          <Link>Demo\Hotfix\Handler\C2G_PingHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Handler\C2M_ReloadHandler.cs">
+          <Link>Demo\Hotfix\Handler\C2M_ReloadHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Module\ActorLocation\ActorLocationSenderComponentSystem.cs">
+          <Link>Demo\Hotfix\Module\ActorLocation\ActorLocationSenderComponentSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Module\ActorLocation\ActorLocationSenderSystem.cs">
+          <Link>Demo\Hotfix\Module\ActorLocation\ActorLocationSenderSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Module\ActorLocation\LocationProxyComponentSystem.cs">
+          <Link>Demo\Hotfix\Module\ActorLocation\LocationProxyComponentSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Module\ActorLocation\ObjectAddRequestHandler.cs">
+          <Link>Demo\Hotfix\Module\ActorLocation\ObjectAddRequestHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Module\ActorLocation\ObjectGetRequestHandler.cs">
+          <Link>Demo\Hotfix\Module\ActorLocation\ObjectGetRequestHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Module\ActorLocation\ObjectLockRequestHandler.cs">
+          <Link>Demo\Hotfix\Module\ActorLocation\ObjectLockRequestHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Module\ActorLocation\ObjectRemoveRequestHandler.cs">
+          <Link>Demo\Hotfix\Module\ActorLocation\ObjectRemoveRequestHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Module\ActorLocation\ObjectUnLockRequestHandler.cs">
+          <Link>Demo\Hotfix\Module\ActorLocation\ObjectUnLockRequestHandler.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Module\DB\DBComponentSystem.cs">
+          <Link>Demo\Hotfix\Module\DB\DBComponentSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Module\DB\DBManagerComponentSystem.cs">
+          <Link>Demo\Hotfix\Module\DB\DBManagerComponentSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Module\Http\HttpComponentSystem.cs">
+          <Link>Demo\Hotfix\Module\Http\HttpComponentSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\obj\Debug\.NETCoreApp,Version=v6.0.AssemblyAttributes.cs">
+          <Link>Demo\Hotfix\obj\Debug\.NETCoreApp,Version=v6.0.AssemblyAttributes.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\obj\Debug\Server.Hotfix.AssemblyInfo.cs">
+          <Link>Demo\Hotfix\obj\Debug\Server.Hotfix.AssemblyInfo.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Watcher\WatcherComponentSystem.cs">
+          <Link>Demo\Hotfix\Watcher\WatcherComponentSystem.cs</Link>
+        </Compile>
+        <Compile Include="..\..\Server\Hotfix\Watcher\WatcherHelper.cs">
+          <Link>Demo\Hotfix\Watcher\WatcherHelper.cs</Link>
         </Compile>
         <Compile Include="..\..\Unity\Codes\Hotfix\Module\AI\**\*.cs">
             <Link>Module\AI\%(RecursiveDir)%(FileName)%(Extension)</Link>
@@ -94,6 +307,60 @@
     
     <ItemGroup>
       <Folder Include="Server" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Content Include="..\..\Server\Hotfix\obj\Debug\refint\Server.Hotfix.dll">
+        <Link>Demo\Hotfix\obj\Debug\refint\Server.Hotfix.dll</Link>
+      </Content>
+      <Content Include="..\..\Server\Hotfix\obj\Debug\ref\Server.Hotfix.dll">
+        <Link>Demo\Hotfix\obj\Debug\ref\Server.Hotfix.dll</Link>
+      </Content>
+      <Content Include="..\..\Server\Hotfix\obj\Debug\Server.Hotfix.AssemblyInfoInputs.cache">
+        <Link>Demo\Hotfix\obj\Debug\Server.Hotfix.AssemblyInfoInputs.cache</Link>
+      </Content>
+      <Content Include="..\..\Server\Hotfix\obj\Debug\Server.Hotfix.assets.cache">
+        <Link>Demo\Hotfix\obj\Debug\Server.Hotfix.assets.cache</Link>
+      </Content>
+      <Content Include="..\..\Server\Hotfix\obj\Debug\Server.Hotfix.csproj.AssemblyReference.cache">
+        <Link>Demo\Hotfix\obj\Debug\Server.Hotfix.csproj.AssemblyReference.cache</Link>
+      </Content>
+      <Content Include="..\..\Server\Hotfix\obj\Debug\Server.Hotfix.csproj.CoreCompileInputs.cache">
+        <Link>Demo\Hotfix\obj\Debug\Server.Hotfix.csproj.CoreCompileInputs.cache</Link>
+      </Content>
+      <Content Include="..\..\Server\Hotfix\obj\Debug\Server.Hotfix.csproj.FileListAbsolute.txt">
+        <Link>Demo\Hotfix\obj\Debug\Server.Hotfix.csproj.FileListAbsolute.txt</Link>
+      </Content>
+      <Content Include="..\..\Server\Hotfix\obj\Debug\Server.Hotfix.dll">
+        <Link>Demo\Hotfix\obj\Debug\Server.Hotfix.dll</Link>
+      </Content>
+      <Content Include="..\..\Server\Hotfix\obj\Debug\Server.Hotfix.GeneratedMSBuildEditorConfig.editorconfig">
+        <Link>Demo\Hotfix\obj\Debug\Server.Hotfix.GeneratedMSBuildEditorConfig.editorconfig</Link>
+      </Content>
+      <Content Include="..\..\Server\Hotfix\obj\Debug\Server.Hotfix.pdb">
+        <Link>Demo\Hotfix\obj\Debug\Server.Hotfix.pdb</Link>
+      </Content>
+      <Content Include="..\..\Server\Hotfix\obj\project.assets.json">
+        <Link>Demo\Hotfix\obj\project.assets.json</Link>
+      </Content>
+      <Content Include="..\..\Server\Hotfix\obj\project.nuget.cache">
+        <Link>Demo\Hotfix\obj\project.nuget.cache</Link>
+      </Content>
+      <Content Include="..\..\Server\Hotfix\obj\project.packagespec.json">
+        <Link>Demo\Hotfix\obj\project.packagespec.json</Link>
+      </Content>
+      <Content Include="..\..\Server\Hotfix\obj\Server.Hotfix.csproj.nuget.dgspec.json">
+        <Link>Demo\Hotfix\obj\Server.Hotfix.csproj.nuget.dgspec.json</Link>
+      </Content>
+      <Content Include="..\..\Server\Hotfix\obj\Server.Hotfix.csproj.nuget.g.props">
+        <Link>Demo\Hotfix\obj\Server.Hotfix.csproj.nuget.g.props</Link>
+      </Content>
+      <Content Include="..\..\Server\Hotfix\obj\Server.Hotfix.csproj.nuget.g.targets">
+        <Link>Demo\Hotfix\obj\Server.Hotfix.csproj.nuget.g.targets</Link>
+      </Content>
+      <Content Include="..\..\Server\Hotfix\Server.Hotfix.csproj">
+        <Link>Demo\Hotfix\Server.Hotfix.csproj</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

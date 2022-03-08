@@ -6,6 +6,14 @@
         {
             
             Log.Debug("init map data" + message.DiamondInfo);
+
+            foreach (var diamondInfo in message.DiamondInfo)
+            {
+
+                session.DomainScene().GetComponent<DiamondComponent>().CreateDiamoneWithMessage(diamondInfo);
+            }
+            // UnitFactory.Create()
+            // Game.EventSystem.Publish(new EventType.);
             await ETTask.CompletedTask;
         }
     }

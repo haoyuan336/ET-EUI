@@ -52,6 +52,9 @@
     <Compile Include="..\Server\Model\Demo\Room\Diamond.cs">
       <Link>Codes\Model\Demo\Room\Diamond.cs</Link>
     </Compile>
+    <Compile Include="..\Server\Model\Demo\Room\DiamondComponent.cs">
+      <Link>Codes\Model\Demo\Room\DiamondComponent.cs</Link>
+    </Compile>
     <Compile Include="Codes\Model\**\*.cs" />
     <Reference Include="UnityEngine">
       <HintPath>./Temp/bin/Debug/UnityEngine.dll</HintPath>

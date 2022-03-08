@@ -1,4 +1,4 @@
-﻿namespace ET.Room
+﻿namespace ET
 {
     public static class DiamondSystem
     {

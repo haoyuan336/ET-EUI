@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ET.Room
+namespace ET
 {
     public class RoomAwakeSystem: AwakeSystem<Room>
     {
@@ -41,10 +41,8 @@ namespace ET.Room
             {
                 for (var j = 0 ; j < self.LieCount; j ++)
                 {
-                    long id = IdGenerater.Instance.GenerateId();
-                    Diamond diamond = self.AddChildWithId<Diamond>(id);
-                    diamond.SetIndex(j,i);
-                    self.Diamonds[j, i] = diamond;
+
+                    Diamond diamond = self.GetParent<DiamondComponent>().CreateOneDiamond(j, i);
                     diamondInfos.Add(diamond.GetMessageInfo());
                 }
             }

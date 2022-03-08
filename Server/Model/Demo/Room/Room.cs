@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using OfficeOpenXml.FormulaParsing.Excel.Functions;
 
-namespace ET.Room
+namespace ET
 {
     public class Room: Entity, IAwake,IDestroy, IUpdate
     {
