@@ -35,6 +35,8 @@ namespace ILRuntime.Runtime.Generated
             app.RegisterCLRFieldSetter(field, set_onValueChanged_0);
             app.RegisterCLRFieldBinding(field, CopyToStack_onValueChanged_0, AssignFromStack_onValueChanged_0);
 
+            app.RegisterCLRCreateArrayInstance(type, s => new UnityEngine.UI.Toggle[s]);
+
 
         }
 

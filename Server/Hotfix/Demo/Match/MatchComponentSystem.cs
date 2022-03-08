@@ -41,11 +41,11 @@ namespace ET
                 self.MatchingUnits.Add(unit);
             }
 
-            if (self.MatchingUnits.Count >= 1)
+            if (self.MatchingUnits.Count >= 2)
             {
                 // self.MatchingUnits.
                 List<Unit> units = new List<Unit>();
-                for (var i = 0; i < 1; i++)
+                for (var i = 0; i < 2; i++)
                 {
                     units.Add(self.MatchingUnits[0]);
                     self.MatchingUnits.RemoveAt(0);
