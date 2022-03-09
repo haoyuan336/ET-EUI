@@ -11,6 +11,8 @@
                 TurnIndex = message.TurnIndex,
                 MySeatIndex = message.MySeatIndex
             });
+            session.DomainScene().GetComponent<PlayerComponent>().MySeatIndex = message.MySeatIndex;
+            session.DomainScene().GetComponent<PlayerComponent>().CurrentTurnIndex = message.TurnIndex;
             await ETTask.CompletedTask;
         }
     }

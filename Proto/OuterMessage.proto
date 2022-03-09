@@ -451,7 +451,11 @@ message C2M_PlayerScrollScreen //IActorLocationMessage
 	int32 StartX = 1;
 	int32 StartY = 2;
 
-	int32 DirX = 3;
-	int32 DirY = 4;
+	int32 DirType = 3;
+}
 
+message M2C_ChangeCurrentTurnSeatIndex	//IActorMessage
+{
+	int RpcId = 90;
+	int32 CurrentTurnIndex = 1;
 }

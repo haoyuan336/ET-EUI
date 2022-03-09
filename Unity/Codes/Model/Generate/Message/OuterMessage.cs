@@ -967,4 +967,34 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.C2M_PlayerScrollScreen)]
+	[ProtoContract]
+	public partial class C2M_PlayerScrollScreen: Object, IActorLocationMessage
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public int StartX { get; set; }
+
+		[ProtoMember(2)]
+		public int StartY { get; set; }
+
+		[ProtoMember(3)]
+		public int DirType { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_ChangeCurrentTurnSeatIndex)]
+	[ProtoContract]
+	public partial class M2C_ChangeCurrentTurnSeatIndex: Object, IActorMessage
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public int CurrentTurnIndex { get; set; }
+
+	}
+
 }

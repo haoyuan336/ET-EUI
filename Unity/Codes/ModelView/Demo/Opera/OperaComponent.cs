@@ -13,5 +13,6 @@ namespace ET
 	    public readonly C2M_PathfindingResult frameClickMap = new C2M_PathfindingResult();
 
 	    public bool isTouching = false;
+
     }
 }

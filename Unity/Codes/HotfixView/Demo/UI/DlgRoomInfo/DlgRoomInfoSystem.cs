@@ -23,5 +23,10 @@ namespace ET
             self.View.E_TurnIndexText.text = $"TurnIndex:{info.TurnIndex.ToString()}";
             self.View.E_MySeatIndexText.text = $"MySeatIndex:{info.MySeatIndex.ToString()}";
         }
+
+        public static void UpdateCurrentTurnSeatIndex(this DlgRoomInfo self, int count)
+        {
+            self.View.E_TurnIndexText.text = count.ToString();
+        }
     }
 }

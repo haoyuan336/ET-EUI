@@ -31,8 +31,36 @@ namespace ET
 
             self.InitGameData();
             self.SyncRoomInfo();
+            self.ToggleTurnSeatIndex();
+            self.syncCurrentTurnIndex();
         }
 
+        public static void ToggleTurnSeatIndex(this Room self)
+        {
+            //切换轮流操作游戏的座位号
+            if (self.CurrentTurnIndex == 0)
+            {
+                self.CurrentTurnIndex = 1;
+            }
+            else
+            {
+                self.CurrentTurnIndex++;
+                if (self.CurrentTurnIndex >= self.Units.Count)
+                {
+                    self.CurrentTurnIndex = 1;
+                }
+            }
+        }
+
+        public static void syncCurrentTurnIndex(this Room self)
+        {
+            foreach (var unit in self.Units)
+            {
+                M2C_ChangeCurrentTurnSeatIndex m2CChangeCurrentTurnSeatIndex = new M2C_ChangeCurrentTurnSeatIndex();
+                m2CChangeCurrentTurnSeatIndex.CurrentTurnIndex = self.CurrentTurnIndex;
+                MessageHelper.SendToClient(unit, m2CChangeCurrentTurnSeatIndex);
+            }
+        }
         //同步房间信息
         public static void SyncRoomInfo(this Room self)
         {

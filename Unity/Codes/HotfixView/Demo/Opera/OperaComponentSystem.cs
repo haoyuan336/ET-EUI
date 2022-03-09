@@ -41,9 +41,68 @@ namespace ET
             {
                 if (Vector2.Distance(Input.mousePosition, self.ClickPoint) >= 50)
                 {
+                    self.isTouching = false;
                     Vector2 endDirVector2 = new Vector2(Input.mousePosition.x - self.ClickPoint.x, Input.mousePosition.y - self.ClickPoint.y);
                     var angle = Vector2.SignedAngle(endDirVector2, Vector2.up);
                     Log.Debug("Scroll Screen" + angle);
+                    //得到滑动方向
+                    ScrollDirType dir = ScrollDirType.Down;
+                    if (angle > -45 && angle < 45)
+                    {
+                        dir = ScrollDirType.Up;
+                    }
+
+                    if (angle > 45 && angle < 135)
+                    {
+                        dir = ScrollDirType.Right;
+                    }
+
+                    if ((angle > 135 && angle < 180) || (angle > -180 && angle < -135))
+                    {
+                        dir = ScrollDirType.Down;
+                    }
+
+                    if (angle < -45 && angle > -135)
+                    {
+                        dir = ScrollDirType.Left;
+                    }
+
+                    Log.Debug($"scroll view = {dir.ToString()}");
+
+                    PlayerComponent playerComponent = self.ZoneScene().GetComponent<PlayerComponent>();
+                    int mySeatIndex = playerComponent.MySeatIndex;
+                    int turnIndex = playerComponent.CurrentTurnIndex;
+                    PvPLevelConfig pvPLevelConfig = PvPLevelConfigCategory.Instance.Get(1);
+                    int hangCount = pvPLevelConfig.HangCount;
+                    int lieCount = pvPLevelConfig.LieCount;
+                    if (mySeatIndex == turnIndex)
+                    {
+                        //只有自己的座位号 跟服务器下发的座位号一致的时候 才能操作游戏
+                        Ray ray = Camera.main.ScreenPointToRay(self.ClickPoint);
+
+                        RaycastHit raycastHit;
+                        var maskCode = LayerMask.GetMask("Default");
+                        bool isHited = Physics.Raycast(ray, out raycastHit, Mathf.Infinity, maskCode);
+                        if (isHited)
+                        {
+                            // Log.Debug("hited" + raycastHit.transform.name);
+                            UnityEngine.Vector3 pos = raycastHit.transform.position;
+                            float x = pos.x;
+                            float y = pos.y;
+                            float distance = 1.1f;
+                            // a.Diamond.LieIndex - liecount * 0.5f + 0.5f) * distance,
+                            float lieIndex = x / distance + lieCount * 0.5f - 0.5f;
+                            float hangIndex = y / distance + hangCount * 0.5f - 0.5f;
+                            C2M_PlayerScrollScreen c2MPlayerScrollScreen = new C2M_PlayerScrollScreen();
+                            c2MPlayerScrollScreen.StartX = (int)lieIndex;
+                            c2MPlayerScrollScreen.StartY = (int)hangIndex;
+                            c2MPlayerScrollScreen.DirType = (int)dir;
+                            // self.ZoneScene().GetComponent<SessionComponent>().Session.Call()
+                        }
+
+                        // c2MPlayerScrollScreen.StartX = 
+                        // self.ZoneScene().GetComponent<SessionComponent>().Session.Call(C2M_PlayerScrollScreen).Coroutine();
+                    }
                 }
             }
 

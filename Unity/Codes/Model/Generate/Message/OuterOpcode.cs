@@ -63,5 +63,7 @@ namespace ET
 		 public const ushort DiamondInfo = 10060;
 		 public const ushort M2C_InitMapData = 10061;
 		 public const ushort M2C_SyncRoomInfo = 10062;
+		 public const ushort C2M_PlayerScrollScreen = 10063;
+		 public const ushort M2C_ChangeCurrentTurnSeatIndex = 10064;
 	}
 }

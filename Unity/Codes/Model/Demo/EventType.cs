@@ -134,5 +134,11 @@ namespace ET
             public int TurnIndex;
             public int MySeatIndex;
         }
+
+        public struct UpdateCurrentTurnSeatIndex
+        {
+            public Scene zoneScene;
+            public int TurnIndex;
+        }
     }
 }
