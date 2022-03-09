@@ -32,6 +32,7 @@ namespace ET
             // UIBaseWindow uiBaseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_MatchButton];
             Scene scene = a.zoneScene;
             scene.GetComponent<UIComponent>().HideWindow(WindowID.WindowID_MatchButton);
+            scene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_RoomInfo);
             await ETTask.CompletedTask;
         }
     }

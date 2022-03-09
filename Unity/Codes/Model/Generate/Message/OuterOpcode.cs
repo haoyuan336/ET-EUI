@@ -62,5 +62,6 @@ namespace ET
 		 public const ushort M2C_SyncCreateRoomMessage = 10059;
 		 public const ushort DiamondInfo = 10060;
 		 public const ushort M2C_InitMapData = 10061;
+		 public const ushort M2C_SyncRoomInfo = 10062;
 	}
 }

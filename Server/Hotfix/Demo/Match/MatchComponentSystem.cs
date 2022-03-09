@@ -40,12 +40,12 @@ namespace ET
             {
                 self.MatchingUnits.Add(unit);
             }
-
-            if (self.MatchingUnits.Count >= 2)
+            const int RoomPlayerCount = 1;
+            if (self.MatchingUnits.Count >= RoomPlayerCount)
             {
                 // self.MatchingUnits.
                 List<Unit> units = new List<Unit>();
-                for (var i = 0; i < 2; i++)
+                for (var i = 0; i < RoomPlayerCount; i++)
                 {
                     units.Add(self.MatchingUnits[0]);
                     self.MatchingUnits.RemoveAt(0);

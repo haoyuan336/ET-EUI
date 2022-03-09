@@ -1,10 +1,11 @@
 using System;
 using UnityEngine;
+using Vector3 = System.Numerics.Vector3;
 
 namespace ET
 {
     [ObjectSystem]
-    public class OperaComponentAwakeSystem : AwakeSystem<OperaComponent>
+    public class OperaComponentAwakeSystem: AwakeSystem<OperaComponent>
     {
         public override void Awake(OperaComponent self)
         {
@@ -13,45 +14,66 @@ namespace ET
     }
 
     [ObjectSystem]
-    public class OperaComponentUpdateSystem : UpdateSystem<OperaComponent>
+    public class OperaComponentUpdateSystem: UpdateSystem<OperaComponent>
     {
         public override void Update(OperaComponent self)
         {
             self.Update();
         }
     }
-    
+
     public static class OperaComponentSystem
     {
         public static void Update(this OperaComponent self)
         {
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(0))
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 1000, self.mapMask))
+                self.isTouching = true;
+                self.ClickPoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                self.isTouching = false;
+            }
+
+            if (self.isTouching)
+            {
+                if (Vector2.Distance(Input.mousePosition, self.ClickPoint) >= 50)
                 {
-                    self.ClickPoint = hit.point;
-                    self.frameClickMap.X = self.ClickPoint.x;
-                    self.frameClickMap.Y = self.ClickPoint.y;
-                    self.frameClickMap.Z = self.ClickPoint.z;
-                    self.ZoneScene().GetComponent<SessionComponent>().Session.Send(self.frameClickMap);
+                    Vector2 endDirVector2 = new Vector2(Input.mousePosition.x - self.ClickPoint.x, Input.mousePosition.y - self.ClickPoint.y);
+                    var angle = Vector2.SignedAngle(endDirVector2, Vector2.up);
+                    Log.Debug("Scroll Screen" + angle);
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                CodeLoader.Instance.LoadLogic();
-                Game.EventSystem.Add(CodeLoader.Instance.GetTypes());
-                Game.EventSystem.Load();
-                Log.Debug("hot reload success!");
-            }
-            
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                C2M_TransferMap c2MTransferMap = new C2M_TransferMap();
-                self.ZoneScene().GetComponent<SessionComponent>().Session.Call(c2MTransferMap).Coroutine();
-            }
+            // if (Input.GetMouseButtonDown(1))
+            // {
+            //     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            //     RaycastHit hit;
+            //     if (Physics.Raycast(ray, out hit, 1000, self.mapMask))
+            //     {
+            //         self.ClickPoint = hit.point;
+            //         self.frameClickMap.X = self.ClickPoint.x;
+            //         self.frameClickMap.Y = self.ClickPoint.y;
+            //         self.frameClickMap.Z = self.ClickPoint.z;
+            //         self.ZoneScene().GetComponent<SessionComponent>().Session.Send(self.frameClickMap);
+            //     }
+            // }
+            //
+            // if (Input.GetKeyDown(KeyCode.R))
+            // {
+            //     CodeLoader.Instance.LoadLogic();
+            //     Game.EventSystem.Add(CodeLoader.Instance.GetTypes());
+            //     Game.EventSystem.Load();
+            //     Log.Debug("hot reload success!");
+            // }
+            //
+            // if (Input.GetKeyDown(KeyCode.T))
+            // {
+            //     C2M_TransferMap c2MTransferMap = new C2M_TransferMap();
+            //     self.ZoneScene().GetComponent<SessionComponent>().Session.Call(c2MTransferMap).Coroutine();
+            // }
         }
     }
 }

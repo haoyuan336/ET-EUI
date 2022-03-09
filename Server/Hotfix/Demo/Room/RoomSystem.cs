@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 
 namespace ET
 {
@@ -27,7 +28,22 @@ namespace ET
                 Log.Debug("sync create room message");
                 MessageHelper.SendToClient(unit, new M2C_SyncCreateRoomMessage() { InRoomIndex = unit.InRoomIndex });
             }
+
             self.InitGameData();
+            self.SyncRoomInfo();
+        }
+
+        //同步房间信息
+        public static void SyncRoomInfo(this Room self)
+        {
+            foreach (var unit in self.Units)
+            {
+                M2C_SyncRoomInfo m2CSyncRoomInfo = new M2C_SyncRoomInfo();
+                m2CSyncRoomInfo.RoomId = self.Id;
+                m2CSyncRoomInfo.TurnIndex = self.CurrentTurnIndex;
+                m2CSyncRoomInfo.MySeatIndex = unit.InRoomIndex;
+                MessageHelper.SendToClient(unit, m2CSyncRoomInfo);
+            }
         }
 
         public static void InitGameData(this Room self)
@@ -39,28 +55,21 @@ namespace ET
             List<DiamondInfo> diamondInfos = new List<DiamondInfo>();
             DiamondComponent diamondComponent = self.DomainScene().GetComponent<DiamondComponent>();
             // diamondComponent.CreateOneDiamond();
-            for (var i = 0; i< self.HangCount; i ++)
+            for (var i = 0; i < self.HangCount; i++)
             {
-                for (var j = 0 ; j < self.LieCount; j ++)
+                for (var j = 0; j < self.LieCount; j++)
                 {
-            
                     Diamond diamond = diamondComponent.CreateOneDiamond();
-                    diamond.SetIndex(j,i);
+                    diamond.SetIndex(j, i);
                     self.Diamonds[j, i] = diamond;
                     diamondInfos.Add(diamond.GetMessageInfo());
                 }
             }
 
-            
-
             foreach (var unit in self.Units)
             {
-                
-                MessageHelper.SendToClient(unit,new M2C_InitMapData(){DiamondInfo = diamondInfos});
+                MessageHelper.SendToClient(unit, new M2C_InitMapData() { DiamondInfo = diamondInfos });
             }
-
-            
-
         }
     }
 }

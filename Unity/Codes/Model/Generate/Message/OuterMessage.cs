@@ -948,4 +948,23 @@ namespace ET
 
 	}
 
+//同步房间信息
+	[Message(OuterOpcode.M2C_SyncRoomInfo)]
+	[ProtoContract]
+	public partial class M2C_SyncRoomInfo: Object, IActorMessage
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long RoomId { get; set; }
+
+		[ProtoMember(2)]
+		public int TurnIndex { get; set; }
+
+		[ProtoMember(3)]
+		public int MySeatIndex { get; set; }
+
+	}
+
 }

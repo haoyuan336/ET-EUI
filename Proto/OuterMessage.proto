@@ -436,3 +436,22 @@ message M2C_InitMapData //IActorMessage
 	int RpcId = 90;
 	repeated DiamondInfo DiamondInfo = 1;
 }
+
+//同步房间信息
+message M2C_SyncRoomInfo	//IActorMessage
+{
+	int RpcId = 90;	
+	int64 RoomId = 1;
+	int32 TurnIndex = 2;
+	int32 MySeatIndex = 3;
+}
+message C2M_PlayerScrollScreen //IActorLocationMessage
+{
+	int RpcId = 90;
+	int32 StartX = 1;
+	int32 StartY = 2;
+
+	int32 DirX = 3;
+	int32 DirY = 4;
+
+}

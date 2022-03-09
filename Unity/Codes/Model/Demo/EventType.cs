@@ -126,5 +126,13 @@ namespace ET
         {
             public Diamond Diamond;
         }
+
+        public struct UpdateRoomInfo
+        {
+            public Scene zoneScene;
+            public long RoomId;
+            public int TurnIndex;
+            public int MySeatIndex;
+        }
     }
 }
