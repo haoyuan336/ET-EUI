@@ -5,21 +5,7 @@ namespace ET
 	
 	public static class SessionPlayerComponentSystem
 	{
-		public  class SessionPlayerComponentAwakeSystem: AwakeSystem<SessionPlayerComponent>
-		{
-			public override async void Awake(SessionPlayerComponent self)
-			{
-				while (true)
-				{
-					await TimerComponent.Instance.WaitAsync(1000);
-					if (self.IsDisposed)
-					{
-						// Log.Error("is Disponsed");
-						return;
-					}
-				}
-			}
-		}
+		
 		
 		public class SessionPlayerComponentDestroySystem: DestroySystem<SessionPlayerComponent>
 		{

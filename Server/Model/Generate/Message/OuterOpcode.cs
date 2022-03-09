@@ -65,5 +65,6 @@ namespace ET
 		 public const ushort M2C_SyncRoomInfo = 10062;
 		 public const ushort C2M_PlayerScrollScreen = 10063;
 		 public const ushort M2C_ChangeCurrentTurnSeatIndex = 10064;
+		 public const ushort M2C_SyncDiamondUpdatePos = 10065;
 	}
 }

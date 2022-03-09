@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using System.Numerics;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ET
 {
@@ -45,7 +47,7 @@ namespace ET
             else
             {
                 self.CurrentTurnIndex++;
-                if (self.CurrentTurnIndex >= self.Units.Count)
+                if (self.CurrentTurnIndex > self.Units.Count)
                 {
                     self.CurrentTurnIndex = 1;
                 }
@@ -61,6 +63,7 @@ namespace ET
                 MessageHelper.SendToClient(unit, m2CChangeCurrentTurnSeatIndex);
             }
         }
+
         //同步房间信息
         public static void SyncRoomInfo(this Room self)
         {
@@ -98,6 +101,59 @@ namespace ET
             {
                 MessageHelper.SendToClient(unit, new M2C_InitMapData() { DiamondInfo = diamondInfos });
             }
+        }
+
+        public static void PlayerScrollScreen(this Room self, C2M_PlayerScrollScreen message)
+        {
+            self.ToggleTurnSeatIndex();
+            self.syncCurrentTurnIndex();
+            //交换两个位置的钻石
+            //首先取出临时钻石
+            int LieIndex = message.StartX;
+            int HangIndex = message.StartY;
+            Diamond diamond = self.GetDiamond(LieIndex, HangIndex);
+            int OffsetLie = 0;
+            int OffsetHang = 0;
+            switch (message.DirType)
+            {
+                case (int) ScrollDirType.Up:
+                    OffsetHang += 1;
+                    break;
+                case (int) ScrollDirType.Down:
+                    OffsetHang -= 1;
+                    break;
+                case (int) ScrollDirType.Left:
+                    OffsetLie -= 1;
+                    break;
+                case (int) ScrollDirType.Right:
+                    OffsetLie += 1;
+                    break;
+            }
+
+            Diamond nextDiamond = self.Diamonds[LieIndex + OffsetLie, HangIndex + OffsetHang];
+
+            if (diamond != null && nextDiamond != null)
+            {
+                self.Diamonds[LieIndex, HangIndex] = nextDiamond;
+                self.Diamonds[LieIndex + OffsetLie, HangIndex + OffsetHang] = diamond;
+                diamond.SetIndex(LieIndex + OffsetLie, HangIndex + OffsetHang);
+                nextDiamond.SetIndex(LieIndex, HangIndex);
+            }
+            
+            List<DiamondInfo> diamondInfos = new List<DiamondInfo>();
+            diamondInfos.Add(diamond.GetMessageInfo());
+            diamondInfos.Add(nextDiamond.GetMessageInfo());
+            //同步结果
+            foreach (var unit in self.Units)
+            {
+                MessageHelper.SendToClient(unit, new M2C_SyncDiamondUpdatePos() { DiamondInfos = diamondInfos });
+            }
+        }
+
+        public static Diamond GetDiamond(this Room self, int LieIndex, int HangIndex)
+        {
+            // Diamond diamond = null;
+            return self.Diamonds[LieIndex, HangIndex];
         }
     }
 }

@@ -983,6 +983,9 @@ namespace ET
 		[ProtoMember(3)]
 		public int DirType { get; set; }
 
+		[ProtoMember(4)]
+		public long RoomId { get; set; }
+
 	}
 
 	[Message(OuterOpcode.M2C_ChangeCurrentTurnSeatIndex)]
@@ -994,6 +997,18 @@ namespace ET
 
 		[ProtoMember(1)]
 		public int CurrentTurnIndex { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_SyncDiamondUpdatePos)]
+	[ProtoContract]
+	public partial class M2C_SyncDiamondUpdatePos: Object, IActorMessage
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public List<DiamondInfo> DiamondInfos = new List<DiamondInfo>();
 
 	}
 

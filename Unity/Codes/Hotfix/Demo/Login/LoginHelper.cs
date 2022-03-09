@@ -155,6 +155,8 @@ namespace ET
             long accountId = zoneScene.GetComponent<AccountInfoComponent>().AccountId;
             Session session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(gateAddress));
             zoneScene.GetComponent<SessionComponent>().Session = session;
+            session.AddChild<PingComponent>();
+            // session.RemoveComponent<SessionAcceptTimeoutComponent>();
             G2C_LoginGateResponse g2CLoginGateResponse = null;
             try
             {

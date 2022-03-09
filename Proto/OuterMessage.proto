@@ -452,10 +452,17 @@ message C2M_PlayerScrollScreen //IActorLocationMessage
 	int32 StartY = 2;
 
 	int32 DirType = 3;
+	int64 RoomId = 4;
 }
 
 message M2C_ChangeCurrentTurnSeatIndex	//IActorMessage
 {
 	int RpcId = 90;
 	int32 CurrentTurnIndex = 1;
+}
+
+message M2C_SyncDiamondUpdatePos	//IActorMessage
+{
+	int RpcId = 90;
+	repeated DiamondInfo DiamondInfos = 1;
 }

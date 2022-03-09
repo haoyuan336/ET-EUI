@@ -35,7 +35,17 @@ namespace ET
             self.DiamondType = diamondInfo.DiamondType;
 #if !SERVER
             Game.EventSystem.Publish(new EventType.UpdateDiamondData() { Diamond = self });
-            
+
+#endif
+        }
+
+        public static void UpdateIndex(this Diamond self, int LieIndex, int HangIndex)
+        {
+            self.LieIndex = LieIndex;
+            self.HangIndex = HangIndex;
+#if !SERVER
+            Game.EventSystem.Publish(new EventType.UpdateDiamondIndex() { Diamond = self, LieIndex = LieIndex, HangIndex = HangIndex });
+
 #endif
         }
     }

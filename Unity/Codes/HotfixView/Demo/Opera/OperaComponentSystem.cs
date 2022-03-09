@@ -97,7 +97,10 @@ namespace ET
                             c2MPlayerScrollScreen.StartX = (int)lieIndex;
                             c2MPlayerScrollScreen.StartY = (int)hangIndex;
                             c2MPlayerScrollScreen.DirType = (int)dir;
-                            // self.ZoneScene().GetComponent<SessionComponent>().Session.Call()
+                            c2MPlayerScrollScreen.RoomId = playerComponent.RoomId;
+                            // c2MPlayerScrollScreen.RoomId = playerComponent.
+                            self.ZoneScene().GetComponent<SessionComponent>().Session.Call(c2MPlayerScrollScreen).Coroutine();
+                            
                         }
 
                         // c2MPlayerScrollScreen.StartX = 

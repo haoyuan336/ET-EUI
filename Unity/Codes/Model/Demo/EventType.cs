@@ -140,5 +140,12 @@ namespace ET
             public Scene zoneScene;
             public int TurnIndex;
         }
+
+        public struct UpdateDiamondIndex
+        {
+            public Diamond Diamond;
+            public int LieIndex;
+            public int HangIndex;
+        }
     }
 }
