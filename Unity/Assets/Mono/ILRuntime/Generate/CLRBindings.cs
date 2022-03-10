@@ -58,6 +58,8 @@ namespace ILRuntime.Runtime.Generated
             ET_ETCancellationToken_Binding.Register(app);
             System_Linq_Enumerable_Binding.Register(app);
             ET_RandomHelper_Binding.Register(app);
+            System_Collections_Generic_List_1_ETTask_Binding.Register(app);
+            ET_ETTaskHelper_Binding.Register(app);
             System_IO_MemoryStream_Binding.Register(app);
             System_BitConverter_Binding.Register(app);
             System_Collections_Generic_List_1_Int64_Binding.Register(app);
@@ -254,8 +256,6 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_KeyValuePair_2_String_Int32_Binding.Register(app);
             ET_ListComponent_1_ILTypeInstance_Binding.Register(app);
             ET_ListComponent_1_ETTask_Binding.Register(app);
-            System_Collections_Generic_List_1_ETTask_Binding.Register(app);
-            ET_ETTaskHelper_Binding.Register(app);
         }
 
         /// <summary>

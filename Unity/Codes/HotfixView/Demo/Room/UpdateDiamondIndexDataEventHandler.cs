@@ -17,9 +17,18 @@ namespace ET
             Vector3 endPos = new Vector3((a.Diamond.LieIndex - LieCount * 0.5f + 0.5f) * distance,
                 (a.Diamond.HangIndex - HangCount * 0.5f + 0.5f) * distance, 0);
             // go.transform.position = ;
-            
-            
-            
+            while (true)
+            {
+                Vector3 prePos = Vector3.Lerp(go.transform.position, endPos, 0.15f);
+                await TimerComponent.Instance.WaitAsync(10);
+                go.transform.position = prePos;
+                if (Vector3.Distance(go.transform.position, endPos) < 0.1f)
+                {
+                    go.transform.position = endPos;
+                    break;
+                }
+            }
+
             await ETTask.CompletedTask;
         }
     }
