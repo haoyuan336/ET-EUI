@@ -14,8 +14,12 @@ namespace ET
             PvPLevelConfig pLevelConfig = PvPLevelConfigCategory.Instance.Get(1);
             int LieCount = pLevelConfig.LieCount;
             int HangCount = pLevelConfig.HangCount;
-            go.transform.position = new Vector3((a.Diamond.LieIndex - LieCount * 0.5f + 0.5f) * distance,
+            Vector3 endPos = new Vector3((a.Diamond.LieIndex - LieCount * 0.5f + 0.5f) * distance,
                 (a.Diamond.HangIndex - HangCount * 0.5f + 0.5f) * distance, 0);
+            // go.transform.position = ;
+            
+            
+            
             await ETTask.CompletedTask;
         }
     }

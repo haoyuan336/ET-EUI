@@ -105,8 +105,6 @@ namespace ET
 
         public static void PlayerScrollScreen(this Room self, C2M_PlayerScrollScreen message)
         {
-            self.ToggleTurnSeatIndex();
-            self.syncCurrentTurnIndex();
             //交换两个位置的钻石
             //首先取出临时钻石
             int LieIndex = message.StartX;
@@ -134,26 +132,59 @@ namespace ET
 
             if (diamond != null && nextDiamond != null)
             {
-                self.Diamonds[LieIndex, HangIndex] = nextDiamond;
-                self.Diamonds[LieIndex + OffsetLie, HangIndex + OffsetHang] = diamond;
-                diamond.SetIndex(LieIndex + OffsetLie, HangIndex + OffsetHang);
-                nextDiamond.SetIndex(LieIndex, HangIndex);
+                M2C_SyncDiamondAction m2CSyncDiamondAction = new M2C_SyncDiamondAction();
+                m2CSyncDiamondAction.DiamondActionItems.Add(self.SwapDiamondPos(diamond, nextDiamond));
+                bool isCrash = self.CheckCrash();
+                if (isCrash)
+                {
+                    self.ToggleTurnSeatIndex();
+                    self.syncCurrentTurnIndex();
+                }
+                else
+                {
+                    //todo 交换失败。反向交换
+                    m2CSyncDiamondAction.DiamondActionItems.Add(self.SwapDiamondPos(diamond, nextDiamond));
+                }
+                //todo 下发交换action 消息
+                foreach (var unit in self.Units)
+                {
+                    MessageHelper.SendToClient(unit, m2CSyncDiamondAction);
+                }
             }
-            
-            List<DiamondInfo> diamondInfos = new List<DiamondInfo>();
-            diamondInfos.Add(diamond.GetMessageInfo());
-            diamondInfos.Add(nextDiamond.GetMessageInfo());
-            //同步结果
-            foreach (var unit in self.Units)
+            else
             {
-                MessageHelper.SendToClient(unit, new M2C_SyncDiamondUpdatePos() { DiamondInfos = diamondInfos });
+                //todo 非法操作
             }
+        }
+
+        //交换宝石的位置
+        public static DiamondActionItem SwapDiamondPos(this Room self, Diamond diamond1, Diamond diamond2)
+        {
+            DiamondActionItem diamondActionItem = new DiamondActionItem();
+            int LieIndex1 = diamond1.LieIndex;
+            int HangIndex1 = diamond1.HangIndex;
+
+            int LieIndex2 = diamond2.LieIndex;
+            int HangIndex2 = diamond2.HangIndex;
+            self.Diamonds[LieIndex1, HangIndex1] = diamond2;
+            diamond2.SetIndex(LieIndex1, HangIndex1);
+            diamondActionItem.DiamondActions.Add(new DiamondAction() { DiamondInfo = diamond2.GetMessageInfo() });
+
+            self.Diamonds[LieIndex2, HangIndex2] = diamond1;
+            diamond1.SetIndex(LieIndex2, HangIndex2);
+            diamondActionItem.DiamondActions.Add(new DiamondAction() { DiamondInfo = diamond1.GetMessageInfo() });
+            return diamondActionItem;
         }
 
         public static Diamond GetDiamond(this Room self, int LieIndex, int HangIndex)
         {
             // Diamond diamond = null;
             return self.Diamonds[LieIndex, HangIndex];
+        }
+
+        public static bool CheckCrash(this Room self)
+        {
+            return false;
         }
     }
 }

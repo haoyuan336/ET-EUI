@@ -1012,4 +1012,41 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.DiamondAction)]
+	[ProtoContract]
+	public partial class DiamondAction: Object
+	{
+//宝石的action
+		[ProtoMember(90)]
+		public int PpcId { get; set; }
+
+		[ProtoMember(1)]
+		public int ActionType { get; set; }
+
+		[ProtoMember(2)]
+		public DiamondInfo DiamondInfo { get; set; }
+
+	}
+
+	[Message(OuterOpcode.DiamondActionItem)]
+	[ProtoContract]
+	public partial class DiamondActionItem: Object
+	{
+		[ProtoMember(1)]
+		public List<DiamondAction> DiamondActions = new List<DiamondAction>();
+
+	}
+
+	[Message(OuterOpcode.M2C_SyncDiamondAction)]
+	[ProtoContract]
+	public partial class M2C_SyncDiamondAction: Object, IActorMessage
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public List<DiamondActionItem> DiamondActionItems = new List<DiamondActionItem>();
+
+	}
+
 }

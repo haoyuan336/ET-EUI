@@ -466,3 +466,20 @@ message M2C_SyncDiamondUpdatePos	//IActorMessage
 	int RpcId = 90;
 	repeated DiamondInfo DiamondInfos = 1;
 }
+message DiamondAction
+{
+	//宝石的action
+	int32 PpcId = 90;
+	int32 ActionType = 1;
+	DiamondInfo DiamondInfo = 2;
+}
+message DiamondActionItem
+{
+	repeated DiamondAction DiamondActions = 1;
+}
+message M2C_SyncDiamondAction //IActorMessage
+{
+	int32 RpcId = 90;
+	repeated DiamondActionItem DiamondActionItems = 1;
+}
+
