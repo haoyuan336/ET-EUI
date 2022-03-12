@@ -75,6 +75,8 @@ namespace ET
 		public int HangCount { get; set; }
 		[ProtoMember(3)]
 		public int LieCount { get; set; }
+		[ProtoMember(4)]
+		public string Distance { get; set; }
 
 	}
 }

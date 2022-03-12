@@ -18,10 +18,22 @@ namespace ET
                 {
                     DiamondInfo diamondInfo = diamondAction.DiamondInfo;
                     Diamond diamond = diamondComponent.GetChild<Diamond>(diamondInfo.Id);
-                    diamond.SetIndex(diamondInfo.LieIndex, diamondInfo.HangIndex);
-                    tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex() { Diamond = diamond }));
+                    Log.Debug("action type = " + diamondAction.ActionType);
+                    switch (diamondAction.ActionType)
+                    {
+                        case (int) DiamondActionType.Move:
+                            diamond.SetIndex(diamondInfo.LieIndex, diamondInfo.HangIndex);
+                            tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex() { Diamond = diamond }));
+                            break;
+                        case (int) DiamondActionType.Destory:
+                            tasks.Add(Game.EventSystem.PublishAsync(new EventType.DestoryDiamondView()
+                            {
+                                LieIndex = diamondInfo.LieIndex, HangIndex = diamondInfo.HangIndex
+                            }));
+                            diamond.Dispose();
+                            break;
+                    }
                 }
-
                 await ETTaskHelper.WaitAll(tasks);
             }
 

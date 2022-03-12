@@ -8,5 +8,6 @@ namespace ET
         public int HangCount = 0;
         public int LieCount = 0;
         public Diamond[,] Diamonds = null;
+        public DiamondComponent DiamondComponent = null;
     }
 }

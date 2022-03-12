@@ -147,5 +147,11 @@ namespace ET
             public int LieIndex;
             public int HangIndex;
         }
+
+        public struct DestoryDiamondView
+        {
+            public int LieIndex;
+            public int HangIndex;
+        }
     }
 }
