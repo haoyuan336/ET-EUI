@@ -1,4 +1,6 @@
-﻿using ET.EventType;
+﻿using System;
+using ET.EventType;
+using ET.Test;
 using UnityEngine;
 
 namespace ET
@@ -12,7 +14,7 @@ namespace ET
             PvPLevelConfig pvPLevelConfig = PvPLevelConfigCategory.Instance.Get(1);
             int hangCount = pvPLevelConfig.HangCount;
             int liecount = pvPLevelConfig.LieCount;
-            float distance = 1.1f;
+            float distance = float.Parse(pvPLevelConfig.Distance);
 
             DiamondTypeConfig diamondTypeConfig = DiamondTypeConfigCategory.Instance.Get(a.Diamond.DiamondType);
             string colorStr = diamondTypeConfig.ColorValue;
@@ -27,7 +29,16 @@ namespace ET
                 (a.Diamond.HangIndex - hangCount * 0.5f + 0.5f) * distance, 0);
             if (go.GetComponent<SpriteRenderer>() != null)
             {
+                
+
+                // TestClassBase
                 go.GetComponent<SpriteRenderer>().color = color;
+                // GameObject bundleGameObject = (GameObject) ResourcesComponent.Instance.GetAsset("Unit.unity3d", "Unit");
+                // String spriteNameStr = $"item_0{a.Diamond.DiamondType}";
+                // Log.Debug($"sprite name str ={spriteNameStr} ");
+                // Sprite sprite = bundleGameObject.Get<Sprite>(spriteNameStr);
+                // // library.GetComponent<>()
+                // go.GetComponent<SpriteRenderer>().sprite = sprite;
             }
 
             await ETTask.CompletedTask;
