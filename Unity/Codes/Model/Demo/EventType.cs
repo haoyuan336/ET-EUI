@@ -153,5 +153,10 @@ namespace ET
             public int LieIndex;
             public int HangIndex;
         }
+
+        public struct InitDiamondAndMoveDown
+        {
+            public Diamond Diamond;
+        }
     }
 }

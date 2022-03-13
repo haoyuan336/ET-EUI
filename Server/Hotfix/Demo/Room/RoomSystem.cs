@@ -126,6 +126,7 @@ namespace ET
                 bool isCrash = self.CheckCrash(m2CSyncDiamondAction.DiamondActionItems);
                 if (isCrash)
                 {
+                    self.MoveDownAllDiamond(m2CSyncDiamondAction.DiamondActionItems);
                     self.ToggleTurnSeatIndex();
                     self.syncCurrentTurnIndex();
                 }
@@ -393,6 +394,55 @@ namespace ET
             }
 
             return self.Diamonds[lieIndex, hangIndex];
+        }
+
+        public static void MoveDownAllDiamond(this Room self, List<DiamondActionItem> diamondActionItems)
+        {
+            //todo 将宝石都向下移动
+            DiamondActionItem diamondActionItem = new DiamondActionItem();
+            DiamondComponent diamondComponent = self.DiamondComponent;
+            //遍历每一列
+            for (var i = 0; i < self.LieCount; i++)
+            {
+                List<Diamond> diamonds = new List<Diamond>();
+                //找到这一列有多少是空的
+                for (var j = 0; j < self.HangCount; j++)
+                {
+                    Diamond diamond = self.GetDiamond(i, j);
+                    if (diamond != null)
+                    {
+                        diamonds.Add(diamond);
+                    }
+                }
+
+                for (var j = 0; j < self.HangCount; j++)
+                {
+                    if (j < diamonds.Count)
+                    {
+                        Diamond diamond = diamonds[j];
+                        self.Diamonds[i, j] = diamond;
+                        diamond.SetIndex(i, j);
+                        DiamondAction action = new DiamondAction();
+                        action.ActionType = (int) DiamondActionType.Move;
+                        action.DiamondInfo = diamond.GetMessageInfo();
+                        diamondActionItem.DiamondActions.Add(action);
+                    }
+                    else
+                    {
+                        Diamond diamond = diamondComponent.CreateOneDiamond();
+                        self.Diamonds[i, j] = diamond;
+                        diamond.InitLieIndex = i;
+                        diamond.InitHangIndex = self.HangCount + j;
+                        diamond.SetIndex(i, j);
+                        DiamondAction action = new DiamondAction();
+                        action.ActionType = (int) DiamondActionType.Create;
+                        action.DiamondInfo = diamond.GetMessageInfo();
+                        diamondActionItem.DiamondActions.Add(action);
+                    }
+                }
+            }
+
+            diamondActionItems.Add(diamondActionItem);
         }
     }
 }

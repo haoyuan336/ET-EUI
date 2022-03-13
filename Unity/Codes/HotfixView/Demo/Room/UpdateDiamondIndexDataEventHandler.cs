@@ -19,10 +19,10 @@ namespace ET
             // go.transform.position = ;
             while (true)
             {
-                Vector3 prePos = Vector3.Lerp(go.transform.position, endPos, 0.15f);
+                Vector3 prePos = Vector3.Lerp(go.transform.position, endPos, 0.12f);
                 await TimerComponent.Instance.WaitAsync(10);
                 go.transform.position = prePos;
-                if (Vector3.Distance(go.transform.position, endPos) < 0.1f)
+                if (Vector3.Distance(go.transform.position, endPos) < 0.05f)
                 {
                     go.transform.position = endPos;
                     break;

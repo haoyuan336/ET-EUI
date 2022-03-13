@@ -933,6 +933,12 @@ namespace ET
 		[ProtoMember(4)]
 		public int DiamondType { get; set; }
 
+		[ProtoMember(5)]
+		public int InitLieIndex { get; set; }
+
+		[ProtoMember(6)]
+		public int InitHangIndex { get; set; }
+
 	}
 
 	[Message(OuterOpcode.M2C_InitMapData)]

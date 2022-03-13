@@ -32,6 +32,10 @@ namespace ET
                             }));
                             diamond.Dispose();
                             break;
+                        case (int)DiamondActionType.Create:
+                            Diamond newDiamond = diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo);
+                            tasks.Add(Game.EventSystem.PublishAsync(new EventType.InitDiamondAndMoveDown(){Diamond = newDiamond}));
+                            break;
                     }
                 }
                 await ETTaskHelper.WaitAll(tasks);
