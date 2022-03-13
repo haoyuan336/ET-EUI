@@ -6,7 +6,6 @@ namespace ET
     {
         protected override async ETTask Run(DestoryDiamondView a)
         {
-            Log.Debug("Destroy Obj In View");
             PvPLevelConfig pLevelConfig = PvPLevelConfigCategory.Instance.Get(1);
             int LieCount = pLevelConfig.LieCount;
             int HangCount = pLevelConfig.HangCount;
@@ -23,7 +22,6 @@ namespace ET
             bool isHited = Physics.Raycast(ray, out raycastHit, Mathf.Infinity, maskCode);
             if (isHited)
             {
-                Log.Debug($"hited gameobject {raycastHit.transform.name}");
                 GameObject.Destroy(raycastHit.transform.gameObject);
             }
             await ETTask.CompletedTask;

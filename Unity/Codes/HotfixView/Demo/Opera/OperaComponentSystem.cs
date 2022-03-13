@@ -26,6 +26,7 @@ namespace ET
     {
         public static void Update(this OperaComponent self)
         {
+            
             if (Input.GetMouseButtonDown(0))
             {
                 self.isTouching = true;
@@ -89,7 +90,7 @@ namespace ET
                             UnityEngine.Vector3 pos = raycastHit.transform.position;
                             float x = pos.x;
                             float y = pos.y;
-                            float distance = 1.1f;
+                            float distance = float.Parse(pvPLevelConfig.Distance);
                             // a.Diamond.LieIndex - liecount * 0.5f + 0.5f) * distance,
                             float lieIndex = x / distance + lieCount * 0.5f - 0.5f;
                             float hangIndex = y / distance + hangCount * 0.5f - 0.5f;
@@ -99,6 +100,12 @@ namespace ET
                             c2MPlayerScrollScreen.DirType = (int)dir;
                             c2MPlayerScrollScreen.RoomId = playerComponent.RoomId;
                             // c2MPlayerScrollScreen.RoomId = playerComponent.
+                            if (self.touchLock)
+                            {
+                                return;
+                            }
+
+                            self.touchLock = true;
                             self.ZoneScene().GetComponent<SessionComponent>().Session.Call(c2MPlayerScrollScreen).Coroutine();
                             
                         }

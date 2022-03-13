@@ -18,7 +18,6 @@ namespace ET
                 {
                     DiamondInfo diamondInfo = diamondAction.DiamondInfo;
                     Diamond diamond = diamondComponent.GetChild<Diamond>(diamondInfo.Id);
-                    Log.Debug("action type = " + diamondAction.ActionType);
                     switch (diamondAction.ActionType)
                     {
                         case (int) DiamondActionType.Move:
@@ -39,7 +38,9 @@ namespace ET
                     }
                 }
                 await ETTaskHelper.WaitAll(tasks);
+
             }
+            Game.EventSystem.Publish(new EventType.UnLockTouchLock(){ZoneScene = session.ZoneScene().CurrentScene()});
 
             await ETTask.CompletedTask;
         }

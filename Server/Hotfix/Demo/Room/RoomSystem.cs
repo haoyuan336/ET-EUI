@@ -123,10 +123,26 @@ namespace ET
             {
                 M2C_SyncDiamondAction m2CSyncDiamondAction = new M2C_SyncDiamondAction();
                 m2CSyncDiamondAction.DiamondActionItems.Add(self.SwapDiamondPos(diamond, nextDiamond));
-                bool isCrash = self.CheckCrash(m2CSyncDiamondAction.DiamondActionItems);
-                if (isCrash)
+                bool isCrash = true;
+                bool isCrashSuccess = false;
+                while (isCrash)
                 {
-                    self.MoveDownAllDiamond(m2CSyncDiamondAction.DiamondActionItems);
+                    isCrash = self.CheckCrash(m2CSyncDiamondAction.DiamondActionItems);
+                    Log.Debug($"is carsh {isCrash}");
+
+                    if (isCrash)
+                    {
+                        self.MoveDownAllDiamond(m2CSyncDiamondAction.DiamondActionItems);
+                    }
+
+                    if (isCrashSuccess == false && isCrash)
+                    {
+                        isCrashSuccess = true;
+                    }
+                }
+
+                if (isCrashSuccess)
+                {
                     self.ToggleTurnSeatIndex();
                     self.syncCurrentTurnIndex();
                 }
@@ -198,28 +214,8 @@ namespace ET
                     }
 
                     List<Diamond> sameLieList = self.CheckLieSameDiamond(self.Diamonds[j, i]);
-                    if (sameLieList.Count > 2)
-                    {
-                        Log.Debug($"same lie list count = {sameLieList.Count}+ {sameLieList[0].DiamondType}");
-                        foreach (var d in sameLieList)
-                        {
-                            Log.Debug($"id={d.Id}");
-                        }
-                    }
-
                     List<Diamond> sameHangList = self.CheckHangSameDiamond(self.Diamonds[j, i]);
-                    if (sameHangList == null)
-                    {
-                        Log.Debug("same hang list is null");
-                    }
-
-                    if (sameHangList != null)
-                    {
-                        Log.Debug($"same hang list count = {sameHangList.Count}");
-                    }
-
                     List<Diamond> endList = self.ConnectSameDiamondList(sameLieList, sameHangList);
-                    Log.Debug($"carsh diamond count ={endList.Count}");
                     if (endList.Count > 2)
                     {
                         // DiamondActionItem diamondActionItem = new DiamondActionItem();
@@ -238,6 +234,7 @@ namespace ET
                 }
             }
 
+            Log.Debug("diamond action count = " + diamondActionItem.DiamondActions.Count);
             if (diamondActionItem.DiamondActions.Count > 0)
             {
                 diamondActionItems.Add(diamondActionItem);

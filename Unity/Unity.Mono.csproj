@@ -360,6 +360,12 @@
      <Compile Include="Assets\Mono\ILRuntime\Generate\UnityEngine_Animator_Binding.cs" />
      <Compile Include="Assets\Mono\ILRuntime\Generate\System_Collections_Generic_HashSet_1_AService_Binding_Enumerator_Bind.cs" />
      <Compile Include="Assets\Mono\Define.cs" />
+     <Compile Include="Assets\Mono\DiamondLibrary\DiamondLibrary.cs" />
+     <Compile Include="Assets\Mono\DiamondLibrary\DiamondLibraryCtl.cs" />
+     <Compile Include="Assets\Mono\ILRuntime\Generate\ET_DiamondLibraryCtl_Binding.cs" />
+     <Compile Include="Assets\Mono\ILRuntime\Generate\ET_DiamondSprite_Binding.cs" />
+     <Compile Include="Assets\Mono\ILRuntime\Generate\ET_DiamondLibrary_Binding.cs" />
+     <Compile Include="Assets\Mono\ILRuntime\Generate\System_Collections_Generic_Dictionary_2_Int32_DiamondSprite_Binding.cs" />
      <None Include="Assets\Mono\Unity.Mono.asmdef" />
      <Reference Include="UnityEngine">
      <HintPath>J:/unity/2020.3.26f1c1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

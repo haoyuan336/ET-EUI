@@ -1,6 +1,5 @@
 ﻿using System;
 using ET.EventType;
-using ET.Test;
 using UnityEngine;
 
 namespace ET
@@ -24,21 +23,21 @@ namespace ET
                 Log.Error("color error");
             }
 
-            Color color = new Color(int.Parse(list[0]), int.Parse(list[1]), int.Parse(list[2]));
+            // Color color = new Color(int.Parse(list[0]), int.Parse(list[1]), int.Parse(list[2]));
             go.transform.position = new Vector3((a.Diamond.LieIndex - liecount * 0.5f + 0.5f) * distance,
                 (a.Diamond.HangIndex - hangCount * 0.5f + 0.5f) * distance, 0);
             if (go.GetComponent<SpriteRenderer>() != null)
             {
-                
-
+                DiamondLibrary diamondLibrary = go.GetComponent<DiamondLibraryCtl>().DiamondLibrary;
+                DiamondSprite diamondSprite = diamondLibrary.DiamondSpriteMap[a.Diamond.DiamondType];
                 // TestClassBase
-                go.GetComponent<SpriteRenderer>().color = color;
+                // go.GetComponent<SpriteRenderer>().color = color;
                 // GameObject bundleGameObject = (GameObject) ResourcesComponent.Instance.GetAsset("Unit.unity3d", "Unit");
                 // String spriteNameStr = $"item_0{a.Diamond.DiamondType}";
                 // Log.Debug($"sprite name str ={spriteNameStr} ");
                 // Sprite sprite = bundleGameObject.Get<Sprite>(spriteNameStr);
                 // // library.GetComponent<>()
-                // go.GetComponent<SpriteRenderer>().sprite = sprite;
+                go.GetComponent<SpriteRenderer>().sprite = diamondSprite.Sprite;
             }
 
             await ETTask.CompletedTask;

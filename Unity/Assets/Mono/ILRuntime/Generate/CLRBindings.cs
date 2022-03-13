@@ -111,6 +111,10 @@ namespace ILRuntime.Runtime.Generated
             UnityEngine_Ray_Binding.Register(app);
             System_Char_Binding.Register(app);
             UnityEngine_Color_Binding.Register(app);
+            ET_DiamondLibraryCtl_Binding.Register(app);
+            ET_DiamondLibrary_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_Int32_DiamondSprite_Binding.Register(app);
+            ET_DiamondSprite_Binding.Register(app);
             UnityEngine_SpriteRenderer_Binding.Register(app);
             UnityEngine_AsyncOperation_Binding.Register(app);
             UnityEngine_SceneManagement_SceneManager_Binding.Register(app);

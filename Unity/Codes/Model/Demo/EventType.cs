@@ -158,5 +158,10 @@ namespace ET
         {
             public Diamond Diamond;
         }
+
+        public struct UnLockTouchLock
+        {
+            public Scene ZoneScene;
+        }
     }
 }
