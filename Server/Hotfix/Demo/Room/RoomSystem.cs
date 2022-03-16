@@ -94,12 +94,18 @@ namespace ET
             DiamondComponent diamondComponent = self.DomainScene().GetComponent<DiamondComponent>();
             self.DiamondComponent = diamondComponent;
             // diamondComponent.CreateOneDiamond();
+            int[,] map =
+            {
+                { 1, 2, 3, 4, 5, 6, 1, 1 }, { 2, 3, 4, 5, 6, 1, 2, 3 }, { 3, 2, 5, 4, 1, 6, 3, 2 }, { 4, 1, 6, 2, 2, 5, 2, 1 },
+                { 5, 6, 1, 2, 1, 2, 5, 6 }, { 6, 5, 2, 1, 4, 2, 6, 5 }, { 1, 4, 3, 6, 5, 1, 1, 4 }, { 2, 3, 4, 5, 6, 1, 2, 3 }
+            };
             for (var i = 0; i < self.HangCount; i++)
             {
                 for (var j = 0; j < self.LieCount; j++)
                 {
                     Diamond diamond = diamondComponent.CreateOneDiamond();
                     diamond.SetIndex(j, i);
+                    diamond.DiamondType = map[i, j];
                     self.Diamonds[j, i] = diamond;
                     diamondInfos.Add(diamond.GetMessageInfo());
                 }
@@ -213,11 +219,14 @@ namespace ET
                         continue;
                     }
 
-                    List<Diamond> sameLieList = self.CheckLieSameDiamond(self.Diamonds[j, i]);
                     List<Diamond> sameHangList = self.CheckHangSameDiamond(self.Diamonds[j, i]);
+                    List<Diamond> sameLieList = self.CheckLieSameDiamond(self.Diamonds[j, i]);
                     List<Diamond> endList = self.ConnectSameDiamondList(sameLieList, sameHangList);
                     if (endList.Count > 2)
                     {
+                        Log.Debug("same hang list =" + sameHangList.Count);
+                        Log.Debug("same lie list =" + sameLieList.Count);
+                    
                         // DiamondActionItem diamondActionItem = new DiamondActionItem();
                         foreach (var crashDiamond in endList)
                         {
@@ -261,6 +270,11 @@ namespace ET
                 {
                     endList.Add(diamond);
                 }
+            }
+
+            foreach (var diamond in endList)
+            {
+                Log.Debug($"{diamond.LieIndex} , {diamond.HangIndex}");
             }
 
             Dictionary<Diamond, bool> dictionary = new Dictionary<Diamond, bool>();
@@ -330,29 +344,42 @@ namespace ET
             sameList.Add(currentDiamond);
 
             List<Diamond> alCheckList = new List<Diamond>();
+            Log.Debug($"--------------current diamond  {currentDiamond.LieIndex} ,{currentDiamond.HangIndex} al checklist {alCheckList.Count}");
             while (checkQueue.Count > 0)
             {
+                // Log.Debug("same list = " + sameList.Count);
                 Diamond diamond = checkQueue.Dequeue();
                 if (alCheckList.Contains(diamond))
                 {
+                    // Log.Debug("al check list  " + sameList.Count);
                     continue;
                 }
 
+                Log.Debug($"add al check list {diamond.LieIndex}, {diamond.HangIndex}");
                 alCheckList.Add(diamond);
+                foreach (var d in alCheckList)
+                {
+                    Log.Debug($"while {d.LieIndex}, {d.HangIndex}");
+                }
 
-                ScrollDirType[] scrollDirTypes = new ScrollDirType[2] { ScrollDirType.Down, ScrollDirType.Up };
+                ScrollDirType[] scrollDirTypes = { ScrollDirType.Down, ScrollDirType.Up };
                 for (var h = 0; h < scrollDirTypes.Length; h++)
                 {
                     var type = scrollDirTypes[h];
                     Diamond findDiamond = self.GetDiamondWithDir(diamond, (int) type);
+                    Log.Debug($"空位置{type}");
 
                     if (findDiamond != null)
                     {
+                        Log.Debug($"find diamond  {findDiamond.LieIndex}, {findDiamond.HangIndex}");
                         if (alCheckList.Contains(findDiamond))
                         {
+                            Log.Debug($"Contains diamond return  {findDiamond.LieIndex}, {findDiamond.HangIndex}");
+
                             continue;
                         }
 
+                        Log.Debug($"type = {findDiamond.DiamondType},{diamond.DiamondType}");
                         if (findDiamond.DiamondType == diamond.DiamondType)
                         {
                             checkQueue.Enqueue(findDiamond);
@@ -387,6 +414,7 @@ namespace ET
 
             if (hangIndex < 0 || hangIndex >= self.HangCount || lieIndex < 0 || lieIndex >= self.LieCount)
             {
+                Log.Debug("out range");
                 return null;
             }
 

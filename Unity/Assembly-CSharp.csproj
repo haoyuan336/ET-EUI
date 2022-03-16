@@ -613,14 +613,8 @@
      <Reference Include="System.Xml.XPath.XDocument">
      <HintPath>J:/unity/2020.3.26f1c1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Xml.XPath.XDocument.dll</HintPath>
      </Reference>
-     <Reference Include="Unity.ShaderGraph.Editor">
-     <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
-     </Reference>
      <Reference Include="Unity.RenderPipelines.Universal.Shaders">
      <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
-     </Reference>
-     <Reference Include="Unity.RenderPipelines.Universal.Editor">
-     <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Editor.dll</HintPath>
      </Reference>
      <Reference Include="Unity.RenderPipelines.Universal.Runtime">
      <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
@@ -631,23 +625,11 @@
      <Reference Include="Unity.VisualStudio.Editor">
      <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
      </Reference>
-     <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
-     <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
-     </Reference>
-     <Reference Include="Unity.Timeline.Editor">
-     <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
-     </Reference>
      <Reference Include="Unity.Timeline">
      <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
      </Reference>
-     <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
-     <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
-     </Reference>
      <Reference Include="Unity.TextMeshPro">
      <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
-     </Reference>
-     <Reference Include="Unity.Mathematics.Editor">
-     <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
      </Reference>
      <Reference Include="Unity.Searcher.Editor">
      <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.Searcher.Editor.dll</HintPath>
@@ -670,27 +652,45 @@
      <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
      <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
      </Reference>
-     <Reference Include="Unity.RenderPipelines.Core.Editor">
-     <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
-     </Reference>
      <Reference Include="Unity.Mathematics">
      <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
      </Reference>
-     <Reference Include="com.unity.cinemachine.editor">
-     <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
+     <Reference Include="Unity.ShaderGraph.Editor">
+     <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
      </Reference>
      <Reference Include="Cinemachine">
      <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
      </Reference>
+     <Reference Include="com.unity.cinemachine.editor">
+     <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.RenderPipelines.Universal.Editor">
+     <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Editor.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
+     <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
+     <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Timeline.Editor">
+     <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Mathematics.Editor">
+     <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.RenderPipelines.Core.Editor">
+     <HintPath>D:/workspace/ET-EUI2/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
+     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Unity.Mono.csproj">
-      <Project>{5910fa29-5797-199c-985b-fc9fc473328e}</Project>
-      <Name>Unity.Mono</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.Editor.csproj">
       <Project>{041131cd-3018-19b1-81b6-5dbee2467ffb}</Project>
       <Name>Unity.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Mono.csproj">
+      <Project>{5910fa29-5797-199c-985b-fc9fc473328e}</Project>
+      <Name>Unity.Mono</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.ThirdParty.csproj">
       <Project>{d2ad5be1-263a-9a30-ab0f-dc5b08044350}</Project>
