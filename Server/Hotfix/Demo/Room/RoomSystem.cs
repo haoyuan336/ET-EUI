@@ -201,17 +201,13 @@ namespace ET
             return self.Diamonds[LieIndex, HangIndex];
         }
 
-        public static bool CheckCrash(this Room self, List<DiamondActionItem> diamondActionItems)
+        //获得列上的可以消除的列表
+        public static List<List<Diamond>> GetLieCrashListList(this Room self)
         {
-            PvPLevelConfig config = PvPLevelConfigCategory.Instance.Get(1);
-            //检查存在的消除组合
-            int LieCount = config.LieCount;
-            int HangCount = config.HangCount;
-            DiamondActionItem diamondActionItem = new DiamondActionItem();
-            // Diamond[]
-            for (int i = 0; i < HangCount; i++)
+            List<List<Diamond>> crashListList = new List<List<Diamond>>();
+            for (int i = 0; i < self.HangCount; i++)
             {
-                for (int j = 0; j < LieCount; j++)
+                for (int j = 0; j < self.LieCount; j++)
                 {
                     Diamond diamond = self.Diamonds[j, i];
                     if (diamond == null)
@@ -219,37 +215,134 @@ namespace ET
                         continue;
                     }
 
-                    List<Diamond> sameHangList = self.CheckHangSameDiamond(self.Diamonds[j, i]);
-                    List<Diamond> sameLieList = self.CheckLieSameDiamond(self.Diamonds[j, i]);
-                    List<Diamond> endList = self.ConnectSameDiamondList(sameLieList, sameHangList);
-                    if (endList.Count > 2)
+                    if (self.CheckIsContainInListList(crashListList, diamond))
                     {
-                        Log.Debug("same hang list =" + sameHangList.Count);
-                        Log.Debug("same lie list =" + sameLieList.Count);
-                    
-                        // DiamondActionItem diamondActionItem = new DiamondActionItem();
-                        foreach (var crashDiamond in endList)
+                        continue;
+                    }
+
+                    List<Diamond> sameLieList = self.CheckLieSameDiamond(self.Diamonds[j, i]);
+                    if (sameLieList.Count >= 3)
+                    {
+                        crashListList.Add(sameLieList);
+                    }
+                }
+            }
+
+            return crashListList;
+        }
+
+        public static List<List<Diamond>> GetHangCrashListList(this Room self)
+        {
+            List<List<Diamond>> crashListList = new List<List<Diamond>>();
+            for (int i = 0; i < self.HangCount; i++)
+            {
+                for (int j = 0; j < self.LieCount; j++)
+                {
+                    Diamond diamond = self.Diamonds[j, i];
+                    if (diamond == null)
+                    {
+                        continue;
+                    }
+
+                    if (self.CheckIsContainInListList(crashListList, diamond))
+                    {
+                        continue;
+                    }
+
+                    List<Diamond> sameLieList = self.CheckHangSameDiamond(self.Diamonds[j, i]);
+                    if (sameLieList.Count >= 3)
+                    {
+                        crashListList.Add(sameLieList);
+                    }
+                }
+            }
+
+            return crashListList;
+        }
+
+        public static bool CheckIsContainInListList<T>(this Room self, List<List<T>> listlist, T target)
+        {
+            foreach (var list in listlist)
+            {
+                if (list.Contains(target))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool CheckCrash(this Room self, List<DiamondActionItem> diamondActionItems)
+        {
+            List<List<Diamond>> lieCrashListList = self.GetLieCrashListList();
+            List<List<Diamond>> hangCrashListList = self.GetHangCrashListList();
+            Log.Debug("hang crash list list" + hangCrashListList.Count);
+            List<List<Diamond>> endListList = new List<List<Diamond>>();
+            // //行列 查重
+            foreach (var lieList in lieCrashListList)
+            {
+                for (var i = 0; i < hangCrashListList.Count; i++)
+                {
+                    if (self.CheckListIsOver(lieList, hangCrashListList[i]))
+                    {
+                        var hangList = hangCrashListList[i];
+                        hangCrashListList.RemoveAt(i);
+                        i--;
+                        foreach (var target in hangList)
                         {
-                            // m2CSyncDiamondAction.DiamondActionItems.
-                            DiamondAction diamondAction = new DiamondAction();
-                            diamondAction.ActionType = (int) DiamondActionType.Destory;
-                            diamondAction.DiamondInfo = crashDiamond.GetMessageInfo();
-                            self.Diamonds[crashDiamond.LieIndex, crashDiamond.HangIndex] = null;
-                            // self.DiamondComponent.RemoveLocation(crashDiamond);
-                            crashDiamond.Dispose();
-                            diamondActionItem.DiamondActions.Add(diamondAction);
+                            lieList.Add(target);
                         }
                     }
                 }
             }
 
-            Log.Debug("diamond action count = " + diamondActionItem.DiamondActions.Count);
+            //
+            foreach (var lieList in lieCrashListList)
+            {
+                endListList.Add(lieList);
+            }
+            //
+            foreach (var hangList in hangCrashListList)
+            {
+                endListList.Add(hangList);
+            }
+            //
+            Log.Debug("end list list = " + endListList.Count);
+            DiamondActionItem diamondActionItem = new DiamondActionItem();
+            foreach (var crashList in endListList)
+            {
+                foreach (var diamond in crashList)
+                {
+                    DiamondAction diamondAction = new DiamondAction();
+                    diamondAction.ActionType = (int) DiamondActionType.Destory;
+                    diamondAction.DiamondInfo = diamond.GetMessageInfo();
+                    self.Diamonds[diamond.LieIndex, diamond.HangIndex] = null;
+                    diamond.Dispose();
+                    diamondActionItem.DiamondActions.Add(diamondAction);
+                }
+            }
+           
             if (diamondActionItem.DiamondActions.Count > 0)
             {
                 diamondActionItems.Add(diamondActionItem);
                 return true;
             }
 
+            return false;
+        }
+
+        public static bool CheckListIsOver<T>(this Room self, List<T> list1, List<T> list2)
+        {
+            foreach (var target in list1)
+            {
+                if (list2.Contains(target))
+                {
+                    return true;
+                }
+            }
+
+            //检查列表是否重合
             return false;
         }
 
@@ -342,44 +435,29 @@ namespace ET
             Queue<Diamond> checkQueue = new Queue<Diamond>();
             checkQueue.Enqueue(currentDiamond);
             sameList.Add(currentDiamond);
-
             List<Diamond> alCheckList = new List<Diamond>();
-            Log.Debug($"--------------current diamond  {currentDiamond.LieIndex} ,{currentDiamond.HangIndex} al checklist {alCheckList.Count}");
             while (checkQueue.Count > 0)
             {
-                // Log.Debug("same list = " + sameList.Count);
                 Diamond diamond = checkQueue.Dequeue();
                 if (alCheckList.Contains(diamond))
                 {
-                    // Log.Debug("al check list  " + sameList.Count);
                     continue;
                 }
 
-                Log.Debug($"add al check list {diamond.LieIndex}, {diamond.HangIndex}");
                 alCheckList.Add(diamond);
-                foreach (var d in alCheckList)
-                {
-                    Log.Debug($"while {d.LieIndex}, {d.HangIndex}");
-                }
-
                 ScrollDirType[] scrollDirTypes = { ScrollDirType.Down, ScrollDirType.Up };
                 for (var h = 0; h < scrollDirTypes.Length; h++)
                 {
                     var type = scrollDirTypes[h];
                     Diamond findDiamond = self.GetDiamondWithDir(diamond, (int) type);
-                    Log.Debug($"空位置{type}");
 
                     if (findDiamond != null)
                     {
-                        Log.Debug($"find diamond  {findDiamond.LieIndex}, {findDiamond.HangIndex}");
                         if (alCheckList.Contains(findDiamond))
                         {
-                            Log.Debug($"Contains diamond return  {findDiamond.LieIndex}, {findDiamond.HangIndex}");
-
                             continue;
                         }
 
-                        Log.Debug($"type = {findDiamond.DiamondType},{diamond.DiamondType}");
                         if (findDiamond.DiamondType == diamond.DiamondType)
                         {
                             checkQueue.Enqueue(findDiamond);
@@ -414,7 +492,6 @@ namespace ET
 
             if (hangIndex < 0 || hangIndex >= self.HangCount || lieIndex < 0 || lieIndex >= self.LieCount)
             {
-                Log.Debug("out range");
                 return null;
             }
 
