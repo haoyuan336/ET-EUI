@@ -138,6 +138,7 @@ namespace ET
 
                     if (isCrash)
                     {
+                        Log.Debug("处理下落的逻辑");
                         self.MoveDownAllDiamond(m2CSyncDiamondAction.DiamondActionItems);
                     }
 
@@ -291,7 +292,10 @@ namespace ET
                         i--;
                         foreach (var target in hangList)
                         {
-                            lieList.Add(target);
+                            if (!lieList.Contains(target))
+                            {
+                                lieList.Add(target);
+                            }
                         }
                     }
                 }
@@ -312,6 +316,7 @@ namespace ET
             DiamondActionItem diamondActionItem = new DiamondActionItem();
             foreach (var crashList in endListList)
             {
+                Log.Debug("carsh diamond list length = " + crashList.Count);
                 foreach (var diamond in crashList)
                 {
                     DiamondAction diamondAction = new DiamondAction();
@@ -319,6 +324,17 @@ namespace ET
                     diamondAction.DiamondInfo = diamond.GetMessageInfo();
                     self.Diamonds[diamond.LieIndex, diamond.HangIndex] = null;
                     diamond.Dispose();
+                    diamondActionItem.DiamondActions.Add(diamondAction);
+                }
+            }
+
+            
+            foreach (var list in endListList)
+            {
+                //增加特殊钻石
+                DiamondAction diamondAction = self.AddSpecialDiamond(list);
+                if (diamondAction != null)
+                {
                     diamondActionItem.DiamondActions.Add(diamondAction);
                 }
             }
@@ -546,5 +562,21 @@ namespace ET
 
             diamondActionItems.Add(diamondActionItem);
         }
+
+        /*
+         * 增加特殊钻石的逻辑
+         **/
+        public static DiamondAction AddSpecialDiamond(this Room self, List<Diamond> crashList)
+        {
+            DiamondAction diamondAction = null;
+
+            if (crashList.Count >= 5)
+            {
+                
+            }
+
+            return diamondAction;
+        }
+        
     }
 }
