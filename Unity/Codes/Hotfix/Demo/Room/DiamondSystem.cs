@@ -31,7 +31,8 @@ namespace ET
                 LieIndex = self.LieIndex,
                 DiamondType = self.DiamondType,
                 InitLieIndex = self.InitLieIndex,
-                InitHangIndex = self.InitHangIndex
+                InitHangIndex = self.InitHangIndex,
+                BoomType = self.BoomType
             };
         }
 
@@ -43,6 +44,8 @@ namespace ET
             self.DiamondType = diamondInfo.DiamondType;
             self.InitHangIndex = diamondInfo.InitHangIndex;
             self.InitLieIndex = diamondInfo.InitLieIndex;
+            self.BoomType = diamondInfo.BoomType;
+            Log.Debug("Diamond Type = " + self.DiamondType);
 #if !SERVER
             Game.EventSystem.Publish(new EventType.UpdateDiamondData() { Diamond = self });
 

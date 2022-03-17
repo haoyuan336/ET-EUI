@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Numerics;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using MongoDB.Driver;
 using MongoDB.Driver.Core.Operations;
 using NLog.Fluent;
 
@@ -306,11 +308,13 @@ namespace ET
             {
                 endListList.Add(lieList);
             }
+
             //
             foreach (var hangList in hangCrashListList)
             {
                 endListList.Add(hangList);
             }
+
             //
             Log.Debug("end list list = " + endListList.Count);
             DiamondActionItem diamondActionItem = new DiamondActionItem();
@@ -328,7 +332,6 @@ namespace ET
                 }
             }
 
-            
             foreach (var list in endListList)
             {
                 //增加特殊钻石
@@ -338,7 +341,7 @@ namespace ET
                     diamondActionItem.DiamondActions.Add(diamondAction);
                 }
             }
-           
+
             if (diamondActionItem.DiamondActions.Count > 0)
             {
                 diamondActionItems.Add(diamondActionItem);
@@ -570,13 +573,209 @@ namespace ET
         {
             DiamondAction diamondAction = null;
 
-            if (crashList.Count >= 5)
+            if (crashList.Count >= 4)
             {
+                DiamondComponent diamondComponent = self.DomainScene().GetComponent<DiamondComponent>();
+                Diamond diamond = diamondComponent.CreateOneDiamond();
+                DirectionType directionType = self.GetListDirection(crashList);
+                Diamond targetDiamond = null;
+                BoomType boomType = BoomType.Invalide;
+                switch (directionType)
+                {
+                    case DirectionType.Horizontal:
+                        targetDiamond = self.GetLastRightDiamond(crashList);
+                        if (crashList.Count >= 5)
+                        {
+                            boomType = BoomType.BlackHole;
+                        }
+                        else
+                        {
+                            boomType = BoomType.LazerH;
+                        }
+
+                        break;
+                    case DirectionType.Vertical:
+                        targetDiamond = self.GetLastDownDiamond(crashList);
+                        if (crashList.Count >= 5)
+                        {
+                            boomType = BoomType.BlackHole;
+                        }
+                        else
+                        {
+                            boomType = BoomType.LazerV;
+                        }
+
+                        break;
+                    case DirectionType.Cross:
+                        if (crashList.Count >= 5)
+                        {
+                            Log.Debug("Cross");
+                            boomType = BoomType.Boom;
+                            targetDiamond = self.GetCrossDiamond(crashList);
+                        }
+
+                        break;
+                }
+
+                diamond.InitLieIndex = targetDiamond.LieIndex;
+                diamond.InitHangIndex = targetDiamond.HangIndex;
+                diamond.SetIndex(targetDiamond.LieIndex, targetDiamond.HangIndex);
+                diamond.DiamondType = targetDiamond.DiamondType;
+                diamond.BoomType = (int) boomType;
+                self.Diamonds[diamond.LieIndex, diamond.HangIndex] = diamond;
+                diamondAction = new DiamondAction();
+                diamondAction.ActionType = (int)DiamondActionType.Create;
+                diamondAction.DiamondInfo = diamond.GetMessageInfo();
                 
             }
 
             return diamondAction;
         }
-        
+
+        public static Diamond GetLastDownDiamond(this Room self, List<Diamond> list)
+        {
+            Diamond target = null;
+            var minHangIndex = 1000;
+            foreach (var diamond in list)
+            {
+                if (diamond.HangIndex < minHangIndex)
+                {
+                    minHangIndex = diamond.HangIndex;
+                    target = diamond;
+                }
+            }
+
+            return target;
+        }
+
+        public static Diamond GetLastRightDiamond(this Room self, List<Diamond> list)
+        {
+            Diamond target = null;
+            var maxRightIndex = -1000;
+            foreach (var diamond in list)
+            {
+                if (diamond.LieIndex > maxRightIndex)
+                {
+                    maxRightIndex = diamond.HangIndex;
+                    target = diamond;
+                }
+            }
+
+            return target;
+        }
+
+        public static Diamond GetCrossDiamond(this Room self, List<Diamond> list)
+        {
+            List<Diamond> HList = new List<Diamond>();
+            List<Diamond> VList = new List<Diamond>();
+            Dictionary<int, int> Lmap = new Dictionary<int, int>();
+            Dictionary<int, int> HMap = new Dictionary<int, int>();
+            foreach (var diamond in list)
+            {
+                if (!Lmap.ContainsKey(diamond.LieIndex))
+                {
+                    Lmap.Add(diamond.LieIndex, 1);
+                }
+                else
+                {
+                    Lmap[diamond.LieIndex]++;
+                }
+
+                if (!HMap.ContainsKey(diamond.HangIndex))
+                {
+                    HMap.Add(diamond.HangIndex, 1);
+                }
+                else
+                {
+                    HMap[diamond.HangIndex]++;
+                }
+            }
+
+            var max = 0;
+            var LieIndex = 0;
+            foreach (var key in Lmap.Keys)
+            {
+                if (Lmap[key] > max)
+                {
+                    max = Lmap[key];
+                    LieIndex = key;
+                }
+            }
+
+            max = 0;
+            var HangIndex = 0;
+            foreach (var key in HMap.Keys)
+            {
+                if (HMap[key] > max)
+                {
+                    max = HMap[key];
+                    HangIndex = key;
+
+                }
+            }
+
+            Log.Debug("Lie index = " + LieIndex);
+            Log.Debug("Hang index" + HangIndex);
+            foreach (var diamond in list)
+            {
+                if (diamond.LieIndex == LieIndex)
+                {
+                    VList.Add(diamond);
+                }
+            }
+
+            Log.Debug("v list count" + VList.Count);
+            foreach (var diamond in list)
+            {
+                if (diamond.HangIndex == HangIndex)
+                {
+                    HList.Add(diamond);
+                }
+            }
+            Log.Debug("h list count" + HList.Count);
+
+            foreach (var diamond in HList)
+            {
+                if (VList.Contains(diamond))
+                {
+                    return diamond;
+                }
+            }
+
+            return null;
+        }
+
+        public static DirectionType GetListDirection(this Room self, List<Diamond> list)
+        {
+            //获取当前列表的方向
+            Dictionary<int, bool> lieMap = new Dictionary<int, bool>();
+            Dictionary<int, bool> hangMap = new Dictionary<int, bool>();
+            foreach (var diamond in list)
+            {
+                if (!lieMap.ContainsKey(diamond.LieIndex))
+                {
+                    lieMap.Add(diamond.LieIndex, true);
+                }
+
+                if (!hangMap.ContainsKey(diamond.HangIndex))
+                {
+                    hangMap.Add(diamond.HangIndex, true);
+                }
+            }
+
+            if (lieMap.Count == list.Count)
+            {
+                return DirectionType.Vertical;
+            }
+
+            if (hangMap.Count == list.Count)
+            {
+                return DirectionType.Horizontal;
+            }
+
+            Log.Debug("Lie map = " + lieMap.Count);
+            Log.Debug("Hang map = " + hangMap.Count);
+            return DirectionType.Cross;
+        }
     }
 }

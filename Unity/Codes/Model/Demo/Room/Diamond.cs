@@ -8,5 +8,7 @@
 
         public int InitLieIndex = 0;    //初始的index
         public int InitHangIndex = 0;   //初始的行index
+
+        public int BoomType = 0;    //炸弹类型
     }
 }

@@ -939,6 +939,9 @@ namespace ET
 		[ProtoMember(6)]
 		public int InitHangIndex { get; set; }
 
+		[ProtoMember(7)]
+		public int BoomType { get; set; }
+
 	}
 
 	[Message(OuterOpcode.M2C_InitMapData)]

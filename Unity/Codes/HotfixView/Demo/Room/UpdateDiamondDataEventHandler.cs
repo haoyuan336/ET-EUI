@@ -28,16 +28,9 @@ namespace ET
                 (a.Diamond.HangIndex - hangCount * 0.5f + 0.5f) * distance, 0);
             if (go.GetComponent<SpriteRenderer>() != null)
             {
-                DiamondLibrary diamondLibrary = go.GetComponent<DiamondLibraryCtl>().DiamondLibrary;
-                DiamondSprite diamondSprite = diamondLibrary.DiamondSpriteMap[a.Diamond.DiamondType];
-                // TestClassBase
-                // go.GetComponent<SpriteRenderer>().color = color;
-                // GameObject bundleGameObject = (GameObject) ResourcesComponent.Instance.GetAsset("Unit.unity3d", "Unit");
-                // String spriteNameStr = $"item_0{a.Diamond.DiamondType}";
-                // Log.Debug($"sprite name str ={spriteNameStr} ");
-                // Sprite sprite = bundleGameObject.Get<Sprite>(spriteNameStr);
-                // // library.GetComponent<>()
-                go.GetComponent<SpriteRenderer>().sprite = diamondSprite.Sprite;
+                // AllDiamondLibrary allDiamondLibrary = go.GetComponent<DiamondLibraryCtl>().DiamondLibrary;
+                // DiamondLibrary diamondSprite = allDiamondLibrary.DiamondSpriteMap[a.Diamond.DiamondType];
+                // go.GetComponent<SpriteRenderer>().sprite = diamondSprite.Sprite;
             }
 
             await ETTask.CompletedTask;
