@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using ET.EventType;
 using UnityEngine;
 
@@ -28,9 +29,42 @@ namespace ET
                 (a.Diamond.HangIndex - hangCount * 0.5f + 0.5f) * distance, 0);
             if (go.GetComponent<SpriteRenderer>() != null)
             {
-                // AllDiamondLibrary allDiamondLibrary = go.GetComponent<DiamondLibraryCtl>().DiamondLibrary;
-                // DiamondLibrary diamondSprite = allDiamondLibrary.DiamondSpriteMap[a.Diamond.DiamondType];
-                // go.GetComponent<SpriteRenderer>().sprite = diamondSprite.Sprite;
+                AllDiamondLibrary allDiamondLibrary = go.GetComponent<DiamondLibraryCtl>().AllDiamondLibrary;
+                DiamondLibrary diamondLibrary = null;
+                if (allDiamondLibrary.DiamondSpriteMap.TryGetValue(a.Diamond.DiamondType, out diamondLibrary))
+                {
+                    Sprite sprite = diamondLibrary.normalTexture;
+                    Log.Debug("boom type = " + a.Diamond.BoomType);
+                    switch (a.Diamond.BoomType)
+                    {
+                        case (int) BoomType.Boom:
+                            sprite = diamondLibrary.BoomTexture;
+                            break;
+                        case (int) BoomType.BlackHole:
+                            sprite = diamondLibrary.BlackHoleTexture;
+                            break;
+                        case (int) BoomType.LazerH:
+                            sprite = diamondLibrary.LazerHTexture;
+                            break;
+                        case (int) BoomType.LazerV:
+                            sprite = diamondLibrary.LazerVTexture;
+
+                            break;
+                    }
+
+                    go.GetComponent<SpriteRenderer>().sprite = sprite;
+                    if (a.Diamond.BoomType != (int) BoomType.Invalide)
+                    {
+                        float time = 0;
+                        while (time < Mathf.PI)
+                        {
+                            await TimerComponent.Instance.WaitFrameAsync();
+                            time += 0.04f;
+                            go.transform.localScale = Vector3.one + Vector3.one * Mathf.Sin(time) * 0.5f;
+                        }
+
+                    }
+                }
             }
 
             await ETTask.CompletedTask;

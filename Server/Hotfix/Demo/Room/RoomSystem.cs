@@ -98,8 +98,14 @@ namespace ET
             // diamondComponent.CreateOneDiamond();
             int[,] map =
             {
-                { 1, 2, 3, 4, 5, 6, 1, 1 }, { 2, 3, 4, 5, 6, 1, 2, 3 }, { 3, 2, 5, 4, 1, 6, 3, 2 }, { 4, 1, 6, 2, 2, 5, 2, 1 },
-                { 5, 6, 1, 2, 1, 2, 5, 6 }, { 6, 5, 2, 1, 4, 2, 6, 5 }, { 1, 4, 3, 6, 5, 1, 1, 4 }, { 2, 3, 4, 5, 6, 1, 2, 3 }
+                { 1, 2, 3, 4, 5, 6, 1, 1 }, 
+                { 2, 3, 4, 5, 6, 1, 2, 3 }, 
+                { 3, 2, 5, 4, 1, 2, 3, 2 }, 
+                { 4, 1, 6, 2, 2, 5, 2, 1 },
+                { 5, 6, 1, 2, 1, 1, 5, 6 }, 
+                { 6, 5, 2, 1, 4, 2, 6, 5 }, 
+                { 1, 4, 3, 6, 5, 1, 1, 4 }, 
+                { 2, 3, 4, 5, 6, 1, 2, 3 }
             };
             for (var i = 0; i < self.HangCount; i++)
             {
@@ -252,10 +258,11 @@ namespace ET
                         continue;
                     }
 
-                    List<Diamond> sameLieList = self.CheckHangSameDiamond(self.Diamonds[j, i]);
-                    if (sameLieList.Count >= 3)
+                    List<Diamond> sameHangList = self.CheckHangSameDiamond(self.Diamonds[j, i]);
+                    if (sameHangList.Count >= 3)
                     {
-                        crashListList.Add(sameLieList);
+                        Log.Debug("same hang list =  " + sameHangList.Count);
+                        crashListList.Add(sameHangList);
                     }
                 }
             }
@@ -578,12 +585,13 @@ namespace ET
                 DiamondComponent diamondComponent = self.DomainScene().GetComponent<DiamondComponent>();
                 Diamond diamond = diamondComponent.CreateOneDiamond();
                 DirectionType directionType = self.GetListDirection(crashList);
+                Log.Debug($"direction type {directionType}");
                 Diamond targetDiamond = null;
                 BoomType boomType = BoomType.Invalide;
                 switch (directionType)
                 {
                     case DirectionType.Horizontal:
-                        targetDiamond = self.GetLastRightDiamond(crashList);
+                        targetDiamond = self.GetLastLeftDiamond(crashList);
                         if (crashList.Count >= 5)
                         {
                             boomType = BoomType.BlackHole;
@@ -617,6 +625,7 @@ namespace ET
                         break;
                 }
 
+                Log.Debug("create boom type" + boomType);
                 diamond.InitLieIndex = targetDiamond.LieIndex;
                 diamond.InitHangIndex = targetDiamond.HangIndex;
                 diamond.SetIndex(targetDiamond.LieIndex, targetDiamond.HangIndex);
@@ -647,7 +656,21 @@ namespace ET
 
             return target;
         }
+        public static Diamond GetLastLeftDiamond(this Room self, List<Diamond> list)
+        {
+            Diamond target = null;
+            var maxLeftIndex = 1000;
+            foreach (var diamond in list)
+            {
+                if (diamond.LieIndex < maxLeftIndex)
+                {
+                    maxLeftIndex = diamond.LieIndex;
+                    target = diamond;
+                }
+            }
 
+            return target;
+        }
         public static Diamond GetLastRightDiamond(this Room self, List<Diamond> list)
         {
             Diamond target = null;
@@ -656,7 +679,7 @@ namespace ET
             {
                 if (diamond.LieIndex > maxRightIndex)
                 {
-                    maxRightIndex = diamond.HangIndex;
+                    maxRightIndex = diamond.LieIndex;
                     target = diamond;
                 }
             }
@@ -762,19 +785,19 @@ namespace ET
                     hangMap.Add(diamond.HangIndex, true);
                 }
             }
-
+            Log.Debug("Lie map = " + lieMap.Count);
+            Log.Debug("Hang map = " + hangMap.Count);
             if (lieMap.Count == list.Count)
-            {
-                return DirectionType.Vertical;
-            }
-
-            if (hangMap.Count == list.Count)
             {
                 return DirectionType.Horizontal;
             }
 
-            Log.Debug("Lie map = " + lieMap.Count);
-            Log.Debug("Hang map = " + hangMap.Count);
+            if (hangMap.Count == list.Count)
+            {
+                return DirectionType.Vertical;
+            }
+
+      
             return DirectionType.Cross;
         }
     }

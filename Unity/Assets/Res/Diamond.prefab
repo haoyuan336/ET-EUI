@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6647006997372565271}
   - component: {fileID: 7145625748413540824}
   - component: {fileID: 6256317849406436324}
-  - component: {fileID: -7611671741204099551}
+  - component: {fileID: -2351180056473205408}
   m_Layer: 0
   m_Name: Diamond
   m_TagString: Untagged
@@ -98,7 +98,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-7611671741204099551
+--- !u!114 &-2351180056473205408
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,4 +110,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4978aa2ffedc9ad42a18fa66b677e14c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DiamondLibrary: {fileID: 11400000, guid: eb1a91987b0f2674186067751f9da338, type: 2}
+  AllDiamondLibrary: {fileID: 11400000, guid: 9f0d6b36cfaed1448baff69eb0728414, type: 2}

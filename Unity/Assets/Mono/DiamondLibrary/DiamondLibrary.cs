@@ -5,26 +5,21 @@ using UnityEngine;
 
 namespace ET
 {
-    [Serializable]
-    public class DiamondSprite
-    {
-        public Sprite Sprite;
-        public int DiamondType;
-    }
+    // [Serializable]
+    // public class DiamondSprite
+    // {
+    //     public Sprite Sprite;
+    //     public int DiamondType;
+    // }
 
-    [CreateAssetMenu(fileName = "DiamondSpriteLibrary.asset", menuName = "Diamond/Create Diamond Sprite")]
+    [CreateAssetMenu(fileName = "DiamondLibrary.asset", menuName = "Diamond/Create Diamond Library")]
     public class DiamondLibrary: ScriptableObject
     {
-        public List<DiamondSprite> DiamondSprites = new List<DiamondSprite>();
-
-        public Dictionary<int, DiamondSprite> DiamondSpriteMap = new Dictionary<int, DiamondSprite>();
-
-        public void OnEnable()
-        {
-            foreach (var diamondSprite in this.DiamondSprites)
-            {
-                this.DiamondSpriteMap.Add(diamondSprite.DiamondType, diamondSprite);
-            }
-        }
+        public int DiamondType;
+        public Sprite normalTexture;
+        public Sprite BoomTexture;
+        public Sprite LazerVTexture;
+        public Sprite LazerHTexture;
+        public Sprite BlackHoleTexture;
     }
 }
