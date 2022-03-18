@@ -45,7 +45,6 @@ namespace ET
             self.InitHangIndex = diamondInfo.InitHangIndex;
             self.InitLieIndex = diamondInfo.InitLieIndex;
             self.BoomType = diamondInfo.BoomType;
-            Log.Debug("Diamond Type = " + self.BoomType);
 #if !SERVER
             Game.EventSystem.Publish(new EventType.UpdateDiamondData() { Diamond = self });
 

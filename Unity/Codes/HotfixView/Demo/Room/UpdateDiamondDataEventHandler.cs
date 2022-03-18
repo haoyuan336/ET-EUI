@@ -34,7 +34,6 @@ namespace ET
                 if (allDiamondLibrary.DiamondSpriteMap.TryGetValue(a.Diamond.DiamondType, out diamondLibrary))
                 {
                     Sprite sprite = diamondLibrary.normalTexture;
-                    Log.Debug("boom type = " + a.Diamond.BoomType);
                     switch (a.Diamond.BoomType)
                     {
                         case (int) BoomType.Boom:

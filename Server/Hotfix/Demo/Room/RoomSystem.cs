@@ -98,14 +98,8 @@ namespace ET
             // diamondComponent.CreateOneDiamond();
             int[,] map =
             {
-                { 1, 2, 3, 4, 5, 6, 1, 1 }, 
-                { 2, 3, 4, 5, 6, 1, 2, 3 }, 
-                { 3, 2, 5, 4, 1, 2, 3, 2 }, 
-                { 4, 1, 6, 2, 2, 5, 2, 1 },
-                { 5, 6, 1, 2, 1, 1, 5, 6 }, 
-                { 6, 5, 2, 1, 4, 2, 6, 5 }, 
-                { 1, 4, 3, 6, 5, 1, 1, 4 }, 
-                { 2, 3, 4, 5, 6, 1, 2, 3 }
+                { 1, 2, 3, 4, 5, 6, 1, 1 }, { 2, 3, 4, 5, 6, 1, 2, 3 }, { 3, 2, 5, 4, 1, 2, 3, 2 }, { 4, 1, 6, 2, 2, 5, 2, 1 },
+                { 5, 6, 1, 2, 1, 1, 5, 6 }, { 6, 5, 2, 1, 4, 2, 6, 5 }, { 1, 4, 3, 6, 5, 1, 1, 4 }, { 2, 3, 4, 5, 6, 1, 2, 3 }
             };
             for (var i = 0; i < self.HangCount; i++)
             {
@@ -139,20 +133,23 @@ namespace ET
                 m2CSyncDiamondAction.DiamondActionItems.Add(self.SwapDiamondPos(diamond, nextDiamond));
                 bool isCrash = true;
                 bool isCrashSuccess = false;
-                while (isCrash)
+                bool isCheck = true;
+                while (isCrash || isCheck)
                 {
-                    isCrash = self.CheckCrash(m2CSyncDiamondAction.DiamondActionItems);
+                    isCrash = self.CheckCrash(m2CSyncDiamondAction.DiamondActionItems, diamond, nextDiamond);
                     Log.Debug($"is carsh {isCrash}");
-
-                    if (isCrash)
-                    {
-                        Log.Debug("处理下落的逻辑");
-                        self.MoveDownAllDiamond(m2CSyncDiamondAction.DiamondActionItems);
-                    }
+                    Log.Debug("处理下落的逻辑");
+                    isCheck = self.MoveDownAllDiamond(m2CSyncDiamondAction.DiamondActionItems);
 
                     if (isCrashSuccess == false && isCrash)
                     {
                         isCrashSuccess = true;
+                    }
+
+                    if (!isCrash && isCrashSuccess)
+                    {
+                        isCheck = self.AutoCastSpecialDiamond(m2CSyncDiamondAction.DiamondActionItems);
+                        // Log.Debug("is crash " + isCrash);
                     }
                 }
 
@@ -207,6 +204,11 @@ namespace ET
         public static Diamond GetDiamond(this Room self, int LieIndex, int HangIndex)
         {
             // Diamond diamond = null;
+            if (LieIndex < 0 || HangIndex < 0 || LieIndex >= self.LieCount || HangIndex >= self.HangCount)
+            {
+                return null;
+            }
+
             return self.Diamonds[LieIndex, HangIndex];
         }
 
@@ -283,7 +285,7 @@ namespace ET
             return false;
         }
 
-        public static bool CheckCrash(this Room self, List<DiamondActionItem> diamondActionItems)
+        public static bool CheckCrash(this Room self, List<DiamondActionItem> diamondActionItems, Diamond touchDiamond, Diamond swapDiamond)
         {
             List<List<Diamond>> lieCrashListList = self.GetLieCrashListList();
             List<List<Diamond>> hangCrashListList = self.GetHangCrashListList();
@@ -342,7 +344,7 @@ namespace ET
             foreach (var list in endListList)
             {
                 //增加特殊钻石
-                DiamondAction diamondAction = self.AddSpecialDiamond(list);
+                DiamondAction diamondAction = self.AddSpecialDiamond(list, touchDiamond, swapDiamond);
                 if (diamondAction != null)
                 {
                     diamondActionItem.DiamondActions.Add(diamondAction);
@@ -524,10 +526,12 @@ namespace ET
             return self.Diamonds[lieIndex, hangIndex];
         }
 
-        public static void MoveDownAllDiamond(this Room self, List<DiamondActionItem> diamondActionItems)
+        public static bool MoveDownAllDiamond(this Room self, List<DiamondActionItem> diamondActionItems)
         {
+            bool isMoveDown = false;
             //todo 将宝石都向下移动
-            DiamondActionItem diamondActionItem = new DiamondActionItem();
+            DiamondActionItem moveActionItem = new DiamondActionItem();
+            DiamondActionItem createActionItem = new DiamondActionItem();
             DiamondComponent diamondComponent = self.DiamondComponent;
             //遍历每一列
             for (var i = 0; i < self.LieCount; i++)
@@ -553,7 +557,8 @@ namespace ET
                         DiamondAction action = new DiamondAction();
                         action.ActionType = (int) DiamondActionType.Move;
                         action.DiamondInfo = diamond.GetMessageInfo();
-                        diamondActionItem.DiamondActions.Add(action);
+                        moveActionItem.DiamondActions.Add(action);
+                        
                     }
                     else
                     {
@@ -565,18 +570,30 @@ namespace ET
                         DiamondAction action = new DiamondAction();
                         action.ActionType = (int) DiamondActionType.Create;
                         action.DiamondInfo = diamond.GetMessageInfo();
-                        diamondActionItem.DiamondActions.Add(action);
+                        createActionItem.DiamondActions.Add(action);
                     }
                 }
             }
 
-            diamondActionItems.Add(diamondActionItem);
+            if (moveActionItem.DiamondActions.Count > 0)
+            {
+                diamondActionItems.Add(moveActionItem);
+                isMoveDown = true;
+            }
+
+            if (createActionItem.DiamondActions.Count > 0)
+            {
+                diamondActionItems.Add(createActionItem);
+                isMoveDown = true;
+            }
+
+            return isMoveDown;
         }
 
         /*
          * 增加特殊钻石的逻辑
          **/
-        public static DiamondAction AddSpecialDiamond(this Room self, List<Diamond> crashList)
+        public static DiamondAction AddSpecialDiamond(this Room self, List<Diamond> crashList, Diamond touchDiamond, Diamond swapDiamond)
         {
             DiamondAction diamondAction = null;
 
@@ -625,6 +642,16 @@ namespace ET
                         break;
                 }
 
+                if (crashList.Contains(touchDiamond))
+                {
+                    targetDiamond = touchDiamond;
+                }
+
+                if (crashList.Contains(swapDiamond))
+                {
+                    targetDiamond = swapDiamond;
+                }
+
                 Log.Debug("create boom type" + boomType);
                 diamond.InitLieIndex = targetDiamond.LieIndex;
                 diamond.InitHangIndex = targetDiamond.HangIndex;
@@ -633,9 +660,8 @@ namespace ET
                 diamond.BoomType = (int) boomType;
                 self.Diamonds[diamond.LieIndex, diamond.HangIndex] = diamond;
                 diamondAction = new DiamondAction();
-                diamondAction.ActionType = (int)DiamondActionType.Create;
+                diamondAction.ActionType = (int) DiamondActionType.Create;
                 diamondAction.DiamondInfo = diamond.GetMessageInfo();
-                
             }
 
             return diamondAction;
@@ -656,6 +682,7 @@ namespace ET
 
             return target;
         }
+
         public static Diamond GetLastLeftDiamond(this Room self, List<Diamond> list)
         {
             Diamond target = null;
@@ -671,6 +698,7 @@ namespace ET
 
             return target;
         }
+
         public static Diamond GetLastRightDiamond(this Room self, List<Diamond> list)
         {
             Diamond target = null;
@@ -733,7 +761,6 @@ namespace ET
                 {
                     max = HMap[key];
                     HangIndex = key;
-
                 }
             }
 
@@ -755,6 +782,7 @@ namespace ET
                     HList.Add(diamond);
                 }
             }
+
             Log.Debug("h list count" + HList.Count);
 
             foreach (var diamond in HList)
@@ -785,6 +813,7 @@ namespace ET
                     hangMap.Add(diamond.HangIndex, true);
                 }
             }
+
             Log.Debug("Lie map = " + lieMap.Count);
             Log.Debug("Hang map = " + hangMap.Count);
             if (lieMap.Count == list.Count)
@@ -797,8 +826,121 @@ namespace ET
                 return DirectionType.Vertical;
             }
 
-      
             return DirectionType.Cross;
+        }
+
+        public static bool AutoCastSpecialDiamond(this Room self, List<DiamondActionItem> diamondActionItems)
+        {
+            bool isSpecial = false;
+            DiamondActionItem diamondActionItem = new DiamondActionItem();
+
+            // List<List<Diamond>> crashListList = new List<List<Diamond>>();
+            for (int i = 0; i < self.HangCount; i++)
+            {
+                for (int j = 0; j < self.LieCount; j++)
+                {
+                    Diamond diamond = self.Diamonds[j, i];
+                    if (diamond != null && diamond.BoomType != (int) BoomType.Invalide)
+                    {
+                        Log.Debug("存在特殊diamond");
+                        List<Diamond> crashList = new List<Diamond>();
+                        switch (diamond.BoomType)
+                        {
+                            case (int) BoomType.Boom:
+                                crashList = self.GetCrossLineDiamond(diamond);
+                                break;
+                            case (int) BoomType.BlackHole:
+                                crashList = self.GetAroundDiamond(diamond, 5);
+                                break;
+                            case (int) BoomType.LazerH:
+                                crashList = self.GetLineDiamond(diamond, DirectionType.Horizontal);
+                                break;
+                            case (int) BoomType.LazerV:
+                                crashList = self.GetLineDiamond(diamond, DirectionType.Vertical);
+                                break;
+                        }
+
+                        isSpecial = true;
+                        // crashListList.Add(crashList);
+                        foreach (var crashDiamond in crashList)
+                        {
+                            if (self.Diamonds[crashDiamond.LieIndex, crashDiamond.HangIndex] != null)
+                            {
+                                DiamondAction diamondAction = new DiamondAction();
+                                diamondAction.ActionType = (int) DiamondActionType.Destory;
+                                diamondAction.DiamondInfo = crashDiamond.GetMessageInfo();
+                                self.Diamonds[crashDiamond.LieIndex, crashDiamond.HangIndex] = null;
+                                crashDiamond.Dispose();
+                                diamondActionItem.DiamondActions.Add(diamondAction);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (diamondActionItem.DiamondActions.Count > 0)
+            {
+                diamondActionItems.Add(diamondActionItem);
+            }
+
+            return isSpecial;
+        }
+
+        public static List<Diamond> GetLineDiamond(this Room self, Diamond diamond, DirectionType directionType)
+        {
+            List<Diamond> list = new List<Diamond>();
+            var count = directionType == DirectionType.Horizontal? self.LieCount : self.HangCount;
+            for (int i = 0; i < count; i++)
+            {
+                list.Add(self.Diamonds[directionType == DirectionType.Horizontal? i : diamond.LieIndex,
+                    directionType == DirectionType.Horizontal? diamond.HangIndex : i]);
+            }
+
+            return list;
+        }
+
+        public static List<Diamond> GetCrossLineDiamond(this Room self, Diamond diamond)
+        {
+            List<Diamond> list = new List<Diamond>();
+            //获取交叉点上所有钻石
+            for (int i = 0; i < self.HangCount; i++)
+            {
+                Diamond target = self.Diamonds[diamond.LieIndex, i];
+                list.Add(target);
+            }
+
+            for (int i = 0; i < self.LieCount; i++)
+            {
+                Diamond target = self.Diamonds[i, diamond.HangIndex];
+                if (!list.Contains(target))
+                {
+                    list.Add(target);
+                }
+            }
+
+            return list;
+        }
+
+        public static List<Diamond> GetAroundDiamond(this Room self, Diamond diamond, int count)
+        {
+            var startLieIndex = diamond.LieIndex - (count - 1) / 2;
+            var endLieIndex = startLieIndex + count;
+            var startHangIndex = diamond.HangIndex - (count - 1) / 2;
+            var endHangIndex = startHangIndex + count;
+            List<Diamond> list = new List<Diamond>();
+            for (int i = startHangIndex; i < endHangIndex; i++)
+            {
+                for (int j = startLieIndex; j < endLieIndex; j++)
+                {
+                    Diamond targetDiamond = self.GetDiamond(j, i);
+                    if (targetDiamond != null)
+                    {
+                        list.Add(targetDiamond);
+                    }
+                }
+            }
+
+            return list;
         }
     }
 }
