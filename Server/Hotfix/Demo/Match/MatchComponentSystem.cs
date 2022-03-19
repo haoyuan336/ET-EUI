@@ -40,7 +40,7 @@ namespace ET
             {
                 self.MatchingUnits.Add(unit);
             }
-            const int RoomPlayerCount = 2;
+            const int RoomPlayerCount = 1;
             if (self.MatchingUnits.Count >= RoomPlayerCount)
             {
                 // self.MatchingUnits.
