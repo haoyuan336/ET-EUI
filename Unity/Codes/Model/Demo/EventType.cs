@@ -150,8 +150,8 @@ namespace ET
 
         public struct DestoryDiamondView
         {
-            public int LieIndex;
-            public int HangIndex;
+            public Diamond Diamond;
+            
         }
 
         public struct InitDiamondAndMoveDown

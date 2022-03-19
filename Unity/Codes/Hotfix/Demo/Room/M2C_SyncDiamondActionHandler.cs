@@ -27,9 +27,9 @@ namespace ET
                         case (int) DiamondActionType.Destory:
                             tasks.Add(Game.EventSystem.PublishAsync(new EventType.DestoryDiamondView()
                             {
-                                LieIndex = diamondInfo.LieIndex, HangIndex = diamondInfo.HangIndex
+                                Diamond = diamond
                             }));
-                            diamond.Dispose();
+                            // diamond.Dispose();
                             break;
                         case (int)DiamondActionType.Create:
                             Diamond newDiamond = diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo);

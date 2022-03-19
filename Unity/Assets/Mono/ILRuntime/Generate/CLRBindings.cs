@@ -108,7 +108,6 @@ namespace ILRuntime.Runtime.Generated
             UnityEngine_Camera_Binding.Register(app);
             UnityEngine_Physics_Binding.Register(app);
             UnityEngine_RaycastHit_Binding.Register(app);
-            UnityEngine_Ray_Binding.Register(app);
             System_Char_Binding.Register(app);
             ET_DiamondLibraryCtl_Binding.Register(app);
             ET_AllDiamondLibrary_Binding.Register(app);

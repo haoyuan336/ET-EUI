@@ -10,6 +10,8 @@ namespace ET
             Diamond diamond = self.AddChildWithId<Diamond>(id);
 
             int[] keys = DiamondTypeConfigCategory.Instance.GetAll().Keys.ToArray();
+            //todo test
+            keys = new[] { 1, 2, 3 };
             var randomIndex = RandomHelper.RandomNumber(0, keys.Length);
             int configIndex = keys[randomIndex];
             diamond.DiamondType = configIndex;

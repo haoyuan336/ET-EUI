@@ -36,6 +36,15 @@ namespace ET
             };
         }
 
+        public static bool EqualsIndex(this Diamond self, int lieIndex, int hangIndex)
+        {
+            if (self.LieIndex == lieIndex && self.HangIndex == hangIndex)
+            {
+                return true;
+            }
+
+            return false;
+        }
         public static void InitWithMessageInfo(this Diamond self, DiamondInfo diamondInfo)
         {
             self.Id = diamondInfo.Id;
