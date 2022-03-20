@@ -74,7 +74,7 @@ namespace ET
                     errorCode = await LoginHelper.LoginGateServer(self.ZoneScene());
                     if (errorCode == ErrorCode.ERR_Success)
                     {
-                        self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MatchButton);
+                        // self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MatchButton);
                     }
                 }
             }
