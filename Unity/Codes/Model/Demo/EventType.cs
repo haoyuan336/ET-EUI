@@ -163,5 +163,11 @@ namespace ET
         {
             public Scene ZoneScene;
         }
+
+        public struct ShowSceneUI
+        {
+            public Scene ZoneScene;
+            
+        }
     }
 }
