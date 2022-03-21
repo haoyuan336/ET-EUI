@@ -486,5 +486,14 @@ message M2C_SyncDiamondAction //IActorMessage
 	repeated DiamondActionItem DiamondActionItems = 1;
 }
 
-
-
+//ResponseType M2C_GetAllHeroCardListResponse
+message C2M_GetAllHeroCardListRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+}
+message M2C_GetAllHeroCardListResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}

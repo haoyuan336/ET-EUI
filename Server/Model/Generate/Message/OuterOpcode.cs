@@ -69,5 +69,7 @@ namespace ET
 		 public const ushort DiamondAction = 10066;
 		 public const ushort DiamondActionItem = 10067;
 		 public const ushort M2C_SyncDiamondAction = 10068;
+		 public const ushort C2M_GetAllHeroCardListRequest = 10069;
+		 public const ushort M2C_GetAllHeroCardListResponse = 10070;
 	}
 }

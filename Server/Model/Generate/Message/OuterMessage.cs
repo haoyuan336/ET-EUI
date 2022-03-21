@@ -1058,4 +1058,29 @@ namespace ET
 
 	}
 
+	[ResponseType(nameof(M2C_GetAllHeroCardListResponse))]
+	[Message(OuterOpcode.C2M_GetAllHeroCardListRequest)]
+	[ProtoContract]
+	public partial class C2M_GetAllHeroCardListRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetAllHeroCardListResponse)]
+	[ProtoContract]
+	public partial class M2C_GetAllHeroCardListResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
 }
