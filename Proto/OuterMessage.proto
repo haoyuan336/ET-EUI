@@ -485,15 +485,37 @@ message M2C_SyncDiamondAction //IActorMessage
 	int32 RpcId = 90;
 	repeated DiamondActionItem DiamondActionItems = 1;
 }
+message HeroCardInfo
+{
+	int64 HeroId = 1;
+	string HeroName = 2;
+	int32 ConfigId = 3;
+	int64 OwnerId = 4;
+}
 
 //ResponseType M2C_GetAllHeroCardListResponse
 message C2M_GetAllHeroCardListRequest //IActorLocationRequest
 {
 	int RpcId = 90;
+	int64 Account = 1;
 }
 message M2C_GetAllHeroCardListResponse //IActorLocationResponse
 {
 	int RpcId = 90;
 	int32 Error = 91;
 	string Message = 92;
+	repeated HeroCardInfo HeroCardInfos = 1;
+}
+//ResponseType M2C_CallHeroCardResponse
+message C2M_CallHeroCardRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+}
+message M2C_CallHeroCardResponse	//IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	HeroCardInfo HeroCardInfo = 1;
 }

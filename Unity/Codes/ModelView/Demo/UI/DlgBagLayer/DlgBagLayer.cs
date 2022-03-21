@@ -2,10 +2,10 @@
 
 namespace ET
 {
-	public  class DlgCallHeroLayer :Entity,IAwake
+	public  class DlgBagLayer :Entity,IAwake
 	{
 
-		public DlgCallHeroLayerViewComponent View { get => this.Parent.GetComponent<DlgCallHeroLayerViewComponent>();}
+		public DlgBagLayerViewComponent View { get => this.Parent.GetComponent<DlgBagLayerViewComponent>();}
 
 		public Dictionary<int, Scroll_ItemHeroCard> ItemHeroCards = new Dictionary<int, Scroll_ItemHeroCard>();
 

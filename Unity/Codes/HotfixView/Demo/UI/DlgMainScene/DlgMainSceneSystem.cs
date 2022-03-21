@@ -35,11 +35,15 @@ namespace ET
         public static async ETTask BagButtonClick(this DlgMainScene self)
         {
             Log.Debug("Bag button click");
+            self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_BagLayer);
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_MainScene);
+
             await ETTask.CompletedTask;
         }
 
         public static void ShowWindow(this DlgMainScene self, Entity contextData = null)
         {
+            
         }
     }
 }

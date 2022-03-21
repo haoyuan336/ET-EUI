@@ -15,5 +15,6 @@
         WindowID_ProgressBar,   //进度条UI
         WindowID_CallHeroLayer, //召唤英雄页面
         WindowID_MainScene,      //游戏的主页面
+        WindowID_BagLayer,      //背部页面
     }
 }
