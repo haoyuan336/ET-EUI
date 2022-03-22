@@ -5,6 +5,7 @@ using System.Diagnostics.Eventing.Reader;
 using System.Runtime.CompilerServices;
 using ET.Account;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ET
@@ -15,9 +16,14 @@ namespace ET
         {
             self.View.ELoopScrollList_HeroLoopVerticalScrollRect.AddItemRefreshListener((tr, index) =>
             {
-                self.OnLoopItemListTroopHeroCardEvent(tr, index);
+                self.OnLoopItemListHeroCardEvent(tr, index);
             });
             self.View.ELoopScrollList_TroopLoopHorizontalScrollRect.AddItemRefreshListener((tr, index) => { self.OnLoopItemScrollEvent(tr, index); });
+
+            self.View.ELoopScrollList_TroopHeroLoopHorizontalScrollRect.AddItemRefreshListener((tr, index) =>
+            {
+                self.OnLoopItemListTroopHeroCardEvent(tr, index);
+            });
             self.View.E_BackButton.AddListenerAsync(() => { return self.BackButtonClick(); });
         }
 
@@ -31,8 +37,19 @@ namespace ET
         public static void ShowWindow(this DlgEditorTroopLayer self, Entity contextData = null)
         {
             //todo 请求当前玩家拥有几支队伍
-            self.ShowTropItems();
+            self.ShowTroopItems();
             self.ShowBagHeroItems();
+            self.ShowTroopHeroCard();
+        }
+
+        public static void HideWindow(this DlgEditorTroopLayer self)
+        {
+            Log.Debug("hide window");
+            self.RemoveUIScrollItems(ref self.ItemTroops);
+            self.RemoveUIScrollItems(ref self.ItemTroopHeroCards);
+            self.RemoveUIScrollItems(ref self.ItemHeroCards);
+            self.TroopHeroCardInfos.Clear();
+            self.HeroCardInfos.Clear();
         }
 
         public static async void ShowBagHeroItems(this DlgEditorTroopLayer self)
@@ -50,7 +67,7 @@ namespace ET
             }
         }
 
-        public static async void ShowTropItems(this DlgEditorTroopLayer self)
+        public static async void ShowTroopItems(this DlgEditorTroopLayer self)
         {
             long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             M2C_GetAllTroopInfosResponse m2CGetAllTroopInfosResponse;
@@ -63,13 +80,9 @@ namespace ET
             }
         }
 
-        public static void HideWindowd(this DlgEditorTroopLayer self)
-        {
-            self.RemoveUIScrollItems(ref self.ItemTroops);
-        }
-
         public static void OnLoopItemScrollEvent(this DlgEditorTroopLayer self, Transform transform, int index)
         {
+            Log.Debug($"OnLoopItemScrollEvent{index}");
             Scroll_ItemHeroTroop scrollItemHeroTroop = self.ItemTroops[index].BindTrans(transform);
             if (index >= self.TroopInfos.Count)
             {
@@ -80,9 +93,9 @@ namespace ET
                 scrollItemHeroTroop.E_LabelText.text = self.TroopInfos[index].TroopId.ToString();
             }
 
-            scrollItemHeroTroop.E_ToggleToggle.group = self.View.E_ContentToggleGroup;
+            scrollItemHeroTroop.E_ToggleToggle.group = self.View.E_Content_TroopToggleGroup;
+            scrollItemHeroTroop.E_ToggleToggle.onValueChanged.RemoveAllListeners();
             scrollItemHeroTroop.E_ToggleToggle.onValueChanged.AddListener((arg0 => self.TroopButtonClick(arg0, transform, index)));
-            // scrollItemHeroTroop.E_ToggleToggle.AddListener(() => { self.TroopButtonClick(transform, index); });
             if (index == 0)
             {
                 scrollItemHeroTroop.E_ToggleToggle.isOn = true;
@@ -120,6 +133,7 @@ namespace ET
         public static async void ChooseTroop(this DlgEditorTroopLayer self, long TroopId)
         {
             self.View.E_TroopNameText.text = $"current troop :{TroopId}";
+            self.CurrentChooseTroopId = TroopId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             M2C_GetHeroInfosWithTroopIdResponse m2CGetHeroInfosWithTroopIdResponse;
             try
@@ -131,7 +145,10 @@ namespace ET
                 {
                     Log.Debug("获取队伍英雄成功");
 
-                    self.ShowTroopHeroCard(m2CGetHeroInfosWithTroopIdResponse.HeroCardInfos);
+                    self.TroopHeroCardInfos = m2CGetHeroInfosWithTroopIdResponse.HeroCardInfos;
+                    // self.ShowTroopHeroCard();
+                    self.View.ELoopScrollList_TroopHeroLoopHorizontalScrollRect.gameObject.SetActive(true);
+                    self.View.ELoopScrollList_TroopHeroLoopHorizontalScrollRect.SetVisible(true, 3);
                 }
             }
             catch (Exception e)
@@ -153,24 +170,98 @@ namespace ET
             self.View.ELoopScrollList_TroopLoopHorizontalScrollRect.SetVisible(true, count);
         }
 
-        public static void ShowTroopHeroCard(this DlgEditorTroopLayer self, List<HeroCardInfo> heroCardInfos)
+        public static void ShowTroopHeroCard(this DlgEditorTroopLayer self)
         {
-            self.View.ELoopScrollList_TroopHeroLoopHorizontalScrollRect.gameObject.SetActive(true);
             self.AddUIScrollItems(ref self.ItemTroopHeroCards, 3);
             self.View.ELoopScrollList_TroopHeroLoopHorizontalScrollRect.SetVisible(true, 3);
         }
 
-        public static void OnLoopItemListTroopHeroCardEvent(this DlgEditorTroopLayer self, Transform transform, int index)
+        public static void OnLoopItemListHeroCardEvent(this DlgEditorTroopLayer self, Transform transform, int index)
         {
+            Log.Debug($"OnLoopItemListHeroCardEvent{index}");
             Scroll_ItemHeroCard itemHeroCard = self.ItemHeroCards[index].BindTrans(transform);
-            itemHeroCard.E_TextText.text = self.HeroCardInfos[index].HeroName;
+            itemHeroCard.E_TextText.text = self.HeroCardInfos[index].HeroName + self.HeroCardInfos[index].ConfigId;
+            // itemHeroCard.E_ClickButton.onClick.RemoveAllListeners();
             itemHeroCard.E_ClickButton.AddListenerAsync(() => { return self.OnHeroCardClick(index); });
         }
 
-        public static async ETTask OnHeroCardClick(this DlgEditorTroopLayer self,int index)
+        public static async ETTask OnHeroCardClick(this DlgEditorTroopLayer self, int index)
         {
             Log.Debug("hero card click" + index);
+            //todo 请求将此英雄配置到队伍里面
+            try
+            {
+                HeroCardInfo heroCardInfo = self.HeroCardInfos[index];
+                long HeroId = heroCardInfo.HeroId;
+                Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+                M2C_SetHeroToTroopResponse m2CSetHeroToTroopResponse = (M2C_SetHeroToTroopResponse) await session.Call(new C2M_SetHeroToTroopRequest()
+                {
+                    HeroId = HeroId, TroopId = self.CurrentChooseTroopId, InTroopIndex = self.CurrentChooseInTroopIndex
+                });
+
+                if (m2CSetHeroToTroopResponse.Error == ErrorCode.ERR_Success)
+                {
+                    Log.Debug("设置英雄进队伍成功");
+
+                    // HeroCardInfo heroCardInfo = m2CSetHeroToTroopResponse.HeroCardInfo;
+                    // foreach (var VARIABLE in self.TroopHeroCardInfos)
+                    // {
+                    //     
+                    // }
+                }
+                else
+                {
+                    Log.Error($"{m2CSetHeroToTroopResponse.Error}");
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error($"{e}");
+            }
+
             await ETTask.CompletedTask;
+        }
+
+        public static void OnLoopItemListTroopHeroCardEvent(this DlgEditorTroopLayer self, Transform transform, int index)
+        {
+            Log.Debug($"on loop item list {index}");
+
+            HeroCardInfo heroCardInfo = null;
+            foreach (var info in self.TroopHeroCardInfos)
+            {
+                if (info.InTroopIndex == index)
+                {
+                    heroCardInfo = info;
+                }
+            }
+
+            Scroll_ItemTroopHeroCard itemTroopHeroCard = self.ItemTroopHeroCards[index].BindTrans(transform);
+            itemTroopHeroCard.E_ToggleToggle.group = self.View.E_Content_TroopHeroToggleGroup;
+
+            if (heroCardInfo != null)
+            {
+                itemTroopHeroCard.E_TextText.text = heroCardInfo.HeroName + heroCardInfo.ConfigId;
+            }
+            else
+            {
+                itemTroopHeroCard.E_TextText.text = "+";
+            }
+
+            if (index == 0)
+            {
+                itemTroopHeroCard.E_ToggleToggle.isOn = true;
+            }
+            itemTroopHeroCard.E_ToggleToggle.onValueChanged.RemoveAllListeners();
+            itemTroopHeroCard.E_ToggleToggle.onValueChanged.AddListener((value) => { self.OnTroopHeroClick(value, index); });
+        }
+
+        public static void OnTroopHeroClick(this DlgEditorTroopLayer self, bool value, int index)
+        {
+            if (value)
+            {
+                Log.Debug($"on troop hero click{index}");
+                self.CurrentChooseInTroopIndex = index;
+            }
         }
     }
 }

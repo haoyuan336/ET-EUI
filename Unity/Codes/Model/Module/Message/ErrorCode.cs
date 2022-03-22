@@ -26,6 +26,7 @@ namespace ET
         public const int ERR_NotMatching = 200009; //没有再匹配游戏
 
         public const int ERR_TroopCountIsFull = 200010; //队伍数已满
+        public const int ERR_NotFoundHero = 200011;     //未找到此英雄
 
         // 200001以上不抛异常
     }

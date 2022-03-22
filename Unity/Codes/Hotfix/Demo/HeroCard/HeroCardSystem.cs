@@ -20,7 +20,7 @@
         {
             HeroCardInfo heroCardInfo = new HeroCardInfo()
             {
-                HeroId = self.Id, HeroName = self.HeroName, ConfigId = self.ConfigId, OwnerId = self.OwnerId
+                HeroId = self.Id, HeroName = self.HeroName, ConfigId = self.ConfigId, OwnerId = self.OwnerId,TroopId = self.TroopId, InTroopIndex = self.InTroopIndex
             };
 
             return heroCardInfo;
@@ -32,6 +32,8 @@
             self.HeroName = message.HeroName;
             self.OwnerId = message.OwnerId;
             self.ConfigId = message.ConfigId;
+            self.InTroopIndex = message.InTroopIndex;
+            self.TroopId = message.TroopId;
         }
     }
 }

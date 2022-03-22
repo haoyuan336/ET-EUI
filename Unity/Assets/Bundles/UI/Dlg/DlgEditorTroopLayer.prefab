@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 1985626949033523682}
   - component: {fileID: 4240391807780939923}
   - component: {fileID: 1931142735845162052}
+  - component: {fileID: 4860582388105130927}
   m_Layer: 5
-  m_Name: Content
+  m_Name: E_Content_TroopHero
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,6 +76,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 0
+--- !u!114 &4860582388105130927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 316625609878423904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AllowSwitchOff: 0
 --- !u!1 &993032492304956611
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,7 +349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabSource:
-    prefabName: ItemHeroTroop
+    prefabName: ItemTroop
     poolSize: 5
   totalCount: 0
   reverseDirection: 0
@@ -826,7 +840,7 @@ GameObject:
   - component: {fileID: 1019192490033151059}
   - component: {fileID: 6830518134075173367}
   m_Layer: 5
-  m_Name: E_Content
+  m_Name: E_Content_Troop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

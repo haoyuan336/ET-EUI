@@ -1074,6 +1074,12 @@ namespace ET
 		[ProtoMember(4)]
 		public long OwnerId { get; set; }
 
+		[ProtoMember(5)]
+		public long TroopId { get; set; }
+
+		[ProtoMember(6)]
+		public int InTroopIndex { get; set; }
+
 	}
 
 	[ResponseType(nameof(M2C_GetAllHeroCardListResponse))]
@@ -1237,6 +1243,43 @@ namespace ET
 
 		[ProtoMember(1)]
 		public List<HeroCardInfo> HeroCardInfos = new List<HeroCardInfo>();
+
+	}
+
+	[ResponseType(nameof(M2C_SetHeroToTroopResponse))]
+	[Message(OuterOpcode.C2M_SetHeroToTroopRequest)]
+	[ProtoContract]
+	public partial class C2M_SetHeroToTroopRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long TroopId { get; set; }
+
+		[ProtoMember(2)]
+		public long HeroId { get; set; }
+
+		[ProtoMember(3)]
+		public int InTroopIndex { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_SetHeroToTroopResponse)]
+	[ProtoContract]
+	public partial class M2C_SetHeroToTroopResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public HeroCardInfo HeroCardInfo { get; set; }
 
 	}
 

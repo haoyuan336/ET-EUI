@@ -491,6 +491,8 @@ message HeroCardInfo
 	string HeroName = 2;
 	int32 ConfigId = 3;
 	int64 OwnerId = 4;
+	int64 TroopId = 5;
+	int32 InTroopIndex = 6;
 }
 
 //ResponseType M2C_GetAllHeroCardListResponse
@@ -562,4 +564,19 @@ message M2C_GetHeroInfosWithTroopIdResponse //IActorLocationResponse
 	int32 Error = 91;
 	string Message = 92;
 	repeated HeroCardInfo HeroCardInfos = 1;
+}
+//ResponseType M2C_SetHeroToTroopResponse
+message C2M_SetHeroToTroopRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 TroopId = 1;
+	int64 HeroId = 2;
+	int32 InTroopIndex = 3;
+}
+message M2C_SetHeroToTroopResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	HeroCardInfo HeroCardInfo = 1;
 }

@@ -2,7 +2,7 @@
 
 namespace ET
 {
-    public class DlgEditorTroopLayer: Entity, IAwake
+    public class DlgEditorTroopLayer: Entity, IAwake,IDestroy
     {
         public DlgEditorTroopLayerViewComponent View
         {
@@ -18,6 +18,12 @@ namespace ET
         public List<TroopInfo> TroopInfos = new List<TroopInfo>();
 
         public List<HeroCardInfo> HeroCardInfos = new List<HeroCardInfo>();
+
+        public List<HeroCardInfo> TroopHeroCardInfos = new List<HeroCardInfo>();
+
+        public long CurrentChooseTroopId;   //当前选择的队伍id
+
+        public int CurrentChooseInTroopIndex;   //当前选择的 在队伍里面的index   
 
 
     }
