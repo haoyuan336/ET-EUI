@@ -1138,4 +1138,106 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.TroopInfo)]
+	[ProtoContract]
+	public partial class TroopInfo: Object
+	{
+		[ProtoMember(1)]
+		public long TroopId { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_GetAllTroopInfosResponse))]
+	[Message(OuterOpcode.C2M_GetAllTroopInfosRequest)]
+	[ProtoContract]
+	public partial class C2M_GetAllTroopInfosRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long Account { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetAllTroopInfosResponse)]
+	[ProtoContract]
+	public partial class M2C_GetAllTroopInfosResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<TroopInfo> TroopInfos = new List<TroopInfo>();
+
+	}
+
+	[ResponseType(nameof(M2C_CreateTroopResponse))]
+	[Message(OuterOpcode.C2M_CreateTroopRequest)]
+	[ProtoContract]
+	public partial class C2M_CreateTroopRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_CreateTroopResponse)]
+	[ProtoContract]
+	public partial class M2C_CreateTroopResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public TroopInfo TroopInfo { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_GetHeroInfosWithTroopIdResponse))]
+	[Message(OuterOpcode.C2M_GetHeroInfosWithTroopIdRequest)]
+	[ProtoContract]
+	public partial class C2M_GetHeroInfosWithTroopIdRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long TroopId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetHeroInfosWithTroopIdResponse)]
+	[ProtoContract]
+	public partial class M2C_GetHeroInfosWithTroopIdResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<HeroCardInfo> HeroCardInfos = new List<HeroCardInfo>();
+
+	}
+
 }

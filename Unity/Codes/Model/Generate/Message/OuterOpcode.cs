@@ -74,5 +74,12 @@ namespace ET
 		 public const ushort M2C_GetAllHeroCardListResponse = 10071;
 		 public const ushort C2M_CallHeroCardRequest = 10072;
 		 public const ushort M2C_CallHeroCardResponse = 10073;
+		 public const ushort TroopInfo = 10074;
+		 public const ushort C2M_GetAllTroopInfosRequest = 10075;
+		 public const ushort M2C_GetAllTroopInfosResponse = 10076;
+		 public const ushort C2M_CreateTroopRequest = 10077;
+		 public const ushort M2C_CreateTroopResponse = 10078;
+		 public const ushort C2M_GetHeroInfosWithTroopIdRequest = 10079;
+		 public const ushort M2C_GetHeroInfosWithTroopIdResponse = 10080;
 	}
 }

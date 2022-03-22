@@ -519,3 +519,47 @@ message M2C_CallHeroCardResponse	//IActorLocationResponse
 	string Message = 92;
 	HeroCardInfo HeroCardInfo = 1;
 }
+
+message TroopInfo
+{
+	int64 TroopId = 1;
+}
+//ResponseType M2C_GetAllTroopInfosResponse
+message C2M_GetAllTroopInfosRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+}
+message M2C_GetAllTroopInfosResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated TroopInfo TroopInfos = 1;
+}
+//ResponseType M2C_CreateTroopResponse
+message C2M_CreateTroopRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message M2C_CreateTroopResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	TroopInfo TroopInfo = 1;
+}
+//ResponseType M2C_GetHeroInfosWithTroopIdResponse
+message C2M_GetHeroInfosWithTroopIdRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 TroopId = 1;
+}
+message M2C_GetHeroInfosWithTroopIdResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated HeroCardInfo HeroCardInfos = 1;
+}
