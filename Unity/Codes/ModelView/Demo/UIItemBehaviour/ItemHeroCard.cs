@@ -89,17 +89,43 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Image E_InTroopMarkImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_InTroopMarkImage == null )
+     				{
+		    			this.m_E_InTroopMarkImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_InTroopMark");
+     				}
+     				return this.m_E_InTroopMarkImage;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_InTroopMark");
+     			}
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_E_ClickButton = null;
 			this.m_E_ClickImage = null;
 			this.m_E_TextText = null;
+			this.m_E_InTroopMarkImage = null;
 			this.uiTransform = null;
 		}
 
 		private UnityEngine.UI.Button m_E_ClickButton = null;
 		private UnityEngine.UI.Image m_E_ClickImage = null;
 		private UnityEngine.UI.Text m_E_TextText = null;
+		private UnityEngine.UI.Image m_E_InTroopMarkImage = null;
 		public Transform uiTransform = null;
 	}
 }

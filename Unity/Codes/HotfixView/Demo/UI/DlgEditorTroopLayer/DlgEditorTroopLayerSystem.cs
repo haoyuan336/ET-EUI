@@ -109,7 +109,7 @@ namespace ET
                 return;
             }
 
-            // Log.Debug($"trop button click {index}");
+            Log.Debug($"trop toggle value change {index}");
             if (index >= self.TroopInfos.Count)
             {
                 M2C_CreateTroopResponse createTroopResponse;
@@ -146,6 +146,12 @@ namespace ET
                     Log.Debug("获取队伍英雄成功");
 
                     self.TroopHeroCardInfos = m2CGetHeroInfosWithTroopIdResponse.HeroCardInfos;
+                    foreach (var heroCardInfo in self.TroopHeroCardInfos)
+                    {
+                        Log.Debug($"hero card info {heroCardInfo.ConfigId}");
+                        Log.Debug($"hero index {heroCardInfo.InTroopIndex}");
+                    }
+
                     // self.ShowTroopHeroCard();
                     self.View.ELoopScrollList_TroopHeroLoopHorizontalScrollRect.gameObject.SetActive(true);
                     self.View.ELoopScrollList_TroopHeroLoopHorizontalScrollRect.SetVisible(true, 3);
@@ -182,6 +188,11 @@ namespace ET
             Scroll_ItemHeroCard itemHeroCard = self.ItemHeroCards[index].BindTrans(transform);
             itemHeroCard.E_TextText.text = self.HeroCardInfos[index].HeroName + self.HeroCardInfos[index].ConfigId;
             // itemHeroCard.E_ClickButton.onClick.RemoveAllListeners();
+            if (self.HeroCardInfos[index].TroopId != 0)
+            {
+                itemHeroCard.E_InTroopMarkImage.gameObject.SetActive(true);
+            }
+
             itemHeroCard.E_ClickButton.AddListenerAsync(() => { return self.OnHeroCardClick(index); });
         }
 
@@ -191,6 +202,8 @@ namespace ET
             //todo 请求将此英雄配置到队伍里面
             try
             {
+                Log.Debug($"current choose troop  ={self.CurrentChooseTroopId}");
+                Log.Debug($"current choose index = {self.CurrentChooseInTroopIndex}");
                 HeroCardInfo heroCardInfo = self.HeroCardInfos[index];
                 long HeroId = heroCardInfo.HeroId;
                 Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
@@ -202,6 +215,19 @@ namespace ET
                 if (m2CSetHeroToTroopResponse.Error == ErrorCode.ERR_Success)
                 {
                     Log.Debug("设置英雄进队伍成功");
+                    HeroCardInfo cardInfo = m2CSetHeroToTroopResponse.HeroCardInfo;
+
+                    foreach (var VARIABLE in self.TroopHeroCardInfos)
+                    {
+                        if (VARIABLE.HeroId.Equals(cardInfo.HeroId))
+                        {
+                            self.TroopHeroCardInfos.Remove(VARIABLE);
+                            break;
+                        }
+                    }
+
+                    self.TroopHeroCardInfos.Add(cardInfo);
+                    self.View.ELoopScrollList_TroopHeroLoopHorizontalScrollRect.SetVisible(true, 3);
 
                     // HeroCardInfo heroCardInfo = m2CSetHeroToTroopResponse.HeroCardInfo;
                     // foreach (var VARIABLE in self.TroopHeroCardInfos)
@@ -247,12 +273,12 @@ namespace ET
                 itemTroopHeroCard.E_TextText.text = "+";
             }
 
+            itemTroopHeroCard.E_ToggleToggle.onValueChanged.RemoveAllListeners();
+            itemTroopHeroCard.E_ToggleToggle.onValueChanged.AddListener((value) => { self.OnTroopHeroClick(value, index); });
             if (index == 0)
             {
                 itemTroopHeroCard.E_ToggleToggle.isOn = true;
             }
-            itemTroopHeroCard.E_ToggleToggle.onValueChanged.RemoveAllListeners();
-            itemTroopHeroCard.E_ToggleToggle.onValueChanged.AddListener((value) => { self.OnTroopHeroClick(value, index); });
         }
 
         public static void OnTroopHeroClick(this DlgEditorTroopLayer self, bool value, int index)
