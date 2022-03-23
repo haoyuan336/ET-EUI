@@ -1283,4 +1283,32 @@ namespace ET
 
 	}
 
+	[ResponseType(nameof(M2C_StartPVEGameResponse))]
+	[Message(OuterOpcode.C2M_StartPVEGameRequest)]
+	[ProtoContract]
+	public partial class C2M_StartPVEGameRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccoundId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_StartPVEGameResponse)]
+	[ProtoContract]
+	public partial class M2C_StartPVEGameResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
 }

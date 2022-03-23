@@ -175,6 +175,40 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Button E_StartGameButton
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_StartGameButton == null )
+     			{
+		    		this.m_E_StartGameButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_StartGame");
+     			}
+     			return this.m_E_StartGameButton;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_StartGameImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_StartGameImage == null )
+     			{
+		    		this.m_E_StartGameImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_StartGame");
+     			}
+     			return this.m_E_StartGameImage;
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_ELoopScrollList_TroopImage = null;
@@ -187,6 +221,8 @@ namespace ET
 			this.m_ELoopScrollList_TroopHeroLoopHorizontalScrollRect = null;
 			this.m_E_Content_TroopHeroToggleGroup = null;
 			this.m_ELoopScrollList_HeroLoopVerticalScrollRect = null;
+			this.m_E_StartGameButton = null;
+			this.m_E_StartGameImage = null;
 			this.uiTransform = null;
 		}
 
@@ -200,6 +236,8 @@ namespace ET
 		private UnityEngine.UI.LoopHorizontalScrollRect m_ELoopScrollList_TroopHeroLoopHorizontalScrollRect = null;
 		private UnityEngine.UI.ToggleGroup m_E_Content_TroopHeroToggleGroup = null;
 		private UnityEngine.UI.LoopVerticalScrollRect m_ELoopScrollList_HeroLoopVerticalScrollRect = null;
+		private UnityEngine.UI.Button m_E_StartGameButton = null;
+		private UnityEngine.UI.Image m_E_StartGameImage = null;
 		public Transform uiTransform = null;
 	}
 }

@@ -25,6 +25,7 @@ namespace ET
                 self.OnLoopItemListTroopHeroCardEvent(tr, index);
             });
             self.View.E_BackButton.AddListenerAsync(() => { return self.BackButtonClick(); });
+            self.View.E_StartGameButton.AddListenerAsync(() => { return self.StartGameButtonClick(); });
         }
 
         public static async ETTask BackButtonClick(this DlgEditorTroopLayer self)
@@ -279,6 +280,8 @@ namespace ET
             {
                 itemTroopHeroCard.E_ToggleToggle.isOn = true;
             }
+
+            self.View.E_StartGameButton.SetVisible(self.TroopHeroCardInfos.Count == 3);
         }
 
         public static void OnTroopHeroClick(this DlgEditorTroopLayer self, bool value, int index)
@@ -288,6 +291,20 @@ namespace ET
                 Log.Debug($"on troop hero click{index}");
                 self.CurrentChooseInTroopIndex = index;
             }
+        }
+
+        public static async ETTask StartGameButtonClick(this DlgEditorTroopLayer self)
+        {
+            var Account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            M2C_StartPVEGameResponse m2CStartPveGameResponse =
+                    (M2C_StartPVEGameResponse) await session.Call(new C2M_StartPVEGameRequest() { AccoundId = Account });
+            if (m2CStartPveGameResponse.Error == ErrorCode.ERR_Success)
+            {
+                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_EditorTroopLayer);
+            }
+
+            await ETTask.CompletedTask;
         }
     }
 }

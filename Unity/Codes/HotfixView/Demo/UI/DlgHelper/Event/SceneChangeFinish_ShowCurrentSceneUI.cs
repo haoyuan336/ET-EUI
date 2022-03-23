@@ -15,6 +15,9 @@ namespace ET
                 case "MainScene":
                     args.CurrentScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainScene);
                     break;
+                case "PVEGameScene":
+                    Log.Debug("进入了pve 游戏页面");
+                    break;
             }
             await ETTask.CompletedTask;
         }

@@ -35,6 +35,7 @@ namespace ET
                     scene.AddComponent<MatchComponent>();
                     scene.AddComponent<RoomComponent>();
                     scene.AddComponent<DiamondComponent>();
+                    scene.AddComponent<PVERoomComponent>();
                     break;
                 case SceneType.Location:
                     scene.AddComponent<LocationComponent>();

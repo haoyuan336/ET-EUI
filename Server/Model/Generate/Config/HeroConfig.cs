@@ -75,6 +75,8 @@ namespace ET
 		public string HeroName { get; set; }
 		[ProtoMember(3)]
 		public int HeroColor { get; set; }
+		[ProtoMember(4)]
+		public int HeroHP { get; set; }
 
 	}
 }

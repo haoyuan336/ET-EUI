@@ -580,3 +580,15 @@ message M2C_SetHeroToTroopResponse //IActorLocationResponse
 	string Message = 92;
 	HeroCardInfo HeroCardInfo = 1;
 }
+//ResponseType M2C_StartPVEGameResponse
+message C2M_StartPVEGameRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccoundId = 1;
+}
+message M2C_StartPVEGameResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}

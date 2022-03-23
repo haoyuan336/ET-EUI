@@ -11,5 +11,6 @@
         public string Password;
         public long CreateTime;
         public int AccountType;
+        public int PVELevelNumber;  //pve模式下，玩家玩到第几关了
     }
 }
