@@ -14,15 +14,17 @@ namespace ET
 
             if (accounts.Count > 0)
             {
-                int levelNumber = accounts[0].PVELevelNumber;
-                levelNumber = levelNumber == 0? 1 : levelNumber;
-                Log.Debug($"level number {levelNumber}");
-
                 response.Error = ErrorCode.ERR_Success;
                 reply();
                 //传送至pve游戏地图
                 StartSceneConfig startSceneConfig = StartSceneConfigCategory.Instance.GetBySceneName(unit.DomainZone(), "PVEGameScene");
                 await TransferHelper.Transfer(unit, startSceneConfig.InstanceId, startSceneConfig.Name);
+            }
+            else
+            {
+                response.Error = ErrorCode.ERR_NotFoundPlayer;
+                reply();
+
             }
 
             await ETTask.CompletedTask;

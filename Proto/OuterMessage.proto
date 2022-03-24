@@ -592,3 +592,8 @@ message M2C_StartPVEGameResponse //IActorLocationResponse
 	int32 Error = 91;
 	string Message = 92;
 }
+message C2M_GameReadyMessage //IActorLocationMessage
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}

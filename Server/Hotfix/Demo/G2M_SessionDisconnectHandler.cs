@@ -6,7 +6,9 @@
         protected override async ETTask Run(Unit unit, G2M_SessionDisconnect message)
         {
 
-            await unit.DomainScene().GetComponent<MatchComponent>().CancelMatch(unit);
+            // await unit.DomainScene().GetComponent<MatchComponent>().CancelMatch(unit);
+            
+            
             unit.DomainScene().GetComponent<UnitComponent>().Remove(unit.Id);
 
 

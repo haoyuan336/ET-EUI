@@ -181,6 +181,7 @@ namespace ET
         {
             self.AddUIScrollItems(ref self.ItemTroopHeroCards, 3);
             self.View.ELoopScrollList_TroopHeroLoopHorizontalScrollRect.SetVisible(true, 3);
+            // self.View.E_StartGameButton.SetVisible(self.TroopInfos.Count == 2);
         }
 
         public static void OnLoopItemListHeroCardEvent(this DlgEditorTroopLayer self, Transform transform, int index)
@@ -218,23 +219,23 @@ namespace ET
                     Log.Debug("设置英雄进队伍成功");
                     HeroCardInfo cardInfo = m2CSetHeroToTroopResponse.HeroCardInfo;
 
-                    foreach (var VARIABLE in self.TroopHeroCardInfos)
+                    foreach (var value in self.TroopHeroCardInfos)
                     {
-                        if (VARIABLE.HeroId.Equals(cardInfo.HeroId))
+                        if (value.HeroId.Equals(cardInfo.HeroId))
                         {
-                            self.TroopHeroCardInfos.Remove(VARIABLE);
+                            self.TroopHeroCardInfos.Remove(value);
+                            break;
+                        }
+
+                        if (value.InTroopIndex.Equals(cardInfo.InTroopIndex))
+                        {
+                            self.TroopHeroCardInfos.Remove(value);
                             break;
                         }
                     }
 
                     self.TroopHeroCardInfos.Add(cardInfo);
                     self.View.ELoopScrollList_TroopHeroLoopHorizontalScrollRect.SetVisible(true, 3);
-
-                    // HeroCardInfo heroCardInfo = m2CSetHeroToTroopResponse.HeroCardInfo;
-                    // foreach (var VARIABLE in self.TroopHeroCardInfos)
-                    // {
-                    //     
-                    // }
                 }
                 else
                 {
@@ -281,6 +282,7 @@ namespace ET
                 itemTroopHeroCard.E_ToggleToggle.isOn = true;
             }
 
+            Log.Debug($"player troop hero count ={self.TroopHeroCardInfos.Count}");
             self.View.E_StartGameButton.SetVisible(self.TroopHeroCardInfos.Count == 3);
         }
 
@@ -303,6 +305,7 @@ namespace ET
             {
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_EditorTroopLayer);
             }
+            
 
             await ETTask.CompletedTask;
         }

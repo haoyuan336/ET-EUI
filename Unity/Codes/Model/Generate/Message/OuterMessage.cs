@@ -1311,4 +1311,16 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.C2M_GameReadyMessage)]
+	[ProtoContract]
+	public partial class C2M_GameReadyMessage: Object, IActorLocationMessage
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+	}
+
 }

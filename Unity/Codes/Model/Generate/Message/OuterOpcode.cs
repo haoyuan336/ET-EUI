@@ -85,5 +85,6 @@ namespace ET
 		 public const ushort M2C_SetHeroToTroopResponse = 10082;
 		 public const ushort C2M_StartPVEGameRequest = 10083;
 		 public const ushort M2C_StartPVEGameResponse = 10084;
+		 public const ushort C2M_GameReadyMessage = 10085;
 	}
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ET.Account;
+using UnityEngine;
 
 namespace ET
 {
@@ -17,6 +18,8 @@ namespace ET
                     break;
                 case "PVEGameScene":
                     Log.Debug("进入了pve 游戏页面");
+                    long AccountId = args.CurrentScene.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+                    args.CurrentScene.ZoneScene().GetComponent<SessionComponent>().Session.Send(new C2M_GameReadyMessage(){AccountId = AccountId});
                     break;
             }
             await ETTask.CompletedTask;

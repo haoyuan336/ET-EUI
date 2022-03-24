@@ -35,7 +35,19 @@ namespace ET
                     scene.AddComponent<MatchComponent>();
                     scene.AddComponent<RoomComponent>();
                     scene.AddComponent<DiamondComponent>();
+                    // scene.AddComponent<PVERoomComponent>();
+                    break;
+                case SceneType.PVEGameScene:
+                    Log.Debug($"创建pve scene {scene.SceneType}" );
+                    scene.AddComponent<UnitComponent>();
+                    scene.AddComponent<AOIManagerComponent>();
+                    scene.AddComponent<DiamondComponent>();
                     scene.AddComponent<PVERoomComponent>();
+                    break;
+                case SceneType.MainScene:
+                    scene.AddComponent<UnitComponent>();
+                    scene.AddComponent<AOIManagerComponent>();
+                    
                     break;
                 case SceneType.Location:
                     scene.AddComponent<LocationComponent>();
