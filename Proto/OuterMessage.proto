@@ -585,6 +585,8 @@ message C2M_StartPVEGameRequest //IActorLocationRequest
 {
 	int32 RpcId = 90;
 	int64 AccoundId = 1;
+	int64 TroopId = 2;	//队伍id
+
 }
 message M2C_StartPVEGameResponse //IActorLocationResponse
 {
@@ -596,4 +598,9 @@ message C2M_GameReadyMessage //IActorLocationMessage
 {
 	int32 RpcId = 90;
 	int64 AccountId = 1;
+}
+
+message M2C_CreateHeroCardInRoom //IActorMessage
+{
+	repeated HeroCardInfo HeroCardInfo = 1;
 }

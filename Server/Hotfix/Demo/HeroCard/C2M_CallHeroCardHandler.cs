@@ -21,8 +21,10 @@ namespace ET
             heroCard.Id = IdGenerater.Instance.GenerateId();
             heroCard.ConfigId = key;
             heroCard.OwnerId = request.Account;
-            heroCard.HeroName = heroConfig.HeroName;
+            heroCard.InitWithConfig(heroConfig);
+            
             response.HeroCardInfo = heroCard.GetMessageInfo();
+            
             await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(heroCard);
             
             reply();

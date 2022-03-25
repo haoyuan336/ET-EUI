@@ -1294,6 +1294,9 @@ namespace ET
 		[ProtoMember(1)]
 		public long AccoundId { get; set; }
 
+		[ProtoMember(2)]
+		public long TroopId { get; set; }
+
 	}
 
 	[Message(OuterOpcode.M2C_StartPVEGameResponse)]
@@ -1320,6 +1323,15 @@ namespace ET
 
 		[ProtoMember(1)]
 		public long AccountId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_CreateHeroCardInRoom)]
+	[ProtoContract]
+	public partial class M2C_CreateHeroCardInRoom: Object, IActorMessage
+	{
+		[ProtoMember(1)]
+		public List<HeroCardInfo> HeroCardInfo = new List<HeroCardInfo>();
 
 	}
 

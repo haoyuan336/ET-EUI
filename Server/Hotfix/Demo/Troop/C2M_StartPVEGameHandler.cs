@@ -14,6 +14,9 @@ namespace ET
 
             if (accounts.Count > 0)
             {
+                accounts[0].CurrentTroopId = request.TroopId;
+                //将当前选择的队伍id 保存
+                await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(accounts[0]);
                 response.Error = ErrorCode.ERR_Success;
                 reply();
                 //传送至pve游戏地图

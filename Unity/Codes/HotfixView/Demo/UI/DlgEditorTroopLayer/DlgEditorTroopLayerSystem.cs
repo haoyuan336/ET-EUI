@@ -300,7 +300,7 @@ namespace ET
             var Account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             M2C_StartPVEGameResponse m2CStartPveGameResponse =
-                    (M2C_StartPVEGameResponse) await session.Call(new C2M_StartPVEGameRequest() { AccoundId = Account });
+                    (M2C_StartPVEGameResponse) await session.Call(new C2M_StartPVEGameRequest() { AccoundId = Account ,TroopId = self.CurrentChooseTroopId});
             if (m2CStartPveGameResponse.Error == ErrorCode.ERR_Success)
             {
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_EditorTroopLayer);

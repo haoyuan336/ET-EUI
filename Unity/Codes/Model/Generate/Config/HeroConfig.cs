@@ -77,6 +77,10 @@ namespace ET
 		public int HeroColor { get; set; }
 		[ProtoMember(4)]
 		public int HeroHP { get; set; }
+		[ProtoMember(5)]
+		public int Attack { get; set; }
+		[ProtoMember(6)]
+		public int Defence { get; set; }
 
 	}
 }

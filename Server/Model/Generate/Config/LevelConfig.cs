@@ -73,6 +73,12 @@ namespace ET
 		public int Id { get; set; }
 		[ProtoMember(2)]
 		public string HeroId { get; set; }
+		[ProtoMember(3)]
+		public int HangCount { get; set; }
+		[ProtoMember(4)]
+		public int LieCount { get; set; }
+		[ProtoMember(5)]
+		public string Distance { get; set; }
 
 	}
 }

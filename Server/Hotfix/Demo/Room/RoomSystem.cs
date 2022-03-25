@@ -44,7 +44,7 @@ namespace ET
                 MessageHelper.SendToClient(unit, new M2C_SyncCreateRoomMessage() { InRoomIndex = unit.InRoomIndex });
             }
 
-            self.InitGameData();
+            // self.InitGameData();
             self.SyncRoomInfo();
             self.ToggleTurnSeatIndex();
             self.syncCurrentTurnIndex();

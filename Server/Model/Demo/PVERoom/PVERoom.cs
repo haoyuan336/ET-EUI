@@ -10,5 +10,8 @@ namespace ET
         public int LieCount = 0;
         public Diamond[,] Diamonds = null;
         public DiamondComponent DiamondComponent = null;
+        public List<HeroCard> enemyHeroCards;
+        public List<HeroCard> playerHeroCards;
+        public LevelConfig LevelConfig;
     }
 }

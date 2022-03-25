@@ -26,10 +26,10 @@
       <Link>Demo\Move\MoveComponentSystem.cs</Link>
     </Compile>
     <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Room\DiamondComponentSystem.cs">
-      <Link>Demo\Room\DiamondComponentSystem.cs</Link>
+      <Link>Demo\Diamond\DiamondComponentSystem.cs</Link>
     </Compile>
     <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Room\DiamondSystem.cs">
-      <Link>Demo\Room\DiamondSystem.cs</Link>
+      <Link>Demo\Diamond\DiamondSystem.cs</Link>
     </Compile>
     <Compile Include="..\..\Unity\Codes\Hotfix\Demo\ServerInfo\ServerInfoSystem.cs">
       <Link>Demo\ServerInfo\ServerInfoSystem.cs</Link>
@@ -61,8 +61,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Server.Model.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Demo\Diamond" />
   </ItemGroup>
 </Project>

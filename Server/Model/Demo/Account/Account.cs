@@ -12,5 +12,6 @@
         public long CreateTime;
         public int AccountType;
         public int PVELevelNumber;  //pve模式下，玩家玩到第几关了
+        public long CurrentTroopId; //当前选择的队伍id
     }
 }

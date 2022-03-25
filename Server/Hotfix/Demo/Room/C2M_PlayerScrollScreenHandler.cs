@@ -8,18 +8,28 @@ namespace ET
         {
             //玩家发来了，滑动屏幕的消息
             //首先判断当前的seatindex是否正确 
-            RoomComponent roomComponent = entity.DomainScene().GetComponent<RoomComponent>();
-            Room room = roomComponent.GetChild<Room>(message.RoomId);
+            switch (entity.DomainScene().SceneType)
+            {
+                case SceneType.PVEGameScene:
+                    PVERoomComponent roomComponent = entity.DomainScene().GetComponent<PVERoomComponent>();
+                    PVERoom room = roomComponent.GetChild<PVERoom>(message.RoomId);
+                    if (room != null)
+                    {
+                        room.PlayerScrollScreen(message);
+                    }
 
-            if (room != null)
-            {
-                // Log.Debug("room is have");
-                room.PlayerScrollScreen(message);
+                    break;
             }
-            else
-            {
-                Log.Error("room is null");
-            }
+
+            // if (room != null)
+            // {
+            //     // Log.Debug("room is have");
+            //     room.PlayerScrollScreen(message);
+            // }
+            // else
+            // {
+            //     Log.Error("room is null");
+            // }
 
             await ETTask.CompletedTask;
         }
