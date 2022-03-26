@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ET
@@ -61,6 +62,80 @@ namespace ET
             Diamond diamond = self.AddChildWithId<Diamond>(id);
             diamond.InitWithMessageInfo(diamondInfo);
             return diamond;
+        }
+        public static Diamond GetDiamond(this DiamondComponent self, int LieIndex, int HangIndex)
+        {
+            // Diamond diamond = null;
+            if (LieIndex < 0 || HangIndex < 0 || LieIndex >= self.LevelConfig.LieCount || HangIndex >= self.LevelConfig.HangCount)
+            {
+                return null;
+            }
+
+            return self.Diamonds[LieIndex, HangIndex];
+        }
+        public static void ScrollDiamond(this DiamondComponent self,C2M_PlayerScrollScreen message)
+        {
+            //todo 滑动钻石
+            Log.Debug("screen diamond");
+              int LieIndex = message.StartX;
+            int HangIndex = message.StartY;
+            Log.Debug("process scroll screen message");
+            self.DomainScene().GetComponent<DiamondComponent>().ScrollDiamond(message);
+
+            Diamond diamond = self.GetDiamond(LieIndex, HangIndex);
+            Diamond nextDiamond = self.GetDiamondWithDir(diamond, message.DirType);
+            if (diamond != null && nextDiamond != null)
+            {
+                M2C_SyncDiamondAction m2CSyncDiamondAction = new M2C_SyncDiamondAction();
+                m2CSyncDiamondAction.DiamondActionItems.Add(self.SwapDiamondPos(diamond, nextDiamond));
+                bool isCrash = true;
+                bool isCrashSuccess = false;
+                bool isMoveDown = false;
+                bool isFirstAddSpecial = true;
+                // bool isSpecial = false;
+                Queue<Diamond> specialDiamonds = new Queue<Diamond>();
+                while (isCrash || isMoveDown || specialDiamonds.Count > 0)
+                {
+                    isCrash = self.CheckCrash(m2CSyncDiamondAction.DiamondActionItems, diamond, nextDiamond, specialDiamonds, isFirstAddSpecial);
+                    if (isFirstAddSpecial)
+                    {
+                        isFirstAddSpecial = false;
+                    }
+            
+                    isMoveDown = self.MoveDownAllDiamond(m2CSyncDiamondAction.DiamondActionItems);
+                    if (isCrashSuccess == false && isCrash)
+                    {
+                        isCrashSuccess = true;
+                    }
+            
+                    if (specialDiamonds.Count > 0)
+                    {
+                        Diamond specialDiamond = specialDiamonds.Dequeue();
+                        self.AutoCastSpecialDiamond(m2CSyncDiamondAction.DiamondActionItems, specialDiamond);
+                    }
+                }
+            
+                if (isCrashSuccess)
+                {
+                    self.ToggleTurnSeatIndex();
+                    self.syncCurrentTurnIndex();
+                }
+                else
+                {
+                    //todo 交换失败。反向交换
+                    m2CSyncDiamondAction.DiamondActionItems.Add(self.SwapDiamondPos(diamond, nextDiamond));
+                }
+            
+                //todo 下发交换action 消息
+                foreach (var unit in self.Units)
+                {
+                    MessageHelper.SendToClient(unit, m2CSyncDiamondAction);
+                }
+            }
+            else
+            {
+                //todo 非法操作
+            }
         }
     }
 }

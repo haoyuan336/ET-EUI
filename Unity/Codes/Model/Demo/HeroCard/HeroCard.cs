@@ -15,5 +15,7 @@ namespace ET
         public int Attack;
         public int HP;
         public int Defence;
+
+        public int CampIndex; //todo 阵营index
     }
 }

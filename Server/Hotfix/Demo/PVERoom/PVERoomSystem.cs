@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ET
 {
@@ -18,25 +19,32 @@ namespace ET
     {
         public static async void PlayerGameReady(this PVERoom self, Unit unit, long AccountId)
         {
-            // Log.Debug("player game read");            
-            // unit.GetComponent<LoginAccountRecordComponentSystem>()
             self.Units.Add(unit);
             //取出当前玩家 玩到的关卡数
+            Account account = await self.GetCurrentAccountInfo(AccountId, unit);
+            int levelNum = account.PVELevelNumber == 0? 1 : account.PVELevelNumber;
+            self.LevelConfig = LevelConfigCategory.Instance.Get(levelNum);
+            self.InitHeroCards(account.CurrentTroopId);
+            self.InitGameMap();
+        }
+
+        public static async ETTask<Account> GetCurrentAccountInfo(this PVERoom self, long AccountId, Unit unit)
+        {
             List<Account> accounts = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<Account>((a) => a.Id.Equals(AccountId));
             if (accounts.Count > 0)
             {
-                int levelNum = accounts[0].PVELevelNumber;
-                long troopId = accounts[0].CurrentTroopId;
-                levelNum = levelNum == 0? 1 : levelNum;
-                self.LevelConfig = LevelConfigCategory.Instance.Get(levelNum);
-                self.InitHeroCards(troopId);
-                Log.Debug($"level num {levelNum}");
-                List<DiamondInfo> diamondInfos = self.GetComponent<DiamondComponent>().InitDiamonds(self.LevelConfig);
+                return accounts[0];
+            }
 
-                foreach (var entity in self.Units)
-                {
-                    MessageHelper.SendToClient(entity, new M2C_InitMapData() { DiamondInfo = diamondInfos });
-                }
+            return null;
+        }
+
+        public static void InitGameMap(this PVERoom self)
+        {
+            List<DiamondInfo> diamondInfos = self.GetComponent<DiamondComponent>().InitDiamonds(self.LevelConfig);
+            foreach (var entity in self.Units)
+            {
+                MessageHelper.SendToClient(entity, new M2C_InitMapData() { DiamondInfo = diamondInfos });
             }
         }
 
@@ -49,6 +57,7 @@ namespace ET
             self.enemyHeroCards = new List<HeroCard>();
             self.playerHeroCards = new List<HeroCard>();
             List<HeroCardInfo> heroCardInfo = new List<HeroCardInfo>();
+            int index = 0;
             foreach (var str in strList)
             {
                 int heroId = int.Parse(str);
@@ -56,9 +65,13 @@ namespace ET
                 // HeroCard heroCard = self.AddChildWithId<HeroCard>(heroId);
                 HeroCard heroCard = new HeroCard();
                 HeroConfig heroConfig = HeroConfigCategory.Instance.Get(heroId);
-                heroCard.InitWithConfig(heroConfig);
+                long id = IdGenerater.Instance.GenerateId();
+                heroCard.InitWithConfig(heroConfig, id);
+                heroCard.InTroopIndex = index;
+                index++;
                 self.enemyHeroCards.Add(heroCard);
                 heroCardInfo.Add(heroCard.GetMessageInfo());
+                heroCard.CampIndex = 0;
             }
 
             //todo 取出玩家的troopid
@@ -66,6 +79,7 @@ namespace ET
 
             foreach (var heroCard in self.playerHeroCards)
             {
+                heroCard.CampIndex = 1;
                 heroCardInfo.Add(heroCard.GetMessageInfo());
             }
 
@@ -82,6 +96,8 @@ namespace ET
             int LieIndex = message.StartX;
             int HangIndex = message.StartY;
             Log.Debug("process scroll screen message");
+            self.DomainScene().GetComponent<DiamondComponent>().ScrollDiamond(message);
+
             // Diamond diamond = self.GetDiamond(LieIndex, HangIndex);
             // Diamond nextDiamond = self.GetDiamondWithDir(diamond, message.DirType);
             // if (diamond != null && nextDiamond != null)

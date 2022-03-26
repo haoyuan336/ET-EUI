@@ -25,7 +25,8 @@
                 ConfigId = self.ConfigId,
                 OwnerId = self.OwnerId,
                 TroopId = self.TroopId,
-                InTroopIndex = self.InTroopIndex
+                InTroopIndex = self.InTroopIndex,
+                CampIndex = self.CampIndex
             };
 
             return heroCardInfo;
@@ -39,15 +40,18 @@
             self.ConfigId = message.ConfigId;
             self.InTroopIndex = message.InTroopIndex;
             self.TroopId = message.TroopId;
+            self.CampIndex = message.CampIndex;
         }
 
-        public static void InitWithConfig(this HeroCard self, HeroConfig heroConfig)
+        public static void InitWithConfig(this HeroCard self, HeroConfig heroConfig, long id)
         {
+            self.Id = id;
             self.Attack = heroConfig.Attack;
             self.Defence = heroConfig.Defence;
             self.HP = heroConfig.HeroHP;
             self.HeroName = heroConfig.HeroName;
             self.ConfigId = heroConfig.Id;
+            
             // self.Id = heroConfig.Id;
         }
     }

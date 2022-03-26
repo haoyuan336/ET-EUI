@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
 
 namespace ET
 {
@@ -171,7 +173,7 @@ namespace ET
         }
         public struct CreateHeroCardView
         {
-            public HeroCard HeroCard;
+            public Dictionary<int, List<HeroCard>> HeroCardListMap;
         }
     }
 }

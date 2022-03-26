@@ -1080,6 +1080,9 @@ namespace ET
 		[ProtoMember(6)]
 		public int InTroopIndex { get; set; }
 
+		[ProtoMember(7)]
+		public int CampIndex { get; set; }
+
 	}
 
 	[ResponseType(nameof(M2C_GetAllHeroCardListResponse))]

@@ -21,7 +21,7 @@ namespace ET
             heroCard.Id = IdGenerater.Instance.GenerateId();
             heroCard.ConfigId = key;
             heroCard.OwnerId = request.Account;
-            heroCard.InitWithConfig(heroConfig);
+            heroCard.InitWithConfig(heroConfig, heroCard.Id);
             
             response.HeroCardInfo = heroCard.GetMessageInfo();
             

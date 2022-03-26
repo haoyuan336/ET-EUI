@@ -493,6 +493,7 @@ message HeroCardInfo
 	int64 OwnerId = 4;
 	int64 TroopId = 5;
 	int32 InTroopIndex = 6;
+	int32 CampIndex = 7;		//阵营index
 }
 
 //ResponseType M2C_GetAllHeroCardListResponse
