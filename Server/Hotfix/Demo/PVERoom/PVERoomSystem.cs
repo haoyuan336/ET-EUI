@@ -27,17 +27,16 @@ namespace ET
             {
                 int levelNum = accounts[0].PVELevelNumber;
                 long troopId = accounts[0].CurrentTroopId;
-                Log.Debug($"level num {levelNum}");
                 levelNum = levelNum == 0? 1 : levelNum;
                 self.LevelConfig = LevelConfigCategory.Instance.Get(levelNum);
+                self.InitHeroCards(troopId);
+                Log.Debug($"level num {levelNum}");
                 List<DiamondInfo> diamondInfos = self.GetComponent<DiamondComponent>().InitDiamonds(self.LevelConfig);
 
                 foreach (var entity in self.Units)
                 {
                     MessageHelper.SendToClient(entity, new M2C_InitMapData() { DiamondInfo = diamondInfos });
                 }
-
-                self.InitHeroCards(troopId);
             }
         }
 
@@ -53,6 +52,7 @@ namespace ET
             foreach (var str in strList)
             {
                 int heroId = int.Parse(str);
+                Log.Debug($"add enemy hero  {heroId}");
                 // HeroCard heroCard = self.AddChildWithId<HeroCard>(heroId);
                 HeroCard heroCard = new HeroCard();
                 HeroConfig heroConfig = HeroConfigCategory.Instance.Get(heroId);

@@ -367,6 +367,9 @@ namespace ET
 
         private void AddResource(string bundleName, string assetName, UnityEngine.Object resource)
         {
+            Log.Debug($"boundle name = {bundleName}");
+            Log.Debug($"assetName  = {assetName}");
+
             Dictionary<string, UnityEngine.Object> dict;
             if (!this.resourceCache.TryGetValue(bundleName.BundleNameToLower(), out dict))
             {

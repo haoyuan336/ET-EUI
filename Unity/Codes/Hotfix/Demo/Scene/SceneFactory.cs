@@ -15,7 +15,6 @@ namespace ET
             zoneScene.AddComponent<AccountInfoComponent>();
             zoneScene.AddComponent<ServerInfosComponent>();
             zoneScene.AddComponent<DiamondComponent>();
-            
             Game.EventSystem.Publish(new EventType.AfterCreateZoneScene() {ZoneScene = zoneScene});
             return zoneScene;
         }

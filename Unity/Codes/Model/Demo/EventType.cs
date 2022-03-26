@@ -169,5 +169,9 @@ namespace ET
             public Scene ZoneScene;
             
         }
+        public struct CreateHeroCardView
+        {
+            public HeroCard HeroCard;
+        }
     }
 }

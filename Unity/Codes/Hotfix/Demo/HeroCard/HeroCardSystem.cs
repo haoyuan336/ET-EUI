@@ -48,7 +48,7 @@
             self.HP = heroConfig.HeroHP;
             self.HeroName = heroConfig.HeroName;
             self.ConfigId = heroConfig.Id;
-            self.Id = heroConfig.Id;
+            // self.Id = heroConfig.Id;
         }
     }
 }
