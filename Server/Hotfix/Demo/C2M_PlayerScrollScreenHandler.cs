@@ -11,6 +11,7 @@ namespace ET
             switch (entity.DomainScene().SceneType)
             {
                 case SceneType.PVEGameScene:
+                    Log.Debug("receive player scrollscreen message");
                     PVERoomComponent roomComponent = entity.DomainScene().GetComponent<PVERoomComponent>();
                     PVERoom room = roomComponent.GetChild<PVERoom>(message.RoomId);
                     if (room != null)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.VisualBasic;
 
 namespace ET
 {
@@ -24,8 +25,19 @@ namespace ET
             Account account = await self.GetCurrentAccountInfo(AccountId, unit);
             int levelNum = account.PVELevelNumber == 0? 1 : account.PVELevelNumber;
             self.LevelConfig = LevelConfigCategory.Instance.Get(levelNum);
+            self.AsyncRoomInfo();
             self.InitHeroCards(account.CurrentTroopId);
-            self.InitGameMap();
+            self.InitGameMap(levelNum);
+        }
+
+        public static void AsyncRoomInfo(this PVERoom self)
+        {
+            int SeatIndex = 0;
+            foreach (var unit in self.Units)
+            {
+                MessageHelper.SendToClient(unit, new M2C_SyncRoomInfo() { MySeatIndex = SeatIndex, RoomId = self.Id, TurnIndex = 0 });
+                SeatIndex++;
+            }
         }
 
         public static async ETTask<Account> GetCurrentAccountInfo(this PVERoom self, long AccountId, Unit unit)
@@ -39,9 +51,9 @@ namespace ET
             return null;
         }
 
-        public static void InitGameMap(this PVERoom self)
+        public static void InitGameMap(this PVERoom self, int levelNum)
         {
-            List<DiamondInfo> diamondInfos = self.GetComponent<DiamondComponent>().InitDiamonds(self.LevelConfig);
+            List<DiamondInfo> diamondInfos = self.GetComponent<DiamondComponent>().InitDiamonds(levelNum);
             foreach (var entity in self.Units)
             {
                 MessageHelper.SendToClient(entity, new M2C_InitMapData() { DiamondInfo = diamondInfos });
@@ -93,65 +105,12 @@ namespace ET
 
         public static void PlayerScrollScreen(this PVERoom self, C2M_PlayerScrollScreen message)
         {
-            int LieIndex = message.StartX;
-            int HangIndex = message.StartY;
             Log.Debug("process scroll screen message");
-            self.DomainScene().GetComponent<DiamondComponent>().ScrollDiamond(message);
-
-            // Diamond diamond = self.GetDiamond(LieIndex, HangIndex);
-            // Diamond nextDiamond = self.GetDiamondWithDir(diamond, message.DirType);
-            // if (diamond != null && nextDiamond != null)
-            // {
-            //     M2C_SyncDiamondAction m2CSyncDiamondAction = new M2C_SyncDiamondAction();
-            //     m2CSyncDiamondAction.DiamondActionItems.Add(self.SwapDiamondPos(diamond, nextDiamond));
-            //     bool isCrash = true;
-            //     bool isCrashSuccess = false;
-            //     bool isMoveDown = false;
-            //     bool isFirstAddSpecial = true;
-            //     // bool isSpecial = false;
-            //     Queue<Diamond> specialDiamonds = new Queue<Diamond>();
-            //     while (isCrash || isMoveDown || specialDiamonds.Count > 0)
-            //     {
-            //         isCrash = self.CheckCrash(m2CSyncDiamondAction.DiamondActionItems, diamond, nextDiamond, specialDiamonds, isFirstAddSpecial);
-            //         if (isFirstAddSpecial)
-            //         {
-            //             isFirstAddSpecial = false;
-            //         }
-            //
-            //         isMoveDown = self.MoveDownAllDiamond(m2CSyncDiamondAction.DiamondActionItems);
-            //         if (isCrashSuccess == false && isCrash)
-            //         {
-            //             isCrashSuccess = true;
-            //         }
-            //
-            //         if (specialDiamonds.Count > 0)
-            //         {
-            //             Diamond specialDiamond = specialDiamonds.Dequeue();
-            //             self.AutoCastSpecialDiamond(m2CSyncDiamondAction.DiamondActionItems, specialDiamond);
-            //         }
-            //     }
-            //
-            //     if (isCrashSuccess)
-            //     {
-            //         self.ToggleTurnSeatIndex();
-            //         self.syncCurrentTurnIndex();
-            //     }
-            //     else
-            //     {
-            //         //todo 交换失败。反向交换
-            //         m2CSyncDiamondAction.DiamondActionItems.Add(self.SwapDiamondPos(diamond, nextDiamond));
-            //     }
-            //
-            //     //todo 下发交换action 消息
-            //     foreach (var unit in self.Units)
-            //     {
-            //         MessageHelper.SendToClient(unit, m2CSyncDiamondAction);
-            //     }
-            // }
-            // else
-            // {
-            //     //todo 非法操作
-            // }
+            M2C_SyncDiamondAction m2CSyncDiamondAction = self.GetComponent<DiamondComponent>().ScrollDiamond(message);
+            foreach (var unit in self.Units)
+            {
+                MessageHelper.SendToClient(unit, m2CSyncDiamondAction);
+            }
         }
     }
 }

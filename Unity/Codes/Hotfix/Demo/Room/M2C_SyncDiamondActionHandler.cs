@@ -6,6 +6,7 @@ namespace ET
     {
         protected override async ETTask Run(Session session, M2C_SyncDiamondAction message)
         {
+            Log.Debug("收到了 处理滑动的消息");
             //todo 开始处理action
             DiamondComponent diamondComponent = session.DomainScene().GetComponent<DiamondComponent>();
 
