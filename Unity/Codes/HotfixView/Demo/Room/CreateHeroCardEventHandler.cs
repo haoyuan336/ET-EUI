@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ET.EventType;
 using UnityEngine;
 
@@ -25,13 +27,17 @@ namespace ET
                         heroCard.AddComponent<GameObjectComponent>().GameObject = go;
                     float distance = 2;
                     go.transform.position = new Vector3(heroCard.InTroopIndex * distance + (heroCards.Count - 1) * -0.5f * distance,
-                        6.5f * (key == 0? 1 : -1), 0);
+                        6.5f * (key == 0? -1 : 1), 0);
                     SpriteRenderer spriteRenderer = go.GetComponent<SpriteRenderer>();
                     AllHeroCardLibrary asset = go.Get<AllHeroCardLibrary>("AllHeroCardTextureLibrary");
+
                     Sprite sprite;
                     if (asset.HeroCardTextureDict.TryGetValue(heroCard.ConfigId, out sprite))
                     {
                         spriteRenderer.sprite = sprite;
+                        var colorStr = DiamondTypeConfigCategory.Instance.Get(heroCard.HeroColor).ColorValue;
+                        String[] colorStrList = colorStr.Split(',').ToArray();
+                        spriteRenderer.color = new Color(float.Parse(colorStrList[0]), float.Parse(colorStrList[1]), float.Parse(colorStrList[2]));
                     }
                     else
                     {

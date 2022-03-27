@@ -493,7 +493,8 @@ message HeroCardInfo
 	int64 OwnerId = 4;
 	int64 TroopId = 5;
 	int32 InTroopIndex = 6;
-	int32 CampIndex = 7;		//阵营index
+	int32 CampIndex = 7;//阵营index
+	int32 HeroColor = 8;			//颜色属性	
 }
 
 //ResponseType M2C_GetAllHeroCardListResponse

@@ -153,7 +153,6 @@ namespace ET
         public struct DestoryDiamondView
         {
             public Diamond Diamond;
-            
         }
 
         public struct InitDiamondAndMoveDown
@@ -169,11 +168,27 @@ namespace ET
         public struct ShowSceneUI
         {
             public Scene ZoneScene;
-            
         }
+
         public struct CreateHeroCardView
         {
             public Dictionary<int, List<HeroCard>> HeroCardListMap;
+        }
+
+        public struct UpdateAttackView
+        {
+            public HeroCard HeroCard;
+        }
+
+        public struct UpdateAngryView
+        {
+            public HeroCard HeroCard;
+        }
+
+        public struct PlayAddHeroCardValueEffect
+        {
+            public Diamond StartDiamond;
+            public HeroCard EndHeroCard;
         }
     }
 }

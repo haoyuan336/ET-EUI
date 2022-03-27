@@ -12,10 +12,12 @@ namespace ET
 
         public int HeroColor;   //英雄属性
         
-        public int Attack;
-        public int HP;
-        public int Defence;
+        public float Attack;
+        public float HP;
+        public float Defence;
 
         public int CampIndex; //todo 阵营index
+
+        public float Angry; //怒气值
     }
 }

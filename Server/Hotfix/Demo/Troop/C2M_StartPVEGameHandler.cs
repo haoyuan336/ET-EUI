@@ -12,6 +12,7 @@ namespace ET
             List<Account> accounts = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
                     .Query<Account>((a) => a.Id.Equals(request.AccoundId));
 
+            
             if (accounts.Count > 0)
             {
                 accounts[0].CurrentTroopId = request.TroopId;

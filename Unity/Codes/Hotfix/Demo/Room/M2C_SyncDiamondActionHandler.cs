@@ -30,6 +30,8 @@ namespace ET
                             {
                                 Diamond = diamond
                             }));
+                            
+                            session.DomainScene().GetComponent<HeroCardComponent>().AddHeroValueByDiamondDestroy(diamond).Coroutine();
                             // diamond.Dispose();
                             break;
                         case (int)DiamondActionType.Create:

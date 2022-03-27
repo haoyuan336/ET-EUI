@@ -1083,6 +1083,9 @@ namespace ET
 		[ProtoMember(7)]
 		public int CampIndex { get; set; }
 
+		[ProtoMember(8)]
+		public int HeroColor { get; set; }
+
 	}
 
 	[ResponseType(nameof(M2C_GetAllHeroCardListResponse))]

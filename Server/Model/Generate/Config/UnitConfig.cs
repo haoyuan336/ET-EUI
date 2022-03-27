@@ -75,6 +75,8 @@ namespace ET
 		public int Type { get; set; }
 		[ProtoMember(4)]
 		public string Name { get; set; }
+		[ProtoMember(9)]
+		public int IsAI { get; set; }
 
 	}
 }

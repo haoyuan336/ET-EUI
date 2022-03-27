@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace ET
         public int ConfigId; //配置表id
         // public bool isMatching; //是否在匹配中
 
-        public int InRoomIndex;     //在房间里面的id
+        public int InRoomIndex; //在房间里面的id
 
         [BsonIgnore]
         public UnitType Type => (UnitType) this.Config.Type;
@@ -18,6 +19,12 @@ namespace ET
         public UnitConfig Config => UnitConfigCategory.Instance.Get(this.ConfigId);
 
         private Vector3 position; //坐标
+
+        public List<HeroCard> HeroCards = new List<HeroCard>();
+
+        public long CurrentTroopId;  //当前选择的队伍id
+
+        public bool IsAI => this.Config.IsAI == 1;
 
         public Vector3 Position
         {

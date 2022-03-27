@@ -73,6 +73,10 @@ namespace ET
 		public int Id { get; set; }
 		[ProtoMember(2)]
 		public int ColorId { get; set; }
+		[ProtoMember(6)]
+		public string AddAttack { get; set; }
+		[ProtoMember(7)]
+		public string AddAngry { get; set; }
 
 	}
 }

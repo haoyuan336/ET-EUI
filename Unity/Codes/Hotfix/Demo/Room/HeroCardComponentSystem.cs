@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ET.Account;
 
 namespace ET
 {
@@ -30,6 +31,36 @@ namespace ET
 
             //todo 同步给显示层
             Game.EventSystem.Publish(new EventType.CreateHeroCardView() { HeroCardListMap = heroCardListMap });
+        }
+
+        public static async ETTask AddHeroValueByDiamondDestroy(this HeroCardComponent self, Diamond diamond)
+        {
+            PlayerComponent playerComponent = self.DomainScene().GetComponent<PlayerComponent>();
+            
+            Log.Debug($"my seat index {playerComponent.MySeatIndex}");
+            Log.Debug($"current turn index{playerComponent.CurrentTurnIndex}");
+            if (playerComponent.MySeatIndex != playerComponent.CurrentTurnIndex)
+            {
+                Log.Debug("my seat index is diff");
+                return;
+            }
+
+            AccountInfoComponent accountInfoComponent = self.DomainScene().GetComponent<AccountInfoComponent>();
+
+            DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamond.DiamondType);
+            foreach (var heroCard in self.HeroCards)
+            {
+                Log.Debug($"hero card ownerid {heroCard.OwnerId}");
+                Log.Debug($"account id {accountInfoComponent.AccountId}");
+                if (diamond.DiamondType.Equals(heroCard.HeroColor) && heroCard.OwnerId == accountInfoComponent.AccountId)
+                {
+                    await Game.EventSystem.PublishAsync(
+                        new EventType.PlayAddHeroCardValueEffect() { StartDiamond = diamond, EndHeroCard = heroCard });
+                    // Log.Debug("add hero value by diamond ");
+                    heroCard.AddAttackValue(float.Parse(config.AddAttack));
+                    heroCard.AddAngryValue(float.Parse(config.AddAngry));
+                }
+            }
         }
     }
 }

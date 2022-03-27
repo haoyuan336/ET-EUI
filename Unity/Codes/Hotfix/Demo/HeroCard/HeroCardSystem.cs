@@ -26,7 +26,8 @@
                 OwnerId = self.OwnerId,
                 TroopId = self.TroopId,
                 InTroopIndex = self.InTroopIndex,
-                CampIndex = self.CampIndex
+                CampIndex = self.CampIndex,
+                HeroColor = self.HeroColor,
             };
 
             return heroCardInfo;
@@ -41,6 +42,7 @@
             self.InTroopIndex = message.InTroopIndex;
             self.TroopId = message.TroopId;
             self.CampIndex = message.CampIndex;
+            self.HeroColor = message.HeroColor;
         }
 
         public static void InitWithConfig(this HeroCard self, HeroConfig heroConfig, long id)
@@ -51,8 +53,28 @@
             self.HP = heroConfig.HeroHP;
             self.HeroName = heroConfig.HeroName;
             self.ConfigId = heroConfig.Id;
-            
+            self.HeroColor = heroConfig.HeroColor;
             // self.Id = heroConfig.Id;
+        }
+
+        //todo 增加攻击值
+        public static void AddAttackValue(this HeroCard self, float baseValue)
+        {
+            HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
+            self.Attack += float.Parse(heroConfig.AttackRate) * baseValue;
+#if !SERVER
+            Game.EventSystem.Publish(new EventType.UpdateAttackView() { HeroCard = self });
+#endif
+        }
+
+        //todo 增加怒气值
+        public static void AddAngryValue(this HeroCard self, float baseValue)
+        {
+            HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
+            self.Angry += float.Parse(heroConfig.AngryRate) * baseValue;
+#if !SERVER
+            Game.EventSystem.Publish(new EventType.UpdateAngryView() { HeroCard = self });
+#endif
         }
     }
 }

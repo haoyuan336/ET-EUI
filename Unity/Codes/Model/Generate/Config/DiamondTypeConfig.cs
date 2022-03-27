@@ -75,6 +75,10 @@ namespace ET
 		public int ColorId { get; set; }
 		[ProtoMember(3)]
 		public string ColorValue { get; set; }
+		[ProtoMember(6)]
+		public string AddAttack { get; set; }
+		[ProtoMember(7)]
+		public string AddAngry { get; set; }
 
 	}
 }

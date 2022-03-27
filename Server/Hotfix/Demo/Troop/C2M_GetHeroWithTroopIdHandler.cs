@@ -8,8 +8,8 @@ namespace ET
         protected override async ETTask Run(Unit unit, C2M_GetHeroInfosWithTroopIdRequest request, M2C_GetHeroInfosWithTroopIdResponse response,
         Action reply)
         {
-            
             long TroopId = request.TroopId;
+            unit.CurrentTroopId = request.TroopId;
             List<HeroCard> heroCards =
                     await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<HeroCard>((a) => a.TroopId.Equals(TroopId));
             List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>();
