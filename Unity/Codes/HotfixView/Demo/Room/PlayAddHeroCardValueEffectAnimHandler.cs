@@ -17,8 +17,6 @@ namespace ET
             Vector3 startPos = diamond.GetComponent<GameObjectComponent>().GameObject.transform.position + Vector3.back * 0.1f;
             Vector3 endPos = heroCard.GetComponent<GameObjectComponent>().GameObject.transform.position + Vector3.back * 0.1f;
             go.transform.position = startPos;
-
-            TimerComponent.Instance.WaitAsync(1);
             float distance = 1;
             while (distance > 0.1f)
             {

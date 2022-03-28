@@ -54,6 +54,12 @@ namespace ET
                 Log.Debug($"account id {accountInfoComponent.AccountId}");
                 if (diamond.DiamondType.Equals(heroCard.HeroColor) && heroCard.OwnerId == accountInfoComponent.AccountId)
                 {
+                    if (self.CurrentTurnAttackList.Count == 0)
+                    {
+                        self.CurrentTurnAttackList.Add(heroCard);
+                        heroCard.EnterAttackState();
+                    }
+
                     await Game.EventSystem.PublishAsync(
                         new EventType.PlayAddHeroCardValueEffect() { StartDiamond = diamond, EndHeroCard = heroCard });
                     // Log.Debug("add hero value by diamond ");

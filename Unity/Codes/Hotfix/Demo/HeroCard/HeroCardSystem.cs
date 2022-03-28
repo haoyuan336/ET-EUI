@@ -76,5 +76,11 @@
             Game.EventSystem.Publish(new EventType.UpdateAngryView() { HeroCard = self });
 #endif
         }
+
+        public static void EnterAttackState(this HeroCard self)
+        {
+            Log.Debug("enter attack state");
+            Game.EventSystem.Publish(new EventType.EnterAttackStateView() { HeroCard = self });
+        }
     }
 }

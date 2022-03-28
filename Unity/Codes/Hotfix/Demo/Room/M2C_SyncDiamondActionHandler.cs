@@ -12,6 +12,7 @@ namespace ET
 
             List<DiamondActionItem> diamondActionItems = message.DiamondActionItems;
 
+
             foreach (var diamondActionItem in diamondActionItems)
             {
                 List<ETTask> tasks = new List<ETTask>();
@@ -30,6 +31,7 @@ namespace ET
                             {
                                 Diamond = diamond
                             }));
+                            
                             
                             session.DomainScene().GetComponent<HeroCardComponent>().AddHeroValueByDiamondDestroy(diamond).Coroutine();
                             // diamond.Dispose();

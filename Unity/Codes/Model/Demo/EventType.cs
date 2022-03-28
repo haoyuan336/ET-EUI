@@ -190,5 +190,10 @@ namespace ET
             public Diamond StartDiamond;
             public HeroCard EndHeroCard;
         }
+
+        public struct EnterAttackStateView
+        {
+            public HeroCard HeroCard;
+        }
     }
 }
