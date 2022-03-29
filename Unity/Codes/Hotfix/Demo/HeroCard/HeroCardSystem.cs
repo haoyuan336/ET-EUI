@@ -80,7 +80,20 @@
         public static void EnterAttackState(this HeroCard self)
         {
             Log.Debug("enter attack state");
+#if !SERVER
             Game.EventSystem.Publish(new EventType.EnterAttackStateView() { HeroCard = self });
+
+#endif
+        }
+        public static async ETTask AttackTargetAsync(this HeroCard self, HeroCard target)
+        {
+
+#if !SERVER
+            await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim(){SelfHeroCard = self,TargetHeroCard = target});
+#endif
+            
+            
+            await ETTask.CompletedTask;
         }
     }
 }

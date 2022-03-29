@@ -26,8 +26,8 @@ namespace ET
                     if (heroCard.GetComponent<GameObjectComponent>() == null)
                         heroCard.AddComponent<GameObjectComponent>().GameObject = go;
                     float distance = 2;
-                    go.transform.position = new Vector3(heroCard.InTroopIndex * distance + (heroCards.Count - 1) * -0.5f * distance,
-                        6.5f * (key == 0? -1 : 1), 0);
+                    go.transform.position = new Vector3(heroCard.InTroopIndex * distance + (heroCards.Count - 1) * -0.5f * distance,0,
+                        6.5f * (key == 0? -1 : 1));
                     go.GetComponent<HeroCardViewCtl>().InitInfo(heroCard.ConfigId);
                   
                 }

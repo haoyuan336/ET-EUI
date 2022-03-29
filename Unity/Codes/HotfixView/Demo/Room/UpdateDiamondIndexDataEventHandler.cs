@@ -15,8 +15,8 @@ namespace ET
             int HangCount = pLevelConfig.HangCount;
             var distance = float.Parse(pLevelConfig.Distance);
 
-            Vector3 endPos = new Vector3((a.Diamond.LieIndex - LieCount * 0.5f + 0.5f) * distance,
-                (a.Diamond.HangIndex - HangCount * 0.5f + 0.5f) * distance, 0);
+            Vector3 endPos = new Vector3((a.Diamond.LieIndex - LieCount * 0.5f + 0.5f) * distance,0,
+                (a.Diamond.HangIndex - HangCount * 0.5f + 0.5f) * distance);
             // go.transform.position = ;
             while (true)
             {

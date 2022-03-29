@@ -6,5 +6,6 @@
         public long RoomId;
         public int MySeatIndex;
         public int CurrentTurnIndex;
+        public int SeatCount;   //作为的数量
     }
 }

@@ -11,6 +11,7 @@
                 TurnIndex = message.TurnIndex,
                 MySeatIndex = message.MySeatIndex
             });
+            session.DomainScene().GetComponent<PlayerComponent>().SeatCount = message.SeatCount;
             session.DomainScene().GetComponent<PlayerComponent>().RoomId = message.RoomId;
             session.DomainScene().GetComponent<PlayerComponent>().MySeatIndex = message.MySeatIndex;
             session.DomainScene().GetComponent<PlayerComponent>().CurrentTurnIndex = message.TurnIndex;

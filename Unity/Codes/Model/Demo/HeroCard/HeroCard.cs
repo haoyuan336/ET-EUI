@@ -10,6 +10,8 @@ namespace ET
         public long TroopId; //队伍Id
         public int InTroopIndex;    //在队伍里面的index
 
+        public int IsDead;          //是否已经死亡
+
         public int HeroColor;   //英雄属性
         
         public float Attack;

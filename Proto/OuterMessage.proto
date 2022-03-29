@@ -447,6 +447,7 @@ message M2C_SyncRoomInfo	//IActorMessage
 	int64 RoomId = 1;
 	int32 TurnIndex = 2;
 	int32 MySeatIndex = 3;
+	int32 SeatCount = 4;	//房间里面人物的总人数
 }
 message C2M_PlayerScrollScreen //IActorLocationMessage
 {

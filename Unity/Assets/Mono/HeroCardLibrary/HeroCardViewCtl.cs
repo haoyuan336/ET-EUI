@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using ET;
 using UnityEngine;
 
@@ -33,7 +34,7 @@ public class HeroCardViewCtl: MonoBehaviour
         {
             this.HeroCardSpriteRenderer.sprite = heroCardLibrary.Texture;
             GameObject go = Instantiate(heroCardLibrary.HeroModePrefab, this.transform);
-            go.transform.forward = Vector3.back;
+            // go.transform.forward = Vector3.back;
             go.transform.localScale = Vector3.one * 2;
             go.SetActive(false);
             this.HeroMode = go;
@@ -51,4 +52,23 @@ public class HeroCardViewCtl: MonoBehaviour
     public void ChangeCardView()
     {
     }
+
+     public async  ETTask PlayAttackAnim(GameObject target)
+     {
+         Vector3 targetPos = target.transform.position;
+
+         float distance = 1;
+
+         while (distance > 0.1f)
+         {
+             Vector3 prePos = Vector3.Lerp(this.HeroMode.transform.position, targetPos, 0.01f);
+             this.HeroMode.transform.position = prePos;
+             distance = Vector3.Distance(prePos, targetPos);
+             yield return 0;
+         }
+         
+         
+         
+         await ETTask.CompletedTask;
+     }
 }

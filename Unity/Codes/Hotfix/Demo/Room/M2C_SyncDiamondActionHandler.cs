@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace ET
 {
@@ -43,8 +44,12 @@ namespace ET
                     }
                 }
                 await ETTaskHelper.WaitAll(tasks);
+                TimerComponent
 
             }
+            
+            await session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync();
+            
             Game.EventSystem.Publish(new EventType.UnLockTouchLock(){ZoneScene = session.ZoneScene().CurrentScene()});
 
             await ETTask.CompletedTask;

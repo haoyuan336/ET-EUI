@@ -57,7 +57,7 @@ namespace ET
                     continue;
                 }
 
-                MessageHelper.SendToClient(unit, new M2C_SyncRoomInfo() { MySeatIndex = SeatIndex, RoomId = self.Id, TurnIndex = 0 });
+                MessageHelper.SendToClient(unit, new M2C_SyncRoomInfo() { MySeatIndex = SeatIndex, RoomId = self.Id, TurnIndex = 0 ,SeatCount = 2});
                 SeatIndex++;
             }
         }

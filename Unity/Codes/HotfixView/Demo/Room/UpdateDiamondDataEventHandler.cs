@@ -25,8 +25,8 @@ namespace ET
             }
 
             // Color color = new Color(int.Parse(list[0]), int.Parse(list[1]), int.Parse(list[2]));
-            go.transform.position = new Vector3((a.Diamond.LieIndex - liecount * 0.5f + 0.5f) * distance,
-                (a.Diamond.HangIndex - hangCount * 0.5f + 0.5f) * distance, 0);
+            go.transform.position = new Vector3((a.Diamond.LieIndex - liecount * 0.5f + 0.5f) * distance,0,
+                (a.Diamond.HangIndex - hangCount * 0.5f + 0.5f) * distance);
             if (go.GetComponent<SpriteRenderer>() != null)
             {
                 AllDiamondLibrary allDiamondLibrary = go.GetComponent<DiamondLibraryCtl>().AllDiamondLibrary;

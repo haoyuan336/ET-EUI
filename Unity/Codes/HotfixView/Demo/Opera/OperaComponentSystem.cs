@@ -85,10 +85,10 @@ namespace ET
                     bool isHited = Physics.Raycast(ray, out raycastHit, Mathf.Infinity, maskCode);
                     if (isHited)
                     {
-                        // Log.Debug("hited" + raycastHit.transform.name);
+                        Log.Debug("hited" + raycastHit.transform.name);
                         UnityEngine.Vector3 pos = raycastHit.transform.position;
                         float x = pos.x;
-                        float y = pos.y;
+                        float y = pos.z;
                         float distance = float.Parse(pvPLevelConfig.Distance);
                         // a.Diamond.LieIndex - liecount * 0.5f + 0.5f) * distance,
                         float lieIndex = x / distance + lieCount * 0.5f - 0.5f;

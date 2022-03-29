@@ -974,6 +974,9 @@ namespace ET
 		[ProtoMember(3)]
 		public int MySeatIndex { get; set; }
 
+		[ProtoMember(4)]
+		public int SeatCount { get; set; }
+
 	}
 
 	[Message(OuterOpcode.C2M_PlayerScrollScreen)]

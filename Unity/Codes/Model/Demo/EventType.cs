@@ -195,5 +195,11 @@ namespace ET
         {
             public HeroCard HeroCard;
         }
+
+        public struct PlayHeroCardAttackAnim
+        {
+            public HeroCard SelfHeroCard;
+            public HeroCard TargetHeroCard;
+        }
     }
 }
