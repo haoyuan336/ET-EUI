@@ -44,7 +44,7 @@ namespace ET
                     }
                 }
                 await ETTaskHelper.WaitAll(tasks);
-                TimerComponent
+                
 
             }
             

@@ -13,7 +13,7 @@ namespace ET
 
             GameObject selfGo = selfHeroCard.GetComponent<GameObjectComponent>().GameObject;
             GameObject targetGo = targetHeroCard.GetComponent<GameObjectComponent>().GameObject;
-            await selfGo.GetComponent<HeroCardViewCtl>().PlayAttackAnim(targetGo);
+            await selfGo.GetComponent<HeroCardViewCtl>().PlayAttackLogic(targetGo);
             await ETTask.CompletedTask;
         }
     }
