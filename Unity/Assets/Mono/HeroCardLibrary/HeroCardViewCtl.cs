@@ -64,11 +64,9 @@ public class HeroCardViewCtl: MonoBehaviour
              Vector3 prePos = Vector3.Lerp(this.HeroMode.transform.position, targetPos, 0.01f);
              this.HeroMode.transform.position = prePos;
              distance = Vector3.Distance(prePos, targetPos);
-             yield return 0;
+             
+             
          }
          
-         
-         
-         await ETTask.CompletedTask;
      }
 }
