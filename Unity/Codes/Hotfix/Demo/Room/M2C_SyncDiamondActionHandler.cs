@@ -13,7 +13,6 @@ namespace ET
 
             List<DiamondActionItem> diamondActionItems = message.DiamondActionItems;
 
-
             foreach (var diamondActionItem in diamondActionItems)
             {
                 List<ETTask> tasks = new List<ETTask>();
@@ -28,29 +27,35 @@ namespace ET
                             tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex() { Diamond = diamond }));
                             break;
                         case (int) DiamondActionType.Destory:
-                            tasks.Add(Game.EventSystem.PublishAsync(new EventType.DestoryDiamondView()
+                            tasks.Add(Game.EventSystem.PublishAsync(new EventType.DestoryDiamondView() { Diamond = diamond }));
+                            HeroCard heroCard = session.DomainScene().GetComponent<HeroCardComponent>().GetChild<HeroCard>(diamondInfo.HeroCardId);
+                            
+                            Game.EventSystem.Publish(new EventType.PlayAddAttackAngryViewAnim()
                             {
-                                Diamond = diamond
-                            }));
-                            
-                            
-                            session.DomainScene().GetComponent<HeroCardComponent>().AddHeroValueByDiamondDestroy(diamond).Coroutine();
+                                HeroCard = heroCard,
+                                Diamond = diamond,
+                                AddAttack = diamondInfo.HeroCardAddAttack,
+                                AddAngry = diamondInfo.HeroCardAddAngry,
+                                EndAngry = diamondInfo.HeroCardEndAngry,
+                                EndAttack = diamondInfo.HeroCardEndAttack
+                            });
+                            // Game.EventSystem.Publish(new );
+                            // session.DomainScene().GetComponent<HeroCardComponent>().AddHeroValueByDiamondDestroy(diamond).Coroutine();
                             // diamond.Dispose();
                             break;
-                        case (int)DiamondActionType.Create:
+                        case (int) DiamondActionType.Create:
                             Diamond newDiamond = diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo);
-                            tasks.Add(Game.EventSystem.PublishAsync(new EventType.InitDiamondAndMoveDown(){Diamond = newDiamond}));
+                            tasks.Add(Game.EventSystem.PublishAsync(new EventType.InitDiamondAndMoveDown() { Diamond = newDiamond }));
                             break;
                     }
                 }
-                await ETTaskHelper.WaitAll(tasks);
-                
 
+                await ETTaskHelper.WaitAll(tasks);
             }
-            
-            await session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync();
-            
-            Game.EventSystem.Publish(new EventType.UnLockTouchLock(){ZoneScene = session.ZoneScene().CurrentScene()});
+
+            // await session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync();
+
+            Game.EventSystem.Publish(new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene() });
 
             await ETTask.CompletedTask;
         }

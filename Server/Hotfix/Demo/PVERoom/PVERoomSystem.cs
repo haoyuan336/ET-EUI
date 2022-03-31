@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -26,9 +27,20 @@ namespace ET
             self.LevelConfig = LevelConfigCategory.Instance.Get(levelNum);
             self.Units.Add(unit);
             self.Units.Add(self.AddAIUnity());
+            self.SetUnitSeatIndex();
             self.AsyncRoomInfo();
             self.InitHeroCards(unit.CurrentTroopId);
             self.InitGameMap(levelNum);
+        }
+
+        public static void SetUnitSeatIndex(this PVERoom self)
+        {
+            int seatIndex = 0;
+            foreach (var unit in self.Units)
+            {
+                unit.SeatIndex = seatIndex;
+                seatIndex++;
+            }
         }
 
         public static async ETTask<int> GetCurrentPlayerLevelNum(this PVERoom self, Unit unit, long AccountId)
@@ -48,7 +60,6 @@ namespace ET
 
         public static void AsyncRoomInfo(this PVERoom self)
         {
-            int SeatIndex = 0;
             foreach (var unit in self.Units)
             {
                 if (unit.IsAI)
@@ -57,8 +68,8 @@ namespace ET
                     continue;
                 }
 
-                MessageHelper.SendToClient(unit, new M2C_SyncRoomInfo() { MySeatIndex = SeatIndex, RoomId = self.Id, TurnIndex = 0 ,SeatCount = 2});
-                SeatIndex++;
+                MessageHelper.SendToClient(unit,
+                    new M2C_SyncRoomInfo() { MySeatIndex = unit.SeatIndex, RoomId = self.Id, TurnIndex = 0, SeatCount = 2 });
             }
         }
 
@@ -161,15 +172,36 @@ namespace ET
 
         public static void AddHeroCardAttack(this PVERoom self, DiamondAction action)
         {
-            Unit unit = self.Units[self.CurrentTurnIndex];
+            // Unit unit = self.Units[self.CurrentTurnIndex];
+            Unit unit = self.GetCurrentAttackUnit();
+            if (unit == null)
+            {
+                return;
+            }
+
             DiamondInfo diamondInfo = action.DiamondInfo;
             foreach (var heroCard in unit.HeroCards)
             {
-                // heroCard.
                 if (heroCard.HeroColor.Equals(diamondInfo.DiamondType))
                 {
+                    if (self.CurrentAttackHeroCard == null)
+                    {
+                        self.CurrentAttackHeroCard = heroCard;
+                    }
+
                     DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamondInfo.DiamondType);
-                    heroCard.AddAttackValue(float.Parse(config.AddAttack));
+                    if (self.CurrentAttackHeroCard.HeroColor.Equals(diamondInfo.DiamondType))
+                    {
+                        var addValue = self.CurrentAttackHeroCard.AddAttackValue(float.Parse(config.AddAttack));
+                        diamondInfo.HeroCardAddAttack = addValue;
+                        diamondInfo.HeroCardEndAttack = self.CurrentAttackHeroCard.Attack;
+                    }
+
+                    var addAngryValue = heroCard.AddAngryValue(float.Parse(config.AddAngry));
+                    
+                    diamondInfo.HeroCardId = heroCard.Id;
+                    diamondInfo.HeroCardAddAngry = addAngryValue;
+                    diamondInfo.HeroCardEndAngry = heroCard.Angry;
                 }
             }
         }
@@ -186,10 +218,13 @@ namespace ET
                     if (action.ActionType == (int) DiamondActionType.Destory)
                     {
                         // Log.Debug($"增加相对应颜色的攻击力 以及怒气值{action.ActionType}");
+
                         self.AddHeroCardAttack(action);
                     }
                 }
             }
+
+            self.ProcessAttackLogic(m2CSyncDiamondAction);
 
             foreach (var unit in self.Units)
             {
@@ -200,6 +235,28 @@ namespace ET
 
                 MessageHelper.SendToClient(unit, m2CSyncDiamondAction);
             }
+        }
+
+        public static void ProcessAttackLogic(this PVERoom self, M2C_SyncDiamondAction m2CSyncDiamondAction)
+        {
+            Log.Debug("process attack login");
+            //todo 1 先找到当前需要释放技能的玩家
+            // Unit unit = self.Units[self.CurrentTurnIndex];
+        }
+
+        public static Unit GetCurrentAttackUnit(this PVERoom self)
+        {
+            Unit attackUnit = null;
+            foreach (var unit in self.Units)
+            {
+                if (unit.SeatIndex == self.CurrentTurnIndex)
+                {
+                    attackUnit = unit;
+                    break;
+                }
+            }
+
+            return attackUnit;
         }
     }
 }

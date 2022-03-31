@@ -12,6 +12,8 @@ namespace ET
 
         public int InRoomIndex; //在房间里面的id
 
+        public int SeatIndex;
+
         [BsonIgnore]
         public UnitType Type => (UnitType) this.Config.Type;
 

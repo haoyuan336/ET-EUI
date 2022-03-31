@@ -58,23 +58,27 @@
         }
 
         //todo 增加攻击值
-        public static void AddAttackValue(this HeroCard self, float baseValue)
+        public static float AddAttackValue(this HeroCard self, float baseValue)
         {
             HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
-            self.Attack += float.Parse(heroConfig.AttackRate) * baseValue;
+            var value = float.Parse(heroConfig.AttackRate) * baseValue;
+            self.Attack += value;
 #if !SERVER
             Game.EventSystem.Publish(new EventType.UpdateAttackView() { HeroCard = self });
 #endif
+            return value;
         }
 
         //todo 增加怒气值
-        public static void AddAngryValue(this HeroCard self, float baseValue)
+        public static float AddAngryValue(this HeroCard self, float baseValue)
         {
             HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
-            self.Angry += float.Parse(heroConfig.AngryRate) * baseValue;
+            var value = float.Parse(heroConfig.AngryRate) * baseValue;
+            self.Angry += value;
 #if !SERVER
             Game.EventSystem.Publish(new EventType.UpdateAngryView() { HeroCard = self });
 #endif
+            return value;
         }
 
         public static void EnterAttackState(this HeroCard self)
@@ -85,14 +89,13 @@
 
 #endif
         }
+
         public static async ETTask AttackTargetAsync(this HeroCard self, HeroCard target)
         {
-
 #if !SERVER
             await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim(){SelfHeroCard = self,TargetHeroCard = target});
 #endif
-            
-            
+
             await ETTask.CompletedTask;
         }
     }

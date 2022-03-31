@@ -942,6 +942,21 @@ namespace ET
 		[ProtoMember(7)]
 		public int BoomType { get; set; }
 
+		[ProtoMember(8)]
+		public long HeroCardId { get; set; }
+
+		[ProtoMember(9)]
+		public float HeroCardAddAttack { get; set; }
+
+		[ProtoMember(10)]
+		public float HeroCardEndAttack { get; set; }
+
+		[ProtoMember(11)]
+		public float HeroCardAddAngry { get; set; }
+
+		[ProtoMember(12)]
+		public float HeroCardEndAngry { get; set; }
+
 	}
 
 	[Message(OuterOpcode.M2C_InitMapData)]

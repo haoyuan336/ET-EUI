@@ -432,6 +432,11 @@ message DiamondInfo
 	int32 InitLieIndex = 5;
 	int32 InitHangIndex = 6;
 	int32 BoomType = 7;			
+	int64 HeroCardId = 8;
+	float HeroCardAddAttack = 9;
+	float HeroCardEndAttack = 10;
+	float HeroCardAddAngry = 11;
+	float HeroCardEndAngry = 12;
 }
 message M2C_InitMapData //IActorMessage
 {

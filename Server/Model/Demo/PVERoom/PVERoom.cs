@@ -11,5 +11,7 @@ namespace ET
         public Diamond[,] Diamonds = null;
         public DiamondComponent DiamondComponent = null;
         public LevelConfig LevelConfig;
+
+        public HeroCard CurrentAttackHeroCard;
     }
 }
