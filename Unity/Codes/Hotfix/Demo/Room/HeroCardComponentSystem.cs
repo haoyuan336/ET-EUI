@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using ET.Account;
+using UnityEngine;
 
 namespace ET
 {
@@ -33,65 +36,14 @@ namespace ET
             Game.EventSystem.Publish(new EventType.CreateHeroCardView() { HeroCardListMap = heroCardListMap });
         }
 
-        public static async ETTask AddHeroValueByDiamondDestroy(this HeroCardComponent self, Diamond diamond)
+
+        public static async ETTask PlayHeroCardAttackAnimAsync(this HeroCardComponent self, AttackAction action)
         {
-            PlayerComponent playerComponent = self.DomainScene().GetComponent<PlayerComponent>();
+            HeroCard attackHeroCard = self.GetChild<HeroCard>(action.AttackHeroCardInfo.HeroId);
+            HeroCard beAttackHeroCard = self.GetChild<HeroCard>(action.BeAttackHeroCardInfo[0].HeroId);
 
-            Log.Debug($"my seat index {playerComponent.MySeatIndex}");
-            Log.Debug($"current turn index{playerComponent.CurrentTurnIndex}");
-            if (playerComponent.MySeatIndex != playerComponent.CurrentTurnIndex)
-            {
-                Log.Debug("my seat index is diff");
-                return;
-            }
 
-            AccountInfoComponent accountInfoComponent = self.DomainScene().GetComponent<AccountInfoComponent>();
-
-            DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamond.DiamondType);
-            foreach (var heroCard in self.HeroCards)
-            {
-                Log.Debug($"hero card ownerid {heroCard.OwnerId}");
-                Log.Debug($"account id {accountInfoComponent.AccountId}");
-                if (diamond.DiamondType.Equals(heroCard.HeroColor) && heroCard.OwnerId == accountInfoComponent.AccountId)
-                {
-                    if (self.CurrentTurnAttackList.Count == 0)
-                    {
-                        self.CurrentTurnAttackList.Add(heroCard);
-                        heroCard.EnterAttackState();
-                    }
-
-                    await Game.EventSystem.PublishAsync(
-                        new EventType.PlayAddHeroCardValueEffect() { StartDiamond = diamond, EndHeroCard = heroCard });
-                    // Log.Debug("add hero value by diamond ");
-                    heroCard.AddAttackValue(float.Parse(config.AddAttack));
-                    heroCard.AddAngryValue(float.Parse(config.AddAngry));
-                }
-            }
-        }
-
-        public static async ETTask PlayHeroCardAttackAnimAsync(this HeroCardComponent self)
-        {
-            List<ETTask> tasks = new List<ETTask>();
-            Log.Debug("play attack anim");
-            //找到敌对阵营的敌人
-            var seatCount = self.DomainScene().GetComponent<PlayerComponent>().SeatCount;
-            // let currentCampIndex= self.CurrentTurnAttackList
-
-            foreach (var heroCard in self.CurrentTurnAttackList)
-            {
-                int campIndex = heroCard.CampIndex;
-                campIndex++;
-                if (campIndex >= seatCount)
-                {
-                    campIndex = 0;
-                }
-
-                List<HeroCard> heroCards = self.GetHeroCardsByCampIndex(campIndex);
-                HeroCard target = self.GetAttackTargetByTroopIndex(heroCard.InTroopIndex, heroCards);
-                Log.Debug($"attack target troop index{target.InTroopIndex}");
-                tasks.Add(heroCard.AttackTargetAsync(target));
-            }
-
+            await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim(){AttackHeroCard = attackHeroCard, BeAttackHeroCard = beAttackHeroCard});
             await ETTask.CompletedTask;
         }
 

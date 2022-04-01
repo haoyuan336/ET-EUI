@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace ET
 {
-    public class PlayAddHeroCardValueEffectAnimHandler: AEvent<EventType.PlayAddHeroCardValueEffect>
+    public class PlayAddAttackAngryViewAnimHandler: AEvent<EventType.PlayAddAttackAngryViewAnim>
     {
-        protected override async ETTask Run(PlayAddHeroCardValueEffect a)
+        protected override  async ETTask Run(PlayAddAttackAngryViewAnim a)
         {
-            Diamond diamond = a.StartDiamond;
-            HeroCard heroCard = a.EndHeroCard;
+            Diamond diamond = a.Diamond;
+            HeroCard heroCard = a.HeroCard;
             GameObject bundleGameObject = (GameObject) ResourcesComponent.Instance.GetAsset("Unit.unity3d", "Unit");
             GameObject prefab = bundleGameObject.Get<GameObject>("DiamondAddValueTrailEffect");
 
@@ -20,15 +20,17 @@ namespace ET
             float distance = 1;
             while (distance > 0.1f)
             {
-                Log.Debug("process move logic");
                 Vector3 prePos = Vector3.Lerp(go.transform.position, endPos, 0.05f);
                 go.transform.position = prePos;
                 distance = Vector3.Distance(prePos, endPos);
                 await TimerComponent.Instance.WaitFrameAsync();
             }
-
-            GameObject.Destroy(go);
+            
+            HeroCardViewCtl heroCardViewCtl = heroCard.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>();
+            heroCardViewCtl.UpdateAttackView(a.EndAttack);
+            heroCardViewCtl.UpdateAngryView(a.EndAttack);
             await ETTask.CompletedTask;
+
         }
     }
 }

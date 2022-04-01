@@ -70,29 +70,30 @@ public class HeroCardViewCtl: MonoBehaviour
         }
     }
 
-    public async void ChangeModeView()
+    public GameObject ChangeModeView()
     {
         this.HeroCardSpriteRenderer.gameObject.SetActive(false);
         this.HeroMode.SetActive(true);
+        return this.HeroMode;
     }
 
     public void ChangeCardView()
     {
     }
 
-    public async ETTask PlayAttackLogic(GameObject target)
-    {
-        ETTask task = ETTask.Create();
-        StartCoroutine(PlayMoveAction(task, target.transform.position + Vector3.up));
-        await task;
-        task = ETTask.Create();
-        StartCoroutine(PlayAttackAnim(task));
-        await task;
-        Log.Debug("move end");
-        task = ETTask.Create();
-        StartCoroutine(PlayMoveBackAnim(task));
-        await task;
-    }
+    // public async ETTask PlayAttackLogic(GameObject target)
+    // {
+    //     ETTask task = ETTask.Create();
+    //     StartCoroutine(PlayMoveAction(task, target.transform.position + Vector3.up));
+    //     await task;
+    //     task = ETTask.Create();
+    //     StartCoroutine(PlayAttackAnim(task));
+    //     await task;
+    //     Log.Debug("move end");
+    //     task = ETTask.Create();
+    //     StartCoroutine(PlayMoveBackAnim(task));
+    //     await task;
+    // }
 
     IEnumerator PlayMoveAction(ETTask task, Vector3 targetPos)
     {

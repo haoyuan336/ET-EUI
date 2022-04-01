@@ -1064,6 +1064,27 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.AttackAction)]
+	[ProtoContract]
+	public partial class AttackAction: Object
+	{
+		[ProtoMember(1)]
+		public HeroCardInfo AttackHeroCardInfo { get; set; }
+
+		[ProtoMember(2)]
+		public List<HeroCardInfo> BeAttackHeroCardInfo = new List<HeroCardInfo>();
+
+	}
+
+	[Message(OuterOpcode.AttackActionItem)]
+	[ProtoContract]
+	public partial class AttackActionItem: Object
+	{
+		[ProtoMember(1)]
+		public List<AttackAction> AttackActions = new List<AttackAction>();
+
+	}
+
 	[Message(OuterOpcode.M2C_SyncDiamondAction)]
 	[ProtoContract]
 	public partial class M2C_SyncDiamondAction: Object, IActorMessage
@@ -1073,6 +1094,9 @@ namespace ET
 
 		[ProtoMember(1)]
 		public List<DiamondActionItem> DiamondActionItems = new List<DiamondActionItem>();
+
+		[ProtoMember(2)]
+		public List<AttackActionItem> AttackActionItems = new List<AttackActionItem>();
 
 	}
 
@@ -1103,6 +1127,9 @@ namespace ET
 
 		[ProtoMember(8)]
 		public int HeroColor { get; set; }
+
+		[ProtoMember(9)]
+		public int SkillType { get; set; }
 
 	}
 

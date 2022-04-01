@@ -486,10 +486,21 @@ message DiamondActionItem
 {
 	repeated DiamondAction DiamondActions = 1;
 }
+
+message AttackAction
+{
+	HeroCardInfo AttackHeroCardInfo = 1;
+	repeated HeroCardInfo BeAttackHeroCardInfo = 2;
+}
+message AttackActionItem
+{
+	repeated AttackAction AttackActions = 1;
+}
 message M2C_SyncDiamondAction //IActorMessage
 {
 	int32 RpcId = 90;
 	repeated DiamondActionItem DiamondActionItems = 1;
+	repeated AttackActionItem AttackActionItems = 2;
 }
 message HeroCardInfo
 {
@@ -501,6 +512,7 @@ message HeroCardInfo
 	int32 InTroopIndex = 6;
 	int32 CampIndex = 7;//阵营index
 	int32 HeroColor = 8;			//颜色属性	
+	int32 SkillType = 9;	//技能类型
 }
 
 //ResponseType M2C_GetAllHeroCardListResponse

@@ -198,7 +198,7 @@ namespace ET
                     }
 
                     var addAngryValue = heroCard.AddAngryValue(float.Parse(config.AddAngry));
-                    
+
                     diamondInfo.HeroCardId = heroCard.Id;
                     diamondInfo.HeroCardAddAngry = addAngryValue;
                     diamondInfo.HeroCardEndAngry = heroCard.Angry;
@@ -241,7 +241,93 @@ namespace ET
         {
             Log.Debug("process attack login");
             //todo 1 先找到当前需要释放技能的玩家
-            // Unit unit = self.Units[self.CurrentTurnIndex];
+            Unit unit = self.Units[self.CurrentTurnIndex];
+            Unit beAttackUnit = self.GetBeAttackUnit(unit);
+            AttackActionItem attackActionItem = new AttackActionItem();
+            foreach (var heroCard in unit.HeroCards)
+            {
+                if (heroCard.CheckAngryIsFull())
+                {
+                    Log.Debug($"怒气值已满{heroCard.Id}" );
+                    AttackAction attackAction = new AttackAction();
+                    HeroCard beAttackHeroCard = self.GetBeAttackHeroCard(heroCard, beAttackUnit);
+                    heroCard.CurrentCastSkill = heroCard.BigSkill;
+                    attackAction.AttackHeroCardInfo = heroCard.GetMessageInfo();
+                    
+                    if (beAttackHeroCard != null)
+                    {
+                        attackAction.BeAttackHeroCardInfo.Add(beAttackHeroCard.GetMessageInfo());
+                    }
+                    attackActionItem.AttackActions.Add(attackAction);
+                    
+                }
+                else if (heroCard.Attack > 0)
+                {
+                    Log.Debug($"供给值 大于0{heroCard.Attack}, {heroCard.Id}");
+                    AttackAction attackAction = new AttackAction();
+                    HeroCard beAttackHeroCard = self.GetBeAttackHeroCard(heroCard, beAttackUnit);
+
+                    heroCard.CurrentCastSkill = heroCard.NormalSkill;
+                    attackAction.AttackHeroCardInfo = heroCard.GetMessageInfo();
+                    if (beAttackHeroCard != null)
+                    {
+                        attackAction.BeAttackHeroCardInfo.Add(beAttackHeroCard.GetMessageInfo());
+                    }
+                    attackActionItem.AttackActions.Add(attackAction);
+                }
+            }
+
+            m2CSyncDiamondAction.AttackActionItems.Add(attackActionItem);
+        }
+
+        public static Unit GetBeAttackUnit(this PVERoom self, Unit unit)
+        {
+            int whileCount = 0;
+            int index = unit.SeatIndex;
+            Unit targetUnit = null;
+            //todo 防止陷入似循环
+            while (targetUnit == null && whileCount < 20)
+            {
+                index++;
+                if (index >= self.Units.Count)
+                {
+                    index = 0;
+                }
+
+                if (unit.Id != self.Units[index].Id)
+                {
+                    targetUnit = self.Units[index];
+                }
+
+                whileCount++;
+            }
+
+            return targetUnit;
+        }
+
+        public static HeroCard GetBeAttackHeroCard(this PVERoom self, HeroCard heroCard, Unit unit)
+        {
+            //todo 找到需要攻击的玩家之后，开始寻找被攻击的牌
+            //todo 找到与自己位置一致的牌
+            var index = heroCard.InTroopIndex;
+            HeroCard targetHeroCard = null;
+            int whileCount = 0;
+            while (targetHeroCard == null && whileCount < 20)
+            {
+                if (index >= unit.HeroCards.Count)
+                {
+                    index = 0;
+                }
+
+                if (!unit.HeroCards[index].GetIsDead())
+                {
+                    targetHeroCard = unit.HeroCards[index];
+                }
+
+                whileCount++;
+            }
+
+            return targetHeroCard;
         }
 
         public static Unit GetCurrentAttackUnit(this PVERoom self)

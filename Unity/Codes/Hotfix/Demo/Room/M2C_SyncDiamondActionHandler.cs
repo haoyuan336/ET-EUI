@@ -12,6 +12,7 @@ namespace ET
             DiamondComponent diamondComponent = session.DomainScene().GetComponent<DiamondComponent>();
 
             List<DiamondActionItem> diamondActionItems = message.DiamondActionItems;
+            List<AttackActionItem> attackActionItems = message.AttackActionItems;
 
             foreach (var diamondActionItem in diamondActionItems)
             {
@@ -28,20 +29,23 @@ namespace ET
                             break;
                         case (int) DiamondActionType.Destory:
                             tasks.Add(Game.EventSystem.PublishAsync(new EventType.DestoryDiamondView() { Diamond = diamond }));
-                            HeroCard heroCard = session.DomainScene().GetComponent<HeroCardComponent>().GetChild<HeroCard>(diamondInfo.HeroCardId);
-                            
-                            Game.EventSystem.Publish(new EventType.PlayAddAttackAngryViewAnim()
+                            if (diamondInfo.HeroCardId != 0)
                             {
-                                HeroCard = heroCard,
-                                Diamond = diamond,
-                                AddAttack = diamondInfo.HeroCardAddAttack,
-                                AddAngry = diamondInfo.HeroCardAddAngry,
-                                EndAngry = diamondInfo.HeroCardEndAngry,
-                                EndAttack = diamondInfo.HeroCardEndAttack
-                            });
-                            // Game.EventSystem.Publish(new );
-                            // session.DomainScene().GetComponent<HeroCardComponent>().AddHeroValueByDiamondDestroy(diamond).Coroutine();
-                            // diamond.Dispose();
+                                HeroCard heroCard = session.DomainScene().GetComponent<HeroCardComponent>()
+                                        .GetChild<HeroCard>(diamondInfo.HeroCardId);
+                                Game.EventSystem.Publish(new EventType.PlayAddAttackAngryViewAnim()
+                                {
+                                    HeroCard = heroCard,
+                                    Diamond = diamond,
+                                    AddAttack = diamondInfo.HeroCardAddAttack,
+                                    AddAngry = diamondInfo.HeroCardAddAngry,
+                                    EndAngry = diamondInfo.HeroCardEndAngry,
+                                    EndAttack = diamondInfo.HeroCardEndAttack
+                                });
+                            }
+
+                            Log.Debug($"hero card id {diamondInfo.HeroCardId}");
+
                             break;
                         case (int) DiamondActionType.Create:
                             Diamond newDiamond = diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo);
@@ -51,6 +55,16 @@ namespace ET
                 }
 
                 await ETTaskHelper.WaitAll(tasks);
+            }
+
+            foreach (var attackActionItem in attackActionItems)
+            {
+                List<ETTask> task = new List<ETTask>();
+                foreach (var attackAction in attackActionItem.AttackActions)
+                {
+                    task.Add(session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync(attackAction));
+                    Log.Debug("play attack action");
+                }
             }
 
             // await session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync();

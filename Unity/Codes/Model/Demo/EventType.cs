@@ -185,11 +185,11 @@ namespace ET
             public HeroCard HeroCard;
         }
 
-        public struct PlayAddHeroCardValueEffect
-        {
-            public Diamond StartDiamond;
-            public HeroCard EndHeroCard;
-        }
+        // public struct PlayAddHeroCardValueEffect
+        // {
+        //     public Diamond StartDiamond;
+        //     public HeroCard EndHeroCard;
+        // }
 
         public struct EnterAttackStateView
         {
@@ -198,8 +198,8 @@ namespace ET
 
         public struct PlayHeroCardAttackAnim
         {
-            public HeroCard SelfHeroCard;
-            public HeroCard TargetHeroCard;
+            public HeroCard AttackHeroCard;
+            public HeroCard BeAttackHeroCard;
         }
 
         public struct PlayAddAttackAngryViewAnim

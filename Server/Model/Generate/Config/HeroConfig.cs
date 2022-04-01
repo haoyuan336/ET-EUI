@@ -87,6 +87,8 @@ namespace ET
 		public string CritRate { get; set; }
 		[ProtoMember(9)]
 		public string AttackRate { get; set; }
+		[ProtoMember(10)]
+		public int TotalAngry { get; set; }
 
 	}
 }
