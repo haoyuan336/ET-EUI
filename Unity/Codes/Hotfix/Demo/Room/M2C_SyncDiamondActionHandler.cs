@@ -43,9 +43,6 @@ namespace ET
                                     EndAttack = diamondInfo.HeroCardEndAttack
                                 });
                             }
-
-                            Log.Debug($"hero card id {diamondInfo.HeroCardId}");
-
                             break;
                         case (int) DiamondActionType.Create:
                             Diamond newDiamond = diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo);
@@ -69,7 +66,7 @@ namespace ET
 
             // await session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync();
 
-            Game.EventSystem.Publish(new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene() });
+            // Game.EventSystem.Publish(new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene() });
 
             await ETTask.CompletedTask;
         }

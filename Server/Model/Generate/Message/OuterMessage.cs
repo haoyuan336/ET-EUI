@@ -1129,7 +1129,10 @@ namespace ET
 		public int HeroColor { get; set; }
 
 		[ProtoMember(9)]
-		public int SkillType { get; set; }
+		public long CasrSkillId { get; set; }
+
+		[ProtoMember(10)]
+		public float HP { get; set; }
 
 	}
 

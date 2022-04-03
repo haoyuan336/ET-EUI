@@ -512,7 +512,8 @@ message HeroCardInfo
 	int32 InTroopIndex = 6;
 	int32 CampIndex = 7;//阵营index
 	int32 HeroColor = 8;			//颜色属性	
-	int32 SkillType = 9;	//技能类型
+	int64 CasrSkillId = 9;	//技能类型
+	float HP = 10;			//血量
 }
 
 //ResponseType M2C_GetAllHeroCardListResponse

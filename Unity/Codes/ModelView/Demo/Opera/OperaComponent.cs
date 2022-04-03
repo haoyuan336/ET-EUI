@@ -13,6 +13,6 @@ namespace ET
 
         public bool isTouching = false;
 
-        public bool touchLock = false;
+        public bool TouchLock = false;
     }
 }

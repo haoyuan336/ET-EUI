@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4021760788976867121}
   - component: {fileID: 4021760788976867120}
   m_Layer: 0
-  m_Name: DiamondAddValueTrailEffect
+  m_Name: DiamondAddAttackTrailEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -145,5 +145,5 @@ TrailRenderer:
     shadowBias: 0.5
     generateLightingData: 0
   m_MinVertexDistance: 0.1
-  m_Autodestruct: 0
+  m_Autodestruct: 1
   m_Emitting: 1

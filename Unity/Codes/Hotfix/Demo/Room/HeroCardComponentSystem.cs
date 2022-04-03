@@ -40,6 +40,9 @@ namespace ET
         public static async ETTask PlayHeroCardAttackAnimAsync(this HeroCardComponent self, AttackAction action)
         {
             HeroCard attackHeroCard = self.GetChild<HeroCard>(action.AttackHeroCardInfo.HeroId);
+
+            attackHeroCard.SetMessageInfo(action.AttackHeroCardInfo);
+            // attackHeroCard.CurrentCastSkill = 
             HeroCard beAttackHeroCard = self.GetChild<HeroCard>(action.BeAttackHeroCardInfo[0].HeroId);
 
 

@@ -182,26 +182,28 @@ namespace ET
             DiamondInfo diamondInfo = action.DiamondInfo;
             foreach (var heroCard in unit.HeroCards)
             {
+                DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamondInfo.DiamondType);
                 if (heroCard.HeroColor.Equals(diamondInfo.DiamondType))
                 {
-                    if (self.CurrentAttackHeroCard == null)
-                    {
-                        self.CurrentAttackHeroCard = heroCard;
-                    }
-
-                    DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamondInfo.DiamondType);
+                    var addAngryValue = heroCard.AddAngryValue(float.Parse(config.AddAngry));
+                    diamondInfo.HeroCardId = heroCard.Id;
+                    diamondInfo.HeroCardAddAngry = addAngryValue;
+                    diamondInfo.HeroCardEndAngry = heroCard.Angry;
+                    Log.Debug($"end angry {diamondInfo.HeroCardEndAngry}");
+                }
+                if (self.CurrentAttackHeroCard == null)
+                {
+                    self.CurrentAttackHeroCard = heroCard;
+                }
+                if (self.CurrentAttackHeroCard != null)
+                {
                     if (self.CurrentAttackHeroCard.HeroColor.Equals(diamondInfo.DiamondType))
                     {
+                        Log.Debug($"current attack hero card = {self.CurrentAttackHeroCard.Id}");
                         var addValue = self.CurrentAttackHeroCard.AddAttackValue(float.Parse(config.AddAttack));
                         diamondInfo.HeroCardAddAttack = addValue;
                         diamondInfo.HeroCardEndAttack = self.CurrentAttackHeroCard.Attack;
                     }
-
-                    var addAngryValue = heroCard.AddAngryValue(float.Parse(config.AddAngry));
-
-                    diamondInfo.HeroCardId = heroCard.Id;
-                    diamondInfo.HeroCardAddAngry = addAngryValue;
-                    diamondInfo.HeroCardEndAngry = heroCard.Angry;
                 }
             }
         }
@@ -239,40 +241,20 @@ namespace ET
 
         public static void ProcessAttackLogic(this PVERoom self, M2C_SyncDiamondAction m2CSyncDiamondAction)
         {
-            Log.Debug("process attack login");
             //todo 1 先找到当前需要释放技能的玩家
             Unit unit = self.Units[self.CurrentTurnIndex];
             Unit beAttackUnit = self.GetBeAttackUnit(unit);
             AttackActionItem attackActionItem = new AttackActionItem();
             foreach (var heroCard in unit.HeroCards)
             {
-                if (heroCard.CheckAngryIsFull())
+                if (heroCard.Attack > 0 || heroCard.CheckAngryIsFull())
                 {
-                    Log.Debug($"怒气值已满{heroCard.Id}" );
                     AttackAction attackAction = new AttackAction();
                     HeroCard beAttackHeroCard = self.GetBeAttackHeroCard(heroCard, beAttackUnit);
-                    heroCard.CurrentCastSkill = heroCard.BigSkill;
+                    heroCard.CurrentSkillId =  heroCard.ProcessCurrentSkill();
+                    beAttackHeroCard.BeAttack(heroCard);
                     attackAction.AttackHeroCardInfo = heroCard.GetMessageInfo();
-                    
-                    if (beAttackHeroCard != null)
-                    {
-                        attackAction.BeAttackHeroCardInfo.Add(beAttackHeroCard.GetMessageInfo());
-                    }
-                    attackActionItem.AttackActions.Add(attackAction);
-                    
-                }
-                else if (heroCard.Attack > 0)
-                {
-                    Log.Debug($"供给值 大于0{heroCard.Attack}, {heroCard.Id}");
-                    AttackAction attackAction = new AttackAction();
-                    HeroCard beAttackHeroCard = self.GetBeAttackHeroCard(heroCard, beAttackUnit);
-
-                    heroCard.CurrentCastSkill = heroCard.NormalSkill;
-                    attackAction.AttackHeroCardInfo = heroCard.GetMessageInfo();
-                    if (beAttackHeroCard != null)
-                    {
-                        attackAction.BeAttackHeroCardInfo.Add(beAttackHeroCard.GetMessageInfo());
-                    }
+                    attackAction.BeAttackHeroCardInfo.Add(beAttackHeroCard.GetMessageInfo());
                     attackActionItem.AttackActions.Add(attackAction);
                 }
             }
@@ -280,6 +262,7 @@ namespace ET
             m2CSyncDiamondAction.AttackActionItems.Add(attackActionItem);
         }
 
+        
         public static Unit GetBeAttackUnit(this PVERoom self, Unit unit)
         {
             int whileCount = 0;

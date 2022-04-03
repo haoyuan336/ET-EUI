@@ -23,12 +23,9 @@ namespace ET
 
         public float Angry; //怒气值
 
-        public float TotalAngry; //满怒气值
+        // public Skill BigSkill; //必杀技
+        // public Skill NormalSkill; //普通技能
 
-        public Skill BigSkill; //必杀技
-
-        public Skill NormalSkill; //普通技能
-        
-        public Skill CurrentCastSkill; //当前需要释放的技能
+        public long CurrentSkillId; //当前需要释放的技能
     }
 }

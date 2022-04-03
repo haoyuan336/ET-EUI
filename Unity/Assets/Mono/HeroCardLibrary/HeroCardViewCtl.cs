@@ -30,6 +30,7 @@ public class HeroCardViewCtl: MonoBehaviour
 {
     public TextMesh AttackTextMesh;
     public TextMesh AngryTextMesh;
+    public TextMesh HPTextMesh;
 
     public SpriteRenderer HeroCardSpriteRenderer;
 
@@ -46,15 +47,21 @@ public class HeroCardViewCtl: MonoBehaviour
 
     public void UpdateAttackView(float value)
     {
-        this.AttackTextMesh.text = $"Attack:{value.ToString()}";
+        this.AttackTextMesh.text = $"A:{value.ToString()}";
     }
 
     public void UpdateAngryView(float value)
     {
-        this.AngryTextMesh.text = $"Angry:{value.ToString()}";
+        Log.Debug($"Update angry view {value}");
+        this.AngryTextMesh.text = $"N:{value.ToString()}";
     }
 
-    public void InitInfo(int configId)
+    public void UpdateHPView(float value)
+    {
+        this.HPTextMesh.text = $"H:{value.ToString()}";
+    }
+
+    public void InitInfo(int configId, int CampIndex)
     {
         Log.Debug($"hero color {configId}");
         HeroCardLibrary heroCardLibrary;
@@ -65,7 +72,8 @@ public class HeroCardViewCtl: MonoBehaviour
             go.transform.position = this.transform.position;
             // go.transform.forward = Vector3.back;
             go.transform.localScale = Vector3.one * 2;
-            go.SetActive(false);
+            // go.SetActive(false);
+            go.transform.forward = CampIndex == 0? Vector3.forward : Vector3.back;
             this.HeroMode = go;
         }
     }
@@ -81,19 +89,10 @@ public class HeroCardViewCtl: MonoBehaviour
     {
     }
 
-    // public async ETTask PlayAttackLogic(GameObject target)
-    // {
-    //     ETTask task = ETTask.Create();
-    //     StartCoroutine(PlayMoveAction(task, target.transform.position + Vector3.up));
-    //     await task;
-    //     task = ETTask.Create();
-    //     StartCoroutine(PlayAttackAnim(task));
-    //     await task;
-    //     Log.Debug("move end");
-    //     task = ETTask.Create();
-    //     StartCoroutine(PlayMoveBackAnim(task));
-    //     await task;
-    // }
+    public GameObject GetHeroMode()
+    {
+        return this.HeroMode;
+    }
 
     IEnumerator PlayMoveAction(ETTask task, Vector3 targetPos)
     {

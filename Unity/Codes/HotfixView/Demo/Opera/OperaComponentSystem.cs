@@ -99,18 +99,14 @@ namespace ET
                         c2MPlayerScrollScreen.DirType = (int) dir;
                         c2MPlayerScrollScreen.RoomId = playerComponent.RoomId;
                         // c2MPlayerScrollScreen.RoomId = playerComponent.
-                        if (self.touchLock)
+                        if (self.TouchLock)
                         {
                             return;
                         }
 
-                        self.touchLock = true;
+                        self.TouchLock = true;
+                        
                         self.ZoneScene().GetComponent<SessionComponent>().Session.Call(c2MPlayerScrollScreen).Coroutine();
-
-                        // }
-
-                        // c2MPlayerScrollScreen.StartX = 
-                        // self.ZoneScene().GetComponent<SessionComponent>().Session.Call(C2M_PlayerScrollScreen).Coroutine();
                     }
                 }
             }

@@ -9,7 +9,7 @@ namespace ET
           
             Log.Debug("unlock touch lock");
             Scene zoneScene = a.ZoneScene;
-            zoneScene.GetComponent<OperaComponent>().touchLock = false;
+            zoneScene.GetComponent<OperaComponent>().TouchLock = false;
             await ETTask.CompletedTask;
         }
     }

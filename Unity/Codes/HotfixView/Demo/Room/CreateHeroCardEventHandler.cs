@@ -22,13 +22,16 @@ namespace ET
                 {
                     HeroCard heroCard = heroCards[i];
                     GameObject go = GameObject.Instantiate(prefab, GlobalComponent.Instance.Unit);
-
+                    heroCard.AddComponent<HeroCardView>();
                     if (heroCard.GetComponent<GameObjectComponent>() == null)
                         heroCard.AddComponent<GameObjectComponent>().GameObject = go;
-                    float distance = 2;
+                    float distance = 2.5f;
                     go.transform.position = new Vector3(heroCard.InTroopIndex * distance + (heroCards.Count - 1) * -0.5f * distance,0,
                         6.5f * (key == 0? -1 : 1));
-                    go.GetComponent<HeroCardViewCtl>().InitInfo(heroCard.ConfigId);
+                    go.GetComponent<HeroCardViewCtl>().InitInfo(heroCard.ConfigId, heroCard.CampIndex);
+                    go.GetComponent<HeroCardViewCtl>().UpdateHPView(heroCard.HP);
+                    go.GetComponent<HeroCardViewCtl>().UpdateAttackView(heroCard.Attack);
+                    go.GetComponent<HeroCardViewCtl>().UpdateAngryView(heroCard.Angry);
                   
                 }
             }
