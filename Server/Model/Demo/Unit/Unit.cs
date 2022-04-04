@@ -14,6 +14,8 @@ namespace ET
 
         public int SeatIndex;
 
+        public int CurrentTurnAttackHeroSeatIndex;   //todo 当前轮到攻击的英雄
+
         [BsonIgnore]
         public UnitType Type => (UnitType) this.Config.Type;
 

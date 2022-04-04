@@ -510,6 +510,7 @@ message SkillInfo
 	int32 SkillType = 3;
 	int32 SkillConfigId = 4;
 	string SkillAnimName = 5;
+	int64 OwnerId = 6;
 
 }
 message HeroCardInfo

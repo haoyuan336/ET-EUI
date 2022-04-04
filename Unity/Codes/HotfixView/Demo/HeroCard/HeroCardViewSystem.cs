@@ -66,13 +66,15 @@ namespace ET
             await self.PlayChangeModeAnim();
             await self.PlayMoveToAnim(targetGo.transform.position);
             await self.PlayAttackAnim(message);
-            await beAttackHeroCard.GetComponent<HeroCardView>().ProcessBeAttackAnimLogic();
+            // await beAttackHeroCard.UpdateHPView();
+            await self.ProcessBeAttackAnimLogic(message.BeAttackHeroCard);
             await self.PlayMoveToAnim(self.Parent.GetComponent<GameObjectComponent>().GameObject.transform.position);
             await ETTask.CompletedTask;
         }
 
-        public static async ETTask ProcessBeAttackAnimLogic(this HeroCardView self)
+        public static async ETTask ProcessBeAttackAnimLogic(this HeroCardView self, HeroCard heroCard)
         {
+            heroCard.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>().UpdateHPView(heroCard.HP);
             await ETTask.CompletedTask;
         }
 
@@ -108,10 +110,10 @@ namespace ET
             string skillAnimStr = "";
             switch (skill.SkillType)
             {
-                case (int)SkillType.BigSkill:
+                case (int) SkillType.BigSkill:
                     skillAnimStr = "Attack";
                     break;
-                case (int)SkillType.NormalSkill:
+                case (int) SkillType.NormalSkill:
                     skillAnimStr = "Skill";
                     break;
             }

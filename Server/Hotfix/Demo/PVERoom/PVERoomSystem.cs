@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Linq;
 using System.Xml;
@@ -43,6 +44,10 @@ namespace ET
                 {
                     // //todo 首先创建敌人的英雄卡
                     unit.HeroCards = self.GetHeroIdListInLevelConfig(i, unit);
+                    foreach (var heroCard in unit.HeroCards)
+                    {
+                        heroCard.InitHeroSkillWithConfig();
+                    }
                 }
             }
         }
@@ -149,6 +154,7 @@ namespace ET
                 {
                     heroCardInfos.Add(heroCard.GetMessageInfo());
                     List<Skill> skills = heroCard.GetChilds<Skill>();
+                    Log.Debug($"skills {skills.Count}");
                     foreach (var skill in skills)
                     {
                         skillInfos.Add(skill.GetMessageInfo());
@@ -248,6 +254,7 @@ namespace ET
             }
 
             self.ProcessAttackLogic(m2CSyncDiamondAction);
+            self.ProcessReBackAttackLogic(m2CSyncDiamondAction);
             foreach (var unit in self.Units)
             {
                 if (unit.IsAI)
@@ -259,6 +266,36 @@ namespace ET
             }
         }
 
+        public static void ProcessReBackAttackLogic(this PVERoom self , M2C_SyncDiamondAction m2CSyncDiamondAction)
+        {
+            //todo 处理反击逻辑
+            self.GetBeAttackUnit(self.Units[self.CurrentTurnIndex]);
+            
+
+        }
+
+        public static void GetTurnAttackHero(this PVERoom self, Unit unit)
+        {
+            //todo 获得当前轮流攻击的英雄
+            int currentIndex = unit.CurrentTurnAttackHeroSeatIndex;
+            if (currentIndex >= unit.HeroCards.Count)
+            {
+                currentIndex = 0;
+            }
+
+            HeroCard heroCard = null;
+            int index = 0;
+            while (heroCard == null && index < 10)
+            {
+                if ()
+                {
+                    
+                }
+            }
+            
+        }
+        
+
         public static void ProcessAttackLogic(this PVERoom self, M2C_SyncDiamondAction m2CSyncDiamondAction)
         {
             //todo 1 先找到当前需要释放技能的玩家
@@ -267,8 +304,11 @@ namespace ET
             AttackActionItem attackActionItem = new AttackActionItem();
             foreach (var heroCard in unit.HeroCards)
             {
+                Log.Debug($"hero in troop index  {heroCard.InTroopIndex}");
+                Log.Debug($"hero attack {heroCard.Attack}");
                 if (heroCard.Attack > 0 || heroCard.CheckAngryIsFull())
                 {
+                    Log.Debug($"attack hero card {heroCard.InTroopIndex}");
                     AttackAction attackAction = new AttackAction();
                     HeroCard beAttackHeroCard = self.GetBeAttackHeroCard(heroCard, beAttackUnit);
                     heroCard.CurrentSkillId = heroCard.ProcessCurrentSkill();

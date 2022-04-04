@@ -35,13 +35,15 @@
             self.SkillName = skillInfo.SkillName;
             self.SkillType = skillInfo.SkillType;
             self.SkillAnimName = skillInfo.SkillAnimName;
+            self.OwnerId = skillInfo.OwnerId;
+            
         }
 
         public static SkillInfo GetMessageInfo(this Skill self)
         {
             return new SkillInfo()
             {
-                SkillConfigId = self.ConfigId, SkillName = self.SkillName, SkillType = self.SkillType, SkillAnimName = self.SkillAnimName
+                SkillConfigId = self.ConfigId, SkillName = self.SkillName, SkillType = self.SkillType, SkillAnimName = self.SkillAnimName,OwnerId = self.OwnerId,SkillId = self.Id
             };
         }
     }

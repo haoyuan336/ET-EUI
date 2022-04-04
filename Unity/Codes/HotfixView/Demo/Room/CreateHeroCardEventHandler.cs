@@ -23,6 +23,8 @@ namespace ET
                     HeroCard heroCard = heroCards[i];
                     GameObject go = GameObject.Instantiate(prefab, GlobalComponent.Instance.Unit);
                     heroCard.AddComponent<HeroCardView>();
+                    
+                    Log.Debug("add hero card view component");
                     if (heroCard.GetComponent<GameObjectComponent>() == null)
                         heroCard.AddComponent<GameObjectComponent>().GameObject = go;
                     float distance = 2.5f;

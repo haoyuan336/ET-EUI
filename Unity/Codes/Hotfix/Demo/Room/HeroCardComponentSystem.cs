@@ -11,16 +11,20 @@ namespace ET
         public static void InitHeroCard(this HeroCardComponent self, M2C_CreateHeroCardInRoom message)
         {
             List<HeroCardInfo> heroCardInfos = message.HeroCardInfos;
+            List<SkillInfo> skillInfos = message.SkillInfos;
             Dictionary<int, List<HeroCard>> heroCardListMap = new Dictionary<int, List<HeroCard>>();
 
             foreach (var heroCardInfo in heroCardInfos)
             {
                 HeroCard heroCard = self.AddChildWithId<HeroCard, int>(heroCardInfo.HeroId, heroCardInfo.ConfigId);
                 heroCard.SetMessageInfo(heroCardInfo);
+                self.AddHeroCardSkillByList(heroCard, skillInfos);
+                // heroCard.InitHeroWithDBData(heroCard);
                 if (!heroCardListMap.ContainsKey(heroCard.CampIndex))
                 {
                     // heroCardListMap[heroCard.CampIndex] = new List<HeroCard>();
                     List<HeroCard> heroCards = new List<HeroCard>();
+
                     heroCards.Add(heroCard);
                     heroCardListMap.Add(heroCard.CampIndex, heroCards);
                 }
@@ -36,6 +40,18 @@ namespace ET
             Game.EventSystem.Publish(new EventType.CreateHeroCardView() { HeroCardListMap = heroCardListMap });
         }
 
+        public static void AddHeroCardSkillByList(this HeroCardComponent self, HeroCard heroCard, List<SkillInfo> skillInfos)
+        {
+            foreach (var skillInfo in skillInfos)
+            {
+                if (skillInfo.OwnerId.Equals(heroCard.Id))
+                {
+                    Log.Debug($"add skill id {skillInfo.SkillId}");
+                    Skill skill = heroCard.AddChildWithId<Skill, int>(skillInfo.SkillId, skillInfo.SkillConfigId);
+                    skill.SetMessageInfo(skillInfo);
+                }
+            }
+        }
 
         public static async ETTask PlayHeroCardAttackAnimAsync(this HeroCardComponent self, AttackAction action)
         {
@@ -45,8 +61,15 @@ namespace ET
             attackHeroCard.CurrentSkillId = action.AttackHeroCardInfo.CastSkillId;
             HeroCard beAttackHeroCard = self.GetChild<HeroCard>(action.BeAttackHeroCardInfo[0].HeroId);
             // beAttackHeroCard.SetMessageInfo(action.BeAttackHeroCardInfo[0]);
+            beAttackHeroCard.HP = action.BeAttackHeroCardInfo[0].HP;
+            
+            Log.Debug($"be attack hero card hp {beAttackHeroCard.HP}");
+            // beAttackHeroCard.GetComponent<Herocardb>()
 
-            await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim(){AttackHeroCard = attackHeroCard, BeAttackHeroCard = beAttackHeroCard});
+            await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim()
+            {
+                AttackHeroCard = attackHeroCard, BeAttackHeroCard = beAttackHeroCard
+            });
             await ETTask.CompletedTask;
         }
 

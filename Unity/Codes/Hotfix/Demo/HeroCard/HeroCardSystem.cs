@@ -110,10 +110,21 @@ namespace ET
         // {
         // }
 
+        public static void InitHeroSkillWithConfig(this HeroCard self)
+        {
+            HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
+            string[] skillStrList = heroConfig.SkillIdList.Split(',').ToArray();
+            foreach (var str in skillStrList)
+            {
+                Skill skill = self.AddChild<Skill, int>(int.Parse(str));
+                skill.OwnerId = self.Id;
+            }
+        }
+
         public static async ETTask InitHeroWithDBData(this HeroCard self, HeroCard dbHeroCard)
         {
             // self = dbHeroCard;
-            Log.Warning($"self in troop index {self.InTroopIndex}");
+            Log.Debug($"self in troop index {self.InTroopIndex}");
             self.SetMessageInfo(dbHeroCard.GetMessageInfo());
             //todo  init skill info 初始化 技能信息
 #if SERVER
@@ -172,6 +183,8 @@ namespace ET
 
         public static bool CheckAngryIsFull(this HeroCard self)
         {
+            // Log.Debug($"self angry {self.Angry}");
+            // Log.Debug($"total angry {HeroConfigCategory.Instance.Get(self.ConfigId).TotalAngry}");
             return self.Angry >= HeroConfigCategory.Instance.Get(self.ConfigId).TotalAngry;
         }
 
@@ -189,6 +202,12 @@ namespace ET
                 self.HP = 0;
             }
         }
+
+        // public static async ETTask UpdateHPView(this HeroCard self)
+        // {
+        //     await ETTask.CompletedTask;
+        //
+        // }
 
         // public static HeroCardInfo
         //todo 处理当前应该使用哪个技能 并返回技能id
@@ -221,13 +240,13 @@ namespace ET
                 }
             }
 
-            foreach (var skill in skills)
-            {
-                Log.Warning(skill.Id.ToString());
-                Log.Warning(skill.SkillType.ToString());
-            }
-
-            Log.Warning("not find skill");
+            // foreach (var skill in skills)
+            // {
+            //     Log.Warning(skill.Id.ToString());
+            //     Log.Warning(skill.SkillType.ToString());
+            // }
+            //
+            // Log.Warning("not find skill");
             return 0;
         }
     }

@@ -1120,6 +1120,9 @@ namespace ET
 		[ProtoMember(5)]
 		public string SkillAnimName { get; set; }
 
+		[ProtoMember(6)]
+		public long OwnerId { get; set; }
+
 	}
 
 	[Message(OuterOpcode.HeroCardInfo)]
