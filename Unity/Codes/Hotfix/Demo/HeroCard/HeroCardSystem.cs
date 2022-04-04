@@ -1,24 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Net.NetworkInformation;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ET
 {
-    public class HeroCardAwakeSystem: AwakeSystem<HeroCard>
+    public class HeroCardAwakeSystem: AwakeSystem<HeroCard, int>
     {
-        public override void Awake(HeroCard self)
+        public override void Awake(HeroCard self, int configId)
         {
-            for (int i = 0; i < 2; i++)
-            {
-                Skill skill = self.AddChild<Skill>();
-                if (i == 0)
-                {
-                    skill.SkillType = SkillType.BigSkill;
-                }
-                else
-                {
-                    skill.SkillType = SkillType.NormalSkill;
-                }
-            }
+            self.InitWithConfig(HeroConfigCategory.Instance.Get(configId));
         }
     }
 
@@ -31,6 +21,33 @@ namespace ET
 
     public static class HeroCardSystem
     {
+        public static async ETTask Call(this HeroCard self, int zone, long ownerId)
+        {
+            self.OwnerId = ownerId;
+            //todo 先创建继承数据
+            await self.CallSkill(zone);
+#if SERVER
+            await DBManagerComponent.Instance.GetZoneDB(zone).Save(self);
+#endif
+            Log.Debug("hero call complete");
+        }
+
+        public static async ETTask CallSkill(this HeroCard self, int zone)
+        {
+            HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
+            List<string> skillStr = heroConfig.SkillIdList.Split(',').ToList();
+            List<ETTask> tasks = new List<ETTask>();
+            foreach (var skillId in skillStr)
+            {
+                Skill skill = self.AddChild<Skill, int>(int.Parse(skillId));
+                tasks.Add(skill.Call(zone, self.Id));
+            }
+
+            await ETTaskHelper.WaitAll(tasks);
+            Log.Debug("all skill call complete");
+            await ETTask.CompletedTask;
+        }
+
         public static HeroCardInfo GetMessageInfo(this HeroCard self)
         {
             HeroCardInfo heroCardInfo = new HeroCardInfo()
@@ -43,7 +60,7 @@ namespace ET
                 InTroopIndex = self.InTroopIndex,
                 CampIndex = self.CampIndex,
                 HeroColor = self.HeroColor,
-                CasrSkillId = self.CurrentSkillId,
+                CastSkillId = self.CurrentSkillId,
                 HP = self.HP
             };
 
@@ -60,22 +77,55 @@ namespace ET
             self.TroopId = message.TroopId;
             self.CampIndex = message.CampIndex;
             self.HeroColor = message.HeroColor;
-            self.CurrentSkillId = message.CasrSkillId;
-
-            self.HP = HeroConfigCategory.Instance.Get(self.ConfigId).HeroHP;
+            self.CurrentSkillId = message.CastSkillId;
+            self.HP = message.HP;
+            Log.Debug($"in troop index {self.InTroopIndex}");
+            // self.Attack = message.
+            // self.HP = HeroConfigCategory.Instance.Get(self.ConfigId).HeroHP;
+            // self.InitSkill();
+            // foreach (var skillInfo in message.SkillInfos)
+            // {
+            //     self.GetChild<Skill>(skillInfo.SkillId);
+            // }
         }
 
-        public static void InitWithConfig(this HeroCard self, HeroConfig heroConfig, long id)
+        public static void InitWithConfig(this HeroCard self, HeroConfig heroConfig)
         {
-            self.Id = id;
             self.Attack = heroConfig.Attack;
             self.Defence = heroConfig.Defence;
             self.HP = heroConfig.HeroHP;
             self.HeroName = heroConfig.HeroName;
             self.ConfigId = heroConfig.Id;
             self.HeroColor = heroConfig.HeroColor;
-
             // self.Id = heroConfig.Id;
+            // self.InitSkill();
+            // self.InitSkillWithConfig();
+        }
+
+        // public static void InitSkillWithConfig(this HeroCard self)
+        // {
+        // }
+
+        // public static void InitSkillWithDBData(this HeroCard self, HeroCard heroCard)
+        // {
+        // }
+
+        public static async ETTask InitHeroWithDBData(this HeroCard self, HeroCard dbHeroCard)
+        {
+            // self = dbHeroCard;
+            Log.Warning($"self in troop index {self.InTroopIndex}");
+            self.SetMessageInfo(dbHeroCard.GetMessageInfo());
+            //todo  init skill info 初始化 技能信息
+#if SERVER
+            List<Skill> skills = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone()).Query<Skill>(a => a.OwnerId.Equals(self.Id));
+            foreach (var skill in skills)
+            {
+                Skill sk = self.AddChildWithId<Skill, int>(skill.Id, skill.ConfigId);
+                sk.InitSkillWithDBData(skill);
+            }
+#endif
+
+            await ETTask.CompletedTask;
         }
 
         //todo 增加攻击值
@@ -85,9 +135,6 @@ namespace ET
             HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
             var value = float.Parse(heroConfig.AttackRate) * baseValue;
             self.Attack += value;
-            // #if !SERVER
-            //             Game.EventSystem.Publish(new EventType.UpdateAttackView() { HeroCard = self });
-            // #endif
             return value;
         }
 
@@ -102,9 +149,6 @@ namespace ET
                 self.Angry = heroConfig.TotalAngry;
             }
 
-            // #if !SERVER
-            //             Game.EventSystem.Publish(new EventType.UpdateAngryView() { HeroCard = self });
-            // #endif
             return value;
         }
 
@@ -154,6 +198,7 @@ namespace ET
 
             if (skills == null)
             {
+                Log.Warning("not skills ");
                 return 0;
             }
 
@@ -161,7 +206,7 @@ namespace ET
             {
                 if (self.CheckAngryIsFull())
                 {
-                    if (skill.SkillType == SkillType.BigSkill)
+                    if (skill.SkillType == (int) SkillType.BigSkill)
                     {
                         return skill.Id;
                     }
@@ -170,12 +215,19 @@ namespace ET
 
             foreach (var skill in skills)
             {
-                if (skill.SkillType == SkillType.NormalSkill)
+                if (skill.SkillType == (int) SkillType.NormalSkill)
                 {
                     return skill.Id;
                 }
             }
 
+            foreach (var skill in skills)
+            {
+                Log.Warning(skill.Id.ToString());
+                Log.Warning(skill.SkillType.ToString());
+            }
+
+            Log.Warning("not find skill");
             return 0;
         }
     }

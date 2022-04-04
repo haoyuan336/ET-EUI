@@ -89,6 +89,8 @@ namespace ET
 		public string AttackRate { get; set; }
 		[ProtoMember(10)]
 		public int TotalAngry { get; set; }
+		[ProtoMember(11)]
+		public string SkillIdList { get; set; }
 
 	}
 }

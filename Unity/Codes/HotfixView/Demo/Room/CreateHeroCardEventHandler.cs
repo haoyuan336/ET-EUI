@@ -30,8 +30,9 @@ namespace ET
                         6.5f * (key == 0? -1 : 1));
                     go.GetComponent<HeroCardViewCtl>().InitInfo(heroCard.ConfigId, heroCard.CampIndex);
                     go.GetComponent<HeroCardViewCtl>().UpdateHPView(heroCard.HP);
-                    go.GetComponent<HeroCardViewCtl>().UpdateAttackView(heroCard.Attack);
-                    go.GetComponent<HeroCardViewCtl>().UpdateAngryView(heroCard.Angry);
+                    go.GetComponent<HeroCardViewCtl>().UpdateAttackView(heroCard.Attack.ToString());
+                    HeroConfig heroConfig = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
+                    go.GetComponent<HeroCardViewCtl>().UpdateAngryView($"{heroCard.Angry}/{heroConfig.TotalAngry}");
                   
                 }
             }

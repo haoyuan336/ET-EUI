@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ET
 {
-    public class HeroCard: Entity, IAwake, IUpdate, IDestroy
+    public class HeroCard: Entity, IAwake<int>, IUpdate, IDestroy
     {
         public String HeroName; //英雄名称 支持可编辑
         public long OwnerId; //拥有者的id  也就是玩家id
@@ -25,6 +25,8 @@ namespace ET
 
         // public Skill BigSkill; //必杀技
         // public Skill NormalSkill; //普通技能
+        // public List<long> SkillIdList = new List<long>();
+
 
         public long CurrentSkillId; //当前需要释放的技能
     }

@@ -8,7 +8,7 @@ namespace ET
         {
             HeroCard heroCard = a.HeroCard;
             GameObject go = heroCard.GetComponent<GameObjectComponent>().GameObject;
-            go.GetComponent<HeroCardViewCtl>().UpdateAngryView(heroCard.Angry);
+            go.GetComponent<HeroCardViewCtl>().UpdateAngryView(heroCard.Angry.ToString());
             await ETTask.CompletedTask;
             
         }

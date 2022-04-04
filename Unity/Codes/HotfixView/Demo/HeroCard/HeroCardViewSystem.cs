@@ -15,13 +15,12 @@ namespace ET
     {
         public static async ETTask PlayAddAttackEffect(this HeroCardView self, EventType.PlayAddAttackAngryViewAnim message)
         {
-           
             if (message.AddAttack > 0)
             {
                 Diamond diamond = message.Diamond;
                 HeroCardViewCtl heroCardViewCtl = self.Parent.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>();
                 await self.PlayAddEffectAnim(diamond, "DiamondAddAttackTrailEffect");
-                heroCardViewCtl.UpdateAttackView(message.EndAttack);
+                heroCardViewCtl.UpdateAttackView(message.EndAttack.ToString());
             }
 
             await ETTask.CompletedTask;
@@ -29,7 +28,6 @@ namespace ET
 
         public static async ETTask PlayAddAngryEffect(this HeroCardView self, EventType.PlayAddAttackAngryViewAnim message)
         {
-           
             if (message.AddAngry > 0)
             {
                 Log.Debug($"end angry {message.EndAngry}");
@@ -37,7 +35,8 @@ namespace ET
                 Diamond diamond = message.Diamond;
                 HeroCardViewCtl heroCardViewCtl = self.Parent.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>();
                 await self.PlayAddEffectAnim(diamond, "DiamondAddAngryTrailEffect");
-                heroCardViewCtl.UpdateAngryView(message.EndAngry);
+                float TotalAngry = HeroConfigCategory.Instance.Get(message.HeroCard.ConfigId).TotalAngry;
+                heroCardViewCtl.UpdateAngryView($"{message.EndAngry.ToString()}/{TotalAngry}");
             }
         }
 
@@ -61,12 +60,19 @@ namespace ET
 
         public static async ETTask PlayAttackAnimLogic(this HeroCardView self, EventType.PlayHeroCardAttackAnim message)
         {
+            Log.Debug("play attack logic");
             HeroCard beAttackHeroCard = message.BeAttackHeroCard;
             GameObject targetGo = beAttackHeroCard.GetComponent<GameObjectComponent>().GameObject;
             await self.PlayChangeModeAnim();
             await self.PlayMoveToAnim(targetGo.transform.position);
             await self.PlayAttackAnim(message);
+            await beAttackHeroCard.GetComponent<HeroCardView>().ProcessBeAttackAnimLogic();
             await self.PlayMoveToAnim(self.Parent.GetComponent<GameObjectComponent>().GameObject.transform.position);
+            await ETTask.CompletedTask;
+        }
+
+        public static async ETTask ProcessBeAttackAnimLogic(this HeroCardView self)
+        {
             await ETTask.CompletedTask;
         }
 
@@ -94,10 +100,25 @@ namespace ET
         public static async ETTask PlayAttackAnim(this HeroCardView self, EventType.PlayHeroCardAttackAnim message)
         {
             HeroCard heroCard = message.AttackHeroCard;
-            SkillType skillType = heroCard.CurrentCastSkill.SkillType;
+            long skillId = heroCard.CurrentSkillId;
+            Log.Debug($"Skill id {skillId}");
+            Skill skill = heroCard.GetChild<Skill>(skillId);
             GameObject selfGo = self.Parent.GetComponent<GameObjectComponent>().GameObject;
             GameObject heroMode = selfGo.GetComponent<HeroCardViewCtl>().GetHeroMode();
-            heroMode.GetComponent<Animator>().SetTrigger("Attack");
+            string skillAnimStr = "";
+            switch (skill.SkillType)
+            {
+                case (int)SkillType.BigSkill:
+                    skillAnimStr = "Attack";
+                    break;
+                case (int)SkillType.NormalSkill:
+                    skillAnimStr = "Skill";
+                    break;
+            }
+
+            Log.Debug("skill anim str = " + skillAnimStr);
+
+            heroMode.GetComponent<Animator>().SetTrigger(skillAnimStr);
             await TimerComponent.Instance.WaitAsync(1000);
         }
     }

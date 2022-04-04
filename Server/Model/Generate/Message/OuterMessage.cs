@@ -1100,6 +1100,28 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.SkillInfo)]
+	[ProtoContract]
+	public partial class SkillInfo: Object
+	{
+//技能类型
+		[ProtoMember(1)]
+		public long SkillId { get; set; }
+
+		[ProtoMember(2)]
+		public string SkillName { get; set; }
+
+		[ProtoMember(3)]
+		public int SkillType { get; set; }
+
+		[ProtoMember(4)]
+		public int SkillConfigId { get; set; }
+
+		[ProtoMember(5)]
+		public string SkillAnimName { get; set; }
+
+	}
+
 	[Message(OuterOpcode.HeroCardInfo)]
 	[ProtoContract]
 	public partial class HeroCardInfo: Object
@@ -1129,11 +1151,15 @@ namespace ET
 		public int HeroColor { get; set; }
 
 		[ProtoMember(9)]
-		public long CasrSkillId { get; set; }
+		public long CastSkillId { get; set; }
 
 		[ProtoMember(10)]
 		public float HP { get; set; }
 
+		[ProtoMember(11)]
+		public List<SkillInfo> SkillInfos = new List<SkillInfo>();
+
+// repeated long SkillIdList = 11;	//技能id
 	}
 
 	[ResponseType(nameof(M2C_GetAllHeroCardListResponse))]
@@ -1385,7 +1411,10 @@ namespace ET
 	public partial class M2C_CreateHeroCardInRoom: Object, IActorMessage
 	{
 		[ProtoMember(1)]
-		public List<HeroCardInfo> HeroCardInfo = new List<HeroCardInfo>();
+		public List<HeroCardInfo> HeroCardInfos = new List<HeroCardInfo>();
+
+		[ProtoMember(2)]
+		public List<SkillInfo> SkillInfos = new List<SkillInfo>();
 
 	}
 

@@ -1,7 +1,13 @@
-﻿namespace ET
+﻿using System;
+
+namespace ET
 {
-    public class Skill: Entity,IAwake
+    public class Skill: Entity, IAwake<int>
     {
-        public SkillType SkillType;
+        public int SkillType;
+        public string SkillName;
+        public string SkillAnimName;
+        public long OwnerId;
+        public int ConfigId;
     }
 }

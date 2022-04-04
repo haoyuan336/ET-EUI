@@ -45,12 +45,12 @@ public class HeroCardViewCtl: MonoBehaviour
     private float CurrentTime;
     private float TotalTime;
 
-    public void UpdateAttackView(float value)
+    public void UpdateAttackView(string value)
     {
         this.AttackTextMesh.text = $"A:{value.ToString()}";
     }
 
-    public void UpdateAngryView(float value)
+    public void UpdateAngryView(string value)
     {
         Log.Debug($"Update angry view {value}");
         this.AngryTextMesh.text = $"N:{value.ToString()}";

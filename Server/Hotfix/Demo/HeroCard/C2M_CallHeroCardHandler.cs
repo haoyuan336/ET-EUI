@@ -14,19 +14,12 @@ namespace ET
             var keys = HeroConfigCategory.Instance.GetAll().Keys.ToArray();
             Log.Debug($"keys = {keys.Length}");
             int randomIndex = RandomHelper.RandomNumber(0, keys.Length);
-            var key = keys[randomIndex];
-            HeroConfig heroConfig = HeroConfigCategory.Instance.Get(key);
-
-            HeroCard heroCard = new HeroCard();
-            heroCard.Id = IdGenerater.Instance.GenerateId();
-            heroCard.ConfigId = key;
+            int key = keys[randomIndex];
+            HeroCard heroCard = unit.AddChild<HeroCard, int>(key);
+            await heroCard.Call(unit.DomainZone(), request.Account);
             heroCard.OwnerId = request.Account;
-            heroCard.InitWithConfig(heroConfig, heroCard.Id);
-            
             response.HeroCardInfo = heroCard.GetMessageInfo();
-            
-            await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(heroCard);
-            
+
             reply();
             await ETTask.CompletedTask;
         }

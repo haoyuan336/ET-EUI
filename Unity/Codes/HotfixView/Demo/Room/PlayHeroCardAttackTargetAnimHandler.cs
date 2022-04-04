@@ -1,6 +1,4 @@
 ﻿using ET.EventType;
-using UnityEngine;
-
 namespace ET
 {
     public class PlayHeroCardAttackTargetAnimHandler: AEvent<EventType.PlayHeroCardAttackAnim>
@@ -8,6 +6,7 @@ namespace ET
         protected override async ETTask Run(PlayHeroCardAttackAnim a)
         {
 
+            Log.Debug("PlayHeroCardAttackTargetAnimHandler");
             HeroCard heroCard = a.AttackHeroCard;
             await heroCard.GetComponent<HeroCardView>().PlayAttackAnimLogic(a);
             await ETTask.CompletedTask;

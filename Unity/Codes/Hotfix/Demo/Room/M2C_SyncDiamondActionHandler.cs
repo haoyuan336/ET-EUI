@@ -56,11 +56,12 @@ namespace ET
 
             foreach (var attackActionItem in attackActionItems)
             {
+                
                 List<ETTask> task = new List<ETTask>();
                 foreach (var attackAction in attackActionItem.AttackActions)
                 {
-                    task.Add(session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync(attackAction));
                     Log.Debug("play attack action");
+                    task.Add(session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync(attackAction));
                 }
             }
 

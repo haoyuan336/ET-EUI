@@ -10,12 +10,12 @@ namespace ET
     {
         public static void InitHeroCard(this HeroCardComponent self, M2C_CreateHeroCardInRoom message)
         {
-            List<HeroCardInfo> heroCardInfos = message.HeroCardInfo;
+            List<HeroCardInfo> heroCardInfos = message.HeroCardInfos;
             Dictionary<int, List<HeroCard>> heroCardListMap = new Dictionary<int, List<HeroCard>>();
 
             foreach (var heroCardInfo in heroCardInfos)
             {
-                HeroCard heroCard = self.AddChildWithId<HeroCard>(heroCardInfo.HeroId);
+                HeroCard heroCard = self.AddChildWithId<HeroCard, int>(heroCardInfo.HeroId, heroCardInfo.ConfigId);
                 heroCard.SetMessageInfo(heroCardInfo);
                 if (!heroCardListMap.ContainsKey(heroCard.CampIndex))
                 {
@@ -39,12 +39,12 @@ namespace ET
 
         public static async ETTask PlayHeroCardAttackAnimAsync(this HeroCardComponent self, AttackAction action)
         {
+            Log.Debug("PlayHeroCardAttackAnimAsync");
             HeroCard attackHeroCard = self.GetChild<HeroCard>(action.AttackHeroCardInfo.HeroId);
-
-            attackHeroCard.SetMessageInfo(action.AttackHeroCardInfo);
-            // attackHeroCard.CurrentCastSkill = 
+            // attackHeroCard.SetMessageInfo(action.AttackHeroCardInfo);
+            attackHeroCard.CurrentSkillId = action.AttackHeroCardInfo.CastSkillId;
             HeroCard beAttackHeroCard = self.GetChild<HeroCard>(action.BeAttackHeroCardInfo[0].HeroId);
-
+            // beAttackHeroCard.SetMessageInfo(action.BeAttackHeroCardInfo[0]);
 
             await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim(){AttackHeroCard = attackHeroCard, BeAttackHeroCard = beAttackHeroCard});
             await ETTask.CompletedTask;
