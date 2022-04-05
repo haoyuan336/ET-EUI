@@ -524,8 +524,10 @@ message HeroCardInfo
 	int32 CampIndex = 7;//阵营index
 	int32 HeroColor = 8;			//颜色属性	
 	int64 CastSkillId = 9;	//技能类型
-	float HP = 10;			//血量
-	repeated SkillInfo SkillInfos = 11; //技能列表
+	float CurrentAttack = 10;	//当前的攻击力
+	float HP = 11;			//血量
+	repeated SkillInfo SkillInfos = 12; //技能列表
+
 	// repeated long SkillIdList = 11;	//技能id
 }
 
@@ -638,4 +640,21 @@ message M2C_CreateHeroCardInRoom //IActorMessage
 {
 	repeated HeroCardInfo HeroCardInfos = 1;
 	repeated SkillInfo SkillInfos = 2;
+}
+//ResponseType M2C_PlayerReadyTurnResponse
+message C2M_PlayerReadyTurnRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int64 RoomId = 2;	//房间iD
+}
+message M2C_PlayerReadyTurnResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+message M2C_SyncHeroCardTurnData	//IActorMessage
+{
+	repeated HeroCardInfo HeroCardInfos = 1;
 }

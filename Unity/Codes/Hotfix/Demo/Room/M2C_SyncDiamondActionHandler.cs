@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using ET.Account;
 
 namespace ET
 {
@@ -43,6 +44,7 @@ namespace ET
                                     EndAttack = diamondInfo.HeroCardEndAttack
                                 });
                             }
+
                             break;
                         case (int) DiamondActionType.Create:
                             Diamond newDiamond = diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo);
@@ -56,18 +58,26 @@ namespace ET
 
             foreach (var attackActionItem in attackActionItems)
             {
-                
-                List<ETTask> task = new List<ETTask>();
+                List<ETTask> tasks = new List<ETTask>();
                 foreach (var attackAction in attackActionItem.AttackActions)
                 {
                     Log.Debug("play attack action");
-                    task.Add(session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync(attackAction));
+                    tasks.Add(session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync(attackAction));
                 }
+
+                await ETTaskHelper.WaitAll(tasks);
             }
 
-            // await session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync();
-
-            // Game.EventSystem.Publish(new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene() });
+            Log.Debug("一回合结束了");
+            //todo 给服务器发送ready消息
+            long AccountId = session.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            long RoomId = session.ZoneScene().GetComponent<PlayerComponent>().RoomId;
+            M2C_PlayerReadyTurnResponse m2CPlayerReadyTurnResponse =
+                    (M2C_PlayerReadyTurnResponse) await session.Call(new C2M_PlayerReadyTurnRequest() { AccountId = AccountId, RoomId = RoomId });
+            if (m2CPlayerReadyTurnResponse.Error == ErrorCode.ERR_Success)
+            {
+                await Game.EventSystem.PublishAsync(new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene() });
+            }
 
             await ETTask.CompletedTask;
         }

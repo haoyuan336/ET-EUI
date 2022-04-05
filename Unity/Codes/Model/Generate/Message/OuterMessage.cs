@@ -1157,9 +1157,12 @@ namespace ET
 		public long CastSkillId { get; set; }
 
 		[ProtoMember(10)]
-		public float HP { get; set; }
+		public float CurrentAttack { get; set; }
 
 		[ProtoMember(11)]
+		public float HP { get; set; }
+
+		[ProtoMember(12)]
 		public List<SkillInfo> SkillInfos = new List<SkillInfo>();
 
 // repeated long SkillIdList = 11;	//技能id
@@ -1418,6 +1421,46 @@ namespace ET
 
 		[ProtoMember(2)]
 		public List<SkillInfo> SkillInfos = new List<SkillInfo>();
+
+	}
+
+	[ResponseType(nameof(M2C_PlayerReadyTurnResponse))]
+	[Message(OuterOpcode.C2M_PlayerReadyTurnRequest)]
+	[ProtoContract]
+	public partial class C2M_PlayerReadyTurnRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public long RoomId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_PlayerReadyTurnResponse)]
+	[ProtoContract]
+	public partial class M2C_PlayerReadyTurnResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_SyncHeroCardTurnData)]
+	[ProtoContract]
+	public partial class M2C_SyncHeroCardTurnData: Object, IActorMessage
+	{
+		[ProtoMember(1)]
+		public List<HeroCardInfo> HeroCardInfos = new List<HeroCardInfo>();
 
 	}
 

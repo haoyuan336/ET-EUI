@@ -23,7 +23,7 @@ namespace ET
         public static async void PlayerGameReady(this PVERoom self, Unit unit, long AccountId)
         {
             Log.Debug($"current choose troop id {unit.CurrentTroopId}");
-            //取出当前玩家 玩到的关卡数
+            //todo 取出当前玩家 玩到的关卡数
             int levelNum = await self.GetCurrentPlayerLevelNum(unit, AccountId);
             self.LevelConfig = LevelConfigCategory.Instance.Get(levelNum);
             self.Units.Add(unit);
@@ -33,6 +33,44 @@ namespace ET
             self.InitAIUnitHeroCard();
             self.InitPlayerHeroCards(unit.CurrentTroopId).Coroutine();
             self.InitGameMap(levelNum);
+        }
+
+        public static async ETTask PlayerReadyTurn(this PVERoom self)
+        {
+            self.CurrentAttackHeroCard = null;
+            Log.Debug("准备好回合了");
+            //做一些 英雄卡牌初始化的操作
+            foreach (var unit in self.Units)
+            {
+                foreach (var heroCard in unit.HeroCards)
+                {
+                    //todo 做一些初始化的操作
+                    heroCard.InitTurnGame(); //todo 初始化回合
+                }
+            }
+
+            Log.Debug("初始化回合游戏卡牌");
+            List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>(); 
+            foreach (var unit in self.Units)
+            {
+                foreach (var heroCard  in unit.HeroCards)
+                {
+                    heroCardInfos.Add(heroCard.GetMessageInfo());
+                }
+            }
+            Log.Debug("组装数据");
+
+            foreach (var unit in self.Units)
+            {
+                if (unit.IsAI)
+                {
+                    continue;
+                }
+                Log.Debug("发送数据");
+                MessageHelper.SendToClient(unit,new M2C_SyncHeroCardTurnData(){HeroCardInfos = heroCardInfos});
+            }
+
+            await ETTask.CompletedTask;
         }
 
         public static void InitAIUnitHeroCard(this PVERoom self)
@@ -266,35 +304,59 @@ namespace ET
             }
         }
 
-        public static void ProcessReBackAttackLogic(this PVERoom self , M2C_SyncDiamondAction m2CSyncDiamondAction)
+        public static void ProcessReBackAttackLogic(this PVERoom self, M2C_SyncDiamondAction m2CSyncDiamondAction)
         {
             //todo 处理反击逻辑
-            self.GetBeAttackUnit(self.Units[self.CurrentTurnIndex]);
-            
+            Unit attackUnit = self.GetBeAttackUnit(self.Units[self.CurrentTurnIndex]); //todo 首先找到发起攻击的玩家
+            Unit beAttacUnit = self.GetBeAttackUnit(attackUnit);
+            HeroCard attackHero = self.GetTurnAttackHero(attackUnit); //todo 找到发起攻击的英雄
+            HeroCard beAttackHero = self.GetBeAttackHeroCard(attackHero, beAttacUnit); //todo 找到被攻击的英雄
+            if (beAttackHero == null)
+            {
+                Log.Debug("未找到被攻击英雄");
+            }
+            else
+            {
+                Log.Debug($"找到被攻击英雄{attackHero.InTroopIndex},{beAttackHero.InTroopIndex}");
+            }
 
+            AttackActionItem attackActionItem = new AttackActionItem(); //todo 创建攻击actionitem
+            AttackAction attackAction = new AttackAction(); //todo 创建攻击action
+            attackHero.CurrentSkillId = attackHero.ProcessCurrentSkill(); //todo 被攻击对象被攻击
+            beAttackHero.BeAttack(attackHero); //todo 组装消息体
+            attackAction.AttackHeroCardInfo = attackHero.GetMessageInfo();
+            attackAction.BeAttackHeroCardInfo.Add(beAttackHero.GetMessageInfo());
+            attackActionItem.AttackActions.Add(attackAction);
+            m2CSyncDiamondAction.AttackActionItems.Add(attackActionItem);
         }
 
-        public static void GetTurnAttackHero(this PVERoom self, Unit unit)
+        public static HeroCard GetTurnAttackHero(this PVERoom self, Unit unit)
         {
             //todo 获得当前轮流攻击的英雄
             int currentIndex = unit.CurrentTurnAttackHeroSeatIndex;
-            if (currentIndex >= unit.HeroCards.Count)
+            int index = 0;
+            while (index < 10)
             {
-                currentIndex = 0;
+                foreach (var card in unit.HeroCards)
+                {
+                    if (card.InTroopIndex.Equals(currentIndex) && !card.GetIsDead())
+                    {
+                        unit.CurrentTurnAttackHeroSeatIndex = currentIndex + 1;
+                        return card;
+                    }
+                }
+
+                currentIndex++;
+                if (currentIndex >= unit.HeroCards.Count)
+                {
+                    currentIndex = 0;
+                }
+
+                index++;
             }
 
-            HeroCard heroCard = null;
-            int index = 0;
-            while (heroCard == null && index < 10)
-            {
-                if ()
-                {
-                    
-                }
-            }
-            
+            return null;
         }
-        
 
         public static void ProcessAttackLogic(this PVERoom self, M2C_SyncDiamondAction m2CSyncDiamondAction)
         {
@@ -329,7 +391,7 @@ namespace ET
             int index = unit.SeatIndex;
             Unit targetUnit = null;
             //todo 防止陷入似循环
-            while (targetUnit == null && whileCount < 20)
+            while (targetUnit == null && whileCount < 10)
             {
                 index++;
                 if (index >= self.Units.Count)
@@ -353,24 +415,27 @@ namespace ET
             //todo 找到需要攻击的玩家之后，开始寻找被攻击的牌
             //todo 找到与自己位置一致的牌
             var index = heroCard.InTroopIndex;
-            HeroCard targetHeroCard = null;
             int whileCount = 0;
-            while (targetHeroCard == null && whileCount < 20)
+            while (whileCount < 10)
             {
                 if (index >= unit.HeroCards.Count)
                 {
                     index = 0;
                 }
 
-                if (!unit.HeroCards[index].GetIsDead())
+                foreach (var card in unit.HeroCards)
                 {
-                    targetHeroCard = unit.HeroCards[index];
+                    if (card.InTroopIndex.Equals(index) && !card.GetIsDead())
+                    {
+                        return card;
+                    }
                 }
 
+                index++;
                 whileCount++;
             }
 
-            return targetHeroCard;
+            return null;
         }
 
         public static Unit GetCurrentAttackUnit(this PVERoom self)

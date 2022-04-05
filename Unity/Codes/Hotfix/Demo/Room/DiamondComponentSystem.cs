@@ -50,7 +50,7 @@ namespace ET
 
             int[] keys = DiamondTypeConfigCategory.Instance.GetAll().Keys.ToArray();
             //todo test
-            keys = new[] { 1, 2, 3 };
+            keys = new[] { 1, 2, 3, 4, 5, 6 };
             var randomIndex = RandomHelper.RandomNumber(0, keys.Length);
             int configIndex = keys[randomIndex];
             diamond.DiamondType = configIndex;
@@ -75,7 +75,7 @@ namespace ET
             {
                 return null;
             }
-            
+
             return self.Diamonds[LieIndex, HangIndex];
         }
 

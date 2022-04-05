@@ -61,6 +61,7 @@ namespace ET
                 CampIndex = self.CampIndex,
                 HeroColor = self.HeroColor,
                 CastSkillId = self.CurrentSkillId,
+                CurrentAttack = self.Attack,
                 HP = self.HP
             };
 
@@ -208,6 +209,11 @@ namespace ET
         //     await ETTask.CompletedTask;
         //
         // }
+        public static void InitTurnGame(this HeroCard self)
+        {
+            self.Attack = 0;
+            
+        }
 
         // public static HeroCardInfo
         //todo 处理当前应该使用哪个技能 并返回技能id

@@ -90,5 +90,8 @@ namespace ET
 		 public const ushort M2C_StartPVEGameResponse = 10087;
 		 public const ushort C2M_GameReadyMessage = 10088;
 		 public const ushort M2C_CreateHeroCardInRoom = 10089;
+		 public const ushort C2M_PlayerReadyTurnRequest = 10090;
+		 public const ushort M2C_PlayerReadyTurnResponse = 10091;
+		 public const ushort M2C_SyncHeroCardTurnData = 10092;
 	}
 }

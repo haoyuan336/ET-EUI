@@ -73,42 +73,6 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
-        public static HeroCard GetAttackTargetByTroopIndex(this HeroCardComponent self, int inTroopIndex, List<HeroCard> heroCards)
-        {
-            bool isAllDead = true;
-            foreach (var heroCard in heroCards)
-            {
-                if (heroCard.IsDead != 1)
-                {
-                    isAllDead = false;
-                    break;
-                }
-            }
-
-            if (isAllDead)
-            {
-                return null;
-            }
-
-            while (true)
-            {
-                if (inTroopIndex < heroCards.Count)
-                {
-                    HeroCard heroCard = heroCards[inTroopIndex];
-                    if (heroCard.IsDead == 0)
-                    {
-                        return heroCard;
-                    }
-
-                    inTroopIndex++;
-                }
-                else
-                {
-                    inTroopIndex = 0;
-                }
-            }
-        }
-
         public static List<HeroCard> GetHeroCardsByCampIndex(this HeroCardComponent self, int campIndex)
         {
             List<HeroCard> heroCards = new List<HeroCard>();
@@ -120,6 +84,7 @@ namespace ET
                 }
             }
 
+            // C2M_GameReadyMessage
             //根据座位 号进行排序
             heroCards.Sort((a, b) => a.InTroopIndex - b.InTroopIndex);
             foreach (var heroCard in heroCards)
@@ -128,6 +93,16 @@ namespace ET
             }
 
             return heroCards;
+        }
+
+        public static void SyncHeroCardTurnData(this HeroCardComponent self, M2C_SyncHeroCardTurnData m2CSyncHeroCardTurnData)
+        {
+            foreach (var heroCardInfo in m2CSyncHeroCardTurnData.HeroCardInfos)
+            {
+                var heroCard = self.GetChild<HeroCard>(heroCardInfo.HeroId);
+                heroCard.Attack = heroCardInfo.CurrentAttack;
+                Game.EventSystem.Publish(new EventType.UpdateAttackView(){HeroCard = heroCard});
+            }
         }
     }
 }
