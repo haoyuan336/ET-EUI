@@ -432,11 +432,12 @@ message DiamondInfo
 	int32 InitLieIndex = 5;
 	int32 InitHangIndex = 6;
 	int32 BoomType = 7;			
-	int64 HeroCardId = 8;
-	float HeroCardAddAttack = 9;
-	float HeroCardEndAttack = 10;
-	float HeroCardAddAngry = 11;
-	float HeroCardEndAngry = 12;
+	// int64 HeroCardId = 8;
+	// float HeroCardAddAttack = 9;
+	// float HeroCardEndAttack = 10;
+	// float HeroCardAddAngry = 11;
+	// float HeroCardEndAngry = 12;
+	HeroCardInfo HeroCardInfo = 8;
 }
 message M2C_InitMapData //IActorMessage
 {
@@ -524,10 +525,11 @@ message HeroCardInfo
 	int32 CampIndex = 7;//阵营index
 	int32 HeroColor = 8;			//颜色属性	
 	int64 CastSkillId = 9;	//技能类型
-	float CurrentAttack = 10;	//当前的攻击力
+	float Attack = 10;	//当前的攻击力
 	float HP = 11;			//血量
 	repeated SkillInfo SkillInfos = 12; //技能列表
-
+	float DiamondAttack = 13;			//宝石攻击力
+	float Angry = 14;			//怒气值
 	// repeated long SkillIdList = 11;	//技能id
 }
 

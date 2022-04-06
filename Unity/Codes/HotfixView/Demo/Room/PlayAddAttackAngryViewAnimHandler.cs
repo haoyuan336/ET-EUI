@@ -4,16 +4,24 @@ using UnityEngine;
 
 namespace ET
 {
-    public class PlayAddAttackAngryViewAnimHandler: AEvent<EventType.PlayAddAttackAngryViewAnim>
+    public class PlayAddAngryViewAnimHandler: AEvent<EventType.PlayAddAngryViewAnim>
     {
-        protected override async ETTask Run(PlayAddAttackAngryViewAnim a)
+        protected override async ETTask Run(PlayAddAngryViewAnim a)
         {
             List<ETTask> tasks = new List<ETTask>();
             HeroCard heroCard = a.HeroCard;
-            tasks.Add(heroCard.GetComponent<HeroCardView>().PlayAddAttackEffect(a));
             tasks.Add(heroCard.GetComponent<HeroCardView>().PlayAddAngryEffect(a));
             await ETTaskHelper.WaitAll(tasks);
             await ETTask.CompletedTask;
+        }
+    }
+
+    public class PlayAddAttackViewAnimHandler: AEvent<EventType.PlayAddAttackViewAnim>
+    {
+        protected async override ETTask Run(PlayAddAttackViewAnim a)
+        {
+            HeroCard heroCard = a.HeroCard;
+            await heroCard.GetComponent<HeroCardView>().PlayAddAttackEffect(a);
         }
     }
 }

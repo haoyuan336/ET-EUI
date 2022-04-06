@@ -30,19 +30,33 @@ namespace ET
                             break;
                         case (int) DiamondActionType.Destory:
                             tasks.Add(Game.EventSystem.PublishAsync(new EventType.DestoryDiamondView() { Diamond = diamond }));
-                            if (diamondInfo.HeroCardId != 0)
+                            if (diamondInfo.HeroCardInfo != null)
                             {
                                 HeroCard heroCard = session.DomainScene().GetComponent<HeroCardComponent>()
-                                        .GetChild<HeroCard>(diamondInfo.HeroCardId);
-                                Game.EventSystem.Publish(new EventType.PlayAddAttackAngryViewAnim()
+                                        .GetChild<HeroCard>(diamondInfo.HeroCardInfo.HeroId);
+                                // heroCard.Attack = diamondInfo.HeroCardInfo.Attack;
+                                // heroCard.DiamondAttack = diamondInfo.HeroCardInfo.DiamondAttack;
+                                if (diamondInfo.HeroCardInfo.DiamondAttack > heroCard.DiamondAttack)
                                 {
-                                    HeroCard = heroCard,
-                                    Diamond = diamond,
-                                    AddAttack = diamondInfo.HeroCardAddAttack,
-                                    AddAngry = diamondInfo.HeroCardAddAngry,
-                                    EndAngry = diamondInfo.HeroCardEndAngry,
-                                    EndAttack = diamondInfo.HeroCardEndAttack
-                                });
+                                    heroCard.DiamondAttack = diamondInfo.HeroCardInfo.DiamondAttack;
+                                    Game.EventSystem.Publish(new EventType.PlayAddAttackViewAnim()
+                                    {
+                                        HeroCard = heroCard,
+                                        Diamond = diamond,
+                                    });
+                                }
+
+                                if (diamondInfo.HeroCardInfo.Angry > heroCard.Angry)
+                                {
+                                    heroCard.Angry = diamondInfo.HeroCardInfo.Angry;
+                                    Game.EventSystem.Publish(new EventType.PlayAddAngryViewAnim()
+                                    {
+                                        HeroCard = heroCard,
+                                        Diamond = diamond,
+                                    });
+                                }
+                                
+                               
                             }
 
                             break;
@@ -62,6 +76,7 @@ namespace ET
                 foreach (var attackAction in attackActionItem.AttackActions)
                 {
                     Log.Debug("play attack action");
+                    
                     tasks.Add(session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync(attackAction));
                 }
 

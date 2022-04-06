@@ -202,15 +202,20 @@ namespace ET
             public HeroCard BeAttackHeroCard;
         }
 
-        public struct PlayAddAttackAngryViewAnim
+        public struct PlayAddAttackViewAnim
         {
             public HeroCard HeroCard;
             public Diamond Diamond;
-            public float AddAttack;
-            public float AddAngry;
-            public float EndAttack;
-            public float EndAngry;
-            
+            // public float AddAttack;
+            // public float AddAngry;
+            // public float EndAttack;
+            // public float EndAngry;
+        }
+
+        public struct PlayAddAngryViewAnim
+        {
+            public HeroCard HeroCard;
+            public Diamond Diamond;
         }
     }
 }

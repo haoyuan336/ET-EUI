@@ -31,6 +31,7 @@ public class HeroCardViewCtl: MonoBehaviour
     public TextMesh AttackTextMesh;
     public TextMesh AngryTextMesh;
     public TextMesh HPTextMesh;
+    public TextMesh DiamondAttackTextMesh;  //宝石攻击
 
     public SpriteRenderer HeroCardSpriteRenderer;
 
@@ -48,6 +49,12 @@ public class HeroCardViewCtl: MonoBehaviour
     public void UpdateAttackView(string value)
     {
         this.AttackTextMesh.text = $"A:{value.ToString()}";
+    }
+
+    public void UpdateDiamondAttackView(string value)
+    {
+        this.DiamondAttackTextMesh.text = $"DA:{value.ToString()}";
+        
     }
 
     public void UpdateAngryView(string value)
@@ -75,6 +82,10 @@ public class HeroCardViewCtl: MonoBehaviour
             // go.SetActive(false);
             go.transform.forward = CampIndex == 0? Vector3.forward : Vector3.back;
             this.HeroMode = go;
+        }
+        else
+        {
+            Log.Error($"not found hero mode {configId}");
         }
     }
 

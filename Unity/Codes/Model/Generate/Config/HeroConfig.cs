@@ -78,9 +78,9 @@ namespace ET
 		[ProtoMember(4)]
 		public int HeroHP { get; set; }
 		[ProtoMember(5)]
-		public int Attack { get; set; }
+		public int BaseAttack { get; set; }
 		[ProtoMember(6)]
-		public int Defence { get; set; }
+		public int BaseDefence { get; set; }
 		[ProtoMember(7)]
 		public string AngryRate { get; set; }
 		[ProtoMember(8)]

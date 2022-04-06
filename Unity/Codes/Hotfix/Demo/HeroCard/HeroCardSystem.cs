@@ -61,7 +61,9 @@ namespace ET
                 CampIndex = self.CampIndex,
                 HeroColor = self.HeroColor,
                 CastSkillId = self.CurrentSkillId,
-                CurrentAttack = self.Attack,
+                Attack = self.Attack,
+                DiamondAttack = self.DiamondAttack,
+                Angry = self.Angry,
                 HP = self.HP
             };
 
@@ -79,6 +81,9 @@ namespace ET
             self.CampIndex = message.CampIndex;
             self.HeroColor = message.HeroColor;
             self.CurrentSkillId = message.CastSkillId;
+            self.Attack = message.Attack;
+            self.DiamondAttack = message.DiamondAttack;
+            self.Angry = message.Angry;
             self.HP = message.HP;
             Log.Debug($"in troop index {self.InTroopIndex}");
             // self.Attack = message.
@@ -92,8 +97,8 @@ namespace ET
 
         public static void InitWithConfig(this HeroCard self, HeroConfig heroConfig)
         {
-            self.Attack = heroConfig.Attack;
-            self.Defence = heroConfig.Defence;
+            self.Attack = heroConfig.BaseAttack;
+            self.Defence = heroConfig.BaseDefence;
             self.HP = heroConfig.HeroHP;
             self.HeroName = heroConfig.HeroName;
             self.ConfigId = heroConfig.Id;
@@ -146,7 +151,8 @@ namespace ET
             Log.Debug($"add attack value {self.Id}");
             HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
             var value = float.Parse(heroConfig.AttackRate) * baseValue;
-            self.Attack += value;
+            // self.Attack += value;
+            self.DiamondAttack += value;
             return value;
         }
 
@@ -196,7 +202,9 @@ namespace ET
 
         public static void BeAttack(this HeroCard self, HeroCard attackHeroCard)
         {
-            float damage = attackHeroCard.Attack - self.Defence;
+            float attack = attackHeroCard.Attack + attackHeroCard.DiamondAttack;
+            float damage = attack - self.Defence;
+            self.AddAngryValue(damage);
             self.HP -= damage;
             if (self.HP < 0)
             {
@@ -211,8 +219,8 @@ namespace ET
         // }
         public static void InitTurnGame(this HeroCard self)
         {
-            self.Attack = 0;
-            
+            // self.Attack = 0;
+            self.DiamondAttack = 0;
         }
 
         // public static HeroCardInfo
@@ -233,6 +241,8 @@ namespace ET
                 {
                     if (skill.SkillType == (int) SkillType.BigSkill)
                     {
+
+                        self.Angry = 0;
                         return skill.Id;
                     }
                 }

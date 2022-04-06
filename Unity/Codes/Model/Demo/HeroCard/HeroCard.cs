@@ -15,6 +15,9 @@ namespace ET
         public float HP;
         public float Defence;
 
+        public float DiamondAttack;
+        public float DiamondDefence;
+
         public int CampIndex; //todo 阵营index
 
         public float Angry; //怒气值

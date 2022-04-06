@@ -8,7 +8,8 @@ namespace ET
         {
             HeroCard heroCard = a.HeroCard;
             GameObject go = heroCard.GetComponent<GameObjectComponent>().GameObject;
-            go.GetComponent<HeroCardViewCtl>().UpdateAttackView(heroCard.Attack.ToString());
+            go.GetComponent<HeroCardViewCtl>().UpdateAttackView((heroCard.Attack + heroCard.DiamondAttack).ToString());
+            go.GetComponent<HeroCardViewCtl>().UpdateDiamondAttackView(heroCard.DiamondAttack.ToString());
             await ETTask.CompletedTask;
         }
     }

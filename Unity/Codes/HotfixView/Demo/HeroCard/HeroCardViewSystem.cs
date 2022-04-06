@@ -13,31 +13,23 @@ namespace ET
 
     public static class HeroCardViewSystem
     {
-        public static async ETTask PlayAddAttackEffect(this HeroCardView self, EventType.PlayAddAttackAngryViewAnim message)
+        public static async ETTask PlayAddAttackEffect(this HeroCardView self, EventType.PlayAddAttackViewAnim message)
         {
-            if (message.AddAttack > 0)
-            {
-                Diamond diamond = message.Diamond;
-                HeroCardViewCtl heroCardViewCtl = self.Parent.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>();
-                await self.PlayAddEffectAnim(diamond, "DiamondAddAttackTrailEffect");
-                heroCardViewCtl.UpdateAttackView(message.EndAttack.ToString());
-            }
+            Diamond diamond = message.Diamond;
+            HeroCardViewCtl heroCardViewCtl = self.Parent.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>();
+            await self.PlayAddEffectAnim(diamond, "DiamondAddAttackTrailEffect");
+            heroCardViewCtl.UpdateAttackView((message.HeroCard.Attack + message.HeroCard.DiamondAttack).ToString());
 
             await ETTask.CompletedTask;
         }
 
-        public static async ETTask PlayAddAngryEffect(this HeroCardView self, EventType.PlayAddAttackAngryViewAnim message)
+        public static async ETTask PlayAddAngryEffect(this HeroCardView self, EventType.PlayAddAngryViewAnim message)
         {
-            if (message.AddAngry > 0)
-            {
-                Log.Debug($"end angry {message.EndAngry}");
-                Log.Debug($"add angry {message.AddAngry}");
-                Diamond diamond = message.Diamond;
-                HeroCardViewCtl heroCardViewCtl = self.Parent.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>();
-                await self.PlayAddEffectAnim(diamond, "DiamondAddAngryTrailEffect");
-                float TotalAngry = HeroConfigCategory.Instance.Get(message.HeroCard.ConfigId).TotalAngry;
-                heroCardViewCtl.UpdateAngryView($"{message.EndAngry.ToString()}/{TotalAngry}");
-            }
+            Diamond diamond = message.Diamond;
+            HeroCardViewCtl heroCardViewCtl = self.Parent.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>();
+            await self.PlayAddEffectAnim(diamond, "DiamondAddAngryTrailEffect");
+            float TotalAngry = HeroConfigCategory.Instance.Get(message.HeroCard.ConfigId).TotalAngry;
+            heroCardViewCtl.UpdateAngryView($"{message.HeroCard.Angry.ToString()}/{TotalAngry}");
         }
 
         public static async ETTask PlayAddEffectAnim(this HeroCardView self, Diamond diamond, string effectName)
@@ -68,12 +60,15 @@ namespace ET
             await self.PlayAttackAnim(message);
             // await beAttackHeroCard.UpdateHPView();
             await self.ProcessBeAttackAnimLogic(message.BeAttackHeroCard);
-            await self.PlayMoveToAnim(self.Parent.GetComponent<GameObjectComponent>().GameObject.transform.position);
+            await self.PlayMoveToBackAnim();
             await ETTask.CompletedTask;
         }
 
         public static async ETTask ProcessBeAttackAnimLogic(this HeroCardView self, HeroCard heroCard)
         {
+            float totalAngry = HeroConfigCategory.Instance.Get(heroCard.ConfigId).TotalAngry;
+            heroCard.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>()
+                    .UpdateAngryView($"{heroCard.Angry.ToString()}/{totalAngry}");
             heroCard.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>().UpdateHPView(heroCard.HP);
             await ETTask.CompletedTask;
         }
@@ -83,7 +78,22 @@ namespace ET
             GameObject selfGo = self.Parent.GetComponent<GameObjectComponent>().GameObject;
             GameObject heroMode = selfGo.GetComponent<HeroCardViewCtl>().GetHeroMode();
             float distance = 100;
-            while (distance > 1)
+            while (distance > 3f)
+            {
+                Vector3 prePos = Vector3.Lerp(heroMode.transform.position, endPos, 0.01f);
+                heroMode.transform.position = prePos;
+                distance = Vector3.Distance(prePos, endPos);
+                await TimerComponent.Instance.WaitFrameAsync();
+            }
+        }
+
+        public static async ETTask PlayMoveToBackAnim(this HeroCardView self)
+        {
+            Vector3 endPos = self.Parent.GetComponent<GameObjectComponent>().GameObject.transform.position;
+            GameObject selfGo = self.Parent.GetComponent<GameObjectComponent>().GameObject;
+            GameObject heroMode = selfGo.GetComponent<HeroCardViewCtl>().GetHeroMode();
+            float distance = 100;
+            while (distance > 0.1f)
             {
                 Vector3 prePos = Vector3.Lerp(heroMode.transform.position, endPos, 0.01f);
                 heroMode.transform.position = prePos;

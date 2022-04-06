@@ -942,20 +942,13 @@ namespace ET
 		[ProtoMember(7)]
 		public int BoomType { get; set; }
 
+// int64 HeroCardId = 8;
+// float HeroCardAddAttack = 9;
+// float HeroCardEndAttack = 10;
+// float HeroCardAddAngry = 11;
+// float HeroCardEndAngry = 12;
 		[ProtoMember(8)]
-		public long HeroCardId { get; set; }
-
-		[ProtoMember(9)]
-		public float HeroCardAddAttack { get; set; }
-
-		[ProtoMember(10)]
-		public float HeroCardEndAttack { get; set; }
-
-		[ProtoMember(11)]
-		public float HeroCardAddAngry { get; set; }
-
-		[ProtoMember(12)]
-		public float HeroCardEndAngry { get; set; }
+		public HeroCardInfo HeroCardInfo { get; set; }
 
 	}
 
@@ -1157,13 +1150,19 @@ namespace ET
 		public long CastSkillId { get; set; }
 
 		[ProtoMember(10)]
-		public float CurrentAttack { get; set; }
+		public float Attack { get; set; }
 
 		[ProtoMember(11)]
 		public float HP { get; set; }
 
 		[ProtoMember(12)]
 		public List<SkillInfo> SkillInfos = new List<SkillInfo>();
+
+		[ProtoMember(13)]
+		public float DiamondAttack { get; set; }
+
+		[ProtoMember(14)]
+		public float Angry { get; set; }
 
 // repeated long SkillIdList = 11;	//技能id
 	}

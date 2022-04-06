@@ -50,14 +50,15 @@ namespace ET
             }
 
             Log.Debug("初始化回合游戏卡牌");
-            List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>(); 
+            List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>();
             foreach (var unit in self.Units)
             {
-                foreach (var heroCard  in unit.HeroCards)
+                foreach (var heroCard in unit.HeroCards)
                 {
                     heroCardInfos.Add(heroCard.GetMessageInfo());
                 }
             }
+
             Log.Debug("组装数据");
 
             foreach (var unit in self.Units)
@@ -66,8 +67,9 @@ namespace ET
                 {
                     continue;
                 }
+
                 Log.Debug("发送数据");
-                MessageHelper.SendToClient(unit,new M2C_SyncHeroCardTurnData(){HeroCardInfos = heroCardInfos});
+                MessageHelper.SendToClient(unit, new M2C_SyncHeroCardTurnData() { HeroCardInfos = heroCardInfos });
             }
 
             await ETTask.CompletedTask;
@@ -250,25 +252,24 @@ namespace ET
                 DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamondInfo.DiamondType);
                 if (heroCard.HeroColor.Equals(diamondInfo.DiamondType))
                 {
-                    var addAngryValue = heroCard.AddAngryValue(float.Parse(config.AddAngry));
-                    diamondInfo.HeroCardId = heroCard.Id;
-                    diamondInfo.HeroCardAddAngry = addAngryValue;
-                    diamondInfo.HeroCardEndAngry = heroCard.Angry;
-                }
-
-                if (self.CurrentAttackHeroCard == null)
-                {
-                    self.CurrentAttackHeroCard = heroCard;
-                }
-
-                if (self.CurrentAttackHeroCard != null)
-                {
-                    if (self.CurrentAttackHeroCard.HeroColor.Equals(diamondInfo.DiamondType))
+                    heroCard.AddAngryValue(float.Parse(config.AddAngry));
+                    // diamondInfo.HeroCardId = heroCard.Id;
+                    // diamondInfo.HeroCardAddAngry = addAngryValue;
+                    // diamondInfo.HeroCardEndAngry = heroCard.Angry;
+                    // heroCard.
+                    if (self.CurrentAttackHeroCard == null)
                     {
-                        var addValue = self.CurrentAttackHeroCard.AddAttackValue(float.Parse(config.AddAttack));
-                        diamondInfo.HeroCardAddAttack = addValue;
-                        diamondInfo.HeroCardEndAttack = self.CurrentAttackHeroCard.Attack;
+                        self.CurrentAttackHeroCard = heroCard;
                     }
+
+                    if (self.CurrentAttackHeroCard != null)
+                    {
+                        self.CurrentAttackHeroCard.AddAttackValue(float.Parse(config.AddAttack));
+                        // diamondInfo.HeroCardAddAttack = addValue;
+                        // diamondInfo.HeroCardEndAttack = self.CurrentAttackHeroCard.Attack;
+                    }
+
+                    diamondInfo.HeroCardInfo = heroCard.GetMessageInfo();
                 }
             }
         }
@@ -306,6 +307,10 @@ namespace ET
 
         public static void ProcessReBackAttackLogic(this PVERoom self, M2C_SyncDiamondAction m2CSyncDiamondAction)
         {
+            if (m2CSyncDiamondAction.AttackActionItems.Count == 0)
+            {
+                return;
+            }
             //todo 处理反击逻辑
             Unit attackUnit = self.GetBeAttackUnit(self.Units[self.CurrentTurnIndex]); //todo 首先找到发起攻击的玩家
             Unit beAttacUnit = self.GetBeAttackUnit(attackUnit);
@@ -367,8 +372,8 @@ namespace ET
             foreach (var heroCard in unit.HeroCards)
             {
                 Log.Debug($"hero in troop index  {heroCard.InTroopIndex}");
-                Log.Debug($"hero attack {heroCard.Attack}");
-                if (heroCard.Attack > 0 || heroCard.CheckAngryIsFull())
+                Log.Debug($"hero attack {heroCard.DiamondAttack}");
+                if (heroCard.DiamondAttack > 0 || heroCard.CheckAngryIsFull())
                 {
                     Log.Debug($"attack hero card {heroCard.InTroopIndex}");
                     AttackAction attackAction = new AttackAction();

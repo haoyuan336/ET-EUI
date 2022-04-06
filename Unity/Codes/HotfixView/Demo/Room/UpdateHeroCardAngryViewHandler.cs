@@ -1,5 +1,6 @@
 ﻿using ET.EventType;
 using UnityEngine;
+
 namespace ET
 {
     public class UpdateHeroCardAngryViewHandler: AEvent<EventType.UpdateAngryView>
@@ -8,9 +9,9 @@ namespace ET
         {
             HeroCard heroCard = a.HeroCard;
             GameObject go = heroCard.GetComponent<GameObjectComponent>().GameObject;
-            go.GetComponent<HeroCardViewCtl>().UpdateAngryView(heroCard.Angry.ToString());
+            go.GetComponent<HeroCardViewCtl>()
+                    .UpdateAngryView($"{heroCard.Angry.ToString()} /{HeroConfigCategory.Instance.Get(heroCard.ConfigId).TotalAngry.ToString()}");
             await ETTask.CompletedTask;
-            
         }
     }
 }
