@@ -1057,6 +1057,15 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.GameLoseResultAction)]
+	[ProtoContract]
+	public partial class GameLoseResultAction: Object
+	{
+		[ProtoMember(1)]
+		public long LoseAccountId { get; set; }
+
+	}
+
 	[Message(OuterOpcode.AttackAction)]
 	[ProtoContract]
 	public partial class AttackAction: Object
@@ -1090,6 +1099,9 @@ namespace ET
 
 		[ProtoMember(2)]
 		public List<AttackActionItem> AttackActionItems = new List<AttackActionItem>();
+
+		[ProtoMember(3)]
+		public GameLoseResultAction GameLoseResultAction { get; set; }
 
 	}
 

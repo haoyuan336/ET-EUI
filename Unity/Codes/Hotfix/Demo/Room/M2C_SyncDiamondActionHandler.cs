@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using ET.Account;
+using UnityEngine;
 
 namespace ET
 {
@@ -14,7 +15,7 @@ namespace ET
 
             List<DiamondActionItem> diamondActionItems = message.DiamondActionItems;
             List<AttackActionItem> attackActionItems = message.AttackActionItems;
-
+            GameLoseResultAction gameLoseResultAction = message.GameLoseResultAction;
             foreach (var diamondActionItem in diamondActionItems)
             {
                 List<ETTask> tasks = new List<ETTask>();
@@ -39,24 +40,14 @@ namespace ET
                                 if (diamondInfo.HeroCardInfo.DiamondAttack > heroCard.DiamondAttack)
                                 {
                                     heroCard.DiamondAttack = diamondInfo.HeroCardInfo.DiamondAttack;
-                                    Game.EventSystem.Publish(new EventType.PlayAddAttackViewAnim()
-                                    {
-                                        HeroCard = heroCard,
-                                        Diamond = diamond,
-                                    });
+                                    Game.EventSystem.Publish(new EventType.PlayAddAttackViewAnim() { HeroCard = heroCard, Diamond = diamond, });
                                 }
 
                                 if (diamondInfo.HeroCardInfo.Angry > heroCard.Angry)
                                 {
                                     heroCard.Angry = diamondInfo.HeroCardInfo.Angry;
-                                    Game.EventSystem.Publish(new EventType.PlayAddAngryViewAnim()
-                                    {
-                                        HeroCard = heroCard,
-                                        Diamond = diamond,
-                                    });
+                                    Game.EventSystem.Publish(new EventType.PlayAddAngryViewAnim() { HeroCard = heroCard, Diamond = diamond, });
                                 }
-                                
-                               
                             }
 
                             break;
@@ -76,22 +67,40 @@ namespace ET
                 foreach (var attackAction in attackActionItem.AttackActions)
                 {
                     Log.Debug("play attack action");
-                    
+
                     tasks.Add(session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync(attackAction));
                 }
 
                 await ETTaskHelper.WaitAll(tasks);
             }
 
-            Log.Debug("一回合结束了");
-            //todo 给服务器发送ready消息
             long AccountId = session.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            long RoomId = session.ZoneScene().GetComponent<PlayerComponent>().RoomId;
-            M2C_PlayerReadyTurnResponse m2CPlayerReadyTurnResponse =
-                    (M2C_PlayerReadyTurnResponse) await session.Call(new C2M_PlayerReadyTurnRequest() { AccountId = AccountId, RoomId = RoomId });
-            if (m2CPlayerReadyTurnResponse.Error == ErrorCode.ERR_Success)
+
+            if (gameLoseResultAction == null)
             {
-                await Game.EventSystem.PublishAsync(new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene() });
+                Log.Debug("一回合结束了");
+                //todo 给服务器发送ready消息
+                long RoomId = session.ZoneScene().GetComponent<PlayerComponent>().RoomId;
+                M2C_PlayerReadyTurnResponse m2CPlayerReadyTurnResponse =
+                        (M2C_PlayerReadyTurnResponse) await session.Call(new C2M_PlayerReadyTurnRequest() { AccountId = AccountId, RoomId = RoomId });
+                if (m2CPlayerReadyTurnResponse.Error == ErrorCode.ERR_Success)
+                {
+                    await Game.EventSystem.PublishAsync(new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene() });
+                }
+            }
+            else
+            {
+                Log.Debug($"lose id{gameLoseResultAction.LoseAccountId}");
+                Log.Debug($"self id {AccountId}");
+                if (!AccountId.Equals(gameLoseResultAction.LoseAccountId))
+                {
+                    Log.Debug("game win");
+                    Game.EventSystem.Publish(new EventType.ShowGameWinUI() { ZondScene = session.ZoneScene() });
+                }
+                else
+                {
+                    Log.Debug("game lose");
+                }
             }
 
             await ETTask.CompletedTask;

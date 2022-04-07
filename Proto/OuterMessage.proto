@@ -487,6 +487,10 @@ message DiamondActionItem
 {
 	repeated DiamondAction DiamondActions = 1;
 }
+message GameLoseResultAction
+{
+	int64 LoseAccountId = 1;
+}
 
 message AttackAction
 {
@@ -502,6 +506,7 @@ message M2C_SyncDiamondAction //IActorMessage
 	int32 RpcId = 90;
 	repeated DiamondActionItem DiamondActionItems = 1;
 	repeated AttackActionItem AttackActionItems = 2;
+	GameLoseResultAction GameLoseResultAction = 3;
 }
 message SkillInfo
 {

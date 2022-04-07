@@ -6,7 +6,9 @@
         {
             Log.Debug("unit game ready");
             PVERoom pveRoom = unit.DomainScene().GetComponent<PVERoomComponent>().AddChild<PVERoom>();
-            pveRoom.PlayerGameReady(unit,message.AccountId);
+            unit.AccountId = message.AccountId;
+            pveRoom.PlayerGameReady(unit, message.AccountId);
+
             await ETTask.CompletedTask;
         }
     }

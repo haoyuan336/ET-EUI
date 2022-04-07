@@ -205,6 +205,7 @@ namespace ET
         public struct PlayAddAttackViewAnim
         {
             public HeroCard HeroCard;
+
             public Diamond Diamond;
             // public float AddAttack;
             // public float AddAngry;
@@ -216,6 +217,11 @@ namespace ET
         {
             public HeroCard HeroCard;
             public Diamond Diamond;
+        }
+
+        public struct ShowGameWinUI
+        {
+            public Scene ZondScene;
         }
     }
 }

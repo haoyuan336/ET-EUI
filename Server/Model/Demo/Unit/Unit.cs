@@ -7,6 +7,8 @@ namespace ET
 {
     public sealed class Unit: Entity, IAwake<int>
     {
+
+        public long AccountId;
         public int ConfigId; //配置表id
         // public bool isMatching; //是否在匹配中
 

@@ -113,6 +113,7 @@ namespace ET
         {
             Log.Debug("创建一个电脑玩家");
             Unit unit = self.DomainScene().GetComponent<UnitComponent>().AddChild<Unit, int>(1002);
+            unit.AccountId = unit.Id;
             Log.Debug($"create unit is ai {unit.IsAI}");
             return unit;
         }
@@ -278,7 +279,7 @@ namespace ET
         {
             Log.Debug("process scroll screen message");
             M2C_SyncDiamondAction m2CSyncDiamondAction = self.GetComponent<DiamondComponent>().ScrollDiamond(message);
-
+            bool isConDestory = false;
             foreach (var diamondActionItem in m2CSyncDiamondAction.DiamondActionItems)
             {
                 foreach (var action in diamondActionItem.DiamondActions)
@@ -286,14 +287,26 @@ namespace ET
                     if (action.ActionType == (int) DiamondActionType.Destory)
                     {
                         // Log.Debug($"增加相对应颜色的攻击力 以及怒气值{action.ActionType}");
-
+                        isConDestory = true;
                         self.AddHeroCardAttack(action);
                     }
                 }
             }
 
-            self.ProcessAttackLogic(m2CSyncDiamondAction);
-            self.ProcessReBackAttackLogic(m2CSyncDiamondAction);
+            if (isConDestory)
+            {
+                self.ProcessAttackLogic(m2CSyncDiamondAction);
+                self.ProcessReBackAttackLogic(m2CSyncDiamondAction);
+            }
+
+            Unit loseUnit = self.CheckGameEndResult();
+
+            if (loseUnit != null)
+            {
+                // m2CSyncDiamondAction.
+                m2CSyncDiamondAction.GameLoseResultAction = new GameLoseResultAction() { LoseAccountId = loseUnit.AccountId };
+            }
+
             foreach (var unit in self.Units)
             {
                 if (unit.IsAI)
@@ -305,20 +318,49 @@ namespace ET
             }
         }
 
+        public static Unit CheckGameEndResult(this PVERoom self)
+        {
+
+            //todo 检查游戏胜利还是失败
+            foreach (var unit in self.Units)
+            {
+                var isAllDead = true;
+                foreach (var heroCard in unit.HeroCards)
+                {
+                    if (!heroCard.GetIsDead())
+                    {
+                        isAllDead = false;
+                    }
+                }
+
+                if (isAllDead)
+                {
+                    return unit;
+                }
+            }
+
+            return null;
+        }
+
         public static void ProcessReBackAttackLogic(this PVERoom self, M2C_SyncDiamondAction m2CSyncDiamondAction)
         {
-            if (m2CSyncDiamondAction.AttackActionItems.Count == 0)
-            {
-                return;
-            }
+            Log.Debug($"attack action items {m2CSyncDiamondAction.AttackActionItems[0].AttackActions.Count}");
             //todo 处理反击逻辑
             Unit attackUnit = self.GetBeAttackUnit(self.Units[self.CurrentTurnIndex]); //todo 首先找到发起攻击的玩家
             Unit beAttacUnit = self.GetBeAttackUnit(attackUnit);
             HeroCard attackHero = self.GetTurnAttackHero(attackUnit); //todo 找到发起攻击的英雄
+            if (attackHero == null)
+            {
+                //todo 英雄都死光了，不能在发起反击了
+                return;
+            }
+
             HeroCard beAttackHero = self.GetBeAttackHeroCard(attackHero, beAttacUnit); //todo 找到被攻击的英雄
             if (beAttackHero == null)
             {
                 Log.Debug("未找到被攻击英雄");
+                //rodo 英雄都死光了，
+                return;
             }
             else
             {
@@ -373,11 +415,21 @@ namespace ET
             {
                 Log.Debug($"hero in troop index  {heroCard.InTroopIndex}");
                 Log.Debug($"hero attack {heroCard.DiamondAttack}");
+                if (heroCard.GetIsDead())
+                {
+                    continue;
+                }
+
                 if (heroCard.DiamondAttack > 0 || heroCard.CheckAngryIsFull())
                 {
                     Log.Debug($"attack hero card {heroCard.InTroopIndex}");
                     AttackAction attackAction = new AttackAction();
                     HeroCard beAttackHeroCard = self.GetBeAttackHeroCard(heroCard, beAttackUnit);
+                    if (beAttackHeroCard == null)
+                    {
+                        continue;
+                    }
+
                     heroCard.CurrentSkillId = heroCard.ProcessCurrentSkill();
                     Log.Debug($"current skill id {heroCard.CurrentSkillId}");
                     beAttackHeroCard.BeAttack(heroCard);
@@ -440,6 +492,7 @@ namespace ET
                 whileCount++;
             }
 
+            Log.Debug($"not found beattack herocard {index}");
             return null;
         }
 
