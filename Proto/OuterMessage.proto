@@ -665,3 +665,33 @@ message M2C_SyncHeroCardTurnData	//IActorMessage
 {
 	repeated HeroCardInfo HeroCardInfos = 1;
 }
+
+//ResponseType M2C_GetGoldInfoResponse
+message C2M_GetGoldInfoRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message M2C_GetGoldInfoResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	int32 GoldCount = 1;		
+	int32 PowerCount = 2;
+	int32 DiamondCount = 3;
+}
+//ResponseType M2C_GetUserExpInfoResponse
+message C2M_GetUserExpInfoRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message M2C_GetUserExpInfoResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	int32 Exp = 1;			//升级所需要的经验值
+	int32 UserLevel = 2;	//英雄当前的等级
+}

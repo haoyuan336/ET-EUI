@@ -1,7 +1,7 @@
 ﻿namespace ET
 {
-	[AUIEvent(WindowID.WindowID_MainScene)]
-	public  class DlgMainSceneEventHandler : IAUIEventHandler
+	[AUIEvent(WindowID.WindowID_AccountInfo)]
+	public  class DlgAccountInfoEventHandler : IAUIEventHandler
 	{
 
 		public void OnInitWindowCoreData(UIBaseWindow uiBaseWindow)
@@ -11,19 +11,18 @@
 
 		public void OnInitComponent(UIBaseWindow uiBaseWindow)
 		{
-		  uiBaseWindow.AddComponent<DlgMainSceneViewComponent>(); 
-		  uiBaseWindow.AddComponent<DlgMainScene>(); 
+		  uiBaseWindow.AddComponent<DlgAccountInfoViewComponent>(); 
+		  uiBaseWindow.AddComponent<DlgAccountInfo>(); 
 		}
 
 		public void OnRegisterUIEvent(UIBaseWindow uiBaseWindow)
 		{
-		  uiBaseWindow.GetComponent<DlgMainScene>().RegisterUIEvent(); 
+		  uiBaseWindow.GetComponent<DlgAccountInfo>().RegisterUIEvent(); 
 		}
 
 		public void OnShowWindow(UIBaseWindow uiBaseWindow, Entity contextData = null)
 		{
-		  uiBaseWindow.GetComponent<DlgMainScene>().ShowWindow(contextData); 
-
+		  uiBaseWindow.GetComponent<DlgAccountInfo>().ShowWindow(contextData).Coroutine(); 
 		}
 
 		public void OnHideWindow(UIBaseWindow uiBaseWindow)

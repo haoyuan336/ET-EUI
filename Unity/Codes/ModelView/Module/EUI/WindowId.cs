@@ -17,6 +17,8 @@
         WindowID_MainScene, //游戏的主页面
         WindowID_BagLayer, //背部页面
         WindowID_EditorTroopLayer, //编辑队伍页面
-        WindowID_GameWinUI //游戏胜利UI
+        WindowID_GameWinUI, //游戏胜利UI
+        WindowID_GoldInfoUI, //游戏金币体力钻石信息
+        WindowID_AccountInfo //用户信息 id 以及经验值
     }
 }

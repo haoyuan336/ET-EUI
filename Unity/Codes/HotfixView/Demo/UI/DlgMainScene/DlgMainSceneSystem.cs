@@ -15,7 +15,6 @@ namespace ET
             self.View.E_BagButton.AddListenerAsync(() => { return self.BagButtonClick(); });
             self.View.E_CallHeroButton.AddListenerAsync(() => { return self.CallHeroButtonClick(); });
             self.View.E_PVEButton.AddListenerAsync(() => { return self.PvEButtonClick(); });
-            
         }
 
         public static async ETTask PvEButtonClick(this DlgMainScene self)
@@ -45,7 +44,9 @@ namespace ET
 
         public static void ShowWindow(this DlgMainScene self, Entity contextData = null)
         {
-            
+            Log.Debug("macin scene show window");
+            self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GoldInfoUI);
+            self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_AccountInfo);
         }
     }
 }

@@ -94,5 +94,9 @@ namespace ET
 		 public const ushort C2M_PlayerReadyTurnRequest = 10091;
 		 public const ushort M2C_PlayerReadyTurnResponse = 10092;
 		 public const ushort M2C_SyncHeroCardTurnData = 10093;
+		 public const ushort C2M_GetGoldInfoRequest = 10094;
+		 public const ushort M2C_GetGoldInfoResponse = 10095;
+		 public const ushort C2M_GetUserExpInfoRequest = 10096;
+		 public const ushort M2C_GetUserExpInfoResponse = 10097;
 	}
 }
