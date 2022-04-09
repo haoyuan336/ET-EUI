@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,8 +13,7 @@ namespace ET
         public static void RegisterUIEvent(this DlgMainScene self)
         {
             // self.View.E_BagButton.onClick.AddListener(() => { self.BagButtonClick();});
-         
-            self.View.E_PVEButton.AddListenerAsync(() => { return self.PvEButtonClick(); });
+            // self.View.E_PVEButton.AddListenerAsync(() => { return self.PvEButtonClick(); });
             List<GameObject> list = new List<GameObject>();
             list.Add(self.View.E_MainImage.gameObject);
             list.Add(self.View.E_CallImage.gameObject);
@@ -21,10 +21,12 @@ namespace ET
             list.Add(self.View.E_BagImage.gameObject);
             list.Add(self.View.E_ShopImage.gameObject);
             self.InitAllToggleEventHandler(list);
-            
+
             // self.View.E_b.AddListenerAsync(() => { return self.BagButtonClick(); });
             // self.View.E_CallHeroButton.AddListenerAsync(() => { return self.CallHeroButtonClick(); });
+            // self.View.E_HeroToggle
         }
+
         public static async ETTask CallHeroButtonClick(this DlgMainScene self)
         {
             Log.Debug("call hero button click");
@@ -41,6 +43,7 @@ namespace ET
 
             await ETTask.CompletedTask;
         }
+
         public static void InitToggleEventHandler(this DlgMainScene self, GameObject obj)
         {
             obj.GetComponent<Toggle>().onValueChanged.AddListener((value) =>
@@ -50,6 +53,7 @@ namespace ET
                 {
                     obj.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 220);
                     obj.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 220);
+                    self.ClickMainMenu(obj.name);
                 }
                 else
                 {
@@ -59,6 +63,41 @@ namespace ET
             });
         }
 
+        public static void ClickMainMenu(this DlgMainScene self, string buttonName)
+        {
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            uiComponent.HideWindow(WindowID.WindowID_AccountInfo);
+            uiComponent.HideWindow(WindowID.WindowID_MessageTaskActiveInfo);
+            uiComponent.HideWindow(WindowID.WindowID_SettingUI);
+            uiComponent.HideWindow(WindowID.WindowID_FormationUI);
+            uiComponent.HideWindow(WindowID.WindowID_HeroInfoLayerUI);
+            if (buttonName.Equals(self.View.E_MainImage.name))
+            {
+                Log.Debug("hero main");
+                uiComponent.ShowWindow(WindowID.WindowID_AccountInfo);
+                uiComponent.ShowWindow(WindowID.WindowID_MessageTaskActiveInfo);
+                uiComponent.ShowWindow(WindowID.WindowID_SettingUI);
+                uiComponent.ShowWindow(WindowID.WindowID_FormationUI);
+            }
+            else if (buttonName.Equals(self.View.E_HeroImage.name))
+            {
+                Log.Debug("hero label");
+                uiComponent.ShowWindow(WindowID.WindowID_HeroInfoLayerUI);
+            }
+            else if (buttonName.Equals(self.View.E_CallImage.name))
+            {
+                Log.Debug("call label");
+            }
+            else if (buttonName.Equals(self.View.E_BagImage.name))
+            {
+                Log.Debug("bag label");
+            }
+            else
+            {
+                Log.Debug("Shop label");
+            }
+        }
+
         public static void InitAllToggleEventHandler(this DlgMainScene self, List<GameObject> list)
         {
             foreach (var obj in list)
@@ -66,16 +105,15 @@ namespace ET
                 self.InitToggleEventHandler(obj);
             }
         }
+
         public static async ETTask PvEButtonClick(this DlgMainScene self)
         {
             Log.Debug("pve button click");
             self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_EditorTroopLayer);
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_MainScene);
-            
+
             await ETTask.CompletedTask;
         }
-
-      
 
         public static void ShowWindow(this DlgMainScene self, Entity contextData = null)
         {
@@ -84,6 +122,7 @@ namespace ET
             self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_AccountInfo);
             self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MessageTaskActiveInfo);
             self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_SettingUI);
+            self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_FormationUI);
         }
     }
 }

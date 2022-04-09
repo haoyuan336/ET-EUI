@@ -22,5 +22,7 @@
         WindowID_AccountInfo, //用户信息 id 以及经验值
         WindowID_MessageTaskActiveInfo, //通知任务活动
         WindowID_SettingUI, //设置
+        WindowID_FormationUI, //战斗相关按钮
+        WindowID_HeroInfoLayerUI, //英雄信息层
     }
 }
