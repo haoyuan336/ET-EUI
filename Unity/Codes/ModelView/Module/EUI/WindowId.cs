@@ -19,6 +19,8 @@
         WindowID_EditorTroopLayer, //编辑队伍页面
         WindowID_GameWinUI, //游戏胜利UI
         WindowID_GoldInfoUI, //游戏金币体力钻石信息
-        WindowID_AccountInfo //用户信息 id 以及经验值
+        WindowID_AccountInfo, //用户信息 id 以及经验值
+        WindowID_MessageTaskActiveInfo, //通知任务活动
+        WindowID_SettingUI, //设置
     }
 }
