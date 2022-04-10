@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
+using System.Linq;
 using ET.Account;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,37 +25,17 @@ namespace ET
         public static void OnLoopListItemRefreshHandler(this DlgHeroInfoLayerUI self, Transform tr, int index)
         {
             Scroll_ItemHeroCard scrollItemHeroCard = self.ItemHeroCards[index].BindTrans(tr);
-            scrollItemHeroCard.E_TextText.text = $"{self.HeroCardInfos[index].HeroName}";
-            int colorId = self.HeroCardInfos[index].HeroColor;
-            DiamondTypeConfig diamondTypeConfig = DiamondTypeConfigCategory.Instance.Get(colorId);
-            string colorStr = diamondTypeConfig.ColorValue;
-            Color color = self.HexToColor(colorStr);
-            scrollItemHeroCard.E_ClickImage.color = color;
+            scrollItemHeroCard.SetHeroInfo(self.HeroCardInfos[index]);
         }
 
-        public static Color HexToColor(this DlgHeroInfoLayerUI self, string hex)
-        {
-            hex = hex.Replace("0x", string.Empty);
-            hex = hex.Replace("#", string.Empty);
-            byte a = byte.MaxValue;
-            byte r = byte.Parse(hex.Substring(0, 2), NumberStyles.HexNumber);
-            byte g = byte.Parse(hex.Substring(2, 2), NumberStyles.HexNumber);
-            byte b = byte.Parse(hex.Substring(4, 2), NumberStyles.HexNumber);
-            if (hex.Length == 8)
-            {
-                a = byte.Parse(hex.Substring(6, 2), NumberStyles.HexNumber);
-            }
-
-            return new Color32(r, g, b, a);
-        }
-
-        public static void InitColorToggleEvent(this DlgHeroInfoLayerUI self, GameObject go)
+        public static void InitColorToggleEvent(this DlgHeroInfoLayerUI self, GameObject go, int index)
         {
             go.GetComponent<Toggle>().onValueChanged.AddListener((value) =>
             {
                 if (value)
                 {
                     // Log.Debug(go.name);
+                    self.FilterColor(go, index);
                     go.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 160);
                 }
                 else
@@ -61,6 +43,63 @@ namespace ET
                     go.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 140);
                 }
             });
+        }
+
+        public static void FilterColor(this DlgHeroInfoLayerUI self, GameObject colorObj, int index)
+        {
+            // if (colorObj.name.Equals(self.View.E_RedImage.name))
+            // {
+            //     
+            // }
+            Log.Debug($"filter index{index}");
+            Dictionary<int, List<HeroCardInfo>> map = new Dictionary<int, List<HeroCardInfo>>();
+            foreach (var heroCardInfo in self.HeroCardInfos)
+            {
+                if (!map.ContainsKey(heroCardInfo.HeroColor))
+                {
+                    // map[heroCardInfo.HeroColor] = new List<HeroCardInfo>();
+                    map.Add(heroCardInfo.HeroColor, new List<HeroCardInfo>());
+                }
+
+                map[heroCardInfo.HeroColor].Add(heroCardInfo);
+            }
+
+            List<HeroCardInfo> list = new List<HeroCardInfo>();
+            list = map[index + 1];
+            map.Remove(index + 1);
+            foreach (var mapList in map.Values)
+            {
+                // list.Concat(mapList);
+                // List<HeroCardInfo>
+                foreach (var info in mapList)
+                {
+                    list.Add(info);
+                }
+            }
+
+            self.HeroCardInfos = list;
+
+            // self.HeroCardInfos.Sort((a, b) =>
+            // {
+            //     // return 1;
+            //     // var aColor = a.HeroColor;
+            //     // if (aColor == index + 1)
+            //     // {
+            //     //     aColor = 0;
+            //     // }
+            //     //
+            //     // var bColor = b.HeroColor;
+            //     // return aColor - bColor;
+            //     if (a.HeroColor == index + 1)
+            //     {
+            //         return -1;
+            //     }
+            //
+            //     return b.HeroColor - a.HeroColor;
+            // });
+            // self.HeroCardInfos.Clear();
+            self.AddUIScrollItems(ref self.ItemHeroCards, self.HeroCardInfos.Count);
+            self.View.E_LoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, self.HeroCardInfos.Count);
         }
 
         public static void InitAllToggleEvent(this DlgHeroInfoLayerUI self)
@@ -71,9 +110,11 @@ namespace ET
             list.Add(self.View.E_GreenImage.gameObject);
             list.Add(self.View.E_BlueImage.gameObject);
             list.Add(self.View.E_PurpleImage.gameObject);
+            var index = 0;
             foreach (var go in list)
             {
-                self.InitColorToggleEvent(go);
+                self.InitColorToggleEvent(go, index);
+                index++;
             }
         }
 

@@ -71,6 +71,7 @@ namespace ET
             uiComponent.HideWindow(WindowID.WindowID_SettingUI);
             uiComponent.HideWindow(WindowID.WindowID_FormationUI);
             uiComponent.HideWindow(WindowID.WindowID_HeroInfoLayerUI);
+            uiComponent.HideWindow(WindowID.WindowID_CallHeroLayer);
             if (buttonName.Equals(self.View.E_MainImage.name))
             {
                 Log.Debug("hero main");
@@ -87,6 +88,7 @@ namespace ET
             else if (buttonName.Equals(self.View.E_CallImage.name))
             {
                 Log.Debug("call label");
+                uiComponent.ShowWindow(WindowID.WindowID_CallHeroLayer);
             }
             else if (buttonName.Equals(self.View.E_BagImage.name))
             {
@@ -96,6 +98,8 @@ namespace ET
             {
                 Log.Debug("Shop label");
             }
+            // uiComponent.HideWindow(WindowID.WindowID_CallHeroLayer);
+
         }
 
         public static void InitAllToggleEventHandler(this DlgMainScene self, List<GameObject> list)

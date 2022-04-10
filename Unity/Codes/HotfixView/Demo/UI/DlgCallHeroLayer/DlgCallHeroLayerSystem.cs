@@ -17,19 +17,10 @@ namespace ET
                 self.OnLoopListItemRefreshHandler(tr, index);
             });
             self.View.E_CallHeroButton.AddListenerAsync(() => { return self.CallHeroButtonClick(); });
-            self.View.E_BackButton.AddListenerAsync(() => { return self.BackButtonClick(); });
-
             // self.View.oNL
         }
 
-        public static async ETTask BackButtonClick(this DlgCallHeroLayer self)
-        {
-            // self.ZoneScene().GetComponent<UIBaseWindow>().
-            self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainScene);
-            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_CallHeroLayer);
-
-            await ETTask.CompletedTask;
-        }
+       
 
         public static async ETTask CallHeroButtonClick(this DlgCallHeroLayer self)
         {
@@ -107,7 +98,8 @@ namespace ET
         public static void OnLoopListItemRefreshHandler(this DlgCallHeroLayer self, Transform transform, int index)
         {
             Scroll_ItemHeroCard scrollItemHeroCard = self.ItemHeroCards[index].BindTrans(transform);
-            scrollItemHeroCard.E_TextText.text = $"{self.HeroCardInfos[index].HeroName}";
+            // scrollItemHeroCard.E_TextText.text = $"{self.HeroCardInfos[index].HeroName}";
+            scrollItemHeroCard.SetHeroInfo(self.HeroCardInfos[index]);
         }
     }
 }
