@@ -64,7 +64,9 @@ namespace ET
                 Attack = self.Attack,
                 DiamondAttack = self.DiamondAttack,
                 Angry = self.Angry,
-                HP = self.HP
+                HP = self.HP,
+                Defence = self.Defence,
+                Level = self.Level == 0?1: self.Level,
             };
 
             return heroCardInfo;
@@ -85,14 +87,9 @@ namespace ET
             self.DiamondAttack = message.DiamondAttack;
             self.Angry = message.Angry;
             self.HP = message.HP;
-            Log.Debug($"in troop index {self.InTroopIndex}");
-            // self.Attack = message.
-            // self.HP = HeroConfigCategory.Instance.Get(self.ConfigId).HeroHP;
-            // self.InitSkill();
-            // foreach (var skillInfo in message.SkillInfos)
-            // {
-            //     self.GetChild<Skill>(skillInfo.SkillId);
-            // }
+            self.Defence = message.Defence;
+            self.Level = message.Level == 0? 1 : message.Level;
+            Log.Debug($"set message info {self.Level}");
         }
 
         public static void InitWithConfig(this HeroCard self, HeroConfig heroConfig)
@@ -103,18 +100,7 @@ namespace ET
             self.HeroName = heroConfig.HeroName;
             self.ConfigId = heroConfig.Id;
             self.HeroColor = heroConfig.HeroColor;
-            // self.Id = heroConfig.Id;
-            // self.InitSkill();
-            // self.InitSkillWithConfig();
         }
-
-        // public static void InitSkillWithConfig(this HeroCard self)
-        // {
-        // }
-
-        // public static void InitSkillWithDBData(this HeroCard self, HeroCard heroCard)
-        // {
-        // }
 
         public static void InitHeroSkillWithConfig(this HeroCard self)
         {
@@ -130,7 +116,7 @@ namespace ET
         public static async ETTask InitHeroWithDBData(this HeroCard self, HeroCard dbHeroCard)
         {
             // self = dbHeroCard;
-            Log.Debug($"self in troop index {self.InTroopIndex}");
+            // Log.Debug($"self in troop index {self.InTroopIndex}");
             self.SetMessageInfo(dbHeroCard.GetMessageInfo());
             //todo  init skill info 初始化 技能信息
 #if SERVER
@@ -241,7 +227,6 @@ namespace ET
                 {
                     if (skill.SkillType == (int) SkillType.BigSkill)
                     {
-
                         self.Angry = 0;
                         return skill.Id;
                     }

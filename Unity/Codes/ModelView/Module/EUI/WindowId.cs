@@ -24,5 +24,6 @@
         WindowID_SettingUI, //设置
         WindowID_FormationUI, //战斗相关按钮
         WindowID_HeroInfoLayerUI, //英雄信息层
+        WindowID_ShowHeroInfoLayer, //显示英雄的详细信息
     }
 }

@@ -26,6 +26,8 @@ namespace ET
         {
             Scroll_ItemHeroCard scrollItemHeroCard = self.ItemHeroCards[index].BindTrans(tr);
             scrollItemHeroCard.SetHeroInfo(self.HeroCardInfos[index]);
+            scrollItemHeroCard.E_ClickButton.onClick.RemoveAllListeners();
+            scrollItemHeroCard.E_ClickButton.onClick.AddListener(() => { self.OnClickHeroItem(scrollItemHeroCard); });
         }
 
         public static void InitColorToggleEvent(this DlgHeroInfoLayerUI self, GameObject go, int index)
@@ -35,7 +37,7 @@ namespace ET
                 if (value)
                 {
                     // Log.Debug(go.name);
-                    self.FilterColor(go, index);
+                    self.FilterColor(index).Coroutine();
                     go.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 160);
                 }
                 else
@@ -45,61 +47,35 @@ namespace ET
             });
         }
 
-        public static void FilterColor(this DlgHeroInfoLayerUI self, GameObject colorObj, int index)
+        public static async ETTask FilterColor(this DlgHeroInfoLayerUI self, int index)
         {
-            // if (colorObj.name.Equals(self.View.E_RedImage.name))
-            // {
-            //     
-            // }
+            Log.Debug("filter color");
+            long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            M2C_GetAllHeroCardListResponse m2CGetAllTroopInfosResponse = (M2C_GetAllHeroCardListResponse) await self.ZoneScene()
+                    .GetComponent<SessionComponent>().Session.Call(new C2M_GetAllHeroCardListRequest() { Account = AccountId });
             Log.Debug($"filter index{index}");
-            Dictionary<int, List<HeroCardInfo>> map = new Dictionary<int, List<HeroCardInfo>>();
-            foreach (var heroCardInfo in self.HeroCardInfos)
+            if (m2CGetAllTroopInfosResponse.Error == ErrorCode.ERR_Success)
             {
-                if (!map.ContainsKey(heroCardInfo.HeroColor))
+                Dictionary<int, List<HeroCardInfo>> map = new Dictionary<int, List<HeroCardInfo>>();
+                self.HeroCardInfos = m2CGetAllTroopInfosResponse.HeroCardInfos;
+                foreach (var heroCardInfo in self.HeroCardInfos)
                 {
-                    // map[heroCardInfo.HeroColor] = new List<HeroCardInfo>();
-                    map.Add(heroCardInfo.HeroColor, new List<HeroCardInfo>());
+                    if (!map.ContainsKey(heroCardInfo.HeroColor))
+                    {
+                        // map[heroCardInfo.HeroColor] = new List<HeroCardInfo>();
+                        map.Add(heroCardInfo.HeroColor, new List<HeroCardInfo>());
+                    }
+
+                    map[heroCardInfo.HeroColor].Add(heroCardInfo);
                 }
 
-                map[heroCardInfo.HeroColor].Add(heroCardInfo);
+                List<HeroCardInfo> list = new List<HeroCardInfo>();
+                list = map[index + 1];
+                map.Remove(index + 1);
+                self.HeroCardInfos = list;
+                self.AddUIScrollItems(ref self.ItemHeroCards, self.HeroCardInfos.Count);
+                self.View.E_LoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, self.HeroCardInfos.Count);
             }
-
-            List<HeroCardInfo> list = new List<HeroCardInfo>();
-            list = map[index + 1];
-            map.Remove(index + 1);
-            foreach (var mapList in map.Values)
-            {
-                // list.Concat(mapList);
-                // List<HeroCardInfo>
-                foreach (var info in mapList)
-                {
-                    list.Add(info);
-                }
-            }
-
-            self.HeroCardInfos = list;
-
-            // self.HeroCardInfos.Sort((a, b) =>
-            // {
-            //     // return 1;
-            //     // var aColor = a.HeroColor;
-            //     // if (aColor == index + 1)
-            //     // {
-            //     //     aColor = 0;
-            //     // }
-            //     //
-            //     // var bColor = b.HeroColor;
-            //     // return aColor - bColor;
-            //     if (a.HeroColor == index + 1)
-            //     {
-            //         return -1;
-            //     }
-            //
-            //     return b.HeroColor - a.HeroColor;
-            // });
-            // self.HeroCardInfos.Clear();
-            self.AddUIScrollItems(ref self.ItemHeroCards, self.HeroCardInfos.Count);
-            self.View.E_LoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, self.HeroCardInfos.Count);
         }
 
         public static void InitAllToggleEvent(this DlgHeroInfoLayerUI self)
@@ -145,6 +121,14 @@ namespace ET
                 Console.WriteLine(e);
                 throw;
             }
+        }
+
+        public static void OnClickHeroItem(this DlgHeroInfoLayerUI self, Scroll_ItemHeroCard heroCard)
+        {
+            // Log.Debug($"click hero {heroCard.HeroCardInfo.HeroId}");
+            self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_ShowHeroInfoLayer, WindowID.WindowID_Invaild,
+                new ShowWindowData() { contextData = heroCard });
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_HeroInfoLayerUI);
         }
 
         public static void ShowWindow(this DlgHeroInfoLayerUI self, Entity contextData = null)

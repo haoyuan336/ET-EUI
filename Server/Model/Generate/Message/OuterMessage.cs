@@ -1176,6 +1176,12 @@ namespace ET
 		[ProtoMember(14)]
 		public float Angry { get; set; }
 
+		[ProtoMember(15)]
+		public float Defence { get; set; }
+
+		[ProtoMember(16)]
+		public int Level { get; set; }
+
 // repeated long SkillIdList = 11;	//技能id
 	}
 

@@ -14,19 +14,11 @@ namespace ET
         public float Attack;
         public float HP;
         public float Defence;
-
         public float DiamondAttack;
         public float DiamondDefence;
-
         public int CampIndex; //todo 阵营index
-
         public float Angry; //怒气值
-
-        // public Skill BigSkill; //必杀技
-        // public Skill NormalSkill; //普通技能
-        // public List<long> SkillIdList = new List<long>();
-
-
+        public int Level;   //当前英雄的等级
         public long CurrentSkillId; //当前需要释放的技能
     }
 }

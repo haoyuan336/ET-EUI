@@ -535,6 +535,9 @@ message HeroCardInfo
 	repeated SkillInfo SkillInfos = 12; //技能列表
 	float DiamondAttack = 13;			//宝石攻击力
 	float Angry = 14;			//怒气值
+	float Defence = 15;			//防御值
+	int32 Level = 16;	//等级
+
 	// repeated long SkillIdList = 11;	//技能id
 }
 

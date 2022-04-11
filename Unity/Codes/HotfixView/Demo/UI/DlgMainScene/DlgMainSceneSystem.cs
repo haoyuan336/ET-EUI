@@ -72,6 +72,7 @@ namespace ET
             uiComponent.HideWindow(WindowID.WindowID_FormationUI);
             uiComponent.HideWindow(WindowID.WindowID_HeroInfoLayerUI);
             uiComponent.HideWindow(WindowID.WindowID_CallHeroLayer);
+            uiComponent.HideWindow(WindowID.WindowID_ShowHeroInfoLayer);
             if (buttonName.Equals(self.View.E_MainImage.name))
             {
                 Log.Debug("hero main");

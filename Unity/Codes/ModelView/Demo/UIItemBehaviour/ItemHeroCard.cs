@@ -6,6 +6,7 @@ namespace ET
 	public  class Scroll_ItemHeroCard : Entity,IAwake,IDestroy 
 	{
 		private bool isCacheNode = false;
+		public HeroCardInfo HeroCardInfo;
 		public void SetCacheMode(bool isCache)
 		{
 			this.isCacheNode = isCache;

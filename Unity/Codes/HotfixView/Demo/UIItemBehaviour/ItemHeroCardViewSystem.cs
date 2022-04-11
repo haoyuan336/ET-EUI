@@ -18,6 +18,7 @@ namespace ET
     {
         public static void SetHeroInfo(this Scroll_ItemHeroCard self, HeroCardInfo info)
         {
+            self.HeroCardInfo = info;
             self.E_TextText.text = info.ConfigId.ToString();
             DiamondTypeConfig diamondTypeConfig = DiamondTypeConfigCategory.Instance.Get(info.HeroColor);
             self.E_ClickImage.color = self.HexToColor(diamondTypeConfig.ColorValue);
