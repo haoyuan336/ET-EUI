@@ -17,6 +17,7 @@ namespace ET
         public static async ETTask ShowMenu(this DlgSettingUI self, bool isShow)
         {
             GameObject maskNode = GameObject.Find("DlgSettingUI/MaskNode");
+            self.View.E_ShowImage.GetComponent<RectTransform>().localScale = new Vector3(1, isShow? 1 : -1, 1);
             Log.Debug($"mask Node {maskNode}");
             if (maskNode != null)
             {
@@ -30,16 +31,18 @@ namespace ET
                         heightRate = Mathf.Cos(Mathf.PI * 0.5f * (time / 0.2f));
                     }
 
-                    float height = 270 + 600 * heightRate;
+                    float height = 220 + 500 * heightRate;
                     maskNode.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
                     time += Time.deltaTime;
-                    self.View.E_ShowMenuToggle.GetComponent<RectTransform>().anchoredPosition = new Vector2(-113, -441 - heightRate * 600);
+                    self.View.E_ShowMenuToggle.GetComponent<RectTransform>().anchoredPosition = new Vector2(-113, -470 - heightRate * 500);
+                    
+                    self.View.E_BGImage.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
                     // -1031
                     await TimerComponent.Instance.WaitFrameAsync();
                 }
 
                 maskNode.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, isShow? 870 : 270);
-                self.View.E_ShowMenuToggle.GetComponent<RectTransform>().anchoredPosition = new Vector2(-113, !isShow? -440 : -1040);
+                self.View.E_ShowMenuToggle.GetComponent<RectTransform>().anchoredPosition = new Vector2(-113, !isShow? -470 : -969);
             }
         }
 

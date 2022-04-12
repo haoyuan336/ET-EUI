@@ -20,10 +20,11 @@ namespace ET
             M2C_GetGoldInfoResponse response = (M2C_GetGoldInfoResponse) await session.Call(new C2M_GetGoldInfoRequest() { AccountId = AccountId });
             if (response.Error == ErrorCode.ERR_Success)
             {
+                
                 Log.Debug($"get gold info  {response}");
-                self.View.E_GoldText.text = $"金币:{response.GoldCount}";
-                self.View.E_PowerText.text = $"体力:{response.GoldCount}";
-                self.View.E_DiamondText.text = $"宝石:{response.GoldCount}";
+                self.View.E_GoldText.text = $"{response.GoldCount}";
+                self.View.E_PowerText.text = $"{response.PowerCount}";
+                self.View.E_DiamondText.text = $"{response.DiamondCount}";
             }
         }
     }

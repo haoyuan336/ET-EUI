@@ -5,6 +5,23 @@ namespace ET
 {
 	public  class DlgSettingUIViewComponent : Entity,IAwake,IDestroy 
 	{
+		public UnityEngine.UI.Image E_BGImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_BGImage == null )
+     			{
+		    		this.m_E_BGImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_BG");
+     			}
+     			return this.m_E_BGImage;
+     		}
+     	}
+
 		public UnityEngine.UI.Button E_SettingButton
      	{
      		get
@@ -158,7 +175,7 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Text E_ShowText
+		public UnityEngine.UI.Image E_ShowImage
      	{
      		get
      		{
@@ -167,16 +184,17 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_ShowText == null )
+     			if( this.m_E_ShowImage == null )
      			{
-		    		this.m_E_ShowText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_ShowMenu/E_Show");
+		    		this.m_E_ShowImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_ShowMenu/E_Show");
      			}
-     			return this.m_E_ShowText;
+     			return this.m_E_ShowImage;
      		}
      	}
 
 		public void DestroyWidget()
 		{
+			this.m_E_BGImage = null;
 			this.m_E_SettingButton = null;
 			this.m_E_SettingImage = null;
 			this.m_E_MailButton = null;
@@ -186,10 +204,11 @@ namespace ET
 			this.m_E_BackGroundButton = null;
 			this.m_E_BackGroundImage = null;
 			this.m_E_ShowMenuToggle = null;
-			this.m_E_ShowText = null;
+			this.m_E_ShowImage = null;
 			this.uiTransform = null;
 		}
 
+		private UnityEngine.UI.Image m_E_BGImage = null;
 		private UnityEngine.UI.Button m_E_SettingButton = null;
 		private UnityEngine.UI.Image m_E_SettingImage = null;
 		private UnityEngine.UI.Button m_E_MailButton = null;
@@ -199,7 +218,7 @@ namespace ET
 		private UnityEngine.UI.Button m_E_BackGroundButton = null;
 		private UnityEngine.UI.Image m_E_BackGroundImage = null;
 		private UnityEngine.UI.Toggle m_E_ShowMenuToggle = null;
-		private UnityEngine.UI.Text m_E_ShowText = null;
+		private UnityEngine.UI.Image m_E_ShowImage = null;
 		public Transform uiTransform = null;
 	}
 }

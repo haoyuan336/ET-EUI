@@ -17,6 +17,7 @@ namespace ET.MainScene
                 response.Error = ErrorCode.ERR_Success;
                 response.UserLevel = accounts[0].Level == 0? 1 : accounts[0].Level;
                 response.Exp = accounts[0].Exp;
+                response.UserName = accounts[0].AccountName;
             }
             else
             {

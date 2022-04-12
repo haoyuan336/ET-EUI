@@ -697,4 +697,5 @@ message M2C_GetUserExpInfoResponse	//IActorLocationResponse
 	string Message = 92;
 	int32 Exp = 1;			//升级所需要的经验值
 	int32 UserLevel = 2;	//英雄当前的等级
+	string UserName = 3;
 }

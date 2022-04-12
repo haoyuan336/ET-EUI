@@ -1550,6 +1550,9 @@ namespace ET
 		[ProtoMember(2)]
 		public int UserLevel { get; set; }
 
+		[ProtoMember(3)]
+		public string UserName { get; set; }
+
 	}
 
 }
