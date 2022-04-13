@@ -12,15 +12,9 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgCallHeroLayer self)
         {
-            self.View.ELoopScrollListHeroLoopVerticalScrollRect.AddItemRefreshListener((tr, index) =>
-            {
-                self.OnLoopListItemRefreshHandler(tr, index);
-            });
-            self.View.E_CallHeroButton.AddListenerAsync(() => { return self.CallHeroButtonClick(); });
+            self.View.E_CallButton.AddListenerAsync(() => { return self.CallHeroButtonClick(); });
             // self.View.oNL
         }
-
-       
 
         public static async ETTask CallHeroButtonClick(this DlgCallHeroLayer self)
         {
@@ -46,9 +40,6 @@ namespace ET
                 Log.Error($"call hero request {e}");
             }
 
-            self.AddUIScrollItems(ref self.ItemHeroCards, self.HeroCardInfos.Count);
-            self.View.ELoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, self.HeroCardInfos.Count);
-
             await ETTask.CompletedTask;
         }
 
@@ -57,49 +48,11 @@ namespace ET
             Log.Debug("show call hero layer window");
             // self.AddUIScrollItems(ref  self.ItemHeroCards, 100);
             // self.View.ELoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, 100);
-            //todo 请求服务器当前玩家拥有那些卡牌
-            long Account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            Log.Debug($"account = {Account}");
-            M2C_GetAllHeroCardListResponse m2CGetAllHeroCardListResponse;
-            try
-            {
-                m2CGetAllHeroCardListResponse = (M2C_GetAllHeroCardListResponse) await self.ZoneScene().GetComponent<SessionComponent>().Session
-                        .Call(new C2M_GetAllHeroCardListRequest() { Account = Account });
-                if (m2CGetAllHeroCardListResponse.Error == ErrorCode.ERR_Success)
-                {
-                    List<HeroCardInfo> heroCardInfos = m2CGetAllHeroCardListResponse.HeroCardInfos;
-                    self.HeroCardInfos.Clear();
-                    foreach (var heroCardInfo in heroCardInfos)
-                    {
-                        self.HeroCardInfos.Add(heroCardInfo);
-                    }
-
-                    self.AddUIScrollItems(ref self.ItemHeroCards, self.HeroCardInfos.Count);
-                    self.View.ELoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, self.HeroCardInfos.Count);
-                }
-                else
-                {
-                    Log.Error($"c2c get all hero card list error {m2CGetAllHeroCardListResponse.Error}");
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Error($"get all hero card list error {e}");
-            }
-
             await ETTask.CompletedTask;
         }
 
         public static void HideWindow(this DlgCallHeroLayer self)
         {
-            self.RemoveUIScrollItems(ref self.ItemHeroCards);
-        }
-
-        public static void OnLoopListItemRefreshHandler(this DlgCallHeroLayer self, Transform transform, int index)
-        {
-            Scroll_ItemHeroCard scrollItemHeroCard = self.ItemHeroCards[index].BindTrans(transform);
-            // scrollItemHeroCard.E_TextText.text = $"{self.HeroCardInfos[index].HeroName}";
-            scrollItemHeroCard.SetHeroInfo(self.HeroCardInfos[index]);
         }
     }
 }

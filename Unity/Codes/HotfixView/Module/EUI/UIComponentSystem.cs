@@ -397,6 +397,9 @@ namespace ET
             
             Entity contextData = showData == null ? null : showData.contextData;
             baseWindow.UIPrefabGameObject?.SetActive(true);
+            baseWindow.UIPrefabGameObject?.transform.SetAsLastSibling();
+            // baseWindow.UIPrefabGameObject.GetComponent<Canvas>()
+            // baseWindow.UIPrefabGameObject?.GetComponent<CanvasRenderer>().
             UIEventComponent.Instance.GetUIEventHandler(id).OnShowWindow(baseWindow,contextData);
             
             self.VisibleWindowsDic[(int)id] = baseWindow;
@@ -405,6 +408,7 @@ namespace ET
                 self.HideWindowsStack.Push(preWindowID);
             }
          
+            
             Debug.Log("<color=magenta>### current Navigation window </color>" + baseWindow.WindowID.ToString());
         }
         

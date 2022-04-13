@@ -25,5 +25,7 @@
         WindowID_FormationUI, //战斗相关按钮
         WindowID_HeroInfoLayerUI, //英雄信息层
         WindowID_ShowHeroInfoLayer, //显示英雄的详细信息
+        WindowID_MainSceneBg,   //主背景的背景层
+        WindowID_MainSceneMenu, //主页面按钮
     }
 }

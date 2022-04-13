@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace ET
 {
-	public  class DlgMainSceneViewComponent : Entity,IAwake,IDestroy 
+	public  class DlgMainSceneBgViewComponent : Entity,IAwake,IDestroy 
 	{
 		public void DestroyWidget()
 		{
