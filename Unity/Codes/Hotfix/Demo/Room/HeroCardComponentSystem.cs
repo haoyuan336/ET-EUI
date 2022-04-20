@@ -103,7 +103,8 @@ namespace ET
             foreach (var heroCardInfo in m2CSyncHeroCardTurnData.HeroCardInfos)
             {
                 var heroCard = self.GetChild<HeroCard>(heroCardInfo.HeroId);
-                heroCard.Attack = heroCard.Attack;
+                // heroCard.Attack = heroCard.Attack;
+                heroCard.Attack = heroCardInfo.Attack;
                 heroCard.DiamondAttack = heroCardInfo.DiamondAttack;
                 Game.EventSystem.Publish(new EventType.UpdateAttackView() { HeroCard = heroCard });
             }
