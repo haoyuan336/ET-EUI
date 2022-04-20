@@ -29,9 +29,6 @@ namespace ILRuntime.Runtime.Generated
 
             app.RegisterCLRCreateDefaultInstance(type, () => new UnityEngine.Color32());
 
-            args = new Type[]{typeof(System.Byte), typeof(System.Byte), typeof(System.Byte), typeof(System.Byte)};
-            method = type.GetConstructor(flag, null, args, null);
-            app.RegisterCLRMethodRedirection(method, Ctor_0);
 
         }
 
@@ -97,36 +94,6 @@ namespace ILRuntime.Runtime.Generated
             return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
         }
 
-
-        static StackObject* Ctor_0(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
-        {
-            ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
-            StackObject* ptr_of_this_method;
-            StackObject* __ret = ILIntepreter.Minus(__esp, 4);
-            ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
-            System.Byte @a = (byte)ptr_of_this_method->Value;
-
-            ptr_of_this_method = ILIntepreter.Minus(__esp, 2);
-            System.Byte @b = (byte)ptr_of_this_method->Value;
-
-            ptr_of_this_method = ILIntepreter.Minus(__esp, 3);
-            System.Byte @g = (byte)ptr_of_this_method->Value;
-
-            ptr_of_this_method = ILIntepreter.Minus(__esp, 4);
-            System.Byte @r = (byte)ptr_of_this_method->Value;
-
-
-            var result_of_this_method = new UnityEngine.Color32(@r, @g, @b, @a);
-
-            if(!isNewObj)
-            {
-                __ret--;
-                WriteBackInstance(__domain, __ret, __mStack, ref result_of_this_method);
-                return __ret;
-            }
-
-            return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
-        }
 
 
     }

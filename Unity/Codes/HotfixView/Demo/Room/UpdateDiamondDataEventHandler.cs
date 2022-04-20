@@ -15,17 +15,18 @@ namespace ET
             int hangCount = pvPLevelConfig.HangCount;
             int liecount = pvPLevelConfig.LieCount;
             float distance = float.Parse(pvPLevelConfig.Distance);
-
+            Log.Debug($"diamond type{a.Diamond.DiamondType}");
             DiamondTypeConfig diamondTypeConfig = DiamondTypeConfigCategory.Instance.Get(a.Diamond.DiamondType);
             string colorStr = diamondTypeConfig.ColorValue;
-            string[] list = colorStr.Split(',');
-            if (list.Length != 3)
-            {
-                Log.Error("color error");
-            }
+
+            // string[] list = colorStr.Split(',');
+            // if (list.Length != 3)
+            // {
+            //     Log.Error("color error");
+            // }
 
             // Color color = new Color(int.Parse(list[0]), int.Parse(list[1]), int.Parse(list[2]));
-            go.transform.position = new Vector3((a.Diamond.LieIndex - liecount * 0.5f + 0.5f) * distance,0,
+            go.transform.position = new Vector3((a.Diamond.LieIndex - liecount * 0.5f + 0.5f) * distance, 0,
                 (a.Diamond.HangIndex - hangCount * 0.5f + 0.5f) * distance);
             if (go.GetComponent<SpriteRenderer>() != null)
             {
@@ -61,8 +62,11 @@ namespace ET
                             time += 0.04f;
                             go.transform.localScale = Vector3.one + Vector3.one * Mathf.Sin(time) * 0.5f;
                         }
-
                     }
+                }
+                else
+                {
+                    Log.Debug($"diamond type not found {a.Diamond.DiamondType}");
                 }
             }
 

@@ -19,19 +19,20 @@ namespace ET
             Log.Debug($"current level num {levelNum}");
             self.LevelConfig = LevelConfigCategory.Instance.Get(levelNum);
             Log.Debug($"level config {self.LevelConfig}");
-            self.Diamonds = new Diamond[self.LevelConfig.LieCount, self.LevelConfig.HangCount];
+            // self.Diamonds = new Diamond[self.LevelConfig.LieCount, self.LevelConfig.HangCount];
             // diamondComponent.CreateOneDiamond();
+            self.Diamonds = new DiamondStruct[self.LevelConfig.HangCount];
+            for (int i = 0; i < self.LevelConfig.HangCount; i++)
+            {
+                DiamondStruct diamondStruct = new DiamondStruct() { Diamonds = new Diamond[self.LevelConfig.LieCount] };
+                self.Diamonds[i] = diamondStruct;
+            }
+
             List<DiamondInfo> diamondInfos = new List<DiamondInfo>();
             int[,] map =
             {
-                { 1, 2, 3, 4, 5, 4, 1, 1 },
-                { 2, 3, 4, 5, 5, 1, 2, 3 }, 
-                { 3, 2, 5, 4, 1, 2, 3, 2 }, 
-                { 4, 1, 5, 2, 2, 5, 2, 1 },
-                { 5, 5, 1, 2, 1, 1, 5, 5 }, 
-                { 4, 5, 2, 1, 4, 2, 4, 5 }, 
-                { 1, 4, 3, 4, 5, 1, 1, 4 }, 
-                { 2, 3, 4, 5, 5, 1, 2, 3 }
+                { 1, 2, 3, 4, 5, 4, 1, 1 }, { 2, 3, 4, 5, 5, 1, 2, 3 }, { 3, 2, 5, 4, 1, 2, 3, 2 }, { 4, 1, 5, 2, 2, 5, 2, 1 },
+                { 5, 5, 1, 2, 1, 1, 5, 5 }, { 4, 5, 2, 1, 4, 2, 4, 5 }, { 1, 4, 3, 4, 5, 1, 1, 4 }, { 2, 3, 4, 5, 5, 1, 2, 3 }
             };
             for (var i = 0; i < self.LevelConfig.HangCount; i++)
             {
@@ -40,12 +41,18 @@ namespace ET
                     Diamond diamond = self.CreateOneDiamond();
                     diamond.SetIndex(j, i);
                     diamond.DiamondType = map[i, j];
-                    self.Diamonds[j, i] = diamond;
+                    // self.Diamonds[j, i] = diamond;
+                    self.SetDiamondToList(j, i, diamond);
                     diamondInfos.Add(diamond.GetMessageInfo());
                 }
             }
 
             return diamondInfos;
+        }
+
+        public static void SetDiamondToList(this DiamondComponent self, int lie, int hang, Diamond diamond)
+        {
+            self.Diamonds[hang].Diamonds[lie] = diamond;
         }
 
         public static Diamond CreateOneDiamond(this DiamondComponent self)
@@ -56,7 +63,7 @@ namespace ET
 
             int[] keys = DiamondTypeConfigCategory.Instance.GetAll().Keys.ToArray();
             //todo test
-            keys = new[] { 1, 2, 3, 4, 5, 6 };
+            // keys = new[] { 1, 2, 3, 4, 5 };
             var randomIndex = RandomHelper.RandomNumber(0, keys.Length);
             int configIndex = keys[randomIndex];
             diamond.DiamondType = configIndex;
@@ -82,7 +89,8 @@ namespace ET
                 return null;
             }
 
-            return self.Diamonds[LieIndex, HangIndex];
+            // return self.Diamonds[LieIndex, HangIndex];
+            return self.Diamonds[HangIndex].Diamonds[LieIndex];
         }
 
         public static Diamond GetDiamondWithDir(this DiamondComponent self, Diamond diamond, int type)
@@ -110,7 +118,8 @@ namespace ET
                 return null;
             }
 
-            return self.Diamonds[lieIndex, hangIndex];
+            // return self.Diamonds[lieIndex, hangIndex];
+            return self.Diamonds[hangIndex].Diamonds[lieIndex];
         }
 
         public static DiamondActionItem SwapDiamondPos(this DiamondComponent self, Diamond diamond1, Diamond diamond2)
@@ -121,14 +130,16 @@ namespace ET
 
             int LieIndex2 = diamond2.LieIndex;
             int HangIndex2 = diamond2.HangIndex;
-            self.Diamonds[LieIndex1, HangIndex1] = diamond2;
+            // self.Diamonds[LieIndex1, HangIndex1] = diamond2;
+            self.SetDiamondToList(LieIndex1, HangIndex1, diamond2);
             diamond2.SetIndex(LieIndex1, HangIndex1);
             diamondActionItem.DiamondActions.Add(new DiamondAction()
             {
                 DiamondInfo = diamond2.GetMessageInfo(), ActionType = (int) DiamondActionType.Move
             });
 
-            self.Diamonds[LieIndex2, HangIndex2] = diamond1;
+            // self.Diamonds[LieIndex2, HangIndex2] = diamond1;
+            self.SetDiamondToList(LieIndex2, HangIndex2, diamond1);
             diamond1.SetIndex(LieIndex2, HangIndex2);
             diamondActionItem.DiamondActions.Add(new DiamondAction()
             {
@@ -145,7 +156,8 @@ namespace ET
             {
                 for (int j = 0; j < self.LevelConfig.LieCount; j++)
                 {
-                    Diamond diamond = self.Diamonds[j, i];
+                    // Diamond diamond = self.Diamonds[j, i];
+                    Diamond diamond = self.GetDiamond(j, i);
                     if (diamond == null)
                     {
                         continue;
@@ -156,7 +168,7 @@ namespace ET
                         continue;
                     }
 
-                    List<Diamond> sameLieList = self.CheckLieSameDiamond(self.Diamonds[j, i]);
+                    List<Diamond> sameLieList = self.CheckLieSameDiamond(diamond);
                     if (sameLieList.Count >= 3)
                     {
                         crashListList.Add(sameLieList);
@@ -230,7 +242,8 @@ namespace ET
             {
                 for (int j = 0; j < self.LevelConfig.LieCount; j++)
                 {
-                    Diamond diamond = self.Diamonds[j, i];
+                    // Diamond diamond = self.Diamonds[j, i];
+                    Diamond diamond = self.GetDiamond(j, i);
                     if (diamond == null)
                     {
                         continue;
@@ -241,7 +254,7 @@ namespace ET
                         continue;
                     }
 
-                    List<Diamond> sameHangList = self.CheckHangSameDiamond(self.Diamonds[j, i]);
+                    List<Diamond> sameHangList = self.CheckHangSameDiamond(diamond);
                     if (sameHangList.Count >= 3)
                     {
                         Log.Debug("same hang list =  " + sameHangList.Count);
@@ -361,7 +374,8 @@ namespace ET
                     DiamondAction diamondAction = new DiamondAction();
                     diamondAction.ActionType = (int) DiamondActionType.Destory;
                     diamondAction.DiamondInfo = diamond.GetMessageInfo();
-                    self.Diamonds[diamond.LieIndex, diamond.HangIndex] = null;
+                    // self.Diamonds[diamond.LieIndex, diamond.HangIndex] = null;
+                    self.SetDiamondToList(diamond.LieIndex, diamond.HangIndex, null);
                     diamond.Dispose();
                     diamondActionItem.DiamondActions.Add(diamondAction);
                 }
@@ -488,7 +502,8 @@ namespace ET
                         Diamond diamond = diamonds[j];
                         if (!diamond.EqualsIndex(i, j))
                         {
-                            self.Diamonds[i, j] = diamond;
+                            // self.Diamonds[i, j] = diamond;
+                            self.SetDiamondToList(j, i, diamond);
                             diamond.SetIndex(i, j);
                             DiamondAction action = new DiamondAction();
                             action.ActionType = (int) DiamondActionType.Move;
@@ -499,7 +514,8 @@ namespace ET
                     else
                     {
                         Diamond diamond = self.CreateOneDiamond();
-                        self.Diamonds[i, j] = diamond;
+                        // self.Diamonds[i, j] = diamond;
+                        self.SetDiamondToList(j, i, diamond);
                         diamond.InitLieIndex = i;
                         diamond.InitHangIndex = self.LevelConfig.HangCount + j;
                         diamond.SetIndex(i, j);
@@ -630,7 +646,8 @@ namespace ET
                     diamond.SetIndex(targetDiamond.LieIndex, targetDiamond.HangIndex);
                     diamond.DiamondType = targetDiamond.DiamondType;
                     diamond.BoomType = (int) boomType;
-                    self.Diamonds[diamond.LieIndex, diamond.HangIndex] = diamond;
+                    // self.Diamonds[diamond.LieIndex, diamond.HangIndex] = diamond;
+                    self.SetDiamondToList(diamond.LieIndex, diamond.HangIndex, diamond);
                     diamondAction = new DiamondAction();
                     diamondAction.ActionType = (int) DiamondActionType.Create;
                     diamondAction.DiamondInfo = diamond.GetMessageInfo();
@@ -782,12 +799,14 @@ namespace ET
                 // crashListList.Add(crashList);
                 foreach (var crashDiamond in crashList)
                 {
-                    if (crashDiamond != null && !crashDiamond.IsDisposed && self.Diamonds[crashDiamond.LieIndex, crashDiamond.HangIndex] != null)
+                    Diamond getDiamond = self.GetDiamond(crashDiamond.LieIndex, crashDiamond.HangIndex);
+                    if (crashDiamond != null && !crashDiamond.IsDisposed && getDiamond != null)
                     {
                         DiamondAction diamondAction = new DiamondAction();
                         diamondAction.ActionType = (int) DiamondActionType.Destory;
                         diamondAction.DiamondInfo = crashDiamond.GetMessageInfo();
-                        self.Diamonds[crashDiamond.LieIndex, crashDiamond.HangIndex] = null;
+                        // self.Diamonds[crashDiamond.LieIndex, crashDiamond.HangIndex] = null;
+                        self.SetDiamondToList(crashDiamond.LieIndex, crashDiamond.HangIndex, null);
                         crashDiamond.Dispose();
                         diamondActionItem.DiamondActions.Add(diamondAction);
                     }
@@ -808,8 +827,10 @@ namespace ET
             var count = directionType == DirectionType.Horizontal? self.LevelConfig.LieCount : self.LevelConfig.HangCount;
             for (int i = 0; i < count; i++)
             {
-                Diamond target = self.Diamonds[directionType == DirectionType.Horizontal? i : diamond.LieIndex,
-                    directionType == DirectionType.Horizontal? diamond.HangIndex : i];
+                // Diamond target = self.Diamonds[directionType == DirectionType.Horizontal? i : diamond.LieIndex,
+                //     directionType == DirectionType.Horizontal? diamond.HangIndex : i];
+                Diamond target = self.GetDiamond(directionType == DirectionType.Horizontal? i : diamond.LieIndex,
+                    directionType == DirectionType.Horizontal? diamond.HangIndex : i);
 
                 if (!target.Equals(diamond) && target.BoomType != (int) BoomType.Invalide)
                 {
@@ -830,7 +851,8 @@ namespace ET
             //获取交叉点上所有钻石
             for (int i = 0; i < self.LevelConfig.HangCount; i++)
             {
-                Diamond target = self.Diamonds[diamond.LieIndex, i];
+                // Diamond target = self.Diamonds[diamond.LieIndex, i];
+                Diamond target = self.GetDiamond(diamond.LieIndex, i);
                 if (!target.Equals(diamond) && target.BoomType != (int) BoomType.Invalide)
                 {
                     //todo 如果被消除的对象是一个特殊猪，并且它不与原来猪是同一颗
@@ -843,7 +865,8 @@ namespace ET
 
             for (int i = 0; i < self.LevelConfig.LieCount; i++)
             {
-                Diamond target = self.Diamonds[i, diamond.HangIndex];
+                // Diamond target = self.Diamonds[i, diamond.HangIndex];
+                Diamond target = self.GetDiamond(i, diamond.HangIndex);
                 if (!target.Equals(diamond) && target.BoomType != (int) BoomType.Invalide)
                 {
                     //todo 如果被消除的对象是一个特殊猪，并且它不与原来猪是同一颗

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using ET.Account;
 using UnityEngine;
@@ -23,9 +24,12 @@ namespace ET
                 {
                     DiamondInfo diamondInfo = diamondAction.DiamondInfo;
                     Diamond diamond = diamondComponent.GetChild<Diamond>(diamondInfo.Id);
+                
+
                     switch (diamondAction.ActionType)
                     {
                         case (int) DiamondActionType.Move:
+                            Log.Debug($"diamond info lieinde {diamondInfo.LieIndex}");
                             diamond.SetIndex(diamondInfo.LieIndex, diamondInfo.HangIndex);
                             tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex() { Diamond = diamond }));
                             break;

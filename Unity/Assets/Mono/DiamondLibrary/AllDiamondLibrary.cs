@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Android;
 
 namespace ET
 {
@@ -15,7 +16,10 @@ namespace ET
         {
             foreach (var diamondSprite in this.DiamondSprites)
             {
-                this.DiamondSpriteMap.Add(diamondSprite.DiamondType, diamondSprite);
+                if (!this.DiamondSpriteMap.ContainsKey(diamondSprite.DiamondType))
+                {
+                    this.DiamondSpriteMap.Add(diamondSprite.DiamondType, diamondSprite);
+                }
             }
         }
     }
