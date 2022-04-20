@@ -116,6 +116,11 @@ namespace ILRuntime.Runtime.Generated
             UnityEngine_RaycastHit_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Int32_List_1_ILTypeInstance_Binding_KeyCollection_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Int32_List_1_ILTypeInstance_Binding_KeyCollection_Binding_Enumerator_Binding.Register(app);
+            ET_DiamondLibraryCtl_Binding.Register(app);
+            ET_AllDiamondLibrary_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_Int32_DiamondLibrary_Binding.Register(app);
+            ET_DiamondLibrary_Binding.Register(app);
+            UnityEngine_SpriteRenderer_Binding.Register(app);
             UnityEngine_AsyncOperation_Binding.Register(app);
             UnityEngine_SceneManagement_SceneManager_Binding.Register(app);
             UnityEngine_UI_Text_Binding.Register(app);
