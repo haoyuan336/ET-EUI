@@ -22,18 +22,31 @@ namespace ILRuntime.Runtime.Generated
             MethodBase method;
             Type[] args;
             Type type = typeof(ET.RandomHelper);
-            args = new Type[]{typeof(System.Int32), typeof(System.Int32)};
-            method = type.GetMethod("RandomNumber", flag, null, args, null);
-            app.RegisterCLRMethodRedirection(method, RandomNumber_0);
             args = new Type[]{};
             method = type.GetMethod("RandInt64", flag, null, args, null);
-            app.RegisterCLRMethodRedirection(method, RandInt64_1);
+            app.RegisterCLRMethodRedirection(method, RandInt64_0);
+            args = new Type[]{typeof(System.Int32), typeof(System.Int32)};
+            method = type.GetMethod("RandomNumber", flag, null, args, null);
+            app.RegisterCLRMethodRedirection(method, RandomNumber_1);
 
 
         }
 
 
-        static StackObject* RandomNumber_0(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        static StackObject* RandInt64_0(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        {
+            ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
+            StackObject* __ret = ILIntepreter.Minus(__esp, 0);
+
+
+            var result_of_this_method = ET.RandomHelper.RandInt64();
+
+            __ret->ObjectType = ObjectTypes.Long;
+            *(long*)&__ret->Value = result_of_this_method;
+            return __ret + 1;
+        }
+
+        static StackObject* RandomNumber_1(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
             StackObject* ptr_of_this_method;
@@ -50,19 +63,6 @@ namespace ILRuntime.Runtime.Generated
 
             __ret->ObjectType = ObjectTypes.Integer;
             __ret->Value = result_of_this_method;
-            return __ret + 1;
-        }
-
-        static StackObject* RandInt64_1(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
-        {
-            ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
-            StackObject* __ret = ILIntepreter.Minus(__esp, 0);
-
-
-            var result_of_this_method = ET.RandomHelper.RandInt64();
-
-            __ret->ObjectType = ObjectTypes.Long;
-            *(long*)&__ret->Value = result_of_this_method;
             return __ret + 1;
         }
 
