@@ -292,8 +292,8 @@
      <Compile Include="Assets\Mono\ILRuntime\Generate\ET_ILog_Binding.cs" />
      <Compile Include="Assets\Mono\ILRuntime\Generate\ET_ETTask_1_Object_Array_Binding.cs" />
      <Compile Include="Assets\Mono\ILRuntime\Generate\System_Collections_Generic_Dictionary_2_Int32_SortedDictionary_2_Int3.cs" />
-     <Compile Include="Assets\Mono\Core\MultiDictionary.cs" />
      <Compile Include="Assets\Mono\ColorTool.cs" />
+     <Compile Include="Assets\Mono\Core\MultiDictionary.cs" />
      <Compile Include="Assets\Mono\ILRuntime\ICriticalNotifyCompletionAdapter.cs" />
      <Compile Include="Assets\Mono\ILRuntime\Generate\ET_MonoPool_Binding.cs" />
      <Compile Include="Assets\Mono\Module\Network\KChannel.cs" />
@@ -972,6 +972,12 @@
      </Reference>
      <Reference Include="System.Xml.XPath.XDocument">
      <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.27f1c1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Xml.XPath.XDocument.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Addressables">
+     <HintPath>E:/workspace/ET-EUI/Unity/Library/ScriptAssemblies/Unity.Addressables.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.ResourceManager">
+     <HintPath>E:/workspace/ET-EUI/Unity/Library/ScriptAssemblies/Unity.ResourceManager.dll</HintPath>
      </Reference>
      <Reference Include="UnityEditor.UI">
      <HintPath>E:/workspace/ET-EUI/Unity/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>

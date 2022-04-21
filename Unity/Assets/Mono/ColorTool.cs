@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace ET
 {
@@ -18,6 +19,7 @@ namespace ET
                 a = byte.Parse(hex.Substring(6, 2), NumberStyles.HexNumber);
             }
 
+            // Addressables
             return new Color32(r, g, b, a);
         }
     }

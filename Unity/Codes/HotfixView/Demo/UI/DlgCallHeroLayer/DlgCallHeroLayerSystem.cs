@@ -14,6 +14,7 @@ namespace ET
         {
             self.View.E_CallButton.AddListenerAsync(() => { return self.CallHeroButtonClick(); });
             // self.View.oNL
+            
         }
 
         public static async ETTask CallHeroButtonClick(this DlgCallHeroLayer self)
