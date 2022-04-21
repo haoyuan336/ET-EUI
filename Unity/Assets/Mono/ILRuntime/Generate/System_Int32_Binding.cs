@@ -32,8 +32,6 @@ namespace ILRuntime.Runtime.Generated
             method = type.GetMethod("Equals", flag, null, args, null);
             app.RegisterCLRMethodRedirection(method, Equals_2);
 
-            app.RegisterCLRCreateArrayInstance(type, s => new System.Int32[s]);
-
 
         }
 
