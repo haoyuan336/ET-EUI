@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine.AddressableAssets;
 
 namespace ET
 {
@@ -54,6 +55,7 @@ namespace ET
     {
         public HashSet<string> LoadedResource = new HashSet<string>();
 
+        
         public async ETTask LoadAsync(string ab)
         {
             CoroutineLock coroutineLock = null;

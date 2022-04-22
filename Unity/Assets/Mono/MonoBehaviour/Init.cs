@@ -1,63 +1,121 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace ET
 {
-	// 1 mono模式 2 ILRuntime模式 3 mono热重载模式
-	public enum CodeMode
-	{
-		Mono = 1,
-		ILRuntime = 2,
-		Reload = 3,
-	}
-	
-	public class Init: MonoBehaviour
-	{
-		public CodeMode CodeMode = CodeMode.Mono;
-		
-		private void Awake()
-		{
+    // 1 mono模式 2 ILRuntime模式 3 mono热重载模式
+    public enum CodeMode
+    {
+        Mono = 1,
+        ILRuntime = 2,
+        Reload = 3,
+    }
+
+    public class Init: MonoBehaviour
+    {
+        public CodeMode CodeMode = CodeMode.Mono;
+        public LoadProgressBar LoadProgressBar;
+
+        private void Awake()
+        {
+            // #if ENABLE_IL2CPP
+            // 			this.CodeMode = CodeMode.ILRuntime;
+            // #endif
+            // 			
+            // 			System.AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+            // 			{
+            // 				Log.Error(e.ExceptionObject.ToString());
+            // 			};
+            // 			
+            // 			SynchronizationContext.SetSynchronizationContext(ThreadSynchronizationContext.Instance);
+            // 			
+            // 			DontDestroyOnLoad(gameObject);
+            //
+            // 			ETTask.ExceptionHandler += Log.Error;
+            //
+            // 			Log.ILog = new UnityLogger();
+            //
+            // 			Options.Instance = new Options();
+            //
+            // 			CodeLoader.Instance.CodeMode = this.CodeMode;
+        }
+
+        IEnumerator Start()
+        {
+            var handler = Addressables.DownloadDependenciesAsync("Code");
+            while (!handler.IsDone)
+            {
+                LoadProgressBar.Progress = handler.GetDownloadStatus().Percent;
+                yield return null;
+            }
+
+            if (handler.IsDone)
+            {
+                Debug.Log("更新资源完成");
+                Destroy(this.LoadProgressBar.gameObject);
+                this.InitCode();
+            }
+
+            yield break;
+        }
+
+        void InitCode()
+        {
 #if ENABLE_IL2CPP
-			this.CodeMode = CodeMode.ILRuntime;
+            			this.CodeMode = CodeMode.ILRuntime;
 #endif
-			
-			System.AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
-			{
-				Log.Error(e.ExceptionObject.ToString());
-			};
-			
-			SynchronizationContext.SetSynchronizationContext(ThreadSynchronizationContext.Instance);
-			
-			DontDestroyOnLoad(gameObject);
 
-			ETTask.ExceptionHandler += Log.Error;
+            System.AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error(e.ExceptionObject.ToString()); };
 
-			Log.ILog = new UnityLogger();
+            SynchronizationContext.SetSynchronizationContext(ThreadSynchronizationContext.Instance);
 
-			Options.Instance = new Options();
+            DontDestroyOnLoad(gameObject);
 
-			CodeLoader.Instance.CodeMode = this.CodeMode;
-		}
+            ETTask.ExceptionHandler += Log.Error;
 
-		private void Start()
-		{
-			CodeLoader.Instance.Start();
-		}
+            Log.ILog = new UnityLogger();
 
-		private void Update()
-		{
-			CodeLoader.Instance.Update();
-		}
+            Options.Instance = new Options();
 
-		private void LateUpdate()
-		{
-			CodeLoader.Instance.LateUpdate();
-		}
+            CodeLoader.Instance.CodeMode = this.CodeMode;
+            CodeLoader.Instance.Start();
+        }
 
-		private void OnApplicationQuit()
-		{
-			CodeLoader.Instance.OnApplicationQuit();
-			CodeLoader.Instance.Dispose();
-		}
-	}
+        // private void Start()
+        // {
+        // 	CodeLoader.Instance.Start();
+        // }
+        //
+        private void Update()
+        {
+            if (CodeLoader.Instance.Update != null)
+            {
+                CodeLoader.Instance.Update();
+            }
+        }
+
+        //
+        // //
+        private void LateUpdate()
+        {
+            if (CodeLoader.Instance.LateUpdate != null)
+            {
+                CodeLoader.Instance.LateUpdate();
+            }
+        }
+
+        //
+        private void OnApplicationQuit()
+        {
+            if (CodeLoader.Instance.OnApplicationQuit != null)
+            {
+                CodeLoader.Instance.OnApplicationQuit();
+            }
+
+            CodeLoader.Instance.Dispose();
+        }
+    }
 }
