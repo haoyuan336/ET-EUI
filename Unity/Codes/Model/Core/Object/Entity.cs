@@ -768,7 +768,8 @@ namespace ET
             Type type = typeof (K);
             if (this.components != null && this.components.ContainsKey(type))
             {
-                throw new Exception($"entity already has component: {type.FullName}");
+                // throw new Exception($"entity already has component: {type.FullName}");
+                return null;
             }
 
             Entity component = Create(type, isFromPool);

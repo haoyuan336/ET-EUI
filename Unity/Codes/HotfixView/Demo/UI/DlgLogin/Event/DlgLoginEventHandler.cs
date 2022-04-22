@@ -1,4 +1,6 @@
-﻿namespace ET
+﻿using UnityEngine;
+
+namespace ET
 {
 	[AUIEvent(WindowID.WindowID_Login)]
 	public  class DlgLoginEventHandler : IAUIEventHandler
@@ -6,6 +8,7 @@
 
 		public void OnInitWindowCoreData(UIBaseWindow uiBaseWindow)
 		{
+			Log.Debug("on init window core data");
 		  uiBaseWindow.WindowData.windowType = UIWindowType.PopUp; 
 		}
 
