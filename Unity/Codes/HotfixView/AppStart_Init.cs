@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace ET
 {
@@ -7,9 +8,14 @@ namespace ET
     {
         protected override async ETTask Run(EventType.AppStart args)
         {
+            
+            // Debug.Log("add start init");
+            // await AddressableInstance.LoadAssetByLabel<GameObject>("Code");
+            
+            
             Game.Scene.AddComponent<TimerComponent>();
             Game.Scene.AddComponent<CoroutineLockComponent>();
-
+            // await AddressableInstance.LoadAssetByLabel<GameObject>("Code");
             // 加载配置
             Game.Scene.AddComponent<ResourcesComponent>();
             await ResourcesComponent.Instance.LoadBundleAsync("config.unity3d");
@@ -29,12 +35,9 @@ namespace ET
             Game.Scene.AddComponent<AIDispatcherComponent>();
             await ResourcesComponent.Instance.LoadBundleAsync("unit.unity3d");
             //
-            Scene zoneScene = SceneFactory.CreateZoneScene(1, "Game", Game.Scene);
+            Scene zoneScene = await SceneFactory.CreateZoneScene(1, "Game", Game.Scene);
             //
             await Game.EventSystem.PublishAsync(new EventType.AppStartInitFinish() { ZoneScene = zoneScene });
-
         }
-
-    
     }
 }

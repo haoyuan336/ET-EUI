@@ -55,17 +55,17 @@ namespace ET
                 }
                 case CodeMode.ILRuntime:
                 {
-                    Dictionary<string, UnityEngine.Object> dictionary = AssetsBundleHelper.LoadBundle("code.unity3d");
-                    byte[] assBytes = ((TextAsset) dictionary["Code.dll"]).bytes;
-                    byte[] pdbBytes = ((TextAsset) dictionary["Code.pdb"]).bytes;
+                    // Dictionary<string, UnityEngine.Object> dictionary = AssetsBundleHelper.LoadBundle("code.unity3d");
+                    // byte[] assBytes = ((TextAsset) dictionary["Code.dll"]).bytes;
+                    // byte[] pdbBytes = ((TextAsset) dictionary["Code.pdb"]).bytes;
 
                     //byte[] assBytes = File.ReadAllBytes(Path.Combine("../Unity/", Define.BuildOutputDir, "Code.dll"));
                     //byte[] pdbBytes = File.ReadAllBytes(Path.Combine("../Unity/", Define.BuildOutputDir, "Code.pdb"));
 
-                    // TextAsset codedll = Addressables.LoadAssetAsync<TextAsset>("Assets/Bundles/Code/Code.dll.bytes").WaitForCompletion();
-                    // TextAsset codepdb = Addressables.LoadAssetAsync<TextAsset>("Assets/Bundles/Code/Code.pdb.bytes").WaitForCompletion();
-                    // byte[] assBytes = codedll.bytes;
-                    // byte[] pdbBytes = codepdb.bytes;
+                    TextAsset codedll = Addressables.LoadAssetAsync<TextAsset>("Code.dll").WaitForCompletion();
+                    TextAsset codepdb = Addressables.LoadAssetAsync<TextAsset>("Code.pdb").WaitForCompletion();
+                    byte[] assBytes = codedll.bytes;
+                    byte[] pdbBytes = codepdb.bytes;
                     appDomain = new ILRuntime.Runtime.Enviorment.AppDomain();
 #if DEBUG && (UNITY_EDITOR || UNITY_ANDROID || UNITY_IPHONE)
                     this.appDomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
