@@ -45,7 +45,7 @@ namespace ET
 
         IEnumerator Start()
         {
-            var handler = Addressables.DownloadDependenciesAsync("Code");
+            var handler = Addressables.DownloadDependenciesAsync("All");
             while (!handler.IsDone)
             {
                 LoadProgressBar.Progress = handler.GetDownloadStatus().Percent;

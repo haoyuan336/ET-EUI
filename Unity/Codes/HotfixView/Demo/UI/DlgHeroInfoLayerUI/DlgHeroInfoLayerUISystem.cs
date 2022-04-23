@@ -123,10 +123,10 @@ namespace ET
             }
         }
 
-        public static void OnClickHeroItem(this DlgHeroInfoLayerUI self, Scroll_ItemHeroCard heroCard)
+        public static async void OnClickHeroItem(this DlgHeroInfoLayerUI self, Scroll_ItemHeroCard heroCard)
         {
             // Log.Debug($"click hero {heroCard.HeroCardInfo.HeroId}");
-            self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_ShowHeroInfoLayer, WindowID.WindowID_Invaild,
+            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_ShowHeroInfoLayer, WindowID.WindowID_Invaild,
                 new ShowWindowData() { contextData = heroCard });
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_HeroInfoLayerUI);
         }

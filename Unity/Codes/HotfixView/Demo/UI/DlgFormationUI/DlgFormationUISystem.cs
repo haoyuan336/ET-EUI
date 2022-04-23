@@ -13,9 +13,9 @@ namespace ET
             self.View.E_PVEButton.AddListener(self.PVEButtonClick);
         }
 
-        public static void PVEButtonClick(this DlgFormationUI self)
+        public static async void PVEButtonClick(this DlgFormationUI self)
         {
-            self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_EditorTroopLayer);
+            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_EditorTroopLayer);
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_MainScene);
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_MainSceneBg);
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GoldInfoUI);

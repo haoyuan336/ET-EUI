@@ -13,11 +13,11 @@ namespace ET
         {
             Log.Debug("DlgLoginSystem RegisterUIEvent");
             // self.View.E_LoginButton.AddListener(() => { self.OnLoginClickHandler(); });
-            // self.View.E_LoginButton.AddListenerAsync(() => { return self.OnLoginClickHandler();});
-            self.View.E_LoginButton.AddListener(() =>
-            {
-                Log.Debug("buttoin click");
-            });
+            self.View.E_LoginButton.AddListenerAsync(() => { return self.OnLoginClickHandler(); });
+            // self.View.E_LoginButton.AddListener(() =>
+            // {
+            //     Log.Debug("buttoin click");
+            // });
         }
 
         public static void ShowWindow(this DlgLogin self, Entity contextData = null)
@@ -40,10 +40,9 @@ namespace ET
                 }
                 //todo 显示登录成功之后的UI
                 //登录成功，进入选择服务器页面
-                
-                
+
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Login);
-                self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_ChooseServer);
+                await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_ChooseServer);
             }
             catch (Exception e)
             {

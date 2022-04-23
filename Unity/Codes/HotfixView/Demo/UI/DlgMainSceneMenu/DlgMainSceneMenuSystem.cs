@@ -38,7 +38,7 @@ namespace ET
             });
         }
 
-        public static void ClickMainMenu(this DlgMainSceneMenu self, string buttonName)
+        public static async void ClickMainMenu(this DlgMainSceneMenu self, string buttonName)
         {
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             uiComponent.HideWindow(WindowID.WindowID_AccountInfo);
@@ -51,22 +51,22 @@ namespace ET
             if (buttonName.Equals(self.View.E_MainImage.name))
             {
                 Log.Debug("hero main");
-                uiComponent.ShowWindow(WindowID.WindowID_AccountInfo);
-                uiComponent.ShowWindow(WindowID.WindowID_MessageTaskActiveInfo);
-                uiComponent.ShowWindow(WindowID.WindowID_SettingUI);
-                uiComponent.ShowWindow(WindowID.WindowID_FormationUI);
+                await uiComponent.ShowWindow(WindowID.WindowID_AccountInfo);
+                await uiComponent.ShowWindow(WindowID.WindowID_MessageTaskActiveInfo);
+                await uiComponent.ShowWindow(WindowID.WindowID_SettingUI);
+                await uiComponent.ShowWindow(WindowID.WindowID_FormationUI);
             }
             else if (buttonName.Equals(self.View.E_HeroImage.name))
             {
                 Log.Debug("hero label");
-                uiComponent.ShowWindow(WindowID.WindowID_HeroInfoLayerUI);
+                await uiComponent.ShowWindow(WindowID.WindowID_HeroInfoLayerUI);
             }
             else if (buttonName.Equals(self.View.E_CallImage.name))
             {
                 Log.Debug("call label");
-                uiComponent.ShowWindow(WindowID.WindowID_CallHeroLayer);
-                uiComponent.ShowWindow(WindowID.WindowID_MainSceneMenu);
-                uiComponent.ShowWindow(WindowID.WindowID_GoldInfoUI);
+                await uiComponent.ShowWindow(WindowID.WindowID_CallHeroLayer);
+                await uiComponent.ShowWindow(WindowID.WindowID_MainSceneMenu);
+                await uiComponent.ShowWindow(WindowID.WindowID_GoldInfoUI);
             }
             else if (buttonName.Equals(self.View.E_BagImage.name))
             {
@@ -90,7 +90,7 @@ namespace ET
         public static async ETTask PvEButtonClick(this DlgMainSceneMenu self)
         {
             Log.Debug("pve button click");
-            self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_EditorTroopLayer);
+            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_EditorTroopLayer);
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_MainScene);
 
             await ETTask.CompletedTask;
@@ -99,7 +99,6 @@ namespace ET
         public static void ShowWindow(this DlgMainSceneMenu self, Entity contextData = null)
         {
             Log.Debug("macin scene show window");
-          
         }
     }
 }

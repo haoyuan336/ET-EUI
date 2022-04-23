@@ -95,11 +95,12 @@ namespace ET
             self.CloseWindow(windowID);
         }
 
-        public static void ShowWindow<T>(this UIComponent self, WindowID preWindowID = WindowID.WindowID_Invaild, ShowWindowData showData = null)
+        public static async void ShowWindow<T>(this UIComponent self, WindowID preWindowID = WindowID.WindowID_Invaild,
+        ShowWindowData showData = null)
                 where T : Entity
         {
             WindowID windowsId = self.GetWindowIdByGeneric<T>();
-            self.ShowWindow(windowsId, preWindowID, showData);
+            await self.ShowWindow(windowsId, preWindowID, showData);
         }
 
         /// <summary>
@@ -107,10 +108,10 @@ namespace ET
         /// </summary>
         /// <OtherParam name="id"></OtherParam>
         /// <OtherParam name="showData"></OtherParam>
-        public static void ShowWindow(this UIComponent self, WindowID id, WindowID preWindowID = WindowID.WindowID_Invaild,
+        public static async ETTask ShowWindow(this UIComponent self, WindowID id, WindowID preWindowID = WindowID.WindowID_Invaild,
         ShowWindowData showData = null)
         {
-            UIBaseWindow baseWindow = self.ReadyToShowBaseWindow(id, showData);
+            UIBaseWindow baseWindow = await self.ReadyToShowBaseWindow(id, showData);
             if (null != baseWindow)
             {
                 self.RealShowWindow(baseWindow, id, showData, preWindowID);
@@ -147,10 +148,10 @@ namespace ET
             await self.ShowWindowAsync(windowsId, preWindowID, showData);
         }
 
-        public static void HideAndShowWindowStack(this UIComponent self, WindowID hideWindowId, WindowID showWindowId)
+        public static async void HideAndShowWindowStack(this UIComponent self, WindowID hideWindowId, WindowID showWindowId)
         {
             self.HideWindow(hideWindowId, true);
-            self.ShowWindow(showWindowId, preWindowID: hideWindowId);
+            await self.ShowWindow(showWindowId, preWindowID: hideWindowId);
         }
 
         public static void HideAndShowWindowStack<T, K>(this UIComponent self) where T : Entity where K : Entity
@@ -178,7 +179,7 @@ namespace ET
         /// </summary>
         /// <OtherParam name="id"></OtherParam>
         /// <OtherParam name="onComplete"></OtherParam>
-        public static void HideWindow(this UIComponent self, WindowID id, bool isPushToStack = false)
+        public static async void HideWindow(this UIComponent self, WindowID id, bool isPushToStack = false)
         {
             if (!self.CheckDirectlyHide(id))
             {
@@ -197,8 +198,7 @@ namespace ET
             }
 
             WindowID preWindowID = self.HideWindowsStack.Pop();
-            ;
-            self.ShowWindow(preWindowID);
+            await self.ShowWindow(preWindowID);
         }
 
         public static void HideWindow<T>(this UIComponent self, bool isPushToStack = false) where T : Entity
@@ -243,7 +243,7 @@ namespace ET
             self.UnLoadWindow(hideWindowId);
         }
 
-        private static UIBaseWindow ReadyToShowBaseWindow(this UIComponent self, WindowID id, ShowWindowData showData = null)
+        private static async ETTask<UIBaseWindow> ReadyToShowBaseWindow(this UIComponent self, WindowID id, ShowWindowData showData = null)
         {
             UIBaseWindow baseWindow = self.GetUIBaseWindow(id);
             // 如果UI不存在开始实例化新的窗口
@@ -251,7 +251,7 @@ namespace ET
             {
                 baseWindow = self.AddChild<UIBaseWindow>();
                 baseWindow.WindowID = id;
-                self.LoadBaseWindows(baseWindow);
+                await self.LoadBaseWindows(baseWindow);
             }
 
             //
@@ -459,7 +459,7 @@ namespace ET
         /// <summary>
         /// 同步加载
         /// </summary>
-        private static async void LoadBaseWindows(this UIComponent self, UIBaseWindow baseWindow)
+        private static async ETTask LoadBaseWindows(this UIComponent self, UIBaseWindow baseWindow)
         {
             if (!UIPathComponent.Instance.WindowPrefabPath.TryGetValue((int) baseWindow.WindowID, out string value))
             {
@@ -468,8 +468,8 @@ namespace ET
             }
 
             Log.Debug($"load base windows value {value}  ");
-            GameObject go = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(value);
-
+            GameObject go = await AddressableComponent.Instance.LoadAssetByPathAsync<UnityEngine.GameObject>(value);
+            Log.Debug("load base window complete");
             //
             // ResourcesComponent.Instance.LoadBundle(value.StringToAB());
             // GameObject go                      = ResourcesComponent.Instance.GetAsset(value.StringToAB(), value ) as GameObject;

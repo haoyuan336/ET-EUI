@@ -10,10 +10,12 @@ namespace ET
     {
         public static async ETTask<int> Login(Scene zoneScene, string address, string account, string password)
         {
+            Log.Debug("Login ");
             A2C_LoginAccount a2CLoginAccount = null;
             Session session = null;
             try
             {
+                Log.Debug($"LoginHelper address {address}");
                 session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(address));
                 // MD5Helper
                 a2CLoginAccount =
@@ -177,7 +179,7 @@ namespace ET
             // zoneScene.GetComponent<AccountInfoComponent>().PlayerId = g2CLoginGateResponse.PlayerId;
 
             await EnterMapHelper.EnterMapAsync(zoneScene);
-            
+
             await ETTask.CompletedTask;
             return ErrorCode.ERR_Success;
         }

@@ -1,0 +1,157 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Dlg
+  m_EditorClassIdentifier: 
+  m_GroupName: Dlg
+  m_Data:
+    m_SerializedData: []
+  m_GUID: e20e4104d931462418d76c4f15ced3fb
+  m_SerializeEntries:
+  - m_GUID: 2c85f9bc9b5b07a49b9acc3cdab85b74
+    m_Address: DlgEditorTroopLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: c291809cebe94124d90890c07e9939a2
+    m_Address: DlgGameUI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: d1a032eceeaca7244a337f7401a868b8
+    m_Address: DlgGameWinUI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 835fb089b4f38a642b92cc2c9c81538f
+    m_Address: DlgHelper
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: ea771c0703e9d9b47bf65443f77093bb
+    m_Address: DlgLobby
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: a87e203f6599b18489cb615ec32b682d
+    m_Address: DlgLogin
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 72a69a6885669a447b3e32f99fede9c9
+    m_Address: DlgMatchButton
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 619d0e2eeb2dc6b44a73c32c2bafe17f
+    m_Address: DlgRedDot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 839a14cbe6724514f80e14234c631988
+    m_Address: DlgRoomInfo
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 56107bbbdd8f0834fbd66b9c085a7b31
+    m_Address: DlgAccountInfo
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 4fa355c2bce983948a0e9ad33197d59e
+    m_Address: DlgBagLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: fb7bfb79328225e40a28a898fb78201b
+    m_Address: DlgChooseServer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 4af627f8ad8c2594d8d1275f5211fee1
+    m_Address: DlgFormationUI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 03e7de8a9ec21c14e8baba8fbd721bf5
+    m_Address: DlgGoldInfoUI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: e92ac57bda31a52438ca71208cb4ad24
+    m_Address: DlgMainScene
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: a2eb6ef25d5a90642837014028a4dbf9
+    m_Address: DlgMainSceneBg
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: df0b86f52bab3fc449eea81ab70fffaa
+    m_Address: DlgMainSceneMenu
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: db15e1563d8cab144ae7c7ca39e3fba7
+    m_Address: DlgMessageTaskActiveInfo
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 9054a5228d99a71408ecc3e98bcca359
+    m_Address: DlgSettingUI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 01c699b4b93f9714daac4c1e98e89934
+    m_Address: DlgCallHeroLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: f1c6c9a06c5802848aab7fc22bc15f3a
+    m_Address: DlgHeroInfoLayerUI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 4512d47d1e237bd4a9fdc56183e40347
+    m_Address: DlgShowHeroInfoLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: edefc33150ceaa542be716e8082d9628, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: abaac03e324fc23479a4f2fb9858dfdf, type: 2}
+    - {fileID: 11400000, guid: 855c4b62d3246554b9ce855289a8a1a2, type: 2}

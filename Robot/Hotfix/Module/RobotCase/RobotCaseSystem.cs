@@ -61,10 +61,10 @@ namespace ET
 
         public static async ETTask<Scene> NewRobot(this RobotCase self, int zone, string name)
         {
-            Scene zoneScene = null;
+            ET.Scene zoneScene = null;
             try
             {
-                zoneScene = SceneFactory.CreateZoneScene(zone, name, self);
+                zoneScene = await SceneFactory.CreateZoneScene(zone, name, self);
                 await LoginHelper.Login(zoneScene, ConstValue.LoginAddress, zone.ToString(), zone.ToString());
                 await EnterMapHelper.EnterMapAsync(zoneScene);
                 Log.Debug($"create robot ok: {zone}");
@@ -84,7 +84,7 @@ namespace ET
 
             try
             {
-                zoneScene = SceneFactory.CreateZoneScene(zone, $"Robot_{zone}", self);
+                zoneScene = await SceneFactory.CreateZoneScene(zone, $"Robot_{zone}", self);
                 await LoginHelper.Login(zoneScene, ConstValue.LoginAddress, zone.ToString(), zone.ToString());
                 await EnterMapHelper.EnterMapAsync(zoneScene);
                 Log.Debug($"create robot ok: {zone}");

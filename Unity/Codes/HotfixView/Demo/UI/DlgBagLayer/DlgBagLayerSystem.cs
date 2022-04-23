@@ -28,7 +28,7 @@ namespace ET
 
         public static async ETTask BackButtonClick(this DlgBagLayer self)
         {
-            self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainScene);
+            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainScene);
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_BagLayer);
             await ETTask.CompletedTask;
         }

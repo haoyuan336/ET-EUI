@@ -7,7 +7,7 @@ namespace ET
         protected override async ETTask Run(ShowMatchButtonUIMessage a)
         {
             Scene zoneScene = a.zoneScene;
-            zoneScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MatchButton);
+            await zoneScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MatchButton);
             await ETTask.CompletedTask;
         }
     }

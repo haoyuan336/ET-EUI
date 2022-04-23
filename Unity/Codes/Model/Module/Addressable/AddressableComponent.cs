@@ -129,6 +129,7 @@ namespace ET
         /// </summary>
         public ETTask<T> LoadAssetByPathAsync<T>(string assetPath) where T : UnityEngine.Object
         {
+            Debug.Log($"load asset by path {assetPath}");
             ETTask<T> tcs = ETTask<T>.Create(true);
             AsyncOperationHandle<T> assetHandle = Addressables.LoadAssetAsync<T>(assetPath);
             assetHandle.Completed += (handle) =>
@@ -323,6 +324,7 @@ namespace ET
         /// </summary>
         public ETTask ActivateLoadScene(SceneInstance sceneInstance)
         {
+            Debug.Log("active load scene");
             ETTask tcs = ETTask.Create();
             AsyncOperation asyncOperation = sceneInstance.ActivateAsync();
             asyncOperation.completed += (operation) => { tcs.SetResult(); };

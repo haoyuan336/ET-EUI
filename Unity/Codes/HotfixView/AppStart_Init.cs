@@ -1,6 +1,7 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace ET
 {
@@ -8,18 +9,22 @@ namespace ET
     {
         protected override async ETTask Run(EventType.AppStart args)
         {
-            
             // Debug.Log("add start init");
             // await AddressableInstance.LoadAssetByLabel<GameObject>("Code");
-            
-            
+
+            // Addressables.LoadAssetAsync<UnityEngine.GameObject>("DlgLogin");
+
             Game.Scene.AddComponent<TimerComponent>();
             Game.Scene.AddComponent<CoroutineLockComponent>();
             // 加载配置\
             Game.Scene.AddComponent<AddressableComponent>();
+            
+            // AddressableComponent.Instance.LoadAssetByPathAsync<UnityEngine.GameObject>("DlgMainScene");
+
+            
             Game.Scene.AddComponent<ConfigComponent>();
             await ConfigComponent.Instance.LoadAsync();
-            
+
             // Game.Scene.AddComponent<ResourcesComponent>();
             // await ResourcesComponent.Instance.LoadBundleAsync("config.unity3d");
             // Game.Scene.AddComponent<ConfigComponent>();

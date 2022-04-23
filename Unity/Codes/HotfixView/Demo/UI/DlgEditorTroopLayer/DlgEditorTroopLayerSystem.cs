@@ -30,7 +30,7 @@ namespace ET
 
         public static async ETTask BackButtonClick(this DlgEditorTroopLayer self)
         {
-            self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainScene);
+            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainScene);
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_EditorTroopLayer);
             await ETTask.CompletedTask;
         }

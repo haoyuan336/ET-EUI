@@ -10,12 +10,13 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgShowHeroInfoLayer self)
         {
-            self.View.E_BackButton.AddListener(() =>
-            {
-                self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_HeroInfoLayerUI);
-                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_ShowHeroInfoLayer);
+            self.View.E_BackButton.AddListener(() => { self.BackButtonClick(); });
+        }
 
-            });
+        public static async void BackButtonClick(this DlgShowHeroInfoLayer self)
+        {
+            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_HeroInfoLayerUI);
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_ShowHeroInfoLayer);
         }
 
         public static void ShowWindow(this DlgShowHeroInfoLayer self, Entity contextData = null)

@@ -7,7 +7,7 @@ namespace ET
     {
         protected override async ETTask Run(ShowGameWinUI a)
         {
-            a.ZondScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameWinUI);
+            await a.ZondScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameWinUI);
             await ETTask.CompletedTask;
         }
     }
