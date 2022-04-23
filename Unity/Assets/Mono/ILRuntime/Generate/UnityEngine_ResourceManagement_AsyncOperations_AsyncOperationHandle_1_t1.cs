@@ -14,27 +14,27 @@ using ILRuntime.CLR.Utils;
 
 namespace ILRuntime.Runtime.Generated
 {
-    unsafe class UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_Int64_Binding
+    unsafe class UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_IResourceLocator_Binding
     {
         public static void Register(ILRuntime.Runtime.Enviorment.AppDomain app)
         {
             BindingFlags flag = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly;
             MethodBase method;
             Type[] args;
-            Type type = typeof(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Int64>);
-            args = new Type[]{typeof(System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Int64>>)};
-            method = type.GetMethod("add_Completed", flag, null, args, null);
-            app.RegisterCLRMethodRedirection(method, add_Completed_0);
+            Type type = typeof(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.AddressableAssets.ResourceLocators.IResourceLocator>);
+            args = new Type[]{typeof(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.AddressableAssets.ResourceLocators.IResourceLocator>)};
+            method = type.GetMethod("op_Implicit", flag, null, args, null);
+            app.RegisterCLRMethodRedirection(method, op_Implicit_0);
             args = new Type[]{};
-            method = type.GetMethod("get_Result", flag, null, args, null);
-            app.RegisterCLRMethodRedirection(method, get_Result_1);
+            method = type.GetMethod("get_Status", flag, null, args, null);
+            app.RegisterCLRMethodRedirection(method, get_Status_1);
 
-            app.RegisterCLRCreateDefaultInstance(type, () => new UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Int64>());
+            app.RegisterCLRCreateDefaultInstance(type, () => new UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.AddressableAssets.ResourceLocators.IResourceLocator>());
 
 
         }
 
-        static void WriteBackInstance(ILRuntime.Runtime.Enviorment.AppDomain __domain, StackObject* ptr_of_this_method, IList<object> __mStack, ref UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Int64> instance_of_this_method)
+        static void WriteBackInstance(ILRuntime.Runtime.Enviorment.AppDomain __domain, StackObject* ptr_of_this_method, IList<object> __mStack, ref UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.AddressableAssets.ResourceLocators.IResourceLocator> instance_of_this_method)
         {
             ptr_of_this_method = ILIntepreter.GetObjectAndResolveReference(ptr_of_this_method);
             switch(ptr_of_this_method->ObjectType)
@@ -73,37 +73,30 @@ namespace ILRuntime.Runtime.Generated
                     break;
                  case ObjectTypes.ArrayReference:
                     {
-                        var instance_of_arrayReference = __mStack[ptr_of_this_method->Value] as UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Int64>[];
+                        var instance_of_arrayReference = __mStack[ptr_of_this_method->Value] as UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.AddressableAssets.ResourceLocators.IResourceLocator>[];
                         instance_of_arrayReference[ptr_of_this_method->ValueLow] = instance_of_this_method;
                     }
                     break;
             }
         }
 
-        static StackObject* add_Completed_0(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        static StackObject* op_Implicit_0(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
             StackObject* ptr_of_this_method;
-            StackObject* __ret = ILIntepreter.Minus(__esp, 2);
+            StackObject* __ret = ILIntepreter.Minus(__esp, 1);
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
-            System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Int64>> @value = (System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Int64>>)typeof(System.Action<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Int64>>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)8);
+            UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.AddressableAssets.ResourceLocators.IResourceLocator> @obj = (UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.AddressableAssets.ResourceLocators.IResourceLocator>)typeof(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.AddressableAssets.ResourceLocators.IResourceLocator>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)16);
             __intp.Free(ptr_of_this_method);
 
-            ptr_of_this_method = ILIntepreter.Minus(__esp, 2);
-            ptr_of_this_method = ILIntepreter.GetObjectAndResolveReference(ptr_of_this_method);
-            UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Int64> instance_of_this_method = (UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Int64>)typeof(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Int64>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)16);
 
-            instance_of_this_method.Completed += value;
+            var result_of_this_method = (UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle)obj;
 
-            ptr_of_this_method = ILIntepreter.Minus(__esp, 2);
-            WriteBackInstance(__domain, ptr_of_this_method, __mStack, ref instance_of_this_method);
-
-            __intp.Free(ptr_of_this_method);
-            return __ret;
+            return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
         }
 
-        static StackObject* get_Result_1(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        static StackObject* get_Status_1(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
             StackObject* ptr_of_this_method;
@@ -111,17 +104,15 @@ namespace ILRuntime.Runtime.Generated
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
             ptr_of_this_method = ILIntepreter.GetObjectAndResolveReference(ptr_of_this_method);
-            UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Int64> instance_of_this_method = (UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Int64>)typeof(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Int64>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)16);
+            UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.AddressableAssets.ResourceLocators.IResourceLocator> instance_of_this_method = (UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.AddressableAssets.ResourceLocators.IResourceLocator>)typeof(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.AddressableAssets.ResourceLocators.IResourceLocator>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)16);
 
-            var result_of_this_method = instance_of_this_method.Result;
+            var result_of_this_method = instance_of_this_method.Status;
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
             WriteBackInstance(__domain, ptr_of_this_method, __mStack, ref instance_of_this_method);
 
             __intp.Free(ptr_of_this_method);
-            __ret->ObjectType = ObjectTypes.Long;
-            *(long*)&__ret->Value = result_of_this_method;
-            return __ret + 1;
+            return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
         }
 
 

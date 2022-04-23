@@ -19,9 +19,13 @@ namespace ILRuntime.Runtime.Generated
         public static void Register(ILRuntime.Runtime.Enviorment.AppDomain app)
         {
             BindingFlags flag = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly;
+            MethodBase method;
             FieldInfo field;
             Type[] args;
             Type type = typeof(UnityEngine.ResourceManagement.AsyncOperations.DownloadStatus);
+            args = new Type[]{};
+            method = type.GetMethod("get_Percent", flag, null, args, null);
+            app.RegisterCLRMethodRedirection(method, get_Percent_0);
 
             field = type.GetField("TotalBytes", flag);
             app.RegisterCLRFieldGetter(field, get_TotalBytes_0);
@@ -81,6 +85,27 @@ namespace ILRuntime.Runtime.Generated
                     }
                     break;
             }
+        }
+
+        static StackObject* get_Percent_0(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        {
+            ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
+            StackObject* ptr_of_this_method;
+            StackObject* __ret = ILIntepreter.Minus(__esp, 1);
+
+            ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
+            ptr_of_this_method = ILIntepreter.GetObjectAndResolveReference(ptr_of_this_method);
+            UnityEngine.ResourceManagement.AsyncOperations.DownloadStatus instance_of_this_method = (UnityEngine.ResourceManagement.AsyncOperations.DownloadStatus)typeof(UnityEngine.ResourceManagement.AsyncOperations.DownloadStatus).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)16);
+
+            var result_of_this_method = instance_of_this_method.Percent;
+
+            ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
+            WriteBackInstance(__domain, ptr_of_this_method, __mStack, ref instance_of_this_method);
+
+            __intp.Free(ptr_of_this_method);
+            __ret->ObjectType = ObjectTypes.Float;
+            *(float*)&__ret->Value = result_of_this_method;
+            return __ret + 1;
         }
 
 

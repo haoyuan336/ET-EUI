@@ -130,8 +130,8 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_Dictionary_2_Int32_DiamondLibrary_Binding.Register(app);
             ET_DiamondLibrary_Binding.Register(app);
             UnityEngine_SpriteRenderer_Binding.Register(app);
-            UnityEngine_AsyncOperation_Binding.Register(app);
-            UnityEngine_SceneManagement_SceneManager_Binding.Register(app);
+            UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_SceneInstance_Binding.Register(app);
+            UnityEngine_ResourceManagement_AsyncOperations_DownloadStatus_Binding.Register(app);
             ET_ETTask_1_SceneInstance_Binding.Register(app);
             UnityEngine_UI_Text_Binding.Register(app);
             UnityEngine_UI_LoopScrollRect_Binding.Register(app);
@@ -241,9 +241,8 @@ namespace ILRuntime.Runtime.Generated
             UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_Int64_Binding.Register(app);
             UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_GameObject_Binding.Register(app);
             UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_IList_1_Object_Binding.Register(app);
-            UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_SceneInstance_Binding.Register(app);
             UnityEngine_ResourceManagement_ResourceProviders_SceneInstance_Binding.Register(app);
-            UnityEngine_ResourceManagement_AsyncOperations_DownloadStatus_Binding.Register(app);
+            UnityEngine_AsyncOperation_Binding.Register(app);
             System_Collections_Generic_Queue_1_ValueTuple_3_Int32_Int64_Int32_Binding.Register(app);
             System_Collections_Generic_SortedDictionary_2_Int64_List_1_ILTypeInstance_Binding.Register(app);
             System_ValueTuple_3_Int32_Int64_Int32_Binding.Register(app);
