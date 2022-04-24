@@ -29,7 +29,7 @@ namespace ET
             
             Game.Scene.AddComponent<NetThreadComponent>();
             
-            Game.Scene.AddComponent<NavmeshComponent, Func<string, byte[]>>(RecastFileReader.Read);
+            // Game.Scene.AddComponent<NavmeshComponent, Func<string, byte[]>>(RecastFileReader.Read);
             Game.Scene.AddComponent<DBManagerComponent>();
 
             switch (Game.Options.AppType)
@@ -37,14 +37,14 @@ namespace ET
                 case AppType.Server:
                 {
                     Game.Scene.AddComponent<NetInnerComponent, IPEndPoint, int>(processConfig.InnerIPPort, SessionStreamDispatcherType.SessionStreamDispatcherServerInner);
-
+                    //
                     var processScenes = StartSceneConfigCategory.Instance.GetByProcess(Game.Options.Process);
                     foreach (StartSceneConfig startConfig in processScenes)
                     {
                         await SceneFactory.Create(Game.Scene, startConfig.Id, startConfig.InstanceId, startConfig.Zone, startConfig.Name,
                             startConfig.Type, startConfig);
                     }
-
+            
                     break;
                 }
                 case AppType.Watcher:
