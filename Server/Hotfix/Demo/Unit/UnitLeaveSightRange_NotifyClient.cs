@@ -14,7 +14,7 @@
                 return;
             }
 
-            UnitHelper.NoticeUnitRemove(a.GetParent<Unit>(), b.GetParent<Unit>());
+            // UnitHelper.NoticeUnitRemove(a.GetParent<Unit>(), b.GetParent<Unit>());
         }
     }
 }
