@@ -11,8 +11,9 @@ namespace ET
         protected override async ETTask Run(CreateHeroCardView a)
         {
             // ResourcesLoaderComponent.
-            GameObject bundleGameObject = (GameObject) ResourcesComponent.Instance.GetAsset("Unit.unity3d", "Unit");
-            GameObject prefab = bundleGameObject.Get<GameObject>("HeroCard");
+            // GameObject bundleGameObject = (GameObject) ResourcesComponent.Instance.GetAsset("Unit.unity3d", "Unit");
+            // GameObject prefab = bundleGameObject.Get<GameObject>("HeroCard");
+            GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>("HeroCard");
             Dictionary<int, List<HeroCard>> heroCardListMap = a.HeroCardListMap;
 
             foreach (var key in heroCardListMap.Keys)
@@ -23,19 +24,18 @@ namespace ET
                     HeroCard heroCard = heroCards[i];
                     GameObject go = GameObject.Instantiate(prefab, GlobalComponent.Instance.Unit);
                     heroCard.AddComponent<HeroCardView>();
-                    
+
                     Log.Debug("add hero card view component");
                     if (heroCard.GetComponent<GameObjectComponent>() == null)
                         heroCard.AddComponent<GameObjectComponent>().GameObject = go;
                     float distance = 2.5f;
-                    go.transform.position = new Vector3(heroCard.InTroopIndex * distance + (heroCards.Count - 1) * -0.5f * distance,0,
+                    go.transform.position = new Vector3(heroCard.InTroopIndex * distance + (heroCards.Count - 1) * -0.5f * distance, 0,
                         6.5f * (key == 0? -1 : 1));
                     go.GetComponent<HeroCardViewCtl>().InitInfo(heroCard.ConfigId, heroCard.CampIndex);
                     go.GetComponent<HeroCardViewCtl>().UpdateHPView(heroCard.HP);
                     go.GetComponent<HeroCardViewCtl>().UpdateAttackView(heroCard.Attack.ToString());
                     HeroConfig heroConfig = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
                     go.GetComponent<HeroCardViewCtl>().UpdateAngryView($"{heroCard.Angry}/{heroConfig.TotalAngry}");
-                  
                 }
             }
 

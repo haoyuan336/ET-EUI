@@ -8,6 +8,7 @@ using System.Linq;
 using ET.Account;
 using UnityEngine;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 namespace ET
 {
@@ -24,6 +25,7 @@ namespace ET
 
         public static void OnLoopListItemRefreshHandler(this DlgHeroInfoLayerUI self, Transform tr, int index)
         {
+            Debug.Log("显示卡牌信息");
             Scroll_ItemHeroCard scrollItemHeroCard = self.ItemHeroCards[index].BindTrans(tr);
             scrollItemHeroCard.SetHeroInfo(self.HeroCardInfos[index]);
             scrollItemHeroCard.E_ClickButton.onClick.RemoveAllListeners();

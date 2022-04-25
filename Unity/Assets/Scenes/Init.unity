@@ -455,7 +455,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 575235020}
-  - component: {fileID: 575235022}
   - component: {fileID: 575235019}
   m_Layer: 0
   m_Name: Global
@@ -501,27 +500,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &575235022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 575235018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 502d8cafd6a5a0447ab1db9a24cdcb10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data:
-  - key: Unit
-    gameObject: {fileID: 1610378981859644, guid: cfaf4529ce2243c4c85126e9d008897b,
-      type: 3}
-  - key: MainCamera
-    gameObject: {fileID: 1269863795}
-  - key: HeroCard
-    gameObject: {fileID: 5210404131190412391, guid: f9a8d935ff4a0214cb224600d850396c,
-      type: 3}
 --- !u!1 &786473784
 GameObject:
   m_ObjectHideFlags: 0
@@ -1126,7 +1104,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1269863795}
-  m_LocalRotation: {x: 0.7009093, y: 0.0000064623864, z: -0.0000063505704, w: 0.71325046}
+  m_LocalRotation: {x: 0.7009093, y: -0.0000064623864, z: 0.0000063505704, w: 0.71325046}
   m_LocalPosition: {x: 0, y: 20, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1311,7 +1289,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1291675373}
-  m_LocalRotation: {x: 0.7009093, y: 0.0000064623864, z: -0.0000063505704, w: 0.71325046}
+  m_LocalRotation: {x: 0.7009093, y: -0.0000064623864, z: 0.0000063505704, w: 0.71325046}
   m_LocalPosition: {x: 0, y: 20, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

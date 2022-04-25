@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Policy;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace ET
 {
     public static class GameObjectPoolHelper
     {
         private static Dictionary<string, GameObjectPool> poolDict = new Dictionary<string, GameObjectPool>();
-        
-        public static void InitPool( string poolName, int size, PoolInflationType type = PoolInflationType.DOUBLE)
+
+        public static void InitPool(string poolName, int size, PoolInflationType type = PoolInflationType.DOUBLE)
         {
             if (poolDict.ContainsKey(poolName))
             {
@@ -18,15 +21,18 @@ namespace ET
             {
                 try
                 {
-                    GameObject pb = GetGameObjectByResType(poolName);
-                    if (pb == null)
-                    {
-                        Debug.LogError("[ResourceManager] Invalide prefab name for pooling :" + poolName);
-                        return;
-                    }
-
-                    
-                    poolDict[poolName] = new GameObjectPool(poolName, pb, GameObject.Find("Global/PoolRoot"), size, type);
+                    // GameObject pb = GetGameObjectByResType(poolName);
+                    // if (pb == null)
+                    // {
+                    //     Debug.LogError("[ResourceManager] Invalide prefab name for pooling :" + poolName);
+                    //     return;
+                    // }
+                    Log.Debug($"init poll {poolName}");
+                    AsyncOperationHandle handle = GetGameObjectByResType(poolName);
+                    handle.WaitForCompletion();
+                    GameObject result = (GameObject) handle.Result;
+                    poolDict[poolName] = new GameObjectPool(poolName, result, GameObject.Find("Global/PoolRoot"),
+                        size, type);
                 }
                 catch (Exception e)
                 {
@@ -34,8 +40,8 @@ namespace ET
                 }
             }
         }
-        
-        public static async ETTask InitPoolFormGamObjectAsync(  GameObject pb, int size, PoolInflationType type = PoolInflationType.DOUBLE)
+
+        public static async ETTask InitPoolFormGamObjectAsync(GameObject pb, int size, PoolInflationType type = PoolInflationType.DOUBLE)
         {
             string poolName = pb.name;
             if (poolDict.ContainsKey(poolName))
@@ -51,6 +57,7 @@ namespace ET
                         Debug.LogError("[ResourceManager] Invalide prefab name for pooling :" + poolName);
                         return;
                     }
+
                     poolDict[poolName] = new GameObjectPool(poolName, pb, GameObject.Find("Global/PoolRoot"), size, type);
                 }
                 catch (Exception e)
@@ -61,15 +68,14 @@ namespace ET
 
             await ETTask.CompletedTask;
         }
-        
-        
+
         /// <summary>
         /// Returns an available object from the pool 
         /// OR null in case the pool does not have any object available & can grow size is false.
         /// </summary>
         /// <OtherParam name="poolName"></OtherParam>
         /// <returns></returns>
-        public static GameObject GetObjectFromPool( string poolName,    bool autoActive = true, int autoCreate = 0)
+        public static GameObject GetObjectFromPool(string poolName, bool autoActive = true, int autoCreate = 0)
         {
             GameObject result = null;
 
@@ -99,12 +105,11 @@ namespace ET
             return result;
         }
 
-        
         /// <summary>
         /// Return obj to the pool
         /// </summary>
         /// <OtherParam name="go"></OtherParam>
-        public static void ReturnObjectToPool( GameObject go)
+        public static void ReturnObjectToPool(GameObject go)
         {
             PoolObject po = go.GetComponent<PoolObject>();
             if (po == null)
@@ -133,7 +138,7 @@ namespace ET
         /// Return obj to the pool
         /// </summary>
         /// <OtherParam name="t"></OtherParam>
-        public static void ReturnTransformToPool( Transform t)
+        public static void ReturnTransformToPool(Transform t)
         {
             if (t == null)
             {
@@ -142,14 +147,17 @@ namespace ET
 #endif
                 return;
             }
+
             ReturnObjectToPool(t.gameObject);
         }
 
-        public static GameObject GetGameObjectByResType( string poolName)
+        public static AsyncOperationHandle GetGameObjectByResType(string poolName)
         {
-            GameObject pb = null;
-            Dictionary<string, UnityEngine.Object>  assetDict = AssetsBundleHelper.LoadBundle(poolName + ".unity3d");
-            pb = assetDict[poolName] as GameObject;
+            // GameObject pb = null;
+            // Dictionary<string, UnityEngine.Object>  assetDict = AssetsBundleHelper.LoadBundle(poolName + ".unity3d");
+            // pb = assetDict[poolName] as GameObject;
+            AsyncOperationHandle pb = Addressables.LoadAssetAsync<GameObject>(poolName);
+
             return pb;
         }
     }

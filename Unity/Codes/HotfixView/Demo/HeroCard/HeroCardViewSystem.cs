@@ -36,8 +36,9 @@ namespace ET
         {
             Vector3 startPos = diamond.GetComponent<GameObjectComponent>().GameObject.transform.position + Vector3.back * 0.1f;
             Vector3 endPos = self.Parent.GetComponent<GameObjectComponent>().GameObject.transform.position + Vector3.back * 0.1f;
-            GameObject bundleGameObject = (GameObject) ResourcesComponent.Instance.GetAsset("Unit.unity3d", "Unit");
-            GameObject prefab = bundleGameObject.Get<GameObject>(effectName);
+            // GameObject bundleGameObject = (GameObject) ResourcesComponent.Instance.GetAsset("Unit.unity3d", "Unit");
+            // GameObject prefab = bundleGameObject.Get<GameObject>(effectName);
+            GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(effectName);
             GameObject go = GameObject.Instantiate(prefab, GlobalComponent.Instance.Unit);
             go.transform.position = startPos;
             float distance = 1;

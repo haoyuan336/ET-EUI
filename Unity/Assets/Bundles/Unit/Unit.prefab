@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4373147931430276}
-  - component: {fileID: 114007285335791192}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -31,31 +30,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114007285335791192
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1610378981859644}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 502d8cafd6a5a0447ab1db9a24cdcb10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data:
-  - key: Skeleton
-    gameObject: {fileID: 1248987324363926, guid: 9e27b0bdab1ad7242a009899d15c0e67,
-      type: 3}
-  - key: Diamond
-    gameObject: {fileID: 5176514369317096029, guid: 0748f08715e7b80429d79f15f0748daf,
-      type: 3}
-  - key: HeroCard
-    gameObject: {fileID: 5210404131190412391, guid: f9a8d935ff4a0214cb224600d850396c,
-      type: 3}
-  - key: DiamondAddAngryTrailEffect
-    gameObject: {fileID: 4021760788976867135, guid: d686f201194f8a64eb0e73e6c21279d8,
-      type: 3}
-  - key: DiamondAddAttackTrailEffect
-    gameObject: {fileID: 4021760788976867135, guid: cea135bfad86b854f908d1e3d155657f,
-      type: 3}

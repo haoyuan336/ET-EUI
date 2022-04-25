@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using ILRuntime.Runtime.Intepreter;
 using UnityEngine;
 
@@ -34,7 +35,9 @@ namespace ET
 
         public byte[] GetOneConfigBytes(string configName)
         {
-            TextAsset v = ResourcesComponent.Instance.GetAsset("config.unity3d", configName) as TextAsset;
+            // TextAsset v = ResourcesComponent.Instance.GetAsset("config.unity3d", configName) as TextAsset;
+            // return v.bytes;
+            TextAsset v = AddressableComponent.Instance.LoadAssetByPath<TextAsset>(configName);
             return v.bytes;
         }
     }
