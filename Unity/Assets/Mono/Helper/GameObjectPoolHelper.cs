@@ -30,6 +30,7 @@ namespace ET
                     Log.Debug($"init poll {poolName}");
                     AsyncOperationHandle handle = GetGameObjectByResType(poolName);
                     handle.WaitForCompletion();
+                    Debug.Log($"load  handler {handle.Status}");
                     GameObject result = (GameObject) handle.Result;
                     poolDict[poolName] = new GameObjectPool(poolName, result, GameObject.Find("Global/PoolRoot"),
                         size, type);
@@ -156,6 +157,7 @@ namespace ET
             // GameObject pb = null;
             // Dictionary<string, UnityEngine.Object>  assetDict = AssetsBundleHelper.LoadBundle(poolName + ".unity3d");
             // pb = assetDict[poolName] as GameObject;
+            Log.Debug($"load asset asyna {poolName}");
             AsyncOperationHandle pb = Addressables.LoadAssetAsync<GameObject>(poolName);
 
             return pb;

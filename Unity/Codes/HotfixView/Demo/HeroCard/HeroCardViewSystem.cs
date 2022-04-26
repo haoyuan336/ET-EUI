@@ -55,7 +55,7 @@ namespace ET
         {
             Log.Debug("play attack logic");
             HeroCard beAttackHeroCard = message.BeAttackHeroCard;
-            GameObject targetGo = beAttackHeroCard.GetComponent<GameObjectComponent>().GameObject;
+            GameObject targetGo = beAttackHeroCard.GetComponent<HeroModeObjectCompoent>().HeroMode;
             await self.PlayChangeModeAnim();
             await self.PlayMoveToAnim(targetGo.transform.position);
             await self.PlayAttackAnim(message);
@@ -68,16 +68,16 @@ namespace ET
         public static async ETTask ProcessBeAttackAnimLogic(this HeroCardView self, HeroCard heroCard)
         {
             float totalAngry = HeroConfigCategory.Instance.Get(heroCard.ConfigId).TotalAngry;
-            heroCard.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>()
+            heroCard.GetComponent<HeroCardObjectComponent>().HeroCard.GetComponent<HeroCardViewCtl>()
                     .UpdateAngryView($"{heroCard.Angry.ToString()}/{totalAngry}");
-            heroCard.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>().UpdateHPView(heroCard.HP);
+            heroCard.GetComponent<HeroCardObjectComponent>().HeroCard.GetComponent<HeroCardViewCtl>().UpdateHPView(heroCard.HP);
             await ETTask.CompletedTask;
         }
 
         public static async ETTask PlayMoveToAnim(this HeroCardView self, Vector3 endPos)
         {
-            GameObject selfGo = self.Parent.GetComponent<GameObjectComponent>().GameObject;
-            GameObject heroMode = selfGo.GetComponent<HeroCardViewCtl>().GetHeroMode();
+            GameObject selfGo = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode;
+            GameObject heroMode = selfGo.GetComponent<HeroModeObjectCompoent>().HeroMode;
             float distance = 100;
             while (distance > 3f)
             {
@@ -90,9 +90,9 @@ namespace ET
 
         public static async ETTask PlayMoveToBackAnim(this HeroCardView self)
         {
-            Vector3 endPos = self.Parent.GetComponent<GameObjectComponent>().GameObject.transform.position;
-            GameObject selfGo = self.Parent.GetComponent<GameObjectComponent>().GameObject;
-            GameObject heroMode = selfGo.GetComponent<HeroCardViewCtl>().GetHeroMode();
+            Vector3 endPos = self.Parent.GetComponent<HeroCardObjectComponent>().HeroCard.transform.position;
+            // GameObject selfGo = self.Parent.GetComponent<HeroCardObjectComponent>().GameObject;
+            GameObject heroMode = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode;
             float distance = 100;
             while (distance > 0.1f)
             {
@@ -105,8 +105,8 @@ namespace ET
 
         public static async ETTask PlayChangeModeAnim(this HeroCardView self)
         {
-            GameObject selfGo = self.Parent.GetComponent<GameObjectComponent>().GameObject;
-            selfGo.GetComponent<HeroCardViewCtl>().ChangeModeView();
+            // GameObject selfGo = self.Parent.GetComponent<GameObjectComponent>().GameObject;
+            // selfGo.GetComponent<HeroCardViewCtl>().ChangeModeView();
             await ETTask.CompletedTask;
         }
 
@@ -116,8 +116,8 @@ namespace ET
             long skillId = heroCard.CurrentSkillId;
             Log.Debug($"Skill id {skillId}");
             Skill skill = heroCard.GetChild<Skill>(skillId);
-            GameObject selfGo = self.Parent.GetComponent<GameObjectComponent>().GameObject;
-            GameObject heroMode = selfGo.GetComponent<HeroCardViewCtl>().GetHeroMode();
+            GameObject selfGo = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode;
+            GameObject heroMode = selfGo.GetComponent<HeroModeObjectCompoent>().HeroMode;
             string skillAnimStr = "";
             switch (skill.SkillType)
             {

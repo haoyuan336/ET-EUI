@@ -134,6 +134,7 @@ namespace ET
             AsyncOperationHandle<T> assetHandle = Addressables.LoadAssetAsync<T>(assetPath);
             assetHandle.Completed += (handle) =>
             {
+                Log.Debug($"load error {handle.Status}");
                 tcs.SetResult(handle.Result);
                 tcs = null;
             };

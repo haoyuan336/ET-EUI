@@ -9,7 +9,7 @@ namespace ET
             HeroCard heroCard = a.HeroCard;
 
             GameObject go = heroCard.GetComponent<GameObjectComponent>().GameObject;
-            go.GetComponent<HeroCardViewCtl>().ChangeModeView();
+            // go.GetComponent<HeroCardViewCtl>().ChangeModeView();
 
             await ETTask.CompletedTask;
         }

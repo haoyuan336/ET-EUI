@@ -1,6 +1,7 @@
 using System.Collections;
 using ET;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public class TimeTask
 {
@@ -25,13 +26,13 @@ public class HeroCardViewCtl: MonoBehaviour
     public TextMesh AttackTextMesh;
     public TextMesh AngryTextMesh;
     public TextMesh HPTextMesh;
-    public TextMesh DiamondAttackTextMesh;  //宝石攻击
+    public TextMesh DiamondAttackTextMesh; //宝石攻击
 
     public SpriteRenderer HeroCardSpriteRenderer;
 
-    public AllHeroCardLibrary AllHeroCardLibrary;
+    // public AllHeroCardLibrary AllHeroCardLibrary;
 
-    private GameObject HeroMode;
+    // public GameObject HeroMode;
 
     // private List<TimeTask> timeTasks = new List<TimeTask>();
 
@@ -48,7 +49,6 @@ public class HeroCardViewCtl: MonoBehaviour
     public void UpdateDiamondAttackView(string value)
     {
         this.DiamondAttackTextMesh.text = $"DA:{value.ToString()}";
-        
     }
 
     public void UpdateAngryView(string value)
@@ -65,39 +65,33 @@ public class HeroCardViewCtl: MonoBehaviour
     public void InitInfo(int configId, int CampIndex)
     {
         Log.Debug($"hero color {configId}");
-        HeroCardLibrary heroCardLibrary;
-        if (this.AllHeroCardLibrary.HeroCardTextureDict.TryGetValue(configId, out heroCardLibrary))
-        {
-            this.HeroCardSpriteRenderer.sprite = heroCardLibrary.Texture;
-            GameObject go = Instantiate(heroCardLibrary.HeroModePrefab);
-            go.transform.position = this.transform.position;
-            // go.transform.forward = Vector3.back;
-            go.transform.localScale = Vector3.one * 2;
-            // go.SetActive(false);
-            go.transform.forward = CampIndex == 0? Vector3.forward : Vector3.back;
-            this.HeroMode = go;
-        }
-        else
-        {
-            Log.Error($"not found hero mode {configId}");
-        }
+        // this.HeroCardSpriteRenderer.sprite = heroCardLibrary.Texture;
+        // GameObject go = Instantiate(heroCardLibrary.HeroModePrefab);
+        
+        // GameObject go = Addressables.LoadAssetAsync<GameObject>().WaitForCompletion();
+        // go.transform.position = this.transform.position;
+        // // go.transform.forward = Vector3.back;
+        // go.transform.localScale = Vector3.one * 2;
+        // // go.SetActive(false);
+        // go.transform.forward = CampIndex == 0? Vector3.forward : Vector3.back;
+        // this.HeroMode = go;
     }
 
-    public GameObject ChangeModeView()
-    {
-        this.HeroCardSpriteRenderer.gameObject.SetActive(false);
-        this.HeroMode.SetActive(true);
-        return this.HeroMode;
-    }
+    // public GameObject ChangeModeView()
+    // {
+    //     this.HeroCardSpriteRenderer.gameObject.SetActive(false);
+    //     this.HeroMode.SetActive(true);
+    //     return this.HeroMode;
+    // }
 
     public void ChangeCardView()
     {
     }
 
-    public GameObject GetHeroMode()
-    {
-        return this.HeroMode;
-    }
+    // public GameObject GetHeroMode()
+    // {
+    //     return this.HeroMode;
+    // }
 
     IEnumerator PlayMoveAction(ETTask task, Vector3 targetPos)
     {
@@ -105,9 +99,9 @@ public class HeroCardViewCtl: MonoBehaviour
 
         while (distance > 0.1f)
         {
-            Vector3 prePos = Vector3.Lerp(this.HeroMode.transform.position, targetPos, 0.01f);
-            this.HeroMode.transform.position = prePos;
-            distance = Vector3.Distance(prePos, targetPos);
+            // Vector3 prePos = Vector3.Lerp(this.HeroMode.transform.position, targetPos, 0.01f);
+            // this.HeroMode.transform.position = prePos;
+            // distance = Vector3.Distance(prePos, targetPos);
             yield return new WaitForSeconds(0);
         }
 
@@ -116,7 +110,7 @@ public class HeroCardViewCtl: MonoBehaviour
 
     IEnumerator PlayAttackAnim(ETTask task)
     {
-        this.HeroMode.GetComponent<Animator>().SetTrigger("Attack");
+        // this.HeroMode.GetComponent<Animator>().SetTrigger("Attack");
 
         yield return new WaitForSeconds(1);
         task.SetResult();
@@ -129,9 +123,9 @@ public class HeroCardViewCtl: MonoBehaviour
         Vector3 targetPos = this.transform.position;
         while (distance > 0.1f)
         {
-            Vector3 prePos = Vector3.Lerp(this.HeroMode.transform.position, targetPos, 0.01f);
-            this.HeroMode.transform.position = prePos;
-            distance = Vector3.Distance(prePos, targetPos);
+            // Vector3 prePos = Vector3.Lerp(this.HeroMode.transform.position, targetPos, 0.01f);
+            // this.HeroMode.transform.position = prePos;
+            // distance = Vector3.Distance(prePos, targetPos);
             yield return new WaitForSeconds(0);
         }
 
