@@ -1,11 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using ET.Account;
 using UnityEngine;
 
 namespace ET
 {
+    public class HeroCardComponentAwakeSystem: AwakeSystem<HeroCardComponent>
+    {
+        public override void Awake(HeroCardComponent self)
+        {
+            Log.Debug("Hero card component awake");
+        }
+    }
+
     public static class HeroCardComponentSystem
     {
         public static void InitHeroCard(this HeroCardComponent self, M2C_CreateHeroCardInRoom message)
@@ -16,28 +25,29 @@ namespace ET
 
             foreach (var heroCardInfo in heroCardInfos)
             {
-                HeroCard heroCard = self.AddChildWithId<HeroCard, int>(heroCardInfo.HeroId, heroCardInfo.ConfigId);
-                heroCard.SetMessageInfo(heroCardInfo);
-                self.AddHeroCardSkillByList(heroCard, skillInfos);
+                Log.Debug("create hero card");
+                HeroCard heroCard = self.AddChildWithId<HeroCard, HeroCardInfo>(heroCardInfo.HeroId, heroCardInfo);
+                // HeroCard heroCard = self.AddChildWithId<HeroCard, int>(heroCardInfo.HeroId,heroCardInfo.ConfigId);
+                // heroCard.SetMessageInfo(heroCardInfo);
+                // self.AddHeroCardSkillByList(heroCard, skillInfos);
                 // heroCard.InitHeroWithDBData(heroCard);
-                if (!heroCardListMap.ContainsKey(heroCard.CampIndex))
-                {
-                    // heroCardListMap[heroCard.CampIndex] = new List<HeroCard>();
-                    List<HeroCard> heroCards = new List<HeroCard>();
+                // if (!heroCardListMap.ContainsKey(heroCard.CampIndex))
+                // {
+                // heroCardListMap[heroCard.CampIndex] = new List<HeroCard>();
+                // List<HeroCard> heroCards = new List<HeroCard>();
+                // heroCards.Add(heroCard);
+                // heroCardListMap.Add(heroCard.CampIndex, heroCards);
+                // }
+                // else
+                // {
+                //     heroCardListMap[heroCard.CampIndex].Add(heroCard);
+                // }
 
-                    heroCards.Add(heroCard);
-                    heroCardListMap.Add(heroCard.CampIndex, heroCards);
-                }
-                else
-                {
-                    heroCardListMap[heroCard.CampIndex].Add(heroCard);
-                }
-
-                self.HeroCards.Add(heroCard);
+                // self.HeroCards.Add(heroCard);
             }
 
             //todo 同步给显示层
-            Game.EventSystem.Publish(new EventType.CreateHeroCardView() { HeroCardListMap = heroCardListMap });
+            // Game.EventSystem.Publish(new EventType.CreateHeroCardView() { HeroCardListMap = heroCardListMap });
         }
 
         public static void AddHeroCardSkillByList(this HeroCardComponent self, HeroCard heroCard, List<SkillInfo> skillInfos)

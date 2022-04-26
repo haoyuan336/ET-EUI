@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using ET.Account;
 using UnityEngine;
 
 namespace ET
@@ -20,17 +17,25 @@ namespace ET
             foreach (var diamondActionItem in diamondActionItems)
             {
                 List<ETTask> tasks = new List<ETTask>();
+
+                int count = 0;
+                Log.Debug($"diamond actions  {diamondActionItem.DiamondActions.Count}");
                 foreach (var diamondAction in diamondActionItem.DiamondActions)
                 {
                     DiamondInfo diamondInfo = diamondAction.DiamondInfo;
-                    Diamond diamond = diamondComponent.GetChild<Diamond>(diamondInfo.Id);
-                
+                    Log.Debug($"get child {diamondInfo.Id}");
 
+                    Diamond diamond = diamondComponent.GetChild<Diamond>(diamondInfo.Id);
+
+                    Log.Debug($"diamond action {JsonUtility.ToJson(diamondInfo)}");
                     switch (diamondAction.ActionType)
                     {
                         case (int) DiamondActionType.Move:
-                            Log.Debug($"diamond info lieinde {diamondInfo.LieIndex}");
+                            Log.Debug($"diamond info lieinde {diamondInfo.LieIndex}, {diamondInfo.HangIndex}");
+                            Log.Debug($"diamond {diamond}");
                             diamond.SetIndex(diamondInfo.LieIndex, diamondInfo.HangIndex);
+                            count++;
+                            Log.Debug($"count {count}");
                             tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex() { Diamond = diamond }));
                             break;
                         case (int) DiamondActionType.Destory:
@@ -46,14 +51,14 @@ namespace ET
                                     heroCard.DiamondAttack = diamondInfo.HeroCardInfo.DiamondAttack;
                                     Game.EventSystem.Publish(new EventType.PlayAddAttackViewAnim() { HeroCard = heroCard, Diamond = diamond, });
                                 }
-
+                        
                                 if (diamondInfo.HeroCardInfo.Angry > heroCard.Angry)
                                 {
                                     heroCard.Angry = diamondInfo.HeroCardInfo.Angry;
                                     Game.EventSystem.Publish(new EventType.PlayAddAngryViewAnim() { HeroCard = heroCard, Diamond = diamond, });
                                 }
                             }
-
+                        
                             break;
                         case (int) DiamondActionType.Create:
                             Diamond newDiamond = diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo);
@@ -65,47 +70,47 @@ namespace ET
                 await ETTaskHelper.WaitAll(tasks);
             }
 
-            foreach (var attackActionItem in attackActionItems)
-            {
-                List<ETTask> tasks = new List<ETTask>();
-                foreach (var attackAction in attackActionItem.AttackActions)
-                {
-                    Log.Debug("play attack action");
-
-                    tasks.Add(session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync(attackAction));
-                }
-
-                await ETTaskHelper.WaitAll(tasks);
-            }
-
-            long AccountId = session.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-
-            if (gameLoseResultAction == null)
-            {
-                Log.Debug("一回合结束了");
-                //todo 给服务器发送ready消息
-                long RoomId = session.ZoneScene().GetComponent<PlayerComponent>().RoomId;
-                M2C_PlayerReadyTurnResponse m2CPlayerReadyTurnResponse =
-                        (M2C_PlayerReadyTurnResponse) await session.Call(new C2M_PlayerReadyTurnRequest() { AccountId = AccountId, RoomId = RoomId });
-                if (m2CPlayerReadyTurnResponse.Error == ErrorCode.ERR_Success)
-                {
-                    await Game.EventSystem.PublishAsync(new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene() });
-                }
-            }
-            else
-            {
-                Log.Debug($"lose id{gameLoseResultAction.LoseAccountId}");
-                Log.Debug($"self id {AccountId}");
-                if (!AccountId.Equals(gameLoseResultAction.LoseAccountId))
-                {
-                    Log.Debug("game win");
-                    Game.EventSystem.Publish(new EventType.ShowGameWinUI() { ZondScene = session.ZoneScene() });
-                }
-                else
-                {
-                    Log.Debug("game lose");
-                }
-            }
+            // foreach (var attackActionItem in attackActionItems)
+            // {
+            //     List<ETTask> tasks = new List<ETTask>();
+            //     foreach (var attackAction in attackActionItem.AttackActions)
+            //     {
+            //         Log.Debug("play attack action");
+            //
+            //         tasks.Add(session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync(attackAction));
+            //     }
+            //
+            //     await ETTaskHelper.WaitAll(tasks);
+            // }
+            //
+            // long AccountId = session.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            //
+            // if (gameLoseResultAction == null)
+            // {
+            //     Log.Debug("一回合结束了");
+            //     //todo 给服务器发送ready消息
+            //     long RoomId = session.ZoneScene().GetComponent<PlayerComponent>().RoomId;
+            //     M2C_PlayerReadyTurnResponse m2CPlayerReadyTurnResponse =
+            //             (M2C_PlayerReadyTurnResponse) await session.Call(new C2M_PlayerReadyTurnRequest() { AccountId = AccountId, RoomId = RoomId });
+            //     if (m2CPlayerReadyTurnResponse.Error == ErrorCode.ERR_Success)
+            //     {
+            //         await Game.EventSystem.PublishAsync(new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene() });
+            //     }
+            // }
+            // else
+            // {
+            //     Log.Debug($"lose id{gameLoseResultAction.LoseAccountId}");
+            //     Log.Debug($"self id {AccountId}");
+            //     if (!AccountId.Equals(gameLoseResultAction.LoseAccountId))
+            //     {
+            //         Log.Debug("game win");
+            //         Game.EventSystem.Publish(new EventType.ShowGameWinUI() { ZondScene = session.ZoneScene() });
+            //     }
+            //     else
+            //     {
+            //         Log.Debug("game lose");
+            //     }
+            // }
 
             await ETTask.CompletedTask;
         }

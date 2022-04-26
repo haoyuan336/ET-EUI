@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace ET
@@ -9,6 +8,20 @@ namespace ET
         public override void Awake(HeroCard self, int configId)
         {
             self.InitWithConfig(HeroConfigCategory.Instance.Get(configId));
+        }
+    }
+
+    public class HeroCardAwakeSystem1: AwakeSystem<HeroCard, HeroCardInfo>
+    {
+        public override void Awake(HeroCard self, HeroCardInfo b)
+        {
+            Log.Debug("hero card awake");
+
+            self.ConfigId = b.ConfigId;
+            self.CampIndex = b.CampIndex;
+            self.InTroopIndex = b.InTroopIndex;
+
+            Game.EventSystem.Publish(new EventType.CreateOneHeroCardView() { HeroCard = self });
         }
     }
 
@@ -66,7 +79,7 @@ namespace ET
                 Angry = self.Angry,
                 HP = self.HP,
                 Defence = self.Defence,
-                Level = self.Level == 0?1: self.Level,
+                Level = self.Level == 0? 1 : self.Level,
             };
 
             return heroCardInfo;

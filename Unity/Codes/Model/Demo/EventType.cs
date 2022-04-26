@@ -170,9 +170,19 @@ namespace ET
             public Scene ZoneScene;
         }
 
-        public struct CreateHeroCardView
+        // public struct CreateHeroCardView
+        // {
+        //     public Dictionary<int, List<HeroCard>> HeroCardListMap;
+        // }
+
+        public struct CreateOneHeroCardView
         {
-            public Dictionary<int, List<HeroCard>> HeroCardListMap;
+            public HeroCard HeroCard;
+        }
+
+        public struct CreateOneHeroModeView
+        {
+            public HeroCard HeroCard;
         }
 
         public struct UpdateAttackView

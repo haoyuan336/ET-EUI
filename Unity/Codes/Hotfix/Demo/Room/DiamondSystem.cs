@@ -18,6 +18,9 @@ namespace ET
     {
         public static void SetIndex(this Diamond self, int lieIndex, int hangIndex)
         {
+            Log.Debug($"set index{self.LieIndex}");
+            Log.Debug($"set index self");
+
             self.LieIndex = lieIndex;
             self.HangIndex = hangIndex;
         }
@@ -45,6 +48,7 @@ namespace ET
 
             return false;
         }
+
         public static void InitWithMessageInfo(this Diamond self, DiamondInfo diamondInfo)
         {
             self.Id = diamondInfo.Id;

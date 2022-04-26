@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ET
 {
-    public class HeroCard: Entity, IAwake<int>, IUpdate, IDestroy
+    public class HeroCard: Entity, IAwake<int>, IAwake<int,HeroCardInfo>,IUpdate, IDestroy, IAwake<HeroCardInfo>
     {
         public String HeroName; //英雄名称 支持可编辑
         public long OwnerId; //拥有者的id  也就是玩家id

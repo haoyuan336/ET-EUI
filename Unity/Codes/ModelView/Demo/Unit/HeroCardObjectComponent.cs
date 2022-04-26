@@ -2,7 +2,7 @@
 
 namespace ET
 {
-    public class HeroCardObjectComponent: Entity, IAwake
+    public class HeroCardObjectComponent: Entity, IAwake<HeroCard>
     {
         public GameObject HeroCard;
     }
