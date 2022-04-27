@@ -63,7 +63,6 @@ namespace ILRuntime.Runtime.Generated
             System_Math_Binding.Register(app);
             System_Collections_Generic_List_1_Vector3_Binding_Enumerator_Binding.Register(app);
             ET_ETCancellationToken_Binding.Register(app);
-            System_Int32_Array2_Binding.Register(app);
             ET_RandomHelper_Binding.Register(app);
             System_Collections_Generic_List_1_List_1_ILTypeInstance_Binding.Register(app);
             System_Collections_Generic_Queue_1_ILTypeInstance_Binding.Register(app);
@@ -115,8 +114,10 @@ namespace ILRuntime.Runtime.Generated
             ET_ETTask_1_List_1_Object_Binding.Register(app);
             System_Collections_Generic_List_1_Object_Binding.Register(app);
             System_Collections_Generic_List_1_Object_Binding_Enumerator_Binding.Register(app);
-            HeroCardViewCtl_Binding.Register(app);
+            System_Runtime_CompilerServices_AsyncVoidMethodBuilder_Binding.Register(app);
             ET_ETTask_1_GameObject_Binding.Register(app);
+            UnityEngine_TextMesh_Binding.Register(app);
+            HeroCardViewCtl_Binding.Register(app);
             UnityEngine_Animator_Binding.Register(app);
             UnityEngine_LayerMask_Binding.Register(app);
             UnityEngine_Input_Binding.Register(app);
@@ -124,8 +125,6 @@ namespace ILRuntime.Runtime.Generated
             UnityEngine_Camera_Binding.Register(app);
             UnityEngine_Physics_Binding.Register(app);
             UnityEngine_RaycastHit_Binding.Register(app);
-            System_Collections_Generic_Dictionary_2_Int32_List_1_ILTypeInstance_Binding_KeyCollection_Binding.Register(app);
-            System_Collections_Generic_Dictionary_2_Int32_List_1_ILTypeInstance_Binding_KeyCollection_Binding_Enumerator_Binding.Register(app);
             ET_DiamondLibraryCtl_Binding.Register(app);
             ET_AllDiamondLibrary_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Int32_DiamondLibrary_Binding.Register(app);
@@ -136,7 +135,6 @@ namespace ILRuntime.Runtime.Generated
             ET_ETTask_1_SceneInstance_Binding.Register(app);
             UnityEngine_UI_Text_Binding.Register(app);
             UnityEngine_UI_LoopScrollRect_Binding.Register(app);
-            System_Runtime_CompilerServices_AsyncVoidMethodBuilder_Binding.Register(app);
             UnityEngine_UI_Toggle_Binding.Register(app);
             UnityEngine_Events_UnityEvent_1_Boolean_Binding.Register(app);
             System_Boolean_Binding.Register(app);

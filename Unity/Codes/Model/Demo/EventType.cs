@@ -216,6 +216,7 @@ namespace ET
         {
             public HeroCard HeroCard;
 
+            // public Vector3 StartPos;
             public Diamond Diamond;
             // public float AddAttack;
             // public float AddAngry;
@@ -226,6 +227,8 @@ namespace ET
         public struct PlayAddAngryViewAnim
         {
             public HeroCard HeroCard;
+
+            // public Vector3 StartPos;
             public Diamond Diamond;
         }
 

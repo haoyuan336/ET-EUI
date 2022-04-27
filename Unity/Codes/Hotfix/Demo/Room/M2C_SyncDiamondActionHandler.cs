@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using Vector3 = System.Numerics.Vector3;
 
 namespace ET
 {
@@ -10,7 +12,7 @@ namespace ET
             Log.Debug("收到了 处理滑动的消息");
             //todo 开始处理action
             DiamondComponent diamondComponent = session.DomainScene().GetComponent<DiamondComponent>();
-
+            HeroCardComponent heroCardComponent = session.DomainScene().GetComponent<HeroCardComponent>();
             List<DiamondActionItem> diamondActionItems = message.DiamondActionItems;
             List<AttackActionItem> attackActionItems = message.AttackActionItems;
             GameLoseResultAction gameLoseResultAction = message.GameLoseResultAction;
@@ -24,7 +26,7 @@ namespace ET
                 {
                     DiamondInfo diamondInfo = diamondAction.DiamondInfo;
                     Diamond diamond = diamondComponent.GetChild<Diamond>(diamondInfo.Id);
-                    
+
                     switch (diamondAction.ActionType)
                     {
                         case (int) DiamondActionType.Move:
@@ -39,22 +41,26 @@ namespace ET
                             if (diamondInfo.HeroCardInfo != null)
                             {
                                 Log.Debug("play action logic");
-                                HeroCard heroCard = session.DomainScene().GetComponent<HeroCardComponent>()
-                                        .GetChild<HeroCard>(diamondInfo.HeroCardInfo.HeroId);
-                                // heroCard.Attack = diamondInfo.HeroCardInfo.Attack;
-                                // heroCard.DiamondAttack = diamondInfo.HeroCardInfo.DiamondAttack;
+                                // HeroCard heroCard = session.DomainScene().GetComponent<HeroCardComponent>()
+                                // .GetChild<HeroCard>(diamondInfo.HeroCardInfo.HeroId);
+                                HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(diamondInfo.HeroCardInfo.HeroId);
                                 if (diamondInfo.HeroCardInfo.DiamondAttack > heroCard.DiamondAttack)
                                 {
                                     heroCard.DiamondAttack = diamondInfo.HeroCardInfo.DiamondAttack;
-                                    await Game.EventSystem.PublishAsync(new EventType.PlayAddAttackViewAnim() { HeroCard = heroCard, Diamond = diamond, });
+                                    Game.EventSystem.PublishAsync(new EventType.PlayAddAttackViewAnim() { HeroCard = heroCard, Diamond = diamond })
+                                            .Coroutine();
                                 }
-                        
+
                                 if (diamondInfo.HeroCardInfo.Angry > heroCard.Angry)
                                 {
                                     heroCard.Angry = diamondInfo.HeroCardInfo.Angry;
-                                    await Game.EventSystem.PublishAsync(new EventType.PlayAddAngryViewAnim() { HeroCard = heroCard, Diamond = diamond, });
+                                    Game.EventSystem.PublishAsync(new EventType.PlayAddAngryViewAnim() { HeroCard = heroCard, Diamond = diamond })
+                                            .Coroutine();
                                 }
                             }
+
+                            // await TimerComponent.Instance.WaitFrameAsync();
+
                             tasks.Add(Game.EventSystem.PublishAsync(new EventType.DestoryDiamondView() { Diamond = diamond }));
 
                             break;
@@ -75,7 +81,10 @@ namespace ET
                 {
                     Log.Debug("play attack action");
             
-                    tasks.Add(session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync(attackAction));
+                    // tasks.Add(session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync(attackAction));
+                    // HeroCardComponent cardComponent = session.DomainScene().GetComponent<HeroCardComponent>();
+                    // await heroCardComponent.PlayHeroCardAttackAnimAsync(attackAction);
+                    // HeroCard heroCard = heroCardComponent.GetChild<>()
                 }
             
                 await ETTaskHelper.WaitAll(tasks);

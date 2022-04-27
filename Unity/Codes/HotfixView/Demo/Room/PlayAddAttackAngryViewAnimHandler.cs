@@ -10,6 +10,8 @@ namespace ET
         {
             List<ETTask> tasks = new List<ETTask>();
             HeroCard heroCard = a.HeroCard;
+            Diamond diamond = a.Diamond;
+            // Vector3 startPos = diamond.GetComponent<GameObjectComponent>().GameObject.transform.position;
             tasks.Add(heroCard.GetComponent<HeroCardView>().PlayAddAngryEffect(a));
             await ETTaskHelper.WaitAll(tasks);
             await ETTask.CompletedTask;

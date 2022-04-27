@@ -11,11 +11,13 @@ namespace ET
             //加载英雄模型
             HeroConfig heroConfig = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
             var heroModeStr = heroConfig.HeroMode;
+            Log.Debug($"hero mode name {heroConfig.HeroMode}");
 
             GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(heroModeStr);
             self.HeroMode = GameObject.Instantiate(prefab);
             self.HeroMode.transform.position = new Vector3(-3 + heroCard.InTroopIndex * 3, 0, -7 * (heroCard.CampIndex == 0? 1 : -1));
             self.HeroMode.transform.forward = heroCard.CampIndex == 0? Vector3.forward : Vector3.back;
+            await ETTask.CompletedTask;
         }
     }
 }

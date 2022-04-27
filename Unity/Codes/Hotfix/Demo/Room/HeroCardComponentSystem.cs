@@ -76,8 +76,8 @@ namespace ET
             {
                 AttackHeroCard = attackHeroCard, BeAttackHeroCard = beAttackHeroCard
             });
-            // Game.EventSystem.Publish(new EventType.UpdateAngryView() { HeroCard = attackHeroCard });
-            // await ETTask.CompletedTask;
+            await ETTask.CompletedTask;
+
         }
 
         public static List<HeroCard> GetHeroCardsByCampIndex(this HeroCardComponent self, int campIndex)

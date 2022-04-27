@@ -14,6 +14,7 @@ namespace ET
             self.HeroCard = card;
             self.UpdateHeroCardTextView();
             card.transform.position = new Vector3(-3 + heroCard.InTroopIndex * 3, 0, -7 * (heroCard.CampIndex == 0? 1 : -1));
+            await ETTask.CompletedTask;
         }
     }
 

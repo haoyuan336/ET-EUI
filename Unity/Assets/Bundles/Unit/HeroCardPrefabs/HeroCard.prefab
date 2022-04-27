@@ -472,7 +472,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1254080954067614851}
-  - component: {fileID: 7348682540080000346}
   m_Layer: 0
   m_Name: HeroCard
   m_TagString: Untagged
@@ -500,24 +499,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!114 &7348682540080000346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5210404131190412391}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f35d324dcf5de64aa884a65558a7bfb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AttackTextMesh: {fileID: 1551519363048349299}
-  AngryTextMesh: {fileID: 3420069335679360380}
-  HPTextMesh: {fileID: 6698821453302790642}
-  DiamondAttackTextMesh: {fileID: 1296312566180893271}
-  HeroCardSpriteRenderer: {fileID: 6020650240286715780}
-  AllHeroCardLibrary: {fileID: 11400000, guid: f8d39586ecc5f3249aab76b36303f1fe, type: 2}
 --- !u!1 &6689214934891861966
 GameObject:
   m_ObjectHideFlags: 0
