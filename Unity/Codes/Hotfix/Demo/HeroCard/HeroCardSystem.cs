@@ -20,8 +20,13 @@ namespace ET
             self.ConfigId = b.ConfigId;
             self.CampIndex = b.CampIndex;
             self.InTroopIndex = b.InTroopIndex;
-
+            self.Attack = b.Attack;
+            self.Angry = b.Angry;
+            self.HP = b.HP;
+            self.DiamondAttack = b.DiamondAttack;
+#if !SERVER
             Game.EventSystem.Publish(new EventType.CreateOneHeroCardView() { HeroCard = self });
+#endif
         }
     }
 

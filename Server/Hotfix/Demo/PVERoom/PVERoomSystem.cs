@@ -279,32 +279,32 @@ namespace ET
         {
             Log.Debug("process scroll screen message");
             M2C_SyncDiamondAction m2CSyncDiamondAction = self.GetComponent<DiamondComponent>().ScrollDiamond(message);
-            // bool isConDestory = false;
-            // foreach (var diamondActionItem in m2CSyncDiamondAction.DiamondActionItems)
-            // {
-            //     foreach (var action in diamondActionItem.DiamondActions)
-            //     {
-            //         if (action.ActionType == (int) DiamondActionType.Destory)
-            //         {
-            //             // Log.Debug($"增加相对应颜色的攻击力 以及怒气值{action.ActionType}");
-            //             isConDestory = true;
-            //             self.AddHeroCardAttack(action);
-            //         }
-            //     }
-            // }
-            //
-            // if (isConDestory)
-            // {
-            //     self.ProcessAttackLogic(m2CSyncDiamondAction);
-            //     self.ProcessReBackAttackLogic(m2CSyncDiamondAction);
-            // }
-            //
-            // Unit loseUnit = self.CheckGameEndResult();
-            //
-            // if (loseUnit != null)
-            // {
-            //     m2CSyncDiamondAction.GameLoseResultAction = new GameLoseResultAction() { LoseAccountId = loseUnit.AccountId };
-            // }
+            bool isConDestory = false;
+            foreach (var diamondActionItem in m2CSyncDiamondAction.DiamondActionItems)
+            {
+                foreach (var action in diamondActionItem.DiamondActions)
+                {
+                    if (action.ActionType == (int) DiamondActionType.Destory)
+                    {
+                        // Log.Debug($"增加相对应颜色的攻击力 以及怒气值{action.ActionType}");
+                        isConDestory = true;
+                        self.AddHeroCardAttack(action);
+                    }
+                }
+            }
+            
+            if (isConDestory)
+            {
+                self.ProcessAttackLogic(m2CSyncDiamondAction);
+                self.ProcessReBackAttackLogic(m2CSyncDiamondAction);
+            }
+            
+            Unit loseUnit = self.CheckGameEndResult();
+            
+            if (loseUnit != null)
+            {
+                m2CSyncDiamondAction.GameLoseResultAction = new GameLoseResultAction() { LoseAccountId = loseUnit.AccountId };
+            }
 
             foreach (var unit in self.Units)
             {

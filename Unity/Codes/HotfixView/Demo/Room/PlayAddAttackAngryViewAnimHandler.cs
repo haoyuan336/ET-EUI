@@ -22,6 +22,7 @@ namespace ET
         {
             HeroCard heroCard = a.HeroCard;
             await heroCard.GetComponent<HeroCardView>().PlayAddAttackEffect(a);
+            await ETTask.CompletedTask;
         }
     }
 }

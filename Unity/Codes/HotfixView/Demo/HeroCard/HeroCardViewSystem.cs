@@ -16,28 +16,27 @@ namespace ET
         public static async ETTask PlayAddAttackEffect(this HeroCardView self, EventType.PlayAddAttackViewAnim message)
         {
             Diamond diamond = message.Diamond;
-            HeroCardViewCtl heroCardViewCtl = self.Parent.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>();
+            // HeroCardViewCtl heroCardViewCtl = self.Parent.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>();
             await self.PlayAddEffectAnim(diamond, "DiamondAddAttackTrailEffect");
-            heroCardViewCtl.UpdateAttackView((message.HeroCard.Attack + message.HeroCard.DiamondAttack).ToString());
+            // heroCardViewCtl.UpdateAttackView((message.HeroCard.Attack + message.HeroCard.DiamondAttack).ToString());
 
             await ETTask.CompletedTask;
         }
 
         public static async ETTask PlayAddAngryEffect(this HeroCardView self, EventType.PlayAddAngryViewAnim message)
         {
+            Log.Debug("play add angry effect");
             Diamond diamond = message.Diamond;
-            HeroCardViewCtl heroCardViewCtl = self.Parent.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>();
             await self.PlayAddEffectAnim(diamond, "DiamondAddAngryTrailEffect");
-            float TotalAngry = HeroConfigCategory.Instance.Get(message.HeroCard.ConfigId).TotalAngry;
-            heroCardViewCtl.UpdateAngryView($"{message.HeroCard.Angry.ToString()}/{TotalAngry}");
+            self.Parent.GetComponent<HeroCardObjectComponent>().UpdateHeroCardTextView();
         }
 
         public static async ETTask PlayAddEffectAnim(this HeroCardView self, Diamond diamond, string effectName)
         {
+            Log.Debug("play add effect anim");
             Vector3 startPos = diamond.GetComponent<GameObjectComponent>().GameObject.transform.position + Vector3.back * 0.1f;
-            Vector3 endPos = self.Parent.GetComponent<GameObjectComponent>().GameObject.transform.position + Vector3.back * 0.1f;
-            // GameObject bundleGameObject = (GameObject) ResourcesComponent.Instance.GetAsset("Unit.unity3d", "Unit");
-            // GameObject prefab = bundleGameObject.Get<GameObject>(effectName);
+            Vector3 endPos = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode.transform.position + Vector3.up;
+            Log.Debug($"Load effect {effectName}");
             GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(effectName);
             GameObject go = GameObject.Instantiate(prefab, GlobalComponent.Instance.Unit);
             go.transform.position = startPos;

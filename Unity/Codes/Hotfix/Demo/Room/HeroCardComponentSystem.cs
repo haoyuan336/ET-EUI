@@ -68,22 +68,16 @@ namespace ET
             Log.Debug("PlayHeroCardAttackAnimAsync");
             HeroCard attackHeroCard = self.GetChild<HeroCard>(action.AttackHeroCardInfo.HeroId);
             attackHeroCard.Angry = action.AttackHeroCardInfo.Angry;
-            // attackHeroCard.SetMessageInfo(action.AttackHeroCardInfo);
             attackHeroCard.CurrentSkillId = action.AttackHeroCardInfo.CastSkillId;
             HeroCard beAttackHeroCard = self.GetChild<HeroCard>(action.BeAttackHeroCardInfo[0].HeroId);
-            // beAttackHeroCard.SetMessageInfo(action.BeAttackHeroCardInfo[0]);
             beAttackHeroCard.HP = action.BeAttackHeroCardInfo[0].HP;
             beAttackHeroCard.Angry = action.BeAttackHeroCardInfo[0].Angry;
-            Log.Debug($"be attack hero card hp {beAttackHeroCard.HP}");
-            Log.Debug($"be attack hero card angry{beAttackHeroCard.Angry}");
-            // beAttackHeroCard.GetComponent<Herocardb>()
-
             await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim()
             {
                 AttackHeroCard = attackHeroCard, BeAttackHeroCard = beAttackHeroCard
             });
-            Game.EventSystem.Publish(new EventType.UpdateAngryView() { HeroCard = attackHeroCard });
-            await ETTask.CompletedTask;
+            // Game.EventSystem.Publish(new EventType.UpdateAngryView() { HeroCard = attackHeroCard });
+            // await ETTask.CompletedTask;
         }
 
         public static List<HeroCard> GetHeroCardsByCampIndex(this HeroCardComponent self, int campIndex)

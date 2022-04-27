@@ -23,11 +23,8 @@ namespace ET
                 foreach (var diamondAction in diamondActionItem.DiamondActions)
                 {
                     DiamondInfo diamondInfo = diamondAction.DiamondInfo;
-                    Log.Debug($"get child {diamondInfo.Id}");
-
                     Diamond diamond = diamondComponent.GetChild<Diamond>(diamondInfo.Id);
-
-                    Log.Debug($"diamond action {JsonUtility.ToJson(diamondInfo)}");
+                    
                     switch (diamondAction.ActionType)
                     {
                         case (int) DiamondActionType.Move:
@@ -39,9 +36,9 @@ namespace ET
                             tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex() { Diamond = diamond }));
                             break;
                         case (int) DiamondActionType.Destory:
-                            tasks.Add(Game.EventSystem.PublishAsync(new EventType.DestoryDiamondView() { Diamond = diamond }));
                             if (diamondInfo.HeroCardInfo != null)
                             {
+                                Log.Debug("play action logic");
                                 HeroCard heroCard = session.DomainScene().GetComponent<HeroCardComponent>()
                                         .GetChild<HeroCard>(diamondInfo.HeroCardInfo.HeroId);
                                 // heroCard.Attack = diamondInfo.HeroCardInfo.Attack;
@@ -49,16 +46,17 @@ namespace ET
                                 if (diamondInfo.HeroCardInfo.DiamondAttack > heroCard.DiamondAttack)
                                 {
                                     heroCard.DiamondAttack = diamondInfo.HeroCardInfo.DiamondAttack;
-                                    Game.EventSystem.Publish(new EventType.PlayAddAttackViewAnim() { HeroCard = heroCard, Diamond = diamond, });
+                                    await Game.EventSystem.PublishAsync(new EventType.PlayAddAttackViewAnim() { HeroCard = heroCard, Diamond = diamond, });
                                 }
                         
                                 if (diamondInfo.HeroCardInfo.Angry > heroCard.Angry)
                                 {
                                     heroCard.Angry = diamondInfo.HeroCardInfo.Angry;
-                                    Game.EventSystem.Publish(new EventType.PlayAddAngryViewAnim() { HeroCard = heroCard, Diamond = diamond, });
+                                    await Game.EventSystem.PublishAsync(new EventType.PlayAddAngryViewAnim() { HeroCard = heroCard, Diamond = diamond, });
                                 }
                             }
-                        
+                            tasks.Add(Game.EventSystem.PublishAsync(new EventType.DestoryDiamondView() { Diamond = diamond }));
+
                             break;
                         case (int) DiamondActionType.Create:
                             Diamond newDiamond = diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo);
@@ -70,18 +68,18 @@ namespace ET
                 await ETTaskHelper.WaitAll(tasks);
             }
 
-            // foreach (var attackActionItem in attackActionItems)
-            // {
-            //     List<ETTask> tasks = new List<ETTask>();
-            //     foreach (var attackAction in attackActionItem.AttackActions)
-            //     {
-            //         Log.Debug("play attack action");
-            //
-            //         tasks.Add(session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync(attackAction));
-            //     }
-            //
-            //     await ETTaskHelper.WaitAll(tasks);
-            // }
+            foreach (var attackActionItem in attackActionItems)
+            {
+                List<ETTask> tasks = new List<ETTask>();
+                foreach (var attackAction in attackActionItem.AttackActions)
+                {
+                    Log.Debug("play attack action");
+            
+                    tasks.Add(session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync(attackAction));
+                }
+            
+                await ETTaskHelper.WaitAll(tasks);
+            }
             //
             // long AccountId = session.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             //
