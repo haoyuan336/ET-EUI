@@ -51,19 +51,23 @@ namespace ET
             }
         }
 
-        public static async ETTask PlayAttackAnimLogic(this HeroCardView self, EventType.PlayHeroCardAttackAnim message)
-        {
-            Log.Debug("play attack logic");
-            HeroCard beAttackHeroCard = message.BeAttackHeroCard;
-            GameObject targetGo = beAttackHeroCard.GetComponent<HeroModeObjectCompoent>().HeroMode;
-            await self.PlayChangeModeAnim();
-            await self.PlayMoveToAnim(targetGo.transform.position);
-            await self.PlayAttackAnim(message);
-            // await beAttackHeroCard.UpdateHPView();
-            await self.ProcessBeAttackAnimLogic(message.BeAttackHeroCard);
-            await self.PlayMoveToBackAnim();
-            await ETTask.CompletedTask;
-        }
+        // public static async ETTask PlayAttackAnimLogic(this HeroCardView self, EventType.PlayHeroCardAttackAnim message)
+        // {
+        //     Log.Debug("play attack logic");
+        //     HeroCard beAttackHeroCard = message.BeAttackHeroCard;
+        //     HeroModeObjectCompoent beAttackHeroModeCom = beAttackHeroCard.GetComponent<HeroModeObjectCompoent>();
+        //     HeroModeObjectCompoent selfHeroModeCom = self.Parent.GetComponent<HeroModeObjectCompoent>();
+        //     Vector3 initPos = selfHeroModeCom.HeroMode.transform.position;
+        //     await self.PlayChangeModeAnim();
+        //     await selfHeroModeCom.PlayMoveToAnim(beAttackHeroModeCom.HeroMode.transform.position);
+        //     // await self.PlayMoveToAnim(targetGo.transform.position);
+        //     await self.PlayAttackAnim(message);
+        //     // await beAttackHeroCard.UpdateHPView();
+        //     await self.ProcessBeAttackAnimLogic(message.BeAttackHeroCard);
+        //     // await self.PlayMoveToBackAnim(startPos);
+        //     await selfHeroModeCom.PlayMoveToAnim(initPos);
+        //     await ETTask.CompletedTask;
+        // }
 
         public static async ETTask ProcessBeAttackAnimLogic(this HeroCardView self, HeroCard heroCard)
         {
@@ -74,34 +78,47 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
-        public static async ETTask PlayMoveToAnim(this HeroCardView self, Vector3 endPos)
-        {
-            GameObject selfGo = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode;
-            GameObject heroMode = selfGo.GetComponent<HeroModeObjectCompoent>().HeroMode;
-            float distance = 100;
-            while (distance > 3f)
-            {
-                Vector3 prePos = Vector3.Lerp(heroMode.transform.position, endPos, 0.01f);
-                heroMode.transform.position = prePos;
-                distance = Vector3.Distance(prePos, endPos);
-                await TimerComponent.Instance.WaitFrameAsync();
-            }
-        }
+        // public static async ETTask PlayMoveToAnim(this HeroCardView self, Vector3 targetPos)
+        // {
+        //     GameObject heroMode = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode;
+        //     float distance = 100;
+        //     while (distance > 3f)
+        //     {
+        //         Vector3 prePos = Vector3.Lerp(selfGo.transform.position, endPos, 0.01f);
+        //         selfGo.transform.position = prePos;
+        //         distance = Vector3.Distance(prePos, endPos);
+        //         await TimerComponent.Instance.WaitFrameAsync();
+        //     }
+        // }
 
-        public static async ETTask PlayMoveToBackAnim(this HeroCardView self)
-        {
-            Vector3 endPos = self.Parent.GetComponent<HeroCardObjectComponent>().HeroCard.transform.position;
-            // GameObject selfGo = self.Parent.GetComponent<HeroCardObjectComponent>().GameObject;
-            GameObject heroMode = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode;
-            float distance = 100;
-            while (distance > 0.1f)
-            {
-                Vector3 prePos = Vector3.Lerp(heroMode.transform.position, endPos, 0.01f);
-                heroMode.transform.position = prePos;
-                distance = Vector3.Distance(prePos, endPos);
-                await TimerComponent.Instance.WaitFrameAsync();
-            }
-        }
+        // public static async ETTask PlayMoveToAnim(this HeroCardView self, Vector3 endPos)
+        // {
+        //     GameObject selfGo = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode;
+        //     // GameObject heroMode = selfGo;
+        //     float distance = 100;
+        //     while (distance > 3f)
+        //     {
+        //         Vector3 prePos = Vector3.Lerp(selfGo.transform.position, endPos, 0.01f);
+        //         selfGo.transform.position = prePos;
+        //         distance = Vector3.Distance(prePos, endPos);
+        //         await TimerComponent.Instance.WaitFrameAsync();
+        //     }
+        // }
+        //
+        // public static async ETTask PlayMoveToBackAnim(this HeroCardView self, Vector3 endPos)
+        // {
+        //     // Vector3 endPos = self.Parent.GetComponent<HeroCardObjectComponent>().HeroCard.transform.position;
+        //     // GameObject selfGo = self.Parent.GetComponent<HeroCardObjectComponent>().GameObject;
+        //     GameObject heroMode = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode;
+        //     float distance = 100;
+        //     while (distance > 0.1f)
+        //     {
+        //         Vector3 prePos = Vector3.Lerp(heroMode.transform.position, endPos, 0.01f);
+        //         heroMode.transform.position = prePos;
+        //         distance = Vector3.Distance(prePos, endPos);
+        //         await TimerComponent.Instance.WaitFrameAsync();
+        //     }
+        // }
 
         public static async ETTask PlayChangeModeAnim(this HeroCardView self)
         {
@@ -110,29 +127,28 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
-        public static async ETTask PlayAttackAnim(this HeroCardView self, EventType.PlayHeroCardAttackAnim message)
-        {
-            HeroCard heroCard = message.AttackHeroCard;
-            long skillId = heroCard.CurrentSkillId;
-            Log.Debug($"Skill id {skillId}");
-            Skill skill = heroCard.GetChild<Skill>(skillId);
-            GameObject selfGo = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode;
-            GameObject heroMode = selfGo.GetComponent<HeroModeObjectCompoent>().HeroMode;
-            string skillAnimStr = "";
-            switch (skill.SkillType)
-            {
-                case (int) SkillType.BigSkill:
-                    skillAnimStr = "Attack";
-                    break;
-                case (int) SkillType.NormalSkill:
-                    skillAnimStr = "Skill";
-                    break;
-            }
-
-            Log.Debug("skill anim str = " + skillAnimStr);
-
-            heroMode.GetComponent<Animator>().SetTrigger(skillAnimStr);
-            await TimerComponent.Instance.WaitAsync(1000);
-        }
+        // public static async ETTask PlayAttackAnim(this HeroCardView self, EventType.PlayHeroCardAttackAnim message)
+        // {
+        //     HeroCard heroCard = message.AttackHeroCard;
+        //     long skillId = heroCard.CurrentSkillId;
+        //     Log.Debug($"Skill id {skillId}");
+        //     Skill skill = heroCard.GetChild<Skill>(skillId);
+        //     SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
+        //     string skillAnimStr = "";
+        //     switch (skillConfig.SkillType)
+        //     {
+        //         case (int) SkillType.BigSkill:
+        //             skillAnimStr = "Attack";
+        //             break;
+        //         case (int) SkillType.NormalSkill:
+        //             skillAnimStr = "Skill";
+        //             break;
+        //     }
+        //
+        //     Log.Debug("skill anim str = " + skillAnimStr);
+        //     GameObject selfGo = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode;
+        //     selfGo.GetComponent<Animator>().SetTrigger(skillAnimStr);
+        //     await TimerComponent.Instance.WaitAsync(1000);
+        // }
     }
 }

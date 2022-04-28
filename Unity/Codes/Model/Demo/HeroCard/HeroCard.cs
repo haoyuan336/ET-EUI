@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ET
 {
-    public class HeroCard: Entity, IAwake<int>, IAwake<int,HeroCardInfo>,IUpdate, IDestroy, IAwake<HeroCardInfo>
+    public class HeroCard: Entity, IAwake<int>, IAwake<int, HeroCardInfo>, IAwake<HeroCardInfo, List<Skill>>, IUpdate, IDestroy, IAwake<HeroCardInfo>, IAwake<HeroCard, List<Skill>>, IAwake<HeroCard>
     {
         public String HeroName; //英雄名称 支持可编辑
         public long OwnerId; //拥有者的id  也就是玩家id
@@ -18,7 +18,7 @@ namespace ET
         public float DiamondDefence;
         public int CampIndex; //todo 阵营index
         public float Angry; //怒气值
-        public int Level;   //当前英雄的等级
+        public int Level; //当前英雄的等级
         public long CurrentSkillId; //当前需要释放的技能
     }
 }

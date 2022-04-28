@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using UnityEngine;
-using Vector3 = System.Numerics.Vector3;
+using ET.Account;
 
 namespace ET
 {
@@ -80,44 +78,44 @@ namespace ET
                 foreach (var attackAction in attackActionItem.AttackActions)
                 {
                     Log.Debug("play attack action");
-            
-                    // tasks.Add(session.DomainScene().GetComponent<HeroCardComponent>().PlayHeroCardAttackAnimAsync(attackAction));
-                    // HeroCardComponent cardComponent = session.DomainScene().GetComponent<HeroCardComponent>();
-                    // await heroCardComponent.PlayHeroCardAttackAnimAsync(attackAction);
-                    // HeroCard heroCard = heroCardComponent.GetChild<>()
+                    HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(attackAction.AttackHeroCardInfo.HeroId);
+                    await heroCard.PlayHeroCardAttackAnimAsync(attackAction);
                 }
-            
+
                 await ETTaskHelper.WaitAll(tasks);
             }
+
             //
-            // long AccountId = session.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            //
-            // if (gameLoseResultAction == null)
-            // {
-            //     Log.Debug("一回合结束了");
-            //     //todo 给服务器发送ready消息
-            //     long RoomId = session.ZoneScene().GetComponent<PlayerComponent>().RoomId;
-            //     M2C_PlayerReadyTurnResponse m2CPlayerReadyTurnResponse =
-            //             (M2C_PlayerReadyTurnResponse) await session.Call(new C2M_PlayerReadyTurnRequest() { AccountId = AccountId, RoomId = RoomId });
-            //     if (m2CPlayerReadyTurnResponse.Error == ErrorCode.ERR_Success)
-            //     {
-            //         await Game.EventSystem.PublishAsync(new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene() });
-            //     }
-            // }
-            // else
-            // {
-            //     Log.Debug($"lose id{gameLoseResultAction.LoseAccountId}");
-            //     Log.Debug($"self id {AccountId}");
-            //     if (!AccountId.Equals(gameLoseResultAction.LoseAccountId))
-            //     {
-            //         Log.Debug("game win");
-            //         Game.EventSystem.Publish(new EventType.ShowGameWinUI() { ZondScene = session.ZoneScene() });
-            //     }
-            //     else
-            //     {
-            //         Log.Debug("game lose");
-            //     }
-            // }
+            long AccountId = session.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+
+            if (gameLoseResultAction == null)
+            {
+                Log.Debug("一回合结束了");
+                // todo 给服务器发送ready消息
+                // long RoomId = session.ZoneScene().GetComponent<PlayerComponent>().RoomId;
+                // M2C_PlayerReadyTurnResponse m2CPlayerReadyTurnResponse =
+                //         (M2C_PlayerReadyTurnResponse) await session.Call(new C2M_PlayerReadyTurnRequest() { AccountId = AccountId, RoomId = RoomId });
+                // if (m2CPlayerReadyTurnResponse.Error == ErrorCode.ERR_Success)
+                // {
+                //     // await Game.EventSystem.PublishAsync(new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene() });
+                // }
+
+                await Game.EventSystem.PublishAsync(new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene() });
+            }
+            else
+            {
+                Log.Debug($"lose id{gameLoseResultAction.LoseAccountId}");
+                Log.Debug($"self id {AccountId}");
+                if (!AccountId.Equals(gameLoseResultAction.LoseAccountId))
+                {
+                    Log.Debug("game win");
+                    Game.EventSystem.Publish(new EventType.ShowGameWinUI() { ZondScene = session.ZoneScene() });
+                }
+                else
+                {
+                    Log.Debug("game lose");
+                }
+            }
 
             await ETTask.CompletedTask;
         }

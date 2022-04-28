@@ -37,40 +37,42 @@ namespace ET
 
         public static async ETTask PlayerReadyTurn(this PVERoom self)
         {
-            self.CurrentAttackHeroCard = null;
-            Log.Debug("准备好回合了");
+            // self.CurrentAttackHeroCard = null;
+            // Log.Debug("准备好回合了");
             //做一些 英雄卡牌初始化的操作
-            foreach (var unit in self.Units)
-            {
-                foreach (var heroCard in unit.HeroCards)
-                {
-                    //todo 做一些初始化的操作
-                    heroCard.InitTurnGame(); //todo 初始化回合
-                }
-            }
+            // foreach (var unit in self.Units)
+            // {
+            //     foreach (var id in unit.HeroCardIDs)
+            //     {
+            //         HeroCard heroCard = unit.GetChild<HeroCard>(id);
+            //         //todo 做一些初始化的操作
+            //         heroCard.InitTurnGame(); //todo 初始化回合
+            //     }
+            // }
 
-            Log.Debug("初始化回合游戏卡牌");
-            List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>();
-            foreach (var unit in self.Units)
-            {
-                foreach (var heroCard in unit.HeroCards)
-                {
-                    heroCardInfos.Add(heroCard.GetMessageInfo());
-                }
-            }
+            // Log.Debug("初始化回合游戏卡牌");
+            // List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>();
+            // foreach (var unit in self.Units)
+            // {
+            //     foreach (var id in unit.HeroCardIDs)
+            //     {
+            //         HeroCard heroCard = unit.GetChild<HeroCard>(id);
+            //         heroCardInfos.Add(heroCard.GetMessageInfo());
+            //     }
+            // }
+            //
+            // Log.Debug("组装数据");
 
-            Log.Debug("组装数据");
-
-            foreach (var unit in self.Units)
-            {
-                if (unit.IsAI)
-                {
-                    continue;
-                }
-
-                Log.Debug("发送数据");
-                MessageHelper.SendToClient(unit, new M2C_SyncHeroCardTurnData() { HeroCardInfos = heroCardInfos });
-            }
+            // foreach (var unit in self.Units)
+            // {
+            //     if (unit.IsAI)
+            //     {
+            //         continue;
+            //     }
+            //
+            //     Log.Debug("发送数据");
+            //     MessageHelper.SendToClient(unit, new M2C_SyncHeroCardTurnData() { HeroCardInfos = heroCardInfos });
+            // }
 
             await ETTask.CompletedTask;
         }
@@ -83,11 +85,11 @@ namespace ET
                 if (unit.IsAI)
                 {
                     // //todo 首先创建敌人的英雄卡
-                    unit.HeroCards = self.GetHeroIdListInLevelConfig(i, unit);
-                    foreach (var heroCard in unit.HeroCards)
-                    {
-                        heroCard.InitHeroSkillWithConfig();
-                    }
+                    unit.HeroCardIDs = self.GetHeroIdListInLevelConfig(i, unit);
+                    // foreach (var heroCard in unit.HeroCards)
+                    // {
+                    //     heroCard.InitHeroSkillWithConfig();
+                    // }
                 }
             }
         }
@@ -174,32 +176,29 @@ namespace ET
 
                 List<HeroCard> heroCards = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
                         .Query<HeroCard>((a) => a.TroopId.Equals(troopId));
+
                 foreach (var heroCard in heroCards)
                 {
-                    HeroCard card = unit.AddChildWithId<HeroCard, int>(heroCard.Id, heroCard.ConfigId);
-                    // card.SetMessageInfo(heroCard.GetMessageInfo());
-                    // card.InitSkill();
-                    tasks.Add(card.InitHeroWithDBData(heroCard));
-                    unit.HeroCards.Add(card);
+                    List<Skill> skills = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
+                            .Query<Skill>(a => a.OwnerId.Equals(heroCard.Id));
+                    unit.AddChild(heroCard);
+                    foreach (var skill in skills)
+                    {
+                        heroCard.AddChild(skill);
+                    }
+                    unit.HeroCardIDs.Add(heroCard.Id);
                 }
             }
-
             await ETTaskHelper.WaitAll(tasks);
             //todo sync all player info
 
             List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>();
-            List<SkillInfo> skillInfos = new List<SkillInfo>();
             foreach (var unit in self.Units)
             {
-                foreach (var heroCard in unit.HeroCards)
+                foreach (var id in unit.HeroCardIDs)
                 {
+                    HeroCard heroCard = unit.GetChild<HeroCard>(id);
                     heroCardInfos.Add(heroCard.GetMessageInfo());
-                    List<Skill> skills = heroCard.GetChilds<Skill>();
-                    Log.Debug($"skills {skills.Count}");
-                    foreach (var skill in skills)
-                    {
-                        skillInfos.Add(skill.GetMessageInfo());
-                    }
                 }
             }
 
@@ -210,15 +209,16 @@ namespace ET
                     continue;
                 }
 
-                MessageHelper.SendToClient(unit, new M2C_CreateHeroCardInRoom() { HeroCardInfos = heroCardInfos, SkillInfos = skillInfos });
+                MessageHelper.SendToClient(unit, new M2C_CreateHeroCardInRoom() { HeroCardInfos = heroCardInfos });
             }
 
             await ETTask.CompletedTask;
         }
 
-        public static List<HeroCard> GetHeroIdListInLevelConfig(this PVERoom self, int CampIndex, Unit unit)
+        public static List<long> GetHeroIdListInLevelConfig(this PVERoom self, int CampIndex, Unit unit)
         {
-            List<HeroCard> heroCards = new List<HeroCard>();
+            List<long> heroCards = new List<long>();
+            // List<HeroCard> heroCards = new List<HeroCard>();
             string heroIdsstr = self.LevelConfig.HeroId;
             string[] strList = heroIdsstr.Split(',').ToArray();
             // List<HeroCardInfo> heroCardInfo = new List<HeroCardInfo>();
@@ -231,7 +231,7 @@ namespace ET
                 heroCard.InTroopIndex = index;
                 index++;
                 // self.enemyHeroCards.Add(heroCard);
-                heroCards.Add(heroCard);
+                heroCards.Add(heroCard.Id);
                 heroCard.CampIndex = unit.SeatIndex;
             }
 
@@ -248,8 +248,9 @@ namespace ET
             }
 
             DiamondInfo diamondInfo = action.DiamondInfo;
-            foreach (var heroCard in unit.HeroCards)
+            foreach (var id in unit.HeroCardIDs)
             {
+                HeroCard heroCard = unit.GetChild<HeroCard>(id);
                 DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamondInfo.DiamondType);
                 if (heroCard.HeroColor.Equals(diamondInfo.DiamondType))
                 {
@@ -292,15 +293,15 @@ namespace ET
                     }
                 }
             }
-            
+
             if (isConDestory)
             {
                 self.ProcessAttackLogic(m2CSyncDiamondAction);
                 self.ProcessReBackAttackLogic(m2CSyncDiamondAction);
             }
-            
+
             Unit loseUnit = self.CheckGameEndResult();
-            
+
             if (loseUnit != null)
             {
                 m2CSyncDiamondAction.GameLoseResultAction = new GameLoseResultAction() { LoseAccountId = loseUnit.AccountId };
@@ -319,13 +320,13 @@ namespace ET
 
         public static Unit CheckGameEndResult(this PVERoom self)
         {
-
             //todo 检查游戏胜利还是失败
             foreach (var unit in self.Units)
             {
                 var isAllDead = true;
-                foreach (var heroCard in unit.HeroCards)
+                foreach (var id in unit.HeroCardIDs)
                 {
+                    HeroCard heroCard = unit.GetChild<HeroCard>(id);
                     if (!heroCard.GetIsDead())
                     {
                         isAllDead = false;
@@ -383,8 +384,9 @@ namespace ET
             int index = 0;
             while (index < 10)
             {
-                foreach (var card in unit.HeroCards)
+                foreach (var id in unit.HeroCardIDs)
                 {
+                    HeroCard card = unit.GetChild<HeroCard>(id);
                     if (card.InTroopIndex.Equals(currentIndex) && !card.GetIsDead())
                     {
                         unit.CurrentTurnAttackHeroSeatIndex = currentIndex + 1;
@@ -393,7 +395,7 @@ namespace ET
                 }
 
                 currentIndex++;
-                if (currentIndex >= unit.HeroCards.Count)
+                if (currentIndex >= unit.HeroCardIDs.Count)
                 {
                     currentIndex = 0;
                 }
@@ -410,8 +412,9 @@ namespace ET
             Unit unit = self.Units[self.CurrentTurnIndex];
             Unit beAttackUnit = self.GetBeAttackUnit(unit);
             AttackActionItem attackActionItem = new AttackActionItem();
-            foreach (var heroCard in unit.HeroCards)
+            foreach (var id in unit.HeroCardIDs)
             {
+                var heroCard = unit.GetChild<HeroCard>(id);
                 Log.Debug($"hero in troop index  {heroCard.InTroopIndex}");
                 Log.Debug($"hero attack {heroCard.DiamondAttack}");
                 if (heroCard.GetIsDead())
@@ -474,13 +477,14 @@ namespace ET
             int whileCount = 0;
             while (whileCount < 10)
             {
-                if (index >= unit.HeroCards.Count)
+                if (index >= unit.HeroCardIDs.Count)
                 {
                     index = 0;
                 }
 
-                foreach (var card in unit.HeroCards)
+                foreach (var id in unit.HeroCardIDs)
                 {
+                    var card = unit.GetChild<HeroCard>(id);
                     if (card.InTroopIndex.Equals(index) && !card.GetIsDead())
                     {
                         return card;

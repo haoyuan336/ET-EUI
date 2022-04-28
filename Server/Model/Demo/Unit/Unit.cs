@@ -26,8 +26,9 @@ namespace ET
 
         private Vector3 position; //坐标
 
-        public List<HeroCard> HeroCards = new List<HeroCard>();
+        // public List<HeroCard> HeroCards = new List<HeroCard>();
 
+        public List<long> HeroCardIDs = new List<long>();
         public long CurrentTroopId;  //当前选择的队伍id
 
         public bool IsAI => this.Config.IsAI == 1;

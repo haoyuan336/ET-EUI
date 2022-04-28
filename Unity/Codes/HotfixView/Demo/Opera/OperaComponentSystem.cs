@@ -106,7 +106,8 @@ namespace ET
 
                         self.TouchLock = true;
                         
-                        self.ZoneScene().GetComponent<SessionComponent>().Session.Call(c2MPlayerScrollScreen).Coroutine();
+                        self.ZoneScene().GetComponent<SessionComponent>().Session.Send(c2MPlayerScrollScreen);
+                        
                     }
                 }
             }

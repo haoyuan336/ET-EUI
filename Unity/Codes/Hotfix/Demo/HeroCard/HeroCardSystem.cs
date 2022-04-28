@@ -8,6 +8,37 @@ namespace ET
         public override void Awake(HeroCard self, int configId)
         {
             self.InitWithConfig(HeroConfigCategory.Instance.Get(configId));
+
+            var skillsStr = HeroConfigCategory.Instance.Get(configId).SkillIdList;
+            var skillStrList = skillsStr.Split(',').ToList();
+            foreach (var skillStr in skillStrList)
+            {
+                self.AddChild<Skill, int>(int.Parse(skillStr));
+            }
+        }
+    }
+
+    public class HeroCardAwakeSystem2: AwakeSystem<HeroCard, HeroCardInfo, List<Skill>>
+    {
+        public override void Awake(HeroCard self, HeroCardInfo a, List<Skill> b)
+        {
+        }
+    }
+
+    public class HeroCardAwakeSystem3: AwakeSystem<HeroCard, HeroCard>
+    {
+        public override void Awake(HeroCard self, HeroCard a)
+        {
+            self.HeroName = a.HeroName;
+            self.Level = a.Level;
+            self.ConfigId = a.ConfigId;
+            self.InTroopIndex = a.InTroopIndex;
+            self.CampIndex = a.CampIndex;
+            // List<Skill> skills = a.GetChilds<Skill>();
+            // foreach (var skill in skills)
+            // {
+            //     self.AddChild(skill);
+            // }
         }
     }
 
@@ -15,7 +46,7 @@ namespace ET
     {
         public override void Awake(HeroCard self, HeroCardInfo b)
         {
-            Log.Debug("hero card awake");
+            Log.Debug($"hero card awake{b.SkillInfos.Count}");
 
             self.ConfigId = b.ConfigId;
             self.CampIndex = b.CampIndex;
@@ -24,6 +55,13 @@ namespace ET
             self.Angry = b.Angry;
             self.HP = b.HP;
             self.DiamondAttack = b.DiamondAttack;
+
+            List<SkillInfo> skillInfos = b.SkillInfos;
+            foreach (var skillInfo in skillInfos)
+            {
+                Log.Debug($"init skill child {skillInfo.SkillId}");
+                self.AddChildWithId<Skill, SkillInfo>(skillInfo.SkillId, skillInfo);
+            }
 #if !SERVER
             Game.EventSystem.Publish(new EventType.CreateOneHeroCardView() { HeroCard = self });
 #endif
@@ -39,6 +77,24 @@ namespace ET
 
     public static class HeroCardSystem
     {
+        public static async ETTask PlayHeroCardAttackAnimAsync(this HeroCard self, AttackAction action)
+        {
+            Log.Debug("PlayHeroCardAttackAnimAsync");
+            // HeroCard attackHeroCard = self.GetChild<HeroCard>(action.AttackHeroCardInfo.HeroId);
+            self.Angry = action.AttackHeroCardInfo.Angry;
+            self.CurrentSkillId = action.AttackHeroCardInfo.CastSkillId;
+            HeroCard beAttackHeroCard = self.Parent.GetChild<HeroCard>(action.BeAttackHeroCardInfo[0].HeroId);
+            beAttackHeroCard.HP = action.BeAttackHeroCardInfo[0].HP;
+            beAttackHeroCard.Angry = action.BeAttackHeroCardInfo[0].Angry;
+#if !SERVER
+            await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim()
+            {
+                AttackHeroCard = self, BeAttackHeroCard = beAttackHeroCard
+            });
+#endif
+            await ETTask.CompletedTask;
+        }
+
         public static async ETTask Call(this HeroCard self, int zone, long ownerId)
         {
             self.OwnerId = ownerId;
@@ -68,6 +124,17 @@ namespace ET
 
         public static HeroCardInfo GetMessageInfo(this HeroCard self)
         {
+            List<Skill> skills = self.GetChilds<Skill>();
+            List<SkillInfo> skillInfos = new List<SkillInfo>();
+            if (skills != null && skills.Count != 0)
+            {
+                Log.Debug($"hero card info get message info {skills.Count}");
+                foreach (var skill in skills)
+                {
+                    skillInfos.Add(skill.GetMessageInfo());
+                }
+            }
+
             HeroCardInfo heroCardInfo = new HeroCardInfo()
             {
                 HeroId = self.Id,
@@ -85,6 +152,7 @@ namespace ET
                 HP = self.HP,
                 Defence = self.Defence,
                 Level = self.Level == 0? 1 : self.Level,
+                SkillInfos = skillInfos,
             };
 
             return heroCardInfo;
@@ -118,35 +186,6 @@ namespace ET
             self.HeroName = heroConfig.HeroName;
             self.ConfigId = heroConfig.Id;
             self.HeroColor = heroConfig.HeroColor;
-        }
-
-        public static void InitHeroSkillWithConfig(this HeroCard self)
-        {
-            HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
-            string[] skillStrList = heroConfig.SkillIdList.Split(',').ToArray();
-            foreach (var str in skillStrList)
-            {
-                Skill skill = self.AddChild<Skill, int>(int.Parse(str));
-                skill.OwnerId = self.Id;
-            }
-        }
-
-        public static async ETTask InitHeroWithDBData(this HeroCard self, HeroCard dbHeroCard)
-        {
-            // self = dbHeroCard;
-            // Log.Debug($"self in troop index {self.InTroopIndex}");
-            self.SetMessageInfo(dbHeroCard.GetMessageInfo());
-            //todo  init skill info 初始化 技能信息
-#if SERVER
-            List<Skill> skills = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone()).Query<Skill>(a => a.OwnerId.Equals(self.Id));
-            foreach (var skill in skills)
-            {
-                Skill sk = self.AddChildWithId<Skill, int>(skill.Id, skill.ConfigId);
-                sk.InitSkillWithDBData(skill);
-            }
-#endif
-
-            await ETTask.CompletedTask;
         }
 
         //todo 增加攻击值
@@ -243,7 +282,7 @@ namespace ET
             {
                 if (self.CheckAngryIsFull())
                 {
-                    if (skill.SkillType == (int) SkillType.BigSkill)
+                    if (SkillConfigCategory.Instance.Get(skill.ConfigId).SkillType == (int) SkillType.BigSkill)
                     {
                         self.Angry = 0;
                         return skill.Id;
@@ -253,7 +292,7 @@ namespace ET
 
             foreach (var skill in skills)
             {
-                if (skill.SkillType == (int) SkillType.NormalSkill)
+                if (SkillConfigCategory.Instance.Get(skill.ConfigId).SkillType == (int) SkillType.NormalSkill)
                 {
                     return skill.Id;
                 }
