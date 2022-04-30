@@ -576,6 +576,21 @@ namespace ET
             return child as K;
         }
 
+        public void RemoveAllChild<K>() where K : Entity
+        {
+            if (this.children == null)
+            {
+                return;
+            }
+
+            var children = this.GetChilds<K>();
+            Log.Debug($"remove all child ren {children.Count}");
+            foreach (var child in children)
+            {
+                child?.Dispose();
+            }
+        }
+
         public List<K> GetChilds<K>() where K : Entity
         {
             if (this.children == null)

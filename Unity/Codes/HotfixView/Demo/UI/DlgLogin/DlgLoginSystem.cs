@@ -35,7 +35,7 @@ namespace ET
                     ConstValue.LoginAddress,
                     self.View.E_AccountInputField.GetComponent<InputField>().text,
                     self.View.E_PasswordInputField.GetComponent<InputField>().text);
-                Log.Debug("View  errorcode = " + errorCode);
+                // Log.Debug("View  errorcode = " + errorCode);
                 if (errorCode != ErrorCode.ERR_Success)
                 {
                     return;
@@ -67,8 +67,9 @@ namespace ET
                         {
                             // self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MatchButton);
                             // Addressables.LoadSceneAsync()
+                            await AddressableComponent.Instance.LoadAssetsByLabelAsync<GameObject>("UI", (result) => { });
                             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_LoadingLayer);
-                            await AddressableComponent.Instance.LoadAssetsByLabelAsync<GameObject>("All", (result) => { });
+
                         }
                     }
                 }

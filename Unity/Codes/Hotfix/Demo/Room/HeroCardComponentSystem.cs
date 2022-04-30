@@ -11,7 +11,7 @@ namespace ET
     {
         public override void Awake(HeroCardComponent self)
         {
-            Log.Debug("Hero card component awake");
+            // Log.Debug("Hero card component awake");
         }
     }
 
@@ -25,7 +25,7 @@ namespace ET
 
             foreach (var heroCardInfo in heroCardInfos)
             {
-                Log.Debug("create hero card");
+                Log.Debug($"create hero card {heroCardInfo.HeroId} {heroCardInfo.CampIndex}");
                 self.AddChildWithId<HeroCard, HeroCardInfo>(heroCardInfo.HeroId, heroCardInfo);
             }
             //todo 同步给显示层

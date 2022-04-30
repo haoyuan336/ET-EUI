@@ -23,7 +23,7 @@ namespace ET
     {
         public static void UpdateHeroCardTextView(this HeroCardObjectComponent self, HeroCardInfo heroCardInfo)
         {
-            Log.Debug($"update hero card text view  {heroCardInfo.Attack}");
+            // Log.Debug($"update hero card text view  {heroCardInfo.Attack}");
             //更新英雄卡牌
             // Log.Debug($"hero c ard name {self.HeroCard.name}");
             var attackText = GameObject.Find($"{self.HeroCard.name}/AttackText");

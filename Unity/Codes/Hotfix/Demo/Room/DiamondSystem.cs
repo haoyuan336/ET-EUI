@@ -1,7 +1,4 @@
-﻿using System.Text;
-using UnityEngine;
-
-namespace ET
+﻿namespace ET
 {
     public class DiamondAwakeSystem: AwakeSystem<Diamond>
     {
@@ -18,8 +15,8 @@ namespace ET
     {
         public static void SetIndex(this Diamond self, int lieIndex, int hangIndex)
         {
-            Log.Debug($"set index{self.LieIndex}");
-            Log.Debug($"set index self");
+            // Log.Debug($"set index{self.LieIndex}");
+            // Log.Debug($"set index self");
 
             self.LieIndex = lieIndex;
             self.HangIndex = hangIndex;
@@ -47,6 +44,15 @@ namespace ET
             }
 
             return false;
+        }
+
+        public static async ETTask Destroy(this Diamond self)
+        {
+#if !SERVER
+            await Game.EventSystem.PublishAsync(new EventType.DestoryDiamondView() { Diamond = self });
+#endif
+            self.Dispose();
+            await ETTask.CompletedTask;
         }
 
         public static void InitWithMessageInfo(this Diamond self, DiamondInfo diamondInfo)

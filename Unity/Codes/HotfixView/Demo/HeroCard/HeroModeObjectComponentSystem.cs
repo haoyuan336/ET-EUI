@@ -103,7 +103,7 @@ namespace ET
                     break;
             }
 
-            Log.Debug("skill anim str = " + skillAnimStr);
+            // Log.Debug("skill anim str = " + skillAnimStr);
             // GameObject selfGo = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode;
 
             self.HeroMode.GetComponent<Animator>().SetTrigger(skillAnimStr);
@@ -112,7 +112,7 @@ namespace ET
 
         public static async ETTask PlayAddAngryEffect(this HeroModeObjectCompoent self, EventType.PlayAddAngryViewAnim message)
         {
-            Log.Debug("play add angry effect");
+            // Log.Debug("play add angry effect");
             Vector3 startPos = message.Diamond.GetComponent<GameObjectComponent>().GameObject.transform.position;
             await self.PlayAddEffectAnim(startPos, "DiamondAddAngryTrailEffect");
             // self.Parent.GetComponent<HeroCardObjectComponent>().UpdateHeroCardTextView();
@@ -139,14 +139,20 @@ namespace ET
             GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(effectName);
             GameObject go = GameObject.Instantiate(prefab, GlobalComponent.Instance.Unit);
             go.transform.position = startPos;
-            float distance = 1;
-            while (distance > 0.1f)
+            float time = 0;
+            while (time < Mathf.PI * 0.5f)
             {
-                Vector3 prePos = Vector3.Lerp(go.transform.position, endPos, 0.05f);
+                // Vector3 prePos = Vector3.Lerp(go.transform.position, endPos, 0.05f);
+                // go.transform.position = prePos;
+                // distance = Vector3.Distance(prePos, endPos);
+                var value = Mathf.Sin(time);
+                Vector3 prePos = Vector3.Lerp(startPos, endPos, value);
+                time += Time.deltaTime * 5;
                 go.transform.position = prePos;
-                distance = Vector3.Distance(prePos, endPos);
                 await TimerComponent.Instance.WaitFrameAsync();
             }
+
+            GameObject.Destroy(go);
         }
     }
 }

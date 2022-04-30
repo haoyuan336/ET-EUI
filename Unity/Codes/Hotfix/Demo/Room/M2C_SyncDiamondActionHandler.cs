@@ -9,8 +9,8 @@ namespace ET
         {
             Log.Debug("收到了 处理滑动的消息");
             //todo 开始处理action
-            DiamondComponent diamondComponent = session.DomainScene().GetComponent<DiamondComponent>();
-            HeroCardComponent heroCardComponent = session.DomainScene().GetComponent<HeroCardComponent>();
+            DiamondComponent diamondComponent = session.ZoneScene().CurrentScene().GetComponent<DiamondComponent>();
+            HeroCardComponent heroCardComponent = session.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>();
             List<DiamondActionItem> diamondActionItems = message.DiamondActionItems;
             List<AttackActionItem> attackActionItems = message.AttackActionItems;
             GameLoseResultAction gameLoseResultAction = message.GameLoseResultAction;
@@ -19,7 +19,7 @@ namespace ET
                 List<ETTask> tasks = new List<ETTask>();
 
                 int count = 0;
-                Log.Debug($"diamond actions  {diamondActionItem.DiamondActions.Count}");
+                // Log.Debug($"diamond actions  {diamondActionItem.DiamondActions.Count}");
                 foreach (var diamondAction in diamondActionItem.DiamondActions)
                 {
                     DiamondInfo diamondInfo = diamondAction.DiamondInfo;
@@ -28,17 +28,17 @@ namespace ET
                     switch (diamondAction.ActionType)
                     {
                         case (int) DiamondActionType.Move:
-                            Log.Debug($"diamond info lieinde {diamondInfo.LieIndex}, {diamondInfo.HangIndex}");
-                            Log.Debug($"diamond {diamond}");
+                            // Log.Debug($"diamond info lieinde {diamondInfo.LieIndex}, {diamondInfo.HangIndex}");
+                            // Log.Debug($"diamond {diamond}");
                             diamond.SetIndex(diamondInfo.LieIndex, diamondInfo.HangIndex);
                             count++;
-                            Log.Debug($"count {count}");
+                            // Log.Debug($"count {count}");
                             tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex() { Diamond = diamond }));
                             break;
                         case (int) DiamondActionType.Destory:
                             if (diamondInfo.HeroCardInfo != null)
                             {
-                                Log.Debug("play action logic");
+                                // Log.Debug("play action logic");
                                 // HeroCard heroCard = session.DomainScene().GetComponent<HeroCardComponent>()
                                 // .GetChild<HeroCard>(diamondInfo.HeroCardInfo.HeroId);
                                 HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(diamondInfo.HeroCardInfo.HeroId);
@@ -65,8 +65,8 @@ namespace ET
 
                             // await TimerComponent.Instance.WaitFrameAsync();
 
-                            tasks.Add(Game.EventSystem.PublishAsync(new EventType.DestoryDiamondView() { Diamond = diamond }));
-
+                            // tasks.Add(Game.EventSystem.PublishAsync(new EventType.DestoryDiamondView() { Diamond = diamond }));
+                            tasks.Add(diamondComponent.RemoveChild(diamond));
                             break;
                         case (int) DiamondActionType.Create:
                             Diamond newDiamond = diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo);
@@ -83,7 +83,7 @@ namespace ET
                 List<ETTask> tasks = new List<ETTask>();
                 foreach (var attackAction in attackActionItem.AttackActions)
                 {
-                    Log.Debug("play attack action");
+                    // Log.Debug("play attack action");
                     HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(attackAction.AttackHeroCardInfo.HeroId);
                     await heroCard.PlayHeroCardAttackAnimAsync(attackAction);
                 }

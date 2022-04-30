@@ -64,6 +64,28 @@ namespace ET
             self.Diamonds[index] = diamond;
         }
 
+        public static async ETTask RemoveChild(this DiamondComponent self, Diamond diamond)
+        {
+            await diamond.Destroy();
+        }
+
+        // public static void RemoveAllChild(this DiamondComponent self)
+        // {
+        //     Log.Debug("remove all child");
+        //     List<Diamond> diamonds = self.GetChilds<Diamond>();
+        //     if (diamonds != null)
+        //     {
+        //         foreach (var diamond in diamonds)
+        //         {
+        //             diamond.Destroy().Coroutine();
+        //         }
+        //     }
+        //     // foreach (var diamond in diamonds)
+        //     // {
+        //     //     // diamond.Destroy().Coroutine();
+        //     // }
+        // }
+
         public static Diamond CreateOneDiamond(this DiamondComponent self)
         {
             long id = IdGenerater.Instance.GenerateId();
@@ -88,6 +110,15 @@ namespace ET
             return diamond;
         }
 
+        public static void InitMapWithMessage(this DiamondComponent self, M2C_InitMapData message)
+        {
+            foreach (var diamondInfo in message.DiamondInfo)
+            {
+                self.CreateDiamoneWithMessage(diamondInfo);
+            }
+        }
+
+        // public static  Diamond Remove
         public static Diamond GetDiamond(this DiamondComponent self, int LieIndex, int HangIndex)
         {
             // Log.Debug($"level config {self.LevelConfig}");
@@ -475,6 +506,7 @@ namespace ET
                         Log.Debug("消除特殊宝石");
                         self.AutoCastSpecialDiamond(m2CSyncDiamondAction.DiamondActionItems, specialDiamond);
                     }
+
                     Log.Debug($"special diamond {specialDiamonds.Count}");
                 }
 

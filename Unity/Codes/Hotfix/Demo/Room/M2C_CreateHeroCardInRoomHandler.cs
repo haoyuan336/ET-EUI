@@ -6,8 +6,10 @@ namespace ET
     {
         protected override async ETTask Run(Session session, M2C_CreateHeroCardInRoom message)
         {
-            HeroCardComponent heroCardComponent = session.DomainScene().AddComponent<HeroCardComponent>();
+            // HeroCardComponent heroCardComponent = session.ZoneScene().GetComponent<HeroCardComponent>();
 
+            HeroCardComponent heroCardComponent = session.ZoneScene().CurrentScene().AddComponent<HeroCardComponent>();
+            
             heroCardComponent.InitHeroCard(message);
          
 

@@ -18,8 +18,7 @@ namespace ET
                 await TimerComponent.Instance.WaitFrameAsync();
             }
 
-            diamond.Dispose();
-
+            // diamond.Dispose();
             await ETTask.CompletedTask;
         }
     }

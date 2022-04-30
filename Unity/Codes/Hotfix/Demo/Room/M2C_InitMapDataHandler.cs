@@ -4,10 +4,12 @@
     {
         protected override async ETTask Run(Session session, M2C_InitMapData message)
         {
-            foreach (var diamondInfo in message.DiamondInfo)
-            {
-                session.DomainScene().GetComponent<DiamondComponent>().CreateDiamoneWithMessage(diamondInfo);
-            }
+            // foreach (var diamondInfo in message.DiamondInfo)
+            // {
+            //     session.DomainScene().GetComponent<DiamondComponent>().CreateDiamoneWithMessage(diamondInfo);
+            // }
+            DiamondComponent diamondComponent = session.ZoneScene().CurrentScene().AddComponent<DiamondComponent>();
+            diamondComponent.InitMapWithMessage(message);
             await ETTask.CompletedTask;
         }
     }

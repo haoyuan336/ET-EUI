@@ -119,7 +119,7 @@ namespace ET
     {
         public static async ETTask PlayHeroCardAttackAnimAsync(this HeroCard self, AttackAction action)
         {
-            Log.Debug("PlayHeroCardAttackAnimAsync");
+            // Log.Debug("PlayHeroCardAttackAnimAsync");
             // HeroCard attackHeroCard = self.GetChild<HeroCard>(action.AttackHeroCardInfo.HeroId);
             self.Angry = action.AttackHeroCardInfo.Angry;
             self.CurrentSkillId = action.AttackHeroCardInfo.CastSkillId;

@@ -132,6 +132,7 @@
      <Compile Include="Assets\Mono\ILRuntime\Generate\UnityEngine_AnimationClip_Binding.cs" />
      <Compile Include="Assets\Mono\ILRuntime\Generate\System_Collections_Generic_Dictionary_2_Int32_Boolean_Binding.cs" />
      <Compile Include="Assets\Mono\ILRuntime\Generate\UnityEngine_UI_LoopScrollRectBase_Binding.cs" />
+     <Compile Include="Assets\Mono\ILRuntime\Generate\ET_ETTask_1_List_1_GameObject_Binding.cs" />
      <Compile Include="Assets\Mono\ILRuntime\Generate\System_ValueTuple_3_Int32_Int64_Int32_Binding.cs" />
      <Compile Include="Assets\Mono\MonoBehaviour\LoopScrollRect\LoopScrollSizeHelper.cs" />
      <Compile Include="Assets\Mono\ILRuntime\Generate\ET_MD5Helper_Binding.cs" />
@@ -292,6 +293,7 @@
      <Compile Include="Assets\Mono\Core\Helper\RandomHelper.cs" />
      <Compile Include="Assets\Mono\Helper\EasyObjectPool.cs" />
      <Compile Include="Assets\Mono\ILRuntime\Generate\UnityEngine_Camera_Binding.cs" />
+     <Compile Include="Assets\Mono\ILRuntime\Generate\UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_t6.cs" />
      <Compile Include="Assets\Mono\ILRuntime\Generate\ET_UnOrderMultiMapSet_2_Type_Type_Binding.cs" />
      <Compile Include="Assets\Mono\ILRuntime\Generate\System_Action_1_Int32_Binding.cs" />
      <Compile Include="Assets\Mono\ILRuntime\Generate\System_Object_Binding.cs" />
@@ -376,8 +378,6 @@
      <Compile Include="Assets\Mono\ILRuntime\Generate\System_Collections_Generic_HashSet_1_ILTypeInstance_Binding_Enumerato.cs" />
      <Compile Include="Assets\Mono\ILRuntime\Generate\System_Collections_Generic_HashSet_1_AService_Binding_Enumerator_Bind.cs" />
      <Compile Include="Assets\Mono\Define.cs" />
-     <Compile Include="Assets\Mono\ILRuntime\Generate\UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_t6.cs" />
-     <Compile Include="Assets\Mono\ILRuntime\Generate\ET_ETTask_1_List_1_GameObject_Binding.cs" />
      <None Include="Assets\Mono\Unity.Mono.asmdef" />
      <Reference Include="UnityEngine">
      <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.27f1c1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

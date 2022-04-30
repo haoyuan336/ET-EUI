@@ -25,10 +25,9 @@ namespace ET
         public UnitConfig Config => UnitConfigCategory.Instance.Get(this.ConfigId);
 
         private Vector3 position; //坐标
-
         // public List<HeroCard> HeroCards = new List<HeroCard>();
 
-        public List<long> HeroCardIDs = new List<long>();
+        // public List<long> HeroCardIDs = new List<long>();
         public long CurrentTroopId;  //当前选择的队伍id
 
         public bool IsAI => this.Config.IsAI == 1;
@@ -42,16 +41,15 @@ namespace ET
                 Game.EventSystem.Publish(new EventType.ChangePosition() { Unit = this });
             }
         }
-
         [BsonIgnore]
         public Vector3 Forward
         {
             get => this.Rotation * Vector3.forward;
             set => this.Rotation = Quaternion.LookRotation(value, Vector3.up);
         }
-
+        
         private Quaternion rotation;
-
+        
         public Quaternion Rotation
         {
             get => this.rotation;

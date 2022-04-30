@@ -53,7 +53,7 @@ public class HeroCardViewCtl: MonoBehaviour
 
     public void UpdateAngryView(string value)
     {
-        Log.Debug($"Update angry view {value}");
+        // Log.Debug($"Update angry view {value}");
         this.AngryTextMesh.text = $"N:{value.ToString()}";
     }
 
