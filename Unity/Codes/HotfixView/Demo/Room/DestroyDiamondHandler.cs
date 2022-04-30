@@ -13,7 +13,7 @@ namespace ET
             float time = 0;
             while (time < Mathf.PI * 0.5f)
             {
-                time += 0.04f;
+                time += Time.deltaTime * 8;
                 go.transform.localScale = Vector3.one * Mathf.Cos(time);
                 await TimerComponent.Instance.WaitFrameAsync();
             }

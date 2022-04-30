@@ -68,17 +68,25 @@ namespace ET
             //     await ETTask.CompletedTask;
         }
 
-        public static async ETTask PlayBeAttackAnim(this HeroModeObjectCompoent self)
+        public static async ETTask PlayBeAttackAnim(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message)
         {
             self.HeroMode.GetComponent<Animator>().SetTrigger("BeAttack");
+            self.Parent.GetComponent<HeroCardObjectComponent>().UpdateHeroCardTextView(message.BeAttackHeroCardInfo);
+            await TimerComponent.Instance.WaitAsync(1000);
+            if (message.BeAttackHeroCardInfo.HP <= 0)
+            {
+                self.HeroMode.GetComponent<Animator>().SetBool("Dead", true);
+            }
+
             await ETTask.CompletedTask;
         }
+
         public static async ETTask PlayAttackAnim(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message)
         {
             HeroCard heroCard = message.AttackHeroCard;
             HeroCard beAttackCard = message.BeAttackHeroCard;
 
-            beAttackCard.GetComponent<HeroModeObjectCompoent>().PlayBeAttackAnim().Coroutine();
+            beAttackCard.GetComponent<HeroModeObjectCompoent>().PlayBeAttackAnim(message).Coroutine();
 
             long skillId = heroCard.CurrentSkillId;
             Log.Debug($"Skill id {skillId}");
@@ -97,10 +105,48 @@ namespace ET
 
             Log.Debug("skill anim str = " + skillAnimStr);
             // GameObject selfGo = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode;
-            
-            
+
             self.HeroMode.GetComponent<Animator>().SetTrigger(skillAnimStr);
             await TimerComponent.Instance.WaitAsync(1000);
+        }
+
+        public static async ETTask PlayAddAngryEffect(this HeroModeObjectCompoent self, EventType.PlayAddAngryViewAnim message)
+        {
+            Log.Debug("play add angry effect");
+            Vector3 startPos = message.Diamond.GetComponent<GameObjectComponent>().GameObject.transform.position;
+            await self.PlayAddEffectAnim(startPos, "DiamondAddAngryTrailEffect");
+            // self.Parent.GetComponent<HeroCardObjectComponent>().UpdateHeroCardTextView();
+        }
+
+        public static async ETTask PlayAddAttackEffect(this HeroModeObjectCompoent self, EventType.PlayAddAttackViewAnim message)
+        {
+            Vector3 startPos = message.Diamond.GetComponent<GameObjectComponent>().GameObject.transform.position;
+            // Diamond diamond = message.Diamond;
+            // HeroCardViewCtl heroCardViewCtl = self.Parent.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>();
+            await self.PlayAddEffectAnim(startPos, "DiamondAddAttackTrailEffect");
+            // heroCardViewCtl.UpdateAttackView((message.HeroCard.Attack + message.HeroCard.DiamondAttack).ToString());
+
+            await ETTask.CompletedTask;
+        }
+
+        public static async ETTask PlayAddEffectAnim(this HeroModeObjectCompoent self, Vector3 startPos, string effectName)
+        {
+            Log.Debug("play add effect anim");
+            // Vector3 startPos = diamond.GetComponent<GameObjectComponent>().GameObject.transform.position + Vector3.back * 0.1f;
+            // Vector3 endPos = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode.transform.position + Vector3.up;
+            Vector3 endPos = self.HeroMode.transform.position + Vector3.up;
+            Log.Debug($"Load effect {effectName}");
+            GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(effectName);
+            GameObject go = GameObject.Instantiate(prefab, GlobalComponent.Instance.Unit);
+            go.transform.position = startPos;
+            float distance = 1;
+            while (distance > 0.1f)
+            {
+                Vector3 prePos = Vector3.Lerp(go.transform.position, endPos, 0.05f);
+                go.transform.position = prePos;
+                distance = Vector3.Distance(prePos, endPos);
+                await TimerComponent.Instance.WaitFrameAsync();
+            }
         }
     }
 }

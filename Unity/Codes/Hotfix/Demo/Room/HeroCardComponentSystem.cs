@@ -26,28 +26,9 @@ namespace ET
             foreach (var heroCardInfo in heroCardInfos)
             {
                 Log.Debug("create hero card");
-                HeroCard heroCard = self.AddChildWithId<HeroCard, HeroCardInfo>(heroCardInfo.HeroId, heroCardInfo);
-                // HeroCard heroCard = self.AddChildWithId<HeroCard, int>(heroCardInfo.HeroId,heroCardInfo.ConfigId);
-                // heroCard.SetMessageInfo(heroCardInfo);
-                // self.AddHeroCardSkillByList(heroCard, skillInfos);
-                // heroCard.InitHeroWithDBData(heroCard);
-                // if (!heroCardListMap.ContainsKey(heroCard.CampIndex))
-                // {
-                // heroCardListMap[heroCard.CampIndex] = new List<HeroCard>();
-                // List<HeroCard> heroCards = new List<HeroCard>();
-                // heroCards.Add(heroCard);
-                // heroCardListMap.Add(heroCard.CampIndex, heroCards);
-                // }
-                // else
-                // {
-                //     heroCardListMap[heroCard.CampIndex].Add(heroCard);
-                // }
-
-                // self.HeroCards.Add(heroCard);
+                self.AddChildWithId<HeroCard, HeroCardInfo>(heroCardInfo.HeroId, heroCardInfo);
             }
-
             //todo 同步给显示层
-            // Game.EventSystem.Publish(new EventType.CreateHeroCardView() { HeroCardListMap = heroCardListMap });
         }
 
         // public static void AddHeroCardSkillByList(this HeroCardComponent self, HeroCard heroCard, List<SkillInfo> skillInfos)

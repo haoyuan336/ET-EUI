@@ -1,0 +1,39 @@
+﻿using System;
+
+namespace ET
+{
+    public class C2M_BackGameToMainMenuHandler: AMActorLocationRpcHandler<Unit, C2M_BackGameToMainMenuRequest, M2C_BackGameToMainMenuResponse>
+    {
+        protected override async ETTask Run(Unit unit, C2M_BackGameToMainMenuRequest request, M2C_BackGameToMainMenuResponse response, Action reply)
+        {
+            Log.Warning("收到了客户端发来的返回主页面的消息");
+            switch (unit.DomainScene().SceneType)
+            {
+                case SceneType.PVEGameScene:
+                    Log.Debug("receive player scrollscreen message");
+                    PVERoomComponent roomComponent = unit.DomainScene().GetComponent<PVERoomComponent>();
+                    PVERoom room = roomComponent.GetChild<PVERoom>(request.RoomId);
+            
+  
+                    if (room != null)
+                    {
+                        
+                        // room.PlayerExitGame(request.Account);
+                        room.Dispose();
+                        response.Error = ErrorCode.ERR_Success;
+                    }
+                    else
+                    {
+                        response.Error = ErrorCode.ERR_NotFoundRoom;
+                    }
+
+                    break;
+            }
+
+            reply();
+            StartSceneConfig startSceneConfig = StartSceneConfigCategory.Instance.GetBySceneName(unit.DomainZone(), "MainScene");
+            await TransferHelper.Transfer(unit, startSceneConfig.InstanceId, startSceneConfig.Name);
+            await ETTask.CompletedTask;
+        }
+    }
+}

@@ -178,6 +178,7 @@ namespace ET
         public struct CreateOneHeroCardView
         {
             public HeroCard HeroCard;
+            public HeroCardInfo HeroCardInfo;
         }
 
         public struct CreateOneHeroModeView
@@ -210,12 +211,15 @@ namespace ET
         {
             public HeroCard AttackHeroCard;
             public HeroCard BeAttackHeroCard;
+            public HeroCardInfo AttackHeroCardInfo;
+            public HeroCardInfo BeAttackHeroCardInfo;
         }
 
         public struct PlayAddAttackViewAnim
         {
             public HeroCard HeroCard;
 
+            public HeroCardInfo HeroCardInfo;
             // public Vector3 StartPos;
             public Diamond Diamond;
             // public float AddAttack;
@@ -230,6 +234,7 @@ namespace ET
 
             // public Vector3 StartPos;
             public Diamond Diamond;
+            public HeroCardInfo HeroCardInfo;
         }
 
         public struct ShowGameWinUI

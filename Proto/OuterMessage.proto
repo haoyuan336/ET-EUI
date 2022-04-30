@@ -699,3 +699,18 @@ message M2C_GetUserExpInfoResponse	//IActorLocationResponse
 	int32 UserLevel = 2;	//英雄当前的等级
 	string UserName = 3;
 }
+//ResponseType M2C_BackGameToMainMenuResponse
+message C2M_BackGameToMainMenuRequest //IActorLocationRequest
+{
+	//退出游戏进入主页面
+	int32 RpcId = 90;
+	int64 Account = 1;
+	int64 RoomId = 2;
+
+}
+message M2C_BackGameToMainMenuResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}

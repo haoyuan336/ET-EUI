@@ -8,10 +8,8 @@ namespace ET
         public int CurrentTurnIndex = 0;
         public int HangCount = 0;
         public int LieCount = 0;
-        public Diamond[,] Diamonds = null;
         public DiamondComponent DiamondComponent = null;
         public LevelConfig LevelConfig;
-
         public HeroCard CurrentAttackHeroCard;
     }
 }

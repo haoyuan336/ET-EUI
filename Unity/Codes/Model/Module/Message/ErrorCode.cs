@@ -29,6 +29,8 @@ namespace ET
         public const int ERR_NotFoundHero = 200011; //未找到此英雄
 
         public const int ERR_NotFoundPlayer = 200012;
+        public const int ERR_NotFoundRoom = 200013;
+
         // 200001以上不抛异常
     }
 }

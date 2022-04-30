@@ -58,6 +58,8 @@ namespace ET
             appdomain.DelegateManager.RegisterMethodDelegate<Transform, int>();
             appdomain.DelegateManager.RegisterMethodDelegate<AsyncOperation>();
             appdomain.DelegateManager.RegisterMethodDelegate<AsyncOperationHandle>();
+            appdomain.DelegateManager.RegisterMethodDelegate<UnityEngine.GameObject>();
+
 
             appdomain.DelegateManager.RegisterFunctionDelegate<UnityEngine.Events.UnityAction>();
             appdomain.DelegateManager.RegisterFunctionDelegate<System.Object, ET.ETTask>();
@@ -72,6 +74,8 @@ namespace ET
             appdomain.DelegateManager.RegisterFunctionDelegate<KeyValuePair<int, List<int>>, bool>();
             appdomain.DelegateManager.RegisterFunctionDelegate<KeyValuePair<int, int>, KeyValuePair<int, int>, int>();
             appdomain.DelegateManager.RegisterMethodDelegate<UnityEngine.Object>();
+            appdomain.DelegateManager.RegisterMethodDelegate<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Collections.Generic.IList<UnityEngine.GameObject>>>();
+
             appdomain.DelegateManager
                     .RegisterMethodDelegate<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<
                         System.Collections.Generic.IList<UnityEngine.Object>>>();

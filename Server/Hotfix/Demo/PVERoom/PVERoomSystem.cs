@@ -18,8 +18,11 @@ namespace ET
         }
     }
 
+    
     public static class PVERoomSystem
     {
+        
+        // public static void 
         public static async void PlayerGameReady(this PVERoom self, Unit unit, long AccountId)
         {
             Log.Debug($"current choose troop id {unit.CurrentTroopId}");
@@ -85,7 +88,7 @@ namespace ET
                 if (unit.IsAI)
                 {
                     // //todo 首先创建敌人的英雄卡
-                    unit.HeroCardIDs = self.GetHeroIdListInLevelConfig(i, unit);
+                    unit.HeroCardIDs = self.CreateHeroIdListInLevelConfig(i, unit);
                     // foreach (var heroCard in unit.HeroCards)
                     // {
                     //     heroCard.InitHeroSkillWithConfig();
@@ -181,14 +184,16 @@ namespace ET
                 {
                     List<Skill> skills = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
                             .Query<Skill>(a => a.OwnerId.Equals(heroCard.Id));
-                    unit.AddChild(heroCard);
-                    foreach (var skill in skills)
-                    {
-                        heroCard.AddChild(skill);
-                    }
+                    // unit.AddChild(heroCard);
+                    // foreach (var skill in skills)
+                    // {
+                    //     heroCard.AddChild(skill);
+                    // }
+                    unit.AddChildWithId<HeroCard, HeroCard, List<Skill>>(heroCard.Id, heroCard, skills);
                     unit.HeroCardIDs.Add(heroCard.Id);
                 }
             }
+
             await ETTaskHelper.WaitAll(tasks);
             //todo sync all player info
 
@@ -215,7 +220,7 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
-        public static List<long> GetHeroIdListInLevelConfig(this PVERoom self, int CampIndex, Unit unit)
+        public static List<long> CreateHeroIdListInLevelConfig(this PVERoom self, int CampIndex, Unit unit)
         {
             List<long> heroCards = new List<long>();
             // List<HeroCard> heroCards = new List<HeroCard>();
@@ -226,8 +231,9 @@ namespace ET
             foreach (var str in strList)
             {
                 int configId = int.Parse(str);
+                EnemyHeroConfig enemyHeroConfig = EnemyHeroConfigCategory.Instance.Get(configId);
                 long id = IdGenerater.Instance.GenerateId();
-                HeroCard heroCard = unit.AddChildWithId<HeroCard, int>(id, configId);
+                HeroCard heroCard = unit.AddChildWithId<HeroCard, EnemyHeroConfig>(id, enemyHeroConfig);
                 heroCard.InTroopIndex = index;
                 index++;
                 // self.enemyHeroCards.Add(heroCard);
@@ -252,8 +258,12 @@ namespace ET
             {
                 HeroCard heroCard = unit.GetChild<HeroCard>(id);
                 DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamondInfo.DiamondType);
+                Log.Warning($"AddHeroCardAttack{heroCard.HeroColor}");
+
+                Log.Warning($"diamond info {diamondInfo.DiamondType}");
                 if (heroCard.HeroColor.Equals(diamondInfo.DiamondType))
                 {
+                    Log.Warning("add hero card angry");
                     heroCard.AddAngryValue(float.Parse(config.AddAngry));
                     // diamondInfo.HeroCardId = heroCard.Id;
                     // diamondInfo.HeroCardAddAngry = addAngryValue;
@@ -266,7 +276,7 @@ namespace ET
 
                     if (self.CurrentAttackHeroCard != null)
                     {
-                        self.CurrentAttackHeroCard.AddAttackValue(float.Parse(config.AddAttack));
+                        self.CurrentAttackHeroCard.AddDiamondAttackValue(float.Parse(config.AddAttack));
                         // diamondInfo.HeroCardAddAttack = addValue;
                         // diamondInfo.HeroCardEndAttack = self.CurrentAttackHeroCard.Attack;
                     }
@@ -299,6 +309,8 @@ namespace ET
                 self.ProcessAttackLogic(m2CSyncDiamondAction);
                 self.ProcessReBackAttackLogic(m2CSyncDiamondAction);
             }
+
+            self.CurrentAttackHeroCard = null;
 
             Unit loseUnit = self.CheckGameEndResult();
 
@@ -415,8 +427,8 @@ namespace ET
             foreach (var id in unit.HeroCardIDs)
             {
                 var heroCard = unit.GetChild<HeroCard>(id);
-                Log.Debug($"hero in troop index  {heroCard.InTroopIndex}");
-                Log.Debug($"hero attack {heroCard.DiamondAttack}");
+                // Log.Debug($"hero in troop index  {heroCard.InTroopIndex}");
+                // Log.Debug($"hero attack {heroCard.DiamondAttack}");
                 if (heroCard.GetIsDead())
                 {
                     continue;
@@ -432,9 +444,10 @@ namespace ET
                         continue;
                     }
 
-                    heroCard.CurrentSkillId = heroCard.ProcessCurrentSkill();
+                    heroCard.CastSkill();
                     Log.Debug($"current skill id {heroCard.CurrentSkillId}");
                     beAttackHeroCard.BeAttack(heroCard);
+                    // heroCard.CastAttack();
                     attackAction.AttackHeroCardInfo = heroCard.GetMessageInfo();
                     attackAction.BeAttackHeroCardInfo.Add(beAttackHeroCard.GetMessageInfo());
                     attackActionItem.AttackActions.Add(attackAction);

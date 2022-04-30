@@ -27,5 +27,6 @@
         WindowID_ShowHeroInfoLayer, //显示英雄的详细信息
         WindowID_MainSceneBg,   //主背景的背景层
         WindowID_MainSceneMenu, //主页面按钮
+        WindowID_LoadingLayer,  //加载游戏层
     }
 }

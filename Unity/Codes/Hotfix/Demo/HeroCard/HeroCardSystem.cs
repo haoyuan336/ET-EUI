@@ -7,38 +7,23 @@ namespace ET
     {
         public override void Awake(HeroCard self, int configId)
         {
-            self.InitWithConfig(HeroConfigCategory.Instance.Get(configId));
-
+            // self.InitWithConfig(HeroConfigCategory.Instance.Get(configId));
+            // self.Attack = heroConfig.BaseAttack;
+            // self.Defence = heroConfig.BaseDefence;
+            // self.HP = heroConfig.HeroHP;
+            // self.HeroName = heroConfig.HeroName;
+            // self.ConfigId = heroConfig.Id;
+            // self.HeroColor = heroConfig.HeroColor;
+            self.ConfigId = configId;
+            self.HP = HeroConfigCategory.Instance.Get(configId).HeroHP;
+            self.HeroName = HeroConfigCategory.Instance.Get(configId).HeroName;
+            self.HeroColor = HeroConfigCategory.Instance.Get(configId).HeroColor;
             var skillsStr = HeroConfigCategory.Instance.Get(configId).SkillIdList;
             var skillStrList = skillsStr.Split(',').ToList();
             foreach (var skillStr in skillStrList)
             {
                 self.AddChild<Skill, int>(int.Parse(skillStr));
             }
-        }
-    }
-
-    public class HeroCardAwakeSystem2: AwakeSystem<HeroCard, HeroCardInfo, List<Skill>>
-    {
-        public override void Awake(HeroCard self, HeroCardInfo a, List<Skill> b)
-        {
-        }
-    }
-
-    public class HeroCardAwakeSystem3: AwakeSystem<HeroCard, HeroCard>
-    {
-        public override void Awake(HeroCard self, HeroCard a)
-        {
-            self.HeroName = a.HeroName;
-            self.Level = a.Level;
-            self.ConfigId = a.ConfigId;
-            self.InTroopIndex = a.InTroopIndex;
-            self.CampIndex = a.CampIndex;
-            // List<Skill> skills = a.GetChilds<Skill>();
-            // foreach (var skill in skills)
-            // {
-            //     self.AddChild(skill);
-            // }
         }
     }
 
@@ -51,10 +36,9 @@ namespace ET
             self.ConfigId = b.ConfigId;
             self.CampIndex = b.CampIndex;
             self.InTroopIndex = b.InTroopIndex;
-            self.Attack = b.Attack;
-            self.Angry = b.Angry;
+            self.Level = b.Level;
             self.HP = b.HP;
-            self.DiamondAttack = b.DiamondAttack;
+            self.HeroColor = b.HeroColor;
 
             List<SkillInfo> skillInfos = b.SkillInfos;
             foreach (var skillInfo in skillInfos)
@@ -63,17 +47,73 @@ namespace ET
                 self.AddChildWithId<Skill, SkillInfo>(skillInfo.SkillId, skillInfo);
             }
 #if !SERVER
-            Game.EventSystem.Publish(new EventType.CreateOneHeroCardView() { HeroCard = self });
+            Game.EventSystem.Publish(new EventType.CreateOneHeroCardView() { HeroCard = self, HeroCardInfo = b });
 #endif
         }
     }
 
-    public class HeroCardUpdateSystem: UpdateSystem<HeroCard>
+    public class HeroCardAwakeSystem2: AwakeSystem<HeroCard, EnemyHeroConfig>
     {
-        public override void Update(HeroCard self)
+        public override void Awake(HeroCard self, EnemyHeroConfig a)
         {
+            self.Level = a.Level;
+            self.ConfigId = a.ConfigId;
+            self.HeroName = a.HeroName;
+            self.HP = HeroConfigCategory.Instance.Get(self.ConfigId).HeroHP + HeroUpdateLevelConfigCategory.Instance.Get(self.Level).BaseHP;
+            // self.HP = 
+            // self.HP = 
+
+            self.HeroColor = HeroConfigCategory.Instance.Get(self.ConfigId).HeroColor;
+            var skillConfigStr = HeroConfigCategory.Instance.Get(self.ConfigId).SkillIdList;
+            var skillConfigStrList = skillConfigStr.Split(',');
+            foreach (var skill in skillConfigStrList)
+            {
+                self.AddChild<Skill, int>(int.Parse(skill));
+            }
         }
     }
+
+    public class HeroCardAwakeSystem3: AwakeSystem<HeroCard, HeroCard, List<Skill>>
+    {
+        public override void Awake(HeroCard self, HeroCard a, List<Skill> b)
+        {
+            self.Level = a.Level == 0? 1 : a.Level;
+            self.ConfigId = a.ConfigId;
+            self.HeroName = a.HeroName;
+            self.CampIndex = a.CampIndex;
+            self.InTroopIndex = a.InTroopIndex;
+            self.HeroColor = a.HeroColor;
+            self.HP = HeroConfigCategory.Instance.Get(self.ConfigId).HeroHP + HeroUpdateLevelConfigCategory.Instance.Get(self.Level).BaseHP;
+            foreach (var skill in b)
+            {
+                self.AddChild(skill);
+            }
+        }
+    }
+
+    // public class HeroCardAwakeSystem3: AwakeSystem<HeroCard, HeroCard>
+    // {
+    //     public override void Awake(HeroCard self, HeroCard a)
+    //     {
+    //         self.HeroName = a.HeroName;
+    //         self.Level = a.Level;
+    //         self.ConfigId = a.ConfigId;
+    //         self.InTroopIndex = a.InTroopIndex;
+    //         self.CampIndex = a.CampIndex;
+    //         // List<Skill> skills = a.GetChilds<Skill>();
+    //         // foreach (var skill in skills)
+    //         // {
+    //         //     self.AddChild(skill);
+    //         // }
+    //     }
+    // }
+
+    // public class HeroCardUpdateSystem: UpdateSystem<HeroCard>
+    // {
+    //     public override void Update(HeroCard self)
+    //     {
+    //     }
+    // }
 
     public static class HeroCardSystem
     {
@@ -84,12 +124,15 @@ namespace ET
             self.Angry = action.AttackHeroCardInfo.Angry;
             self.CurrentSkillId = action.AttackHeroCardInfo.CastSkillId;
             HeroCard beAttackHeroCard = self.Parent.GetChild<HeroCard>(action.BeAttackHeroCardInfo[0].HeroId);
-            beAttackHeroCard.HP = action.BeAttackHeroCardInfo[0].HP;
-            beAttackHeroCard.Angry = action.BeAttackHeroCardInfo[0].Angry;
+            // beAttackHeroCard.GetHP() = action.BeAttackHeroCardInfo[0].HP;
+            // beAttackHeroCard.Angry = action.BeAttackHeroCardInfo[0].Angry;
 #if !SERVER
             await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim()
             {
-                AttackHeroCard = self, BeAttackHeroCard = beAttackHeroCard
+                AttackHeroCard = self,
+                BeAttackHeroCard = beAttackHeroCard,
+                BeAttackHeroCardInfo = action.BeAttackHeroCardInfo[0],
+                AttackHeroCardInfo = action.AttackHeroCardInfo
             });
 #endif
             await ETTask.CompletedTask;
@@ -146,11 +189,11 @@ namespace ET
                 CampIndex = self.CampIndex,
                 HeroColor = self.HeroColor,
                 CastSkillId = self.CurrentSkillId,
-                Attack = self.Attack,
-                DiamondAttack = self.DiamondAttack,
-                Angry = self.Angry,
+                Attack = self.GetAttack(),
+                DiamondAttack = self.GetDiamondAttack(),
+                Angry = self.GetAngry(),
                 HP = self.HP,
-                Defence = self.Defence,
+                Defence = self.GetDefence(),
                 Level = self.Level == 0? 1 : self.Level,
                 SkillInfos = skillInfos,
             };
@@ -158,38 +201,79 @@ namespace ET
             return heroCardInfo;
         }
 
-        public static void SetMessageInfo(this HeroCard self, HeroCardInfo message)
+        public static float GetDiamondAttack(this HeroCard self)
         {
-            self.Id = message.HeroId;
-            self.HeroName = message.HeroName;
-            self.OwnerId = message.OwnerId;
-            self.ConfigId = message.ConfigId;
-            self.InTroopIndex = message.InTroopIndex;
-            self.TroopId = message.TroopId;
-            self.CampIndex = message.CampIndex;
-            self.HeroColor = message.HeroColor;
-            self.CurrentSkillId = message.CastSkillId;
-            self.Attack = message.Attack;
-            self.DiamondAttack = message.DiamondAttack;
-            self.Angry = message.Angry;
-            self.HP = message.HP;
-            self.Defence = message.Defence;
-            self.Level = message.Level == 0? 1 : message.Level;
-            Log.Debug($"set message info {self.Level}");
+            return self.DiamondAttack;
         }
 
-        public static void InitWithConfig(this HeroCard self, HeroConfig heroConfig)
+        public static float GetAngry(this HeroCard self)
         {
-            self.Attack = heroConfig.BaseAttack;
-            self.Defence = heroConfig.BaseDefence;
-            self.HP = heroConfig.HeroHP;
-            self.HeroName = heroConfig.HeroName;
-            self.ConfigId = heroConfig.Id;
-            self.HeroColor = heroConfig.HeroColor;
+            return self.Angry;
         }
+
+        // public static float GetHP(this HeroCard self)
+        // {
+        //     int level = self.Level == 0? 1 : self.Level;
+        //     float baseHp = HeroConfigCategory.Instance.Get(self.ConfigId).HeroHP;
+        //     float levelHp = HeroUpdateLevelConfigCategory.Instance.Get(level).BaseHP;
+        //     return baseHp + levelHp;
+        // }
+
+        public static float GetAttack(this HeroCard self)
+        {
+            float baseAttack = HeroConfigCategory.Instance.Get(self.ConfigId).BaseAttack;
+            float levelAttack = self.GetLevelAttack();
+            return levelAttack + baseAttack;
+        }
+
+        public static float GetDefence(this HeroCard self)
+        {
+            float baseDefence = HeroConfigCategory.Instance.Get(self.ConfigId).BaseDefence;
+            int level = self.Level == 0? 1 : self.Level;
+            float levelDefence = HeroUpdateLevelConfigCategory.Instance.Get(level).BaseDefence;
+            return baseDefence + levelDefence;
+        }
+
+        public static float GetLevelAttack(this HeroCard self)
+        {
+            //todo 获取等级攻击力
+            // return HeroUpdateLevelConfig
+            int level = self.Level == 0? 1 : self.Level;
+            HeroUpdateLevelConfig info = HeroUpdateLevelConfigCategory.Instance.Get(level);
+            return info.BaseAttack;
+        }
+        // public static void SetMessageInfo(this HeroCard self, HeroCardInfo message)
+        // {
+        //     self.Id = message.HeroId;
+        //     self.HeroName = message.HeroName;
+        //     self.OwnerId = message.OwnerId;
+        //     self.ConfigId = message.ConfigId;
+        //     self.InTroopIndex = message.InTroopIndex;
+        //     self.TroopId = message.TroopId;
+        //     self.CampIndex = message.CampIndex;
+        //     self.HeroColor = message.HeroColor;
+        //     self.CurrentSkillId = message.CastSkillId;
+        //     self.Attack = message.Attack;
+        //     self.DiamondAttack = message.DiamondAttack;
+        //     self.Angry = message.Angry;
+        //     self.HP = message.HP;
+        //     self.Defence = message.Defence;
+        //     self.Level = message.Level == 0? 1 : message.Level;
+        //     Log.Debug($"set message info {self.Level}");
+        // }
+
+        // public static void InitWithConfig(this HeroCard self, HeroConfig heroConfig)
+        // {
+        //     self.Attack = heroConfig.BaseAttack;
+        //     self.Defence = heroConfig.BaseDefence;
+        //     self.HP = heroConfig.HeroHP;
+        //     self.HeroName = heroConfig.HeroName;
+        //     self.ConfigId = heroConfig.Id;
+        //     self.HeroColor = heroConfig.HeroColor;
+        // }
 
         //todo 增加攻击值
-        public static float AddAttackValue(this HeroCard self, float baseValue)
+        public static float AddDiamondAttackValue(this HeroCard self, float baseValue)
         {
             Log.Debug($"add attack value {self.Id}");
             HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
@@ -213,14 +297,14 @@ namespace ET
             return value;
         }
 
-        public static void EnterAttackState(this HeroCard self)
-        {
-            Log.Debug("enter attack state");
-#if !SERVER
-            Game.EventSystem.Publish(new EventType.EnterAttackStateView() { HeroCard = self });
-
-#endif
-        }
+        //         public static void EnterAttackState(this HeroCard self)
+        //         {
+        //             Log.Debug("enter attack state");
+        // #if !SERVER
+        //             Game.EventSystem.Publish(new EventType.EnterAttackStateView() { HeroCard = self });
+        //
+        // #endif
+        //         }
 
         public static async ETTask AttackTargetAsync(this HeroCard self, HeroCard target)
         {
@@ -245,8 +329,13 @@ namespace ET
 
         public static void BeAttack(this HeroCard self, HeroCard attackHeroCard)
         {
-            float attack = attackHeroCard.Attack + attackHeroCard.DiamondAttack;
-            float damage = attack - self.Defence;
+            float attack = attackHeroCard.GetAttack();
+            float damage = attack - self.GetDefence();
+            if (damage < 0)
+            {
+                damage = 0;
+            }
+
             self.AddAngryValue(damage);
             self.HP -= damage;
             if (self.HP < 0)
@@ -260,10 +349,24 @@ namespace ET
         //     await ETTask.CompletedTask;
         //
         // }
-        public static void InitTurnGame(this HeroCard self)
+        // public static void InitTurnGame(this HeroCard self)
+        // {
+        //     // self.Attack = 0;
+        //     self.DiamondAttack = 0;
+        // }
+
+        public static void CastSkill(this HeroCard self)
         {
-            // self.Attack = 0;
-            self.DiamondAttack = 0;
+            //玩家施放技能
+            // heroCard.ProcessCurrentSkill();
+            self.CurrentSkillId = self.ProcessCurrentSkill();
+            Skill skill = self.GetChild<Skill>(self.CurrentSkillId);
+            SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
+            if (skillConfig.SkillType == (int) SkillType.BigSkill)
+            {
+                //如果当前施放的技能是大招， 那么需要将怒气值清零
+                self.Angry = 0;
+            }
         }
 
         // public static HeroCardInfo

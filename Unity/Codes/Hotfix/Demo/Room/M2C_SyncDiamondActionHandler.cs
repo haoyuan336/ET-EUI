@@ -45,14 +45,20 @@ namespace ET
                                 if (diamondInfo.HeroCardInfo.DiamondAttack > heroCard.DiamondAttack)
                                 {
                                     heroCard.DiamondAttack = diamondInfo.HeroCardInfo.DiamondAttack;
-                                    Game.EventSystem.PublishAsync(new EventType.PlayAddAttackViewAnim() { HeroCard = heroCard, Diamond = diamond })
+                                    Game.EventSystem.PublishAsync(new EventType.PlayAddAttackViewAnim()
+                                            {
+                                                HeroCard = heroCard, Diamond = diamond, HeroCardInfo = diamondInfo.HeroCardInfo
+                                            })
                                             .Coroutine();
                                 }
 
                                 if (diamondInfo.HeroCardInfo.Angry > heroCard.Angry)
                                 {
                                     heroCard.Angry = diamondInfo.HeroCardInfo.Angry;
-                                    Game.EventSystem.PublishAsync(new EventType.PlayAddAngryViewAnim() { HeroCard = heroCard, Diamond = diamond })
+                                    Game.EventSystem.PublishAsync(new EventType.PlayAddAngryViewAnim()
+                                            {
+                                                HeroCard = heroCard, Diamond = diamond, HeroCardInfo = diamondInfo.HeroCardInfo
+                                            })
                                             .Coroutine();
                                 }
                             }

@@ -10,11 +10,13 @@ namespace ET
     {
         protected override async ETTask Run(CreateOneHeroCardView a)
         {
+            Log.Debug($" create hero card {a.HeroCardInfo.Attack}");
             //第一步加载卡牌资源 
             HeroCard heroCard = a.HeroCard;
-            heroCard.AddComponent<HeroCardObjectComponent, HeroCard>(heroCard);
+            heroCard.AddComponent<HeroCardObjectComponent, HeroCard, HeroCardInfo>(heroCard, a.HeroCardInfo);
+            // heroCardObjCom.UpdateHeroCardTextView(a.HeroCardInfo);
             heroCard.AddComponent<HeroModeObjectCompoent, HeroCard>(heroCard);
-            heroCard.AddComponent<HeroCardView>();
+            // heroCard.AddComponent<HeroCardView>();
             await ETTask.CompletedTask;
         }
     }

@@ -72,7 +72,15 @@ namespace ET
 		[ProtoMember(1)]
 		public int Id { get; set; }
 		[ProtoMember(2)]
-		public int NeedExp { get; set; }
+		public float NeedExp { get; set; }
+		[ProtoMember(3)]
+		public float BaseAttack { get; set; }
+		[ProtoMember(4)]
+		public float BaseDefence { get; set; }
+		[ProtoMember(5)]
+		public float BaseCrit { get; set; }
+		[ProtoMember(6)]
+		public float BaseHP { get; set; }
 
 	}
 }
