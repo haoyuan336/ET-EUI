@@ -19,6 +19,9 @@ namespace ET
             self.HeroMode.transform.position = pos;
             self.HeroMode.transform.forward = heroCard.CampIndex == 0? Vector3.forward : Vector3.back;
             self.HeroModeInitPos = new Vector3(pos.x, pos.y, pos.z);
+
+
+            self.AddComponent<HeroCardInfoObjectComponent>();
             await ETTask.CompletedTask;
         }
     }
@@ -98,24 +101,24 @@ namespace ET
             await TimerComponent.Instance.WaitAsync(1000);
         }
 
-        public static async ETTask PlayAddAngryEffect(this HeroModeObjectCompoent self, EventType.PlayAddAngryViewAnim message)
-        {
-            // Log.Debug("play add angry effect");
-            Vector3 startPos = message.Diamond.GetComponent<GameObjectComponent>().GameObject.transform.position;
-            await self.PlayAddEffectAnim(startPos, "DiamondAddAngryTrailEffect");
-            // self.Parent.GetComponent<HeroCardObjectComponent>().UpdateHeroCardTextView();
-        }
-
-        public static async ETTask PlayAddAttackEffect(this HeroModeObjectCompoent self, EventType.PlayAddAttackViewAnim message)
-        {
-            Vector3 startPos = message.Diamond.GetComponent<GameObjectComponent>().GameObject.transform.position;
-            // Diamond diamond = message.Diamond;
-            // HeroCardViewCtl heroCardViewCtl = self.Parent.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>();
-            await self.PlayAddEffectAnim(startPos, "DiamondAddAttackTrailEffect");
-            // heroCardViewCtl.UpdateAttackView((message.HeroCard.Attack + message.HeroCard.DiamondAttack).ToString());
-
-            await ETTask.CompletedTask;
-        }
+        // public static async ETTask PlayAddAngryEffect(this HeroModeObjectCompoent self, EventType.PlayAddAngryViewAnim message)
+        // {
+        //     // Log.Debug("play add angry effect");
+        //     Vector3 startPos = message.Diamond.GetComponent<GameObjectComponent>().GameObject.transform.position;
+        //     await self.PlayAddEffectAnim(startPos, "DiamondAddAngryTrailEffect");
+        //     // self.Parent.GetComponent<HeroCardObjectComponent>().UpdateHeroCardTextView();
+        // }
+        //
+        // public static async ETTask PlayAddAttackEffect(this HeroModeObjectCompoent self, EventType.PlayAddAttackViewAnim message)
+        // {
+        //     Vector3 startPos = message.Diamond.GetComponent<GameObjectComponent>().GameObject.transform.position;
+        //     // Diamond diamond = message.Diamond;
+        //     // HeroCardViewCtl heroCardViewCtl = self.Parent.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>();
+        //     await self.PlayAddEffectAnim(startPos, "DiamondAddAttackTrailEffect");
+        //     // heroCardViewCtl.UpdateAttackView((message.HeroCard.Attack + message.HeroCard.DiamondAttack).ToString());
+        //
+        //     await ETTask.CompletedTask;
+        // }
 
         public static async ETTask PlayAddEffectAnim(this HeroModeObjectCompoent self, Vector3 startPos, string effectName)
         {

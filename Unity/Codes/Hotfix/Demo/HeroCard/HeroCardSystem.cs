@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+
 namespace ET
 {
     public class HeroCardAwakeSystem: AwakeSystem<HeroCard, int>
@@ -303,14 +305,14 @@ namespace ET
         // #endif
         //         }
 
-        public static async ETTask AttackTargetAsync(this HeroCard self, HeroCard target)
-        {
-            // // #if !SERVER
-            //             await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim() { Att = self, TargetHeroCard = target });
-            // // #endif
-
-            await ETTask.CompletedTask;
-        }
+        // public static async ETTask AttackTargetAsync(this HeroCard self, HeroCard target)
+        // {
+        //     // // #if !SERVER
+        //     //             await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim() { Att = self, TargetHeroCard = target });
+        //     // // #endif
+        //
+        //     await ETTask.CompletedTask;
+        // }
 
         public static bool CheckAngryIsFull(this HeroCard self)
         {
@@ -433,6 +435,7 @@ namespace ET
         {
             self.CurrentSkillId = 0;
         }
+
         public static void CastSkill(this HeroCard self)
         {
             //todo 如果当前施放的技能属于必杀技，那么怒气值需要归0
@@ -441,6 +444,7 @@ namespace ET
             {
                 return;
             }
+
             Skill skill = self.GetChild<Skill>(self.CurrentSkillId);
             SkillConfig config = SkillConfigCategory.Instance.Get(skill.ConfigId);
             if (config.SkillType == 4)
@@ -466,39 +470,58 @@ namespace ET
             // }
         }
 
+        //todo 获取英雄名称
+        public static string GetHeroName(this  HeroCard self)
+        {
+            HeroConfig config = HeroConfigCategory.Instance.Get(self.ConfigId);
+            return config.HeroName;
+        }
+
+        //todo 获取当前英雄的颜色
+        public static DiamondTypeConfig GetHeroCardColor(this HeroCard self)
+        {
+            HeroConfig config = HeroConfigCategory.Instance.Get(self.ConfigId);
+            int colorType = config.HeroColor;
+            var diamondConfig = DiamondTypeConfigCategory.Instance.GetAll().Values.ToList().Find(a => { return a.ColorId.Equals(colorType); });
+            // string colorValue = diamondConfig.ColorValue;
+            // return ColorTool.HexToColor(colorValue);
+            // return colorValue;
+            return diamondConfig;
+        }
+
         // public static HeroCardInfo
         //todo 处理当前应该使用哪个技能 并返回技能id
-        public static long ProcessCurrentSkill(this HeroCard self)
-        {
-            // List<Skill> skills = self.GetChilds<Skill>();
-            //
-            // if (skills == null)
-            // {
-            //     Log.Warning("not skills ");
-            //     return 0;
-            // }
-            //
-            // foreach (var skill in skills)
-            // {
-            //     if (self.CheckAngryIsFull())
-            //     {
-            //         if (SkillConfigCategory.Instance.Get(skill.ConfigId).SkillType == (int) SkillType.BigSkill)
-            //         {
-            //             self.Angry = 0;
-            //             return skill.Id;
-            //         }
-            //     }
-            // }
-            //
-            // foreach (var skill in skills)
-            // {
-            // if (SkillConfigCategory.Instance.Get(skill.ConfigId).SkillType == (int) SkillType.NormalSkill)
-            // {
-            //     return skill.Id;
-            // }
-            // }
+        // public static long ProcessCurrentSkill(this HeroCard self)
+        // {
+        // List<Skill> skills = self.GetChilds<Skill>();
+        //
+        // if (skills == null)
+        // {
+        //     Log.Warning("not skills ");
+        //     return 0;
+        // }
+        //
+        // foreach (var skill in skills)
+        // {
+        //     if (self.CheckAngryIsFull())
+        //     {
+        //         if (SkillConfigCategory.Instance.Get(skill.ConfigId).SkillType == (int) SkillType.BigSkill)
+        //         {
+        //             self.Angry = 0;
+        //             return skill.Id;
+        //         }
+        //     }
+        // }
+        //
+        // foreach (var skill in skills)
+        // {
+        // if (SkillConfigCategory.Instance.Get(skill.ConfigId).SkillType == (int) SkillType.NormalSkill)
+        // {
+        //     return skill.Id;
+        // }
+        // }
 
-            return 0;
-        }
+        // return 0;
+        // }
     }
 }

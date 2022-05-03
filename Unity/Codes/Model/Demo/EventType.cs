@@ -218,11 +218,13 @@ namespace ET
 
         public struct PlayAddAttackViewAnim
         {
-            public HeroCard HeroCard;
+            public AddItemAction AddItemAction;
 
-            public HeroCardInfo HeroCardInfo;
+            public Scene Scene;
+            // public HeroCard HeroCard;
+            // public HeroCardInfo HeroCardInfo;
             // public Vector3 StartPos;
-            public Diamond Diamond;
+            // public Diamond Diamond;
             // public float AddAttack;
             // public float AddAngry;
             // public float EndAttack;
@@ -231,11 +233,14 @@ namespace ET
 
         public struct PlayAddAngryViewAnim
         {
-            public HeroCard HeroCard;
+            public AddItemAction AddItemAction;
 
-            // public Vector3 StartPos;
-            public Diamond Diamond;
-            public HeroCardInfo HeroCardInfo;
+            public Scene Scene;
+            // public HeroCard HeroCard;
+            //
+            // // public Vector3 StartPos;
+            // public Diamond Diamond;
+            // public HeroCardInfo HeroCardInfo;
         }
 
         public struct ShowGameWinUI

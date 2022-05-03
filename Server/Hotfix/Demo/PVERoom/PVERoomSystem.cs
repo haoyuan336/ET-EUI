@@ -275,18 +275,27 @@ namespace ET
                     continue;
                 }
 
+                Log.Debug($"action type {item.DiamondActions[0].ActionType}");
+                if (item.DiamondActions[0].ActionType != (int) DiamondActionType.Destory)
+                {
+                    continue;
+                }
+
                 var configId = item.DiamondActions[0].DiamondInfo.ConfigId;
                 DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(configId);
                 var diamondType = config.ColorId;
                 List<HeroCard> heroCards = self.GetAliveHeroCardWithColorType(unit, diamondType);
+                //todo 找到相同颜色的英雄
                 if (heroCards.Count == 0)
                 {
                     continue;
                 }
 
-                if (i == 0)
+                if (attackHeroList.Count == 0)
                 {
                     var diamondCount = item.DiamondActions.Count;
+                    // Log.Warning($"相同颜色的英雄列表 {heroCards[0].GetHeroName()},diamond type {diamondCount}");
+
                     //找到相同颜色的英雄
                     if (diamondCount >= 3)
                     {
@@ -299,6 +308,10 @@ namespace ET
                         }
                     }
                 }
+                // if (i == 0)
+                // {
+
+                // }
 
                 foreach (var heroCard in heroCards)
                 {
@@ -497,6 +510,7 @@ namespace ET
                 heroCard.InitSkill();
                 //初始化
             }
+
             m2CSyncDiamondAction.AttackActionItems.Add(attackActionItem);
         }
 
