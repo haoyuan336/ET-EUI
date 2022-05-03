@@ -49,7 +49,9 @@
      <Compile Include="Assets\Unity-Logs-Viewer\Reporter\MultiKeyDictionary.cs" />
      <Compile Include="Assets\Unity-Logs-Viewer\Reporter\ReporterMessageReceiver.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
+     <None Include="Assets\Res\Model\hero005\hero005.txt" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+     <None Include="Assets\Res\Model\hero006\hero006帧数表.txt" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
@@ -635,6 +637,9 @@
      <Reference Include="System.Xml.XPath.XDocument">
      <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.27f1c1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/Facades/System.Xml.XPath.XDocument.dll</HintPath>
      </Reference>
+     <Reference Include="Unity.VisualEffectGraph.Editor">
+     <HintPath>E:/workspace/ET-EUI/Unity/Library/ScriptAssemblies/Unity.VisualEffectGraph.Editor.dll</HintPath>
+     </Reference>
      <Reference Include="Unity.RenderPipelines.Universal.Shaders">
      <HintPath>E:/workspace/ET-EUI/Unity/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
      </Reference>
@@ -652,6 +657,9 @@
      </Reference>
      <Reference Include="Unity.VisualStudio.Editor">
      <HintPath>E:/workspace/ET-EUI/Unity/Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.VisualEffectGraph.Runtime">
+     <HintPath>E:/workspace/ET-EUI/Unity/Library/ScriptAssemblies/Unity.VisualEffectGraph.Runtime.dll</HintPath>
      </Reference>
      <Reference Include="Unity.Timeline">
      <HintPath>E:/workspace/ET-EUI/Unity/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>

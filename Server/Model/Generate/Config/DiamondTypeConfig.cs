@@ -77,6 +77,10 @@ namespace ET
 		public string AddAttack { get; set; }
 		[ProtoMember(7)]
 		public string AddAngry { get; set; }
+		[ProtoMember(9)]
+		public string ModeName { get; set; }
+		[ProtoMember(10)]
+		public int BoomType { get; set; }
 
 	}
 }

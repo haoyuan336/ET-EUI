@@ -69,8 +69,13 @@ namespace ET
                             tasks.Add(diamondComponent.RemoveChild(diamond));
                             break;
                         case (int) DiamondActionType.Create:
-                            Diamond newDiamond = diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo);
-                            tasks.Add(Game.EventSystem.PublishAsync(new EventType.InitDiamondAndMoveDown() { Diamond = newDiamond }));
+                            diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo);
+                            ETTask task = ETTask.Create();
+                            tasks.Add(task);
+                            await TimerComponent.Instance.WaitFrameAsync();
+                            task.SetResult();
+                            // Diamond newDiamond = diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo);
+                            // tasks.Add(Game.EventSystem.PublishAsync(new EventType.InitDiamondAndMoveDown() { Diamond = newDiamond }));
                             break;
                     }
                 }

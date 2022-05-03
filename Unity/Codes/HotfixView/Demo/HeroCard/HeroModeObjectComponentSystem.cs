@@ -15,7 +15,7 @@ namespace ET
 
             GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(heroModeStr);
             self.HeroMode = GameObject.Instantiate(prefab);
-            Vector3 pos = new Vector3(-3 + heroCard.InTroopIndex * 3, 0, -7 * (heroCard.CampIndex == 0? 1 : -1));
+            Vector3 pos = new Vector3(-2.5f + heroCard.InTroopIndex * 2.5f, 0, -5 * (heroCard.CampIndex == 0? 1 : -1));
             self.HeroMode.transform.position = pos;
             self.HeroMode.transform.forward = heroCard.CampIndex == 0? Vector3.forward : Vector3.back;
             self.HeroModeInitPos = new Vector3(pos.x, pos.y, pos.z);
@@ -54,18 +54,6 @@ namespace ET
             await self.PlayAttackAnim(message);
             await self.PlayMoveToAnim(self.HeroMode.transform.position, self.HeroModeInitPos);
             await ETTask.CompletedTask;
-            //     HeroModeObjectCompoent beAttackHeroModeCom = beAttackHeroCard.GetComponent<HeroModeObjectCompoent>();
-            //     HeroModeObjectCompoent selfHeroModeCom = self.Parent.GetComponent<HeroModeObjectCompoent>();
-            //     Vector3 initPos = selfHeroModeCom.HeroMode.transform.position;
-            //     await self.PlayChangeModeAnim();
-            //     await selfHeroModeCom.PlayMoveToAnim(beAttackHeroModeCom.HeroMode.transform.position);
-            //     // await self.PlayMoveToAnim(targetGo.transform.position);
-            //     await self.PlayAttackAnim(message);
-            //     // await beAttackHeroCard.UpdateHPView();
-            //     await self.ProcessBeAttackAnimLogic(message.BeAttackHeroCard);
-            //     // await self.PlayMoveToBackAnim(startPos);
-            //     await selfHeroModeCom.PlayMoveToAnim(initPos);
-            //     await ETTask.CompletedTask;
         }
 
         public static async ETTask PlayBeAttackAnim(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message)
@@ -92,16 +80,16 @@ namespace ET
             Log.Debug($"Skill id {skillId}");
             Skill skill = heroCard.GetChild<Skill>(skillId);
             SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
-            string skillAnimStr = "";
-            switch (skillConfig.SkillType)
-            {
-                case (int) SkillType.BigSkill:
-                    skillAnimStr = "Attack";
-                    break;
-                case (int) SkillType.NormalSkill:
-                    skillAnimStr = "Skill";
-                    break;
-            }
+            string skillAnimStr = skillConfig.SkillAnimName;
+            // switch (skillConfig.SkillType)
+            // {
+            //     case (int) SkillType.BigSkill:
+            //         skillAnimStr = "Attack";
+            //         break;
+            //     case (int) SkillType.Skill1:
+            //         skillAnimStr = "Skill1";
+            //         break;
+            // }
 
             // Log.Debug("skill anim str = " + skillAnimStr);
             // GameObject selfGo = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode;

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Globalization;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace ET
 {
@@ -19,8 +17,25 @@ namespace ET
         public static void SetHeroInfo(this Scroll_ItemHeroCard self, HeroCardInfo info)
         {
             self.HeroCardInfo = info;
-            self.E_TextText.text = info.ConfigId.ToString();
-            DiamondTypeConfig diamondTypeConfig = DiamondTypeConfigCategory.Instance.Get(info.HeroColor);
+            var configId = self.HeroCardInfo.ConfigId;
+            HeroConfig config = HeroConfigCategory.Instance.Get(configId);
+            // self.E_TextText.text = info.HeroName.ToString();
+            if (info.HeroName.Equals("法老"))
+            {
+                Log.Warning($"hero color {info.HeroColor}");
+            }
+            self.E_TextText.text = config.HeroName;
+            // DiamondTypeConfig diamondTypeConfig = DiamondTypeConfigCategory.Instance.Get(config.HeroColor);
+            List<DiamondTypeConfig> list = DiamondTypeConfigCategory.Instance.GetAll().Values.ToList();
+            DiamondTypeConfig diamondTypeConfig = list.Find((a) =>
+            {
+                if (a.ColorId.Equals(config.HeroColor))
+                {
+                    return true;
+                }
+
+                return false;
+            });
             self.E_ClickImage.color = ColorTool.HexToColor(diamondTypeConfig.ColorValue);
 
         }

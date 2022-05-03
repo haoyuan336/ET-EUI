@@ -950,6 +950,9 @@ namespace ET
 		[ProtoMember(8)]
 		public HeroCardInfo HeroCardInfo { get; set; }
 
+		[ProtoMember(9)]
+		public int ConfigId { get; set; }
+
 	}
 
 	[Message(OuterOpcode.M2C_InitMapData)]
@@ -1055,6 +1058,12 @@ namespace ET
 		[ProtoMember(1)]
 		public List<DiamondAction> DiamondActions = new List<DiamondAction>();
 
+		[ProtoMember(2)]
+		public AddItemAction AddAttackItemAction { get; set; }
+
+		[ProtoMember(3)]
+		public AddItemAction AddAngryItemAction { get; set; }
+
 	}
 
 	[Message(OuterOpcode.GameLoseResultAction)]
@@ -1087,6 +1096,18 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.AddItemAction)]
+	[ProtoContract]
+	public partial class AddItemAction: Object
+	{
+		[ProtoMember(1)]
+		public List<DiamondInfo> DiamondInfos = new List<DiamondInfo>();
+
+		[ProtoMember(2)]
+		public HeroCardInfo HeroCardInfo { get; set; }
+
+	}
+
 	[Message(OuterOpcode.M2C_SyncDiamondAction)]
 	[ProtoContract]
 	public partial class M2C_SyncDiamondAction: Object, IActorMessage
@@ -1103,6 +1124,8 @@ namespace ET
 		[ProtoMember(3)]
 		public GameLoseResultAction GameLoseResultAction { get; set; }
 
+// repeated AddItemAction AddAttackItemActions = 4;
+// repeated AddItemAction AddAngryItemActions = 5;
 	}
 
 	[Message(OuterOpcode.SkillInfo)]

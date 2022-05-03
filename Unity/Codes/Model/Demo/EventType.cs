@@ -122,6 +122,7 @@ namespace ET
         public struct CreateOneDiamondView
         {
             public Diamond Diamond;
+            public DiamondInfo DiamondInfo;
         }
 
         public struct UpdateDiamondData

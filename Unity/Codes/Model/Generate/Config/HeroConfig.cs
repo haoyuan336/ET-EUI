@@ -82,11 +82,11 @@ namespace ET
 		[ProtoMember(6)]
 		public int BaseDefence { get; set; }
 		[ProtoMember(7)]
-		public string AngryRate { get; set; }
+		public string AddAngryRate { get; set; }
 		[ProtoMember(8)]
 		public string CritRate { get; set; }
 		[ProtoMember(9)]
-		public string AttackRate { get; set; }
+		public string AddAttackRate { get; set; }
 		[ProtoMember(10)]
 		public int TotalAngry { get; set; }
 		[ProtoMember(11)]

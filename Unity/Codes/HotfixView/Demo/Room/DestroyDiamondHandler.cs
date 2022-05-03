@@ -10,11 +10,12 @@ namespace ET
         
             Diamond diamond = a.Diamond;
             GameObject go = diamond.GetComponent<GameObjectComponent>().GameObject;
+            Vector3 localScale = go.transform.localScale;
             float time = 0;
             while (time < Mathf.PI * 0.5f)
             {
                 time += Time.deltaTime * 8;
-                go.transform.localScale = Vector3.one * Mathf.Cos(time);
+                go.transform.localScale = localScale * Mathf.Cos(time);
                 await TimerComponent.Instance.WaitFrameAsync();
             }
 

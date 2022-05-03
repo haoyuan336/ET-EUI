@@ -188,7 +188,8 @@ namespace ET
         {
             Log.Debug($"OnLoopItemListHeroCardEvent{index}");
             Scroll_ItemHeroCard itemHeroCard = self.ItemHeroCards[index].BindTrans(transform);
-            itemHeroCard.E_TextText.text = self.HeroCardInfos[index].HeroName + self.HeroCardInfos[index].ConfigId;
+            itemHeroCard.SetHeroInfo(self.HeroCardInfos[index]);
+            // itemHeroCard.E_TextText.text = self.HeroCardInfos[index].HeroName + self.HeroCardInfos[index].ConfigId;
             // itemHeroCard.E_ClickButton.onClick.RemoveAllListeners();
             if (self.HeroCardInfos[index].TroopId != 0)
             {
@@ -268,7 +269,9 @@ namespace ET
 
             if (heroCardInfo != null)
             {
-                itemTroopHeroCard.E_TextText.text = heroCardInfo.HeroName + heroCardInfo.ConfigId;
+                // itemTroopHeroCard.E_TextText.text = heroCardInfo.HeroName + heroCardInfo.ConfigId;
+                
+                itemTroopHeroCard.SetHeroInfo(heroCardInfo);
             }
             else
             {

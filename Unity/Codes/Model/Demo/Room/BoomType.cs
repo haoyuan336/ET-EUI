@@ -2,11 +2,10 @@
 {
     public enum BoomType
     {
-        Invalide = 0,   // 不是炸弹
-        BlackHole = 1,   //黑的
-        Boom = 2,   //炸弹
-        LazerV = 3,  //镭射 垂直方向
-        LazerH = 4,  //镭射 水平方向
-
+        Invalide = 0, // 不是炸弹
+        Boom = 1, //炸弹
+        LazerH = 2, //镭射 水平方向
+        LazerV = 3, //镭射 垂直方向
+        BlackHole = 4, //黑的
     }
 }

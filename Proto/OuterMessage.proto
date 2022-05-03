@@ -438,6 +438,7 @@ message DiamondInfo
 	// float HeroCardAddAngry = 11;
 	// float HeroCardEndAngry = 12;
 	HeroCardInfo HeroCardInfo = 8;
+	int32 ConfigId = 9;
 }
 message M2C_InitMapData //IActorMessage
 {
@@ -486,6 +487,8 @@ message DiamondAction
 message DiamondActionItem
 {
 	repeated DiamondAction DiamondActions = 1;
+	AddItemAction AddAttackItemAction = 2;
+	AddItemAction AddAngryItemAction = 3;
 }
 message GameLoseResultAction
 {
@@ -501,12 +504,20 @@ message AttackActionItem
 {
 	repeated AttackAction AttackActions = 1;
 }
+message AddItemAction
+{
+	repeated DiamondInfo DiamondInfos = 1;
+	HeroCardInfo HeroCardInfo = 2;
+}
 message M2C_SyncDiamondAction //IActorMessage
 {
 	int32 RpcId = 90;
 	repeated DiamondActionItem DiamondActionItems = 1;
 	repeated AttackActionItem AttackActionItems = 2;
 	GameLoseResultAction GameLoseResultAction = 3;
+	// repeated AddItemAction AddAttackItemActions = 4;
+	// repeated AddItemAction AddAngryItemActions = 5;
+
 }
 message SkillInfo
 {

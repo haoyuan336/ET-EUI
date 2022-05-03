@@ -6,5 +6,6 @@ namespace ET
     {
         public long OwnerId;
         public int ConfigId;
+        
     }
 }

@@ -10,10 +10,9 @@ namespace ET
             Diamond diamond = a.Diamond;
             GameObject go = diamond.GetComponent<GameObjectComponent>().GameObject;
 
-            PvPLevelConfig pLevelConfig = PvPLevelConfigCategory.Instance.Get(1);
-            int LieCount = pLevelConfig.LieCount;
-            int HangCount = pLevelConfig.HangCount;
-            var distance = float.Parse(pLevelConfig.Distance);
+            int LieCount = ConstValue.LieCount;
+            int HangCount = ConstValue.HangCount;
+            var distance = ConstValue.Distance;
 
             Vector3 endPos = new Vector3((a.Diamond.LieIndex - LieCount * 0.5f + 0.5f) * distance, 0,
                 (a.Diamond.HangIndex - HangCount * 0.5f + 0.5f) * distance);

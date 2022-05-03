@@ -2,7 +2,9 @@
 {
     public enum SkillType
     {
-        NormalSkill = 1,
-        BigSkill = 2,
+        Attack =1,
+        Skill1 = 1,
+        Skill2 = 2,
+        BigSkill = 3,
     }
 }

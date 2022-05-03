@@ -129,12 +129,16 @@ namespace ET
         /// </summary>
         public ETTask<T> LoadAssetByPathAsync<T>(string assetPath) where T : UnityEngine.Object
         {
-            Debug.Log($"load asset by path {assetPath}");
+            // Debug.Log($"load asset by path {assetPath}");
             ETTask<T> tcs = ETTask<T>.Create(true);
             AsyncOperationHandle<T> assetHandle = Addressables.LoadAssetAsync<T>(assetPath);
             assetHandle.Completed += (handle) =>
             {
-                Log.Debug($"load error {handle.Status}");
+                if (handle.Status == AsyncOperationStatus.Failed)
+                {
+                    Log.Debug($"load error {handle.Result}");
+                    
+                }
                 tcs.SetResult(handle.Result);
                 tcs = null;
             };

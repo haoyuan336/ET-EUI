@@ -72,9 +72,10 @@ namespace ET
                     PlayerComponent playerComponent = self.ZoneScene().GetComponent<PlayerComponent>();
                     // int mySeatIndex = playerComponent.MySeatIndex;
                     // int turnIndex = playerComponent.CurrentTurnIndex;
-                    PvPLevelConfig pvPLevelConfig = PvPLevelConfigCategory.Instance.Get(1);
-                    int hangCount = pvPLevelConfig.HangCount;
-                    int lieCount = pvPLevelConfig.LieCount;
+                    int hangCount = ConstValue.HangCount;
+                    int lieCount = ConstValue.LieCount;
+                    float distance = ConstValue.Distance;
+
                     // if (mySeatIndex == turnIndex)
                     // {
                     //只有自己的座位号 跟服务器下发的座位号一致的时候 才能操作游戏
@@ -89,7 +90,6 @@ namespace ET
                         UnityEngine.Vector3 pos = raycastHit.transform.position;
                         float x = pos.x;
                         float y = pos.z;
-                        float distance = float.Parse(pvPLevelConfig.Distance);
                         // a.Diamond.LieIndex - liecount * 0.5f + 0.5f) * distance,
                         float lieIndex = x / distance + lieCount * 0.5f - 0.5f;
                         float hangIndex = y / distance + hangCount * 0.5f - 0.5f;

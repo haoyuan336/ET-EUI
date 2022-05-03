@@ -18,6 +18,7 @@ namespace ET
         public float DiamondDefence;
         public int CampIndex; //todo 阵营index
         public float Angry; //怒气值
+        public float TotalAngry;    //怒气值上线
         public int Level; //当前英雄的等级
         public long CurrentSkillId; //当前需要释放的技能
         public HeroCardInfo HeroCardInfo;

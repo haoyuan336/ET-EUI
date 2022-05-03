@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-
+﻿using System.Collections.Generic;
 namespace ET
 {
     public class DiamondComponentAwakeSystem: AwakeSystem<DiamondComponent>
@@ -23,26 +19,28 @@ namespace ET
             // self.Diamonds = new Diamond[self.LevelConfig.LieCount, self.LevelConfig.HangCount];
             // diamondComponent.CreateOneDiamond();
             // self.Diamonds = new DiamondStruct[self.LevelConfig.HangCount];
-            self.Diamonds = new Diamond[self.LevelConfig.HangCount * self.LevelConfig.LieCount];
+            // self.Diamonds = new Diamond[self.LevelConfig.HangCount * self.LevelConfig.LieCount];
             // for (int i = 0; i < self.LevelConfig.HangCount; i++)
             // {
             //     DiamondStruct diamondStruct = new DiamondStruct() { Diamonds = new Diamond[self.LevelConfig.LieCount] };
             //     self.Diamonds[i] = diamondStruct;
             // }
 
+            self.Diamonds = new Diamond[ConstValue.HangCount * ConstValue.LieCount];
             List<DiamondInfo> diamondInfos = new List<DiamondInfo>();
             int[] map =
             {
                 1, 2, 3, 4, 5, 4, 1, 1, 2, 3, 4, 5, 5, 1, 2, 3, 3, 2, 5, 4, 1, 2, 3, 2, 4, 1, 5, 2, 2, 5, 2, 1, 5, 5, 1, 2, 1, 1, 5, 5, 4, 5,
                 2, 1, 4, 2, 4, 5, 1, 4, 3, 4, 5, 1, 1, 4, 2, 3, 4, 5, 5, 1, 2, 3
             };
-            for (var i = 0; i < self.LevelConfig.HangCount; i++)
+            for (var i = 0; i < ConstValue.HangCount; i++)
             {
-                for (var j = 0; j < self.LevelConfig.LieCount; j++)
+                for (var j = 0; j < ConstValue.LieCount; j++)
                 {
-                    Diamond diamond = self.CreateOneDiamond();
+                    int colorType = map[i * ConstValue.LieCount + j];
+                    Diamond diamond = self.CreateOneDiamond(colorType, 0);
                     diamond.SetIndex(j, i);
-                    diamond.DiamondType = map[i * self.LevelConfig.LieCount + j];
+                    // diamond.DiamondType = map[];
                     // self.Diamonds[j, i] = diamond;
                     self.SetDiamondToList(j, i, diamond);
                     diamondInfos.Add(diamond.GetMessageInfo());
@@ -55,7 +53,7 @@ namespace ET
         public static void SetDiamondToList(this DiamondComponent self, int lie, int hang, Diamond diamond)
         {
             // self.Diamonds[hang].Diamonds[lie] = diamond;
-            var index = self.LevelConfig.LieCount * hang + lie;
+            var index = ConstValue.LieCount * hang + lie;
             if (diamond != null)
             {
                 diamond.SetIndex(lie, hang);
@@ -86,27 +84,40 @@ namespace ET
         //     // }
         // }
 
-        public static Diamond CreateOneDiamond(this DiamondComponent self)
+        public static Diamond CreateOneDiamond(this DiamondComponent self, int colorType, int boomType)
         {
             long id = IdGenerater.Instance.GenerateId();
-            Log.Debug($"create one diamond {id}");
-            Diamond diamond = self.AddChildWithId<Diamond>(id);
+            Diamond diamond = self.AddChildWithId<Diamond, int, int>(id, colorType, boomType);
+            return diamond;
+        }
 
-            int[] keys = DiamondTypeConfigCategory.Instance.GetAll().Keys.ToArray();
+        public static Diamond CreateOneDiamond(this DiamondComponent self)
+        {
+            // long id = IdGenerater.Instance.GenerateId();
+            // Log.Debug($"create one diamond {id}");
+            // Diamond diamond = self.AddChildWithId<Diamond>(id);
+
+            // int[] keys = DiamondTypeConfigCategory.Instance.GetAll().Keys.ToArray();
             //todo test
             // keys = new[] { 1, 2, 3, 4, 5 };
-            var randomIndex = RandomHelper.RandomNumber(0, keys.Length);
-            int configIndex = keys[randomIndex];
-            diamond.DiamondType = configIndex;
+            // var randomIndex = RandomHelper.RandomNumber(0, keys.Length);
+            // int configIndex = keys[randomIndex];
+            // diamond.DiamondType = configIndex;
 
-            return diamond;
+            var keysStr = self.LevelConfig.DiamondTypes;
+
+            var kerStrs = keysStr.Split(',');
+            var randomIndex = RandomHelper.RandomNumber(0, kerStrs.Length);
+            int key = int.Parse(kerStrs[randomIndex].ToString());
+            return self.CreateOneDiamond(key, 0);
+            // return diamond;
         }
 
         public static Diamond CreateDiamoneWithMessage(this DiamondComponent self, DiamondInfo diamondInfo)
         {
             long id = diamondInfo.Id;
-            Diamond diamond = self.AddChildWithId<Diamond>(id);
-            diamond.InitWithMessageInfo(diamondInfo);
+            Diamond diamond = self.AddChildWithId<Diamond, DiamondInfo>(id, diamondInfo);
+            // diamond.InitWithMessageInfo(diamondInfo);
             return diamond;
         }
 
@@ -124,14 +135,14 @@ namespace ET
             // Log.Debug($"level config {self.LevelConfig}");
             // return null;
             // Diamond diamond = null;
-            if (LieIndex < 0 || HangIndex < 0 || LieIndex >= self.LevelConfig.LieCount || HangIndex >= self.LevelConfig.HangCount)
+            if (LieIndex < 0 || HangIndex < 0 || LieIndex >= ConstValue.LieCount || HangIndex >= ConstValue.HangCount)
             {
                 return null;
             }
 
             // return self.Diamonds[LieIndex, HangIndex];
             // return self.Diamonds[HangIndex].Diamonds[LieIndex];
-            var index = self.LevelConfig.LieCount * HangIndex + LieIndex;
+            var index =ConstValue.LieCount * HangIndex + LieIndex;
             if (index >= self.Diamonds.Length)
             {
                 return null;
@@ -200,9 +211,9 @@ namespace ET
         public static List<List<Diamond>> GetLieCrashListList(this DiamondComponent self)
         {
             List<List<Diamond>> crashListList = new List<List<Diamond>>();
-            for (int i = 0; i < self.LevelConfig.HangCount; i++)
+            for (int i = 0; i < ConstValue.HangCount; i++)
             {
-                for (int j = 0; j < self.LevelConfig.LieCount; j++)
+                for (int j = 0; j < ConstValue.LieCount; j++)
                 {
                     // Diamond diamond = self.Diamonds[j, i];
                     Diamond diamond = self.GetDiamond(j, i);
@@ -286,9 +297,9 @@ namespace ET
         public static List<List<Diamond>> GetHangCrashListList(this DiamondComponent self)
         {
             List<List<Diamond>> crashListList = new List<List<Diamond>>();
-            for (int i = 0; i < self.LevelConfig.HangCount; i++)
+            for (int i = 0; i < ConstValue.HangCount; i++)
             {
-                for (int j = 0; j < self.LevelConfig.LieCount; j++)
+                for (int j = 0; j < ConstValue.LieCount; j++)
                 {
                     // Diamond diamond = self.Diamonds[j, i];
                     Diamond diamond = self.GetDiamond(j, i);
@@ -539,11 +550,11 @@ namespace ET
             DiamondActionItem createActionItem = new DiamondActionItem();
             // DiamondComponent diamondComponent = self.DiamondComponent;
             //遍历每一列
-            for (var i = 0; i < self.LevelConfig.LieCount; i++)
+            for (var i = 0; i < ConstValue.LieCount; i++)
             {
                 List<Diamond> diamonds = new List<Diamond>();
                 //找到这一列有多少是空的
-                for (var j = 0; j < self.LevelConfig.HangCount; j++)
+                for (var j = 0; j < ConstValue.HangCount; j++)
                 {
                     Diamond diamond = self.GetDiamond(i, j);
                     if (diamond != null)
@@ -552,7 +563,7 @@ namespace ET
                     }
                 }
 
-                for (var j = 0; j < self.LevelConfig.HangCount; j++)
+                for (var j = 0; j < ConstValue.HangCount; j++)
                 {
                     if (j < diamonds.Count)
                     {
@@ -574,7 +585,7 @@ namespace ET
                         // self.Diamonds[i, j] = diamond;
                         self.SetDiamondToList(i, j, diamond);
                         diamond.InitLieIndex = i;
-                        diamond.InitHangIndex = self.LevelConfig.HangCount + j;
+                        diamond.InitHangIndex = ConstValue.HangCount + j;
                         diamond.SetIndex(i, j);
                         DiamondAction action = new DiamondAction();
                         action.ActionType = (int) DiamondActionType.Create;
@@ -643,7 +654,7 @@ namespace ET
             if (crashList.Count >= 4)
             {
                 // DiamondComponent diamondComponent = self.DomainScene().GetComponent<DiamondComponent>();
-                Diamond diamond = self.CreateOneDiamond();
+                // Diamond diamond = self.CreateOneDiamond();
                 DirectionType directionType = self.GetListDirection(crashList);
                 Log.Debug($"direction type {directionType}");
                 Diamond targetDiamond = null;
@@ -695,14 +706,15 @@ namespace ET
                     targetDiamond = swapDiamond;
                 }
 
+                Diamond diamond = self.CreateOneSpecialDiamond(targetDiamond.DiamondType, boomType);
                 if (!specialDiamonds.Contains(diamond))
                 {
                     Log.Debug("create boom type" + boomType);
                     diamond.InitLieIndex = targetDiamond.LieIndex;
                     diamond.InitHangIndex = targetDiamond.HangIndex;
                     diamond.SetIndex(targetDiamond.LieIndex, targetDiamond.HangIndex);
-                    diamond.DiamondType = targetDiamond.DiamondType;
-                    diamond.BoomType = (int) boomType;
+                    // diamond.DiamondType = targetDiamond.DiamondType;
+                    // diamond.BoomType = (int) boomType;
                     // self.Diamonds[diamond.LieIndex, diamond.HangIndex] = diamond;
                     self.SetDiamondToList(diamond.LieIndex, diamond.HangIndex, diamond);
                     diamondAction = new DiamondAction();
@@ -713,6 +725,11 @@ namespace ET
             }
 
             return diamondAction;
+        }
+
+        public static Diamond CreateOneSpecialDiamond(this DiamondComponent self, int diamondType, BoomType boomType)
+        {
+            return self.CreateOneDiamond(diamondType, (int) boomType);
         }
 
         public static Diamond GetLastLeftDiamond(this DiamondComponent self, List<Diamond> list)
@@ -832,11 +849,12 @@ namespace ET
         {
             bool isSpecial = false;
             DiamondActionItem diamondActionItem = new DiamondActionItem();
-            if (diamond != null && diamond.BoomType != (int) BoomType.Invalide)
+            DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamond.ConfigId);
+            if (diamond != null && config.BoomType != (int) BoomType.Invalide)
             {
                 Log.Debug("存在特殊diamond");
                 List<Diamond> crashList = new List<Diamond>();
-                switch (diamond.BoomType)
+                switch (config.BoomType)
                 {
                     case (int) BoomType.Boom:
                         crashList = self.GetCrossLineDiamond(diamond);
@@ -881,7 +899,7 @@ namespace ET
         public static List<Diamond> GetLineDiamond(this DiamondComponent self, Diamond diamond, DirectionType directionType)
         {
             List<Diamond> list = new List<Diamond>();
-            var count = directionType == DirectionType.Horizontal? self.LevelConfig.LieCount : self.LevelConfig.HangCount;
+            var count = directionType == DirectionType.Horizontal? ConstValue.LieCount : ConstValue.HangCount;
             for (int i = 0; i < count; i++)
             {
                 // Diamond target = self.Diamonds[directionType == DirectionType.Horizontal? i : diamond.LieIndex,
@@ -889,7 +907,8 @@ namespace ET
                 Diamond target = self.GetDiamond(directionType == DirectionType.Horizontal? i : diamond.LieIndex,
                     directionType == DirectionType.Horizontal? diamond.HangIndex : i);
 
-                if (!target.Equals(diamond) && target.BoomType != (int) BoomType.Invalide)
+                DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(target.ConfigId);
+                if (!target.Equals(diamond) && config.BoomType != (int) BoomType.Invalide)
                 {
                     //todo 如果被消除的对象是一个特殊猪，并且它不与原来猪是同一颗
                 }
@@ -906,11 +925,12 @@ namespace ET
         {
             List<Diamond> list = new List<Diamond>();
             //获取交叉点上所有钻石
-            for (int i = 0; i < self.LevelConfig.HangCount; i++)
+            for (int i = 0; i < ConstValue.HangCount; i++)
             {
                 // Diamond target = self.Diamonds[diamond.LieIndex, i];
                 Diamond target = self.GetDiamond(diamond.LieIndex, i);
-                if (!target.Equals(diamond) && target.BoomType != (int) BoomType.Invalide)
+                DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(target.ConfigId);
+                if (!target.Equals(diamond) && config.BoomType != (int) BoomType.Invalide)
                 {
                     //todo 如果被消除的对象是一个特殊猪，并且它不与原来猪是同一颗
                 }
@@ -920,11 +940,12 @@ namespace ET
                 }
             }
 
-            for (int i = 0; i < self.LevelConfig.LieCount; i++)
+            for (int i = 0; i < ConstValue.LieCount; i++)
             {
                 // Diamond target = self.Diamonds[i, diamond.HangIndex];
                 Diamond target = self.GetDiamond(i, diamond.HangIndex);
-                if (!target.Equals(diamond) && target.BoomType != (int) BoomType.Invalide)
+                DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(target.ConfigId);
+                if (!target.Equals(diamond) && config.BoomType != (int) BoomType.Invalide)
                 {
                     //todo 如果被消除的对象是一个特殊猪，并且它不与原来猪是同一颗
                 }
@@ -954,7 +975,8 @@ namespace ET
                     Diamond targetDiamond = self.GetDiamond(j, i);
                     if (targetDiamond != null)
                     {
-                        if (!targetDiamond.Equals(diamond) && targetDiamond.BoomType != (int) BoomType.Invalide)
+                        DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(targetDiamond.ConfigId);
+                        if (!targetDiamond.Equals(diamond) && config.BoomType != (int) BoomType.Invalide)
                         {
                             //todo 如果被消除的对象是一个特殊猪，并且它不与原来猪是同一颗
                         }

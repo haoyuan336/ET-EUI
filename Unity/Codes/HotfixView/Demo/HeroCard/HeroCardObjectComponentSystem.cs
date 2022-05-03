@@ -13,7 +13,8 @@ namespace ET
             card.name = "Card" + IdGenerater.Instance.GenerateId();
             self.HeroCard = card;
             // self.UpdateHeroCardTextView();
-            card.transform.position = new Vector3(-3 + heroCard.InTroopIndex * 3, 0, -7 * (heroCard.CampIndex == 0? 1 : -1));
+            card.transform.position = new Vector3(-3 + heroCard.InTroopIndex * 3, 0, -20 * (heroCard.CampIndex == 0? 1 : -1));
+            // card.SetActive(false);
             self.UpdateHeroCardTextView(heroCardInfo);
             await ETTask.CompletedTask;
         }

@@ -22,6 +22,7 @@ namespace ET
             long AccountId = request.Account;
             var heroCards = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<HeroCard>((a)=>a.OwnerId.Equals(AccountId));
             List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>();
+         
             foreach (var heroCard in heroCards)
             {
                 heroCardInfos.Add(heroCard.GetMessageInfo());

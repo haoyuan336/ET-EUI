@@ -124,11 +124,6 @@ namespace ILRuntime.Runtime.Generated
             UnityEngine_Camera_Binding.Register(app);
             UnityEngine_Physics_Binding.Register(app);
             UnityEngine_RaycastHit_Binding.Register(app);
-            ET_DiamondLibraryCtl_Binding.Register(app);
-            ET_AllDiamondLibrary_Binding.Register(app);
-            System_Collections_Generic_Dictionary_2_Int32_DiamondLibrary_Binding.Register(app);
-            ET_DiamondLibrary_Binding.Register(app);
-            UnityEngine_SpriteRenderer_Binding.Register(app);
             HeroCardViewCtl_Binding.Register(app);
             UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_SceneInstance_Binding.Register(app);
             UnityEngine_ResourceManagement_AsyncOperations_DownloadStatus_Binding.Register(app);
@@ -152,13 +147,13 @@ namespace ILRuntime.Runtime.Generated
             ET_ColorTool_Binding.Register(app);
             UnityEngine_Color32_Binding.Register(app);
             UnityEngine_UI_Graphic_Binding.Register(app);
+            UnityEngine_UI_Selectable_Binding.Register(app);
             UnityEngine_RuntimeAnimatorController_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_String_AnimationClip_Binding.Register(app);
             UnityEngine_AnimatorControllerParameter_Binding.Register(app);
             System_Collections_Generic_HashSet_1_String_Binding.Register(app);
             UnityEngine_AnimationClip_Binding.Register(app);
             UnityEngine_UI_LoopScrollRectBase_Binding.Register(app);
-            UnityEngine_UI_Selectable_Binding.Register(app);
             System_ValueTuple_2_Int32_Toggle_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Int32_ILTypeInstance_Binding_Enumerator_Binding.Register(app);
             System_Collections_Generic_KeyValuePair_2_Int32_ILTypeInstance_Binding.Register(app);

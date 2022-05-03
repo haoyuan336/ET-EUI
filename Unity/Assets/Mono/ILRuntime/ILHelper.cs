@@ -60,7 +60,6 @@ namespace ET
             appdomain.DelegateManager.RegisterMethodDelegate<AsyncOperationHandle>();
             appdomain.DelegateManager.RegisterMethodDelegate<UnityEngine.GameObject>();
 
-
             appdomain.DelegateManager.RegisterFunctionDelegate<UnityEngine.Events.UnityAction>();
             appdomain.DelegateManager.RegisterFunctionDelegate<System.Object, ET.ETTask>();
             appdomain.DelegateManager.RegisterFunctionDelegate<ILTypeInstance, bool>();
@@ -74,7 +73,16 @@ namespace ET
             appdomain.DelegateManager.RegisterFunctionDelegate<KeyValuePair<int, List<int>>, bool>();
             appdomain.DelegateManager.RegisterFunctionDelegate<KeyValuePair<int, int>, KeyValuePair<int, int>, int>();
             appdomain.DelegateManager.RegisterMethodDelegate<UnityEngine.Object>();
-            appdomain.DelegateManager.RegisterMethodDelegate<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Collections.Generic.IList<UnityEngine.GameObject>>>();
+            appdomain.DelegateManager
+                    .RegisterMethodDelegate<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<
+                        System.Collections.Generic.IList<UnityEngine.GameObject>>>();
+            appdomain.DelegateManager.RegisterDelegateConvertor<System.Predicate<ILRuntime.Runtime.Intepreter.ILTypeInstance>>((act) =>
+            {
+                return new System.Predicate<ILRuntime.Runtime.Intepreter.ILTypeInstance>((obj) =>
+                {
+                    return ((Func<ILRuntime.Runtime.Intepreter.ILTypeInstance, System.Boolean>) act)(obj);
+                });
+            });
 
             appdomain.DelegateManager
                     .RegisterMethodDelegate<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 namespace ET
 {
     public class HeroCardAwakeSystem: AwakeSystem<HeroCard, int>
@@ -273,28 +272,26 @@ namespace ET
         // }
 
         //todo 增加攻击值
-        public static float AddDiamondAttackValue(this HeroCard self, float baseValue)
+        public static void AddDiamondAttackValue(this HeroCard self, DiamondInfo diamondInfo)
         {
             Log.Debug($"add attack value {self.Id}");
+            DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamondInfo.ConfigId);
             HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
-            var value = float.Parse(heroConfig.AttackRate) * baseValue;
-            // self.Attack += value;
+            var value = float.Parse(heroConfig.AddAttackRate) * float.Parse(config.AddAttack);
             self.DiamondAttack += value;
-            return value;
         }
 
         //todo 增加怒气值
-        public static float AddAngryValue(this HeroCard self, float baseValue)
+        public static void AddDiamondAngryValue(this HeroCard self, DiamondInfo diamondInfo)
         {
+            DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamondInfo.ConfigId);
             HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
-            var value = float.Parse(heroConfig.AngryRate) * baseValue;
+            var value = float.Parse(heroConfig.AddAngryRate) * float.Parse(config.AddAngry);
             self.Angry += value;
             if (self.Angry > heroConfig.TotalAngry)
             {
                 self.Angry = heroConfig.TotalAngry;
             }
-
-            return value;
         }
 
         //         public static void EnterAttackState(this HeroCard self)
@@ -327,6 +324,19 @@ namespace ET
             return self.HP <= 0;
         }
 
+        public static float GetAddAngryWhitBeAttackSkill(this HeroCard self, HeroCard heroCard, float damage)
+        {
+            //todo 获得怒气值 用被攻击的技能
+            // 那就按被哪个技能攻击获得多少怒气先吧 普攻10% 1技能 2技能20% 大招40%
+            var rates = new[] { 0.1f, 0.2f, 0.2f, 0.4f };
+            Skill skill = heroCard.GetChild<Skill>(heroCard.CurrentSkillId);
+            // Log.Error($"attack skill id {heroCard.CurrentSkillId}");
+            SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
+            var skillType = skillConfig.SkillType;
+            var rate = rates[skillType - 1];
+            return damage * rate;
+        }
+
         public static void BeAttack(this HeroCard self, HeroCard attackHeroCard)
         {
             float attack = attackHeroCard.GetAttack();
@@ -336,7 +346,15 @@ namespace ET
                 damage = 0;
             }
 
-            self.AddAngryValue(damage);
+            HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
+            // var addAngry = float.Parse(heroConfig.AddAngryRate) * Mathf.Abs(damage);
+            var addAngry = self.GetAddAngryWhitBeAttackSkill(attackHeroCard, damage);
+            self.Angry += addAngry;
+            if (self.Angry > heroConfig.TotalAngry)
+            {
+                self.Angry = heroConfig.TotalAngry;
+            }
+
             self.HP -= damage;
             if (self.HP < 0)
             {
@@ -355,59 +373,131 @@ namespace ET
         //     self.DiamondAttack = 0;
         // }
 
+        public static void MakeHeroCardAngrySkill(this HeroCard self)
+        {
+            List<Skill> skills = self.GetChilds<Skill>();
+            //todo 确定英雄是否进行怒气值技能
+            if (self.TotalAngry == 0)
+            {
+                HeroConfig config = HeroConfigCategory.Instance.Get(self.ConfigId);
+                self.TotalAngry = config.TotalAngry;
+            }
+
+            //todo 如果怒气值满了，那么施放的技能为大招            
+            if (self.Angry >= self.TotalAngry)
+            {
+                foreach (var target in skills)
+                {
+                    SkillConfig skillConfig = SkillConfigCategory.Instance.Get(target.ConfigId);
+                    if (skillConfig.SkillType == 4)
+                    {
+                        self.CurrentSkillId = target.Id;
+                        return;
+                    }
+                }
+            }
+        }
+
+        public static void MakeHeroCardSkill(this HeroCard self, int count)
+        {
+            List<Skill> skills = self.GetChilds<Skill>();
+            // self.Angry
+            count -= 3;
+            if (count < 0)
+            {
+                count = 0;
+            }
+
+            if (count > 5)
+            {
+                count = 5;
+            }
+
+            //todo 根据消除宝石的数量，决定将要施放的技能id
+            skills.Sort((a, b) =>
+            {
+                var configA = SkillConfigCategory.Instance.Get(a.ConfigId);
+                var configB = SkillConfigCategory.Instance.Get(b.ConfigId);
+                return configA.SkillType - configB.SkillType;
+            });
+            for (int i = 0; i < skills.Count; i++)
+            {
+                Log.Debug($"skill type{skills[i].ConfigId}");
+            }
+
+            Skill skill = skills[count];
+            self.CurrentSkillId = skill.Id;
+        }
+
+        public static void InitSkill(this HeroCard self)
+        {
+            self.CurrentSkillId = 0;
+        }
         public static void CastSkill(this HeroCard self)
         {
-            //玩家施放技能
-            // heroCard.ProcessCurrentSkill();
-            self.CurrentSkillId = self.ProcessCurrentSkill();
-            Skill skill = self.GetChild<Skill>(self.CurrentSkillId);
-            SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
-            if (skillConfig.SkillType == (int) SkillType.BigSkill)
+            //todo 如果当前施放的技能属于必杀技，那么怒气值需要归0
+
+            if (self.CurrentSkillId == 0)
             {
-                //如果当前施放的技能是大招， 那么需要将怒气值清零
+                return;
+            }
+            Skill skill = self.GetChild<Skill>(self.CurrentSkillId);
+            SkillConfig config = SkillConfigCategory.Instance.Get(skill.ConfigId);
+            if (config.SkillType == 4)
+            {
                 self.Angry = 0;
             }
+            // self.CurrentSkillId = 0;
+            // if (self.CurrentSkillId == 0)
+            // {
+            //     return;
+            // }
+
+            // Skill skill = self.GetChild<Skill>(self.CurrentSkillId);
+            //玩家施放技能
+            // heroCard.ProcessCurrentSkill();
+            // self.CurrentSkillId = self.ProcessCurrentSkill();
+            // Skill skill = self.GetChild<Skill>(self.CurrentSkillId);
+            // SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
+            // if (skillConfig.SkillType == (int) SkillType.BigSkill)
+            // {
+            //如果当前施放的技能是大招， 那么需要将怒气值清零
+            // self.Angry = 0;
+            // }
         }
 
         // public static HeroCardInfo
         //todo 处理当前应该使用哪个技能 并返回技能id
         public static long ProcessCurrentSkill(this HeroCard self)
         {
-            List<Skill> skills = self.GetChilds<Skill>();
-
-            if (skills == null)
-            {
-                Log.Warning("not skills ");
-                return 0;
-            }
-
-            foreach (var skill in skills)
-            {
-                if (self.CheckAngryIsFull())
-                {
-                    if (SkillConfigCategory.Instance.Get(skill.ConfigId).SkillType == (int) SkillType.BigSkill)
-                    {
-                        self.Angry = 0;
-                        return skill.Id;
-                    }
-                }
-            }
-
-            foreach (var skill in skills)
-            {
-                if (SkillConfigCategory.Instance.Get(skill.ConfigId).SkillType == (int) SkillType.NormalSkill)
-                {
-                    return skill.Id;
-                }
-            }
-
-            // foreach (var skill in skills)
+            // List<Skill> skills = self.GetChilds<Skill>();
+            //
+            // if (skills == null)
             // {
-            //     Log.Warning(skill.Id.ToString());
-            //     Log.Warning(skill.SkillType.ToString());
+            //     Log.Warning("not skills ");
+            //     return 0;
             // }
             //
-            // Log.Warning("not find skill");
+            // foreach (var skill in skills)
+            // {
+            //     if (self.CheckAngryIsFull())
+            //     {
+            //         if (SkillConfigCategory.Instance.Get(skill.ConfigId).SkillType == (int) SkillType.BigSkill)
+            //         {
+            //             self.Angry = 0;
+            //             return skill.Id;
+            //         }
+            //     }
+            // }
+            //
+            // foreach (var skill in skills)
+            // {
+            // if (SkillConfigCategory.Instance.Get(skill.ConfigId).SkillType == (int) SkillType.NormalSkill)
+            // {
+            //     return skill.Id;
+            // }
+            // }
+
             return 0;
         }
     }

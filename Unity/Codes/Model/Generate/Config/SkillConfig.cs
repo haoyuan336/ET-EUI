@@ -77,6 +77,10 @@ namespace ET
 		public string SkillName { get; set; }
 		[ProtoMember(4)]
 		public string SkillAnimName { get; set; }
+		[ProtoMember(5)]
+		public string DamageTime { get; set; }
+		[ProtoMember(6)]
+		public string SkillAnimTime { get; set; }
 
 	}
 }

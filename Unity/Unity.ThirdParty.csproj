@@ -42,8 +42,8 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\ThirdParty\ILRuntime\Mono.Cecil\Mono.Cecil\TypeComparisonMode.cs" />
-     <Compile Include="Assets\ThirdParty\ILRuntime\Mono.Cecil\symbols\mdb\Mono.Cecil.Mdb\MdbWriter.cs" />
      <Compile Include="Assets\ThirdParty\ILRuntime\Runtime\Debugger\Protocol\CSBindBreakpoint.cs" />
+     <Compile Include="Assets\ThirdParty\ILRuntime\Mono.Cecil\symbols\mdb\Mono.Cecil.Mdb\MdbWriter.cs" />
      <Compile Include="Assets\ThirdParty\ILRuntime\Runtime\CLRBinding\CLRBindingUtils.cs" />
      <Compile Include="Assets\ThirdParty\protobuf-net\Serializers\MapDecorator.cs" />
      <Compile Include="Assets\ThirdParty\ILRuntime\Mono.Cecil\Mono.Cecil\FileAttributes.cs" />
@@ -184,8 +184,8 @@
      <Compile Include="Assets\ThirdParty\ILRuntime\Mono.Cecil\Mono.Cecil.Metadata\TokenType.cs" />
      <Compile Include="Assets\ThirdParty\protobuf-net\CallbackAttributes.cs" />
      <Compile Include="Assets\ThirdParty\protobuf-net\Serializers\TupleSerializer.cs" />
-     <Compile Include="Assets\ThirdParty\ILRuntime\Mono.Cecil\Mono.Cecil\WindowsRuntimeProjections.cs" />
      <Compile Include="Assets\ThirdParty\protobuf-net\Serializers\Int16Serializer.cs" />
+     <Compile Include="Assets\ThirdParty\ILRuntime\Mono.Cecil\Mono.Cecil\WindowsRuntimeProjections.cs" />
      <Compile Include="Assets\ThirdParty\protobuf-net\ProtoMapAttribute.cs" />
      <Compile Include="Assets\ThirdParty\ILRuntime\Mono.Cecil\Mono.Cecil\MethodSemanticsAttributes.cs" />
      <Compile Include="Assets\ThirdParty\protobuf-net\Meta\MetaType.cs" />
