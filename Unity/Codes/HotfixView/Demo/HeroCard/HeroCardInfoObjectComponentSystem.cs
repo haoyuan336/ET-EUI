@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace ET
 {
-    public class HeroCardInfoObjectComponentSystem: AwakeSystem<HeroCardInfoObjectComponent>
+    public class HeroCardInfoObjectComponentAwakeSystem: AwakeSystem<HeroCardInfoObjectComponent>
     {
         public override async void Awake(HeroCardInfoObjectComponent self)
         {
@@ -14,7 +14,7 @@ namespace ET
 
             self.GameObject.name = self.Id.ToString();
             self.HpBarImage = GameObject.Find($"{self.GameObject.name}/HpProgress/Bar");
-            self.AttackBarImage = GameObject.Find($"{self.GameObject.name}/AttackProgress/Bar");
+            // self.AttackBarImage = GameObject.Find($"{self.GameObject.name}/AttackProgress/Bar");
             self.AngryBarImage = GameObject.Find($"{self.GameObject.name}/AngryProgress/Bar");
 
             var HeroColorMark = GameObject.Find($"{self.GameObject.name}/HeroColorMark");
@@ -25,11 +25,20 @@ namespace ET
             var colorStr = diamondTypeConfig.ColorValue;
             Color color = ColorTool.HexToColor(colorStr);
             HeroColorMark.GetComponent<Image>().color = color;
-            
-            self.HpBarImage.GetComponent<Image>().fillAmount = 0;
+
+            self.HpBarImage.GetComponent<Image>().fillAmount = 1;
             self.AngryBarImage.GetComponent<Image>().fillAmount = 0;
             // self.HeroHeight = self.HeroMode.GetComponentInChildren<SkinnedMeshRenderer>().bounds.size.y;
             self.HeroHeight = 0;
+        }
+    }
+
+    public class HeroCardInfoObjectComponentDestroySystem: DestroySystem<HeroCardInfoObjectComponent>
+    {
+        public override void Destroy(HeroCardInfoObjectComponent self)
+        {
+            // Destroy(self.GameObject);
+            GameObject.Destroy(self.GameObject);
         }
     }
 
@@ -42,6 +51,24 @@ namespace ET
                 Vector3 pos = Camera.main.WorldToScreenPoint(self.HeroMode.transform.position);
                 self.GameObject.transform.position = pos;
             }
+        }
+    }
+
+    public static class HeroCardInfoObjectComponentSystem
+    {
+        public static void UpdateView(this HeroCardInfoObjectComponent self, HeroCardInfo heroCardInfo)
+        {
+            HeroConfig config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
+            var totalAngry = config.TotalAngry;
+            var currentAngry = heroCardInfo.Angry;
+            var percent = currentAngry / totalAngry;
+            self.AngryBarImage.GetComponent<Image>().fillAmount = percent;
+
+            var totalHP = heroCardInfo.TotalHP;
+            var currentHP = heroCardInfo.HP;
+            var hpPercent = currentHP / totalHP;
+
+            self.HpBarImage.GetComponent<Image>().fillAmount = hpPercent;
         }
     }
 }

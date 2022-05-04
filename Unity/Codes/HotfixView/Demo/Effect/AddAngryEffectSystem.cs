@@ -48,6 +48,7 @@ namespace ET.Demo.Effect
                     {
                         GameObject.Destroy(effect);
                     }
+                    self.Task.SetResult();
                     self.EffectMap.Clear();
                     self.Dispose();
                 }
@@ -60,7 +61,8 @@ namespace ET.Demo.Effect
         // AddAngryEffect
         public static async ETTask PlayAnim(this AddAngryEffect self)
         {
-            await ETTask.CompletedTask;
+            self.Task = ETTask.Create();
+            await self.Task;
         }
     }
 }

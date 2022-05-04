@@ -8,5 +8,6 @@ namespace ET.Effect
         public Dictionary<GameObject, Vector3> EffectMap = new Dictionary<GameObject, Vector3>();
         public float Time = 0;
         public Vector3 EndPos;
+        public ETTask Task;
     }
 }

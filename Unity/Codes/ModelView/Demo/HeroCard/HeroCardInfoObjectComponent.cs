@@ -2,7 +2,7 @@
 
 namespace ET
 {
-    public class HeroCardInfoObjectComponent: Entity,IAwake, IUpdate
+    public class HeroCardInfoObjectComponent: Entity,IAwake, IUpdate, IDestroy
     {
         public GameObject GameObject;
         public GameObject HeroMode;

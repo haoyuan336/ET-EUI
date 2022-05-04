@@ -548,6 +548,7 @@ message HeroCardInfo
 	float Angry = 14;			//怒气值
 	float Defence = 15;			//防御值
 	int32 Level = 16;	//等级
+	float TotalHP = 17;	//总血量
 
 	// repeated long SkillIdList = 11;	//技能id
 }

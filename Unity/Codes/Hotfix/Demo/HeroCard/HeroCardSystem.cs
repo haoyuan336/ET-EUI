@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace ET
 {
@@ -57,7 +56,7 @@ namespace ET
     {
         public override void Awake(HeroCard self, EnemyHeroConfig a)
         {
-            self.Level = a.Level;
+            self.Level = a.Level == 0? 1 : a.Level;
             self.ConfigId = a.ConfigId;
             self.HeroName = a.HeroName;
             self.HP = HeroConfigCategory.Instance.Get(self.ConfigId).HeroHP + HeroUpdateLevelConfigCategory.Instance.Get(self.Level).BaseHP;
@@ -197,9 +196,21 @@ namespace ET
                 Defence = self.GetDefence(),
                 Level = self.Level == 0? 1 : self.Level,
                 SkillInfos = skillInfos,
+                TotalHP = self.GetTotalHP()
             };
 
             return heroCardInfo;
+        }
+
+        public static float GetTotalHP(this HeroCard self)
+        {
+            // HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
+            if (self.Level == 0)
+            {
+                self.Level = 1;
+            }
+            var TotalHP = HeroConfigCategory.Instance.Get(self.ConfigId).HeroHP + HeroUpdateLevelConfigCategory.Instance.Get(self.Level).BaseHP;
+            return TotalHP;
         }
 
         public static float GetDiamondAttack(this HeroCard self)
@@ -402,6 +413,7 @@ namespace ET
 
         public static void MakeHeroCardSkill(this HeroCard self, int count)
         {
+            Log.Debug($"make hero card skill  count {count}");
             List<Skill> skills = self.GetChilds<Skill>();
             // self.Angry
             count -= 3;
@@ -410,9 +422,9 @@ namespace ET
                 count = 0;
             }
 
-            if (count > 5)
+            if (count > 3)
             {
-                count = 5;
+                count = 3;
             }
 
             //todo 根据消除宝石的数量，决定将要施放的技能id
@@ -427,6 +439,8 @@ namespace ET
                 Log.Debug($"skill type{skills[i].ConfigId}");
             }
 
+            Log.Debug($"skill index{count}");
+            Log.Debug($"skill count {skills.Count}");
             Skill skill = skills[count];
             self.CurrentSkillId = skill.Id;
         }
@@ -471,7 +485,7 @@ namespace ET
         }
 
         //todo 获取英雄名称
-        public static string GetHeroName(this  HeroCard self)
+        public static string GetHeroName(this HeroCard self)
         {
             HeroConfig config = HeroConfigCategory.Instance.Get(self.ConfigId);
             return config.HeroName;

@@ -30,6 +30,9 @@ namespace ET
             AddAttackEffect effect = heroCard.AddChild<AddAttackEffect, List<Vector3>, Vector3>(startPosList, endPos);
 
             await effect.PlayAnim();
+            
+            heroCard.GetComponent<HeroModeObjectCompoent>().UpdateShowDataView(a.AddItemAction.HeroCardInfo);
+            // heroCard.GetComponent<>()
             await ETTask.CompletedTask;
         }
     }

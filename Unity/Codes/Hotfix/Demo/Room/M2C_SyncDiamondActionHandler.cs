@@ -26,8 +26,7 @@ namespace ET
                     // Log.Warning("存在等价攻击力的数据");
                     tasks.Add(Game.EventSystem.PublishAsync(new EventType.PlayAddAttackViewAnim()
                     {
-                        AddItemAction = diamondActionItem.AddAttackItemAction,
-                        Scene = session.ZoneScene().CurrentScene()
+                        AddItemAction = diamondActionItem.AddAttackItemAction, Scene = session.ZoneScene().CurrentScene()
                     }));
                 }
 
@@ -36,8 +35,7 @@ namespace ET
                     Log.Warning("存在增加怒气值的数据");
                     tasks.Add(Game.EventSystem.PublishAsync(new EventType.PlayAddAngryViewAnim()
                     {
-                        AddItemAction = diamondActionItem.AddAngryItemAction,
-                        Scene = session.ZoneScene().CurrentScene()
+                        AddItemAction = diamondActionItem.AddAngryItemAction, Scene = session.ZoneScene().CurrentScene()
                     }));
                 }
 
@@ -57,36 +55,6 @@ namespace ET
                             tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex() { Diamond = diamond }));
                             break;
                         case (int) DiamondActionType.Destory:
-                            // if (diamondInfo.HeroCardInfo != null)
-                            // {
-                            //     // Log.Debug("play action logic");
-                            //     // HeroCard heroCard = session.DomainScene().GetComponent<HeroCardComponent>()
-                            //     // .GetChild<HeroCard>(diamondInfo.HeroCardInfo.HeroId);
-                            //     HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(diamondInfo.HeroCardInfo.HeroId);
-                            //     if (diamondInfo.HeroCardInfo.DiamondAttack > heroCard.DiamondAttack)
-                            //     {
-                            //         heroCard.DiamondAttack = diamondInfo.HeroCardInfo.DiamondAttack;
-                            //         Game.EventSystem.PublishAsync(new EventType.PlayAddAttackViewAnim()
-                            //                 {
-                            //                     HeroCard = heroCard, Diamond = diamond, HeroCardInfo = diamondInfo.HeroCardInfo
-                            //                 })
-                            //                 .Coroutine();
-                            //     }
-                            //
-                            //     if (diamondInfo.HeroCardInfo.Angry > heroCard.Angry)
-                            //     {
-                            //         heroCard.Angry = diamondInfo.HeroCardInfo.Angry;
-                            //         Game.EventSystem.PublishAsync(new EventType.PlayAddAngryViewAnim()
-                            //                 {
-                            //                     HeroCard = heroCard, Diamond = diamond, HeroCardInfo = diamondInfo.HeroCardInfo
-                            //                 })
-                            //                 .Coroutine();
-                            //     }
-                            // }
-
-                            // await TimerComponent.Instance.WaitFrameAsync();
-
-                            // tasks.Add(Game.EventSystem.PublishAsync(new EventType.DestoryDiamondView() { Diamond = diamond }));
                             tasks.Add(diamondComponent.RemoveChild(diamond));
                             break;
                         case (int) DiamondActionType.Create:
@@ -146,6 +114,8 @@ namespace ET
                 else
                 {
                     Log.Debug("game lose");
+                    // Game.EventSystem.Publish(new EventType.Show);
+                    Game.EventSystem.Publish(new EventType.ShowGameLoaseUI() { ZoneScene = session.ZoneScene() });
                 }
             }
 

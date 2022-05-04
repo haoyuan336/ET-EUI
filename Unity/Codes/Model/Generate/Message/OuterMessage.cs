@@ -1205,6 +1205,9 @@ namespace ET
 		[ProtoMember(16)]
 		public int Level { get; set; }
 
+		[ProtoMember(17)]
+		public float TotalHP { get; set; }
+
 // repeated long SkillIdList = 11;	//技能id
 	}
 

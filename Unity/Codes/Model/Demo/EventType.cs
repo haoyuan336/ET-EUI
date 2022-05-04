@@ -247,5 +247,10 @@ namespace ET
         {
             public Scene ZondScene;
         }
+
+        public struct ShowGameLoaseUI
+        {
+            public Scene ZoneScene;
+        }
     }
 }

@@ -93,6 +93,8 @@ namespace ET
 		public string SkillIdList { get; set; }
 		[ProtoMember(12)]
 		public string HeroMode { get; set; }
+		[ProtoMember(13)]
+		public string UpdateLevelHP { get; set; }
 
 	}
 }

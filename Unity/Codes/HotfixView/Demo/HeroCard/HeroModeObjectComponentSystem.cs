@@ -26,8 +26,15 @@ namespace ET
         }
     }
 
+   
     public static class HeroModeObjectComponentSystem
     {
+        public static void UpdateShowDataView(this HeroModeObjectCompoent self, HeroCardInfo heroCardInfo)
+        {
+            //todo 更新显示的英雄数据
+            HeroCardInfoObjectComponent component = self.GetComponent<HeroCardInfoObjectComponent>();
+            component.UpdateView(heroCardInfo);
+        }
         public static async ETTask PlayMoveToAnim(this HeroModeObjectCompoent self, Vector3 startPos, Vector3 targetPos)
         {
             float time = 0;
@@ -63,6 +70,7 @@ namespace ET
         {
             self.HeroMode.GetComponent<Animator>().SetTrigger("BeAttack");
             self.Parent.GetComponent<HeroCardObjectComponent>().UpdateHeroCardTextView(message.BeAttackHeroCardInfo);
+            self.GetComponent<HeroCardInfoObjectComponent>().UpdateView(message.BeAttackHeroCardInfo);
             await TimerComponent.Instance.WaitAsync(1000);
             if (message.BeAttackHeroCardInfo.HP <= 0)
             {
@@ -84,6 +92,7 @@ namespace ET
             Skill skill = heroCard.GetChild<Skill>(skillId);
             SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
             string skillAnimStr = skillConfig.SkillAnimName;
+            self.UpdateShowDataView(message.AttackHeroCardInfo);
             // switch (skillConfig.SkillType)
             // {
             //     case (int) SkillType.BigSkill:

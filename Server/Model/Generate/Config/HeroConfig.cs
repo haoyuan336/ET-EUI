@@ -91,6 +91,8 @@ namespace ET
 		public int TotalAngry { get; set; }
 		[ProtoMember(11)]
 		public string SkillIdList { get; set; }
+		[ProtoMember(13)]
+		public string UpdateLevelHP { get; set; }
 
 	}
 }
