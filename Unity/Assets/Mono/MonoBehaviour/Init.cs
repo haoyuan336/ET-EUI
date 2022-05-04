@@ -45,21 +45,36 @@ namespace ET
 
         IEnumerator Start()
         {
-            var handler = Addressables.DownloadDependenciesAsync("All");
-            while (!handler.IsDone)
+            this.LoadProgressBar.gameObject.SetActive(true);
+            var downLoadHandler = Addressables.GetDownloadSizeAsync("All");
+            yield return downLoadHandler;
+            if (downLoadHandler.Result != 0)
             {
-                LoadProgressBar.Progress = handler.GetDownloadStatus().Percent;
-                yield return null;
-            }
+                var handler = Addressables.DownloadDependenciesAsync("All");
+                while (!handler.IsDone)
+                {
+                    var percent = handler.GetDownloadStatus().Percent;
+                    if (percent < 1)
+                    {
+                        LoadProgressBar.Progress = percent;
+                    }
 
-            if (handler.IsDone)
+                    Debug.LogWarning($"percent {percent}");
+                    yield return null;
+                }
+
+                if (handler.IsDone)
+                {
+                    Debug.Log("更新资源完成");
+                    Destroy(this.LoadProgressBar.gameObject);
+                    this.InitCode();
+                }
+            }
+            else
             {
-                Debug.Log("更新资源完成");
                 Destroy(this.LoadProgressBar.gameObject);
                 this.InitCode();
             }
-
-            yield break;
         }
 
         void InitCode()
