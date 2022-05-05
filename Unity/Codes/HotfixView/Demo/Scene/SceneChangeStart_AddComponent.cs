@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
@@ -22,13 +23,28 @@ namespace ET
                 {
                     // await sceneChangeComponent.ChangeSceneAsync(currentScene.Name);
                     await sceneChangeComponent.ChangeSceneAsync(instance);
-
                 }
             }
             finally
             {
                 sceneChangeComponent?.Dispose();
             }
+
+            // Log.Warning($"scene change{currentScene.Name}");
+            // GameObject obj = GameObject.Find("UnitRoot/MainCameraCM");
+            // GameObject pveObj = GameObject.Find("UnitRoot/PVECameraCM");
+            // switch (currentScene.Name)
+            // {
+            //     case "MainScene":
+            //         obj.SetActive(true);
+            //         pveObj.SetActive(false);
+            //
+            //         break;
+            //     case "PVEGameScene":
+            //         obj.SetActive(true);
+            //         pveObj.SetActive(false);
+            //         break;
+            // }
 
             currentScene.AddComponent<OperaComponent>();
         }

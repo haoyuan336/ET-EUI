@@ -127,15 +127,20 @@ namespace ET
 
         public static async void OnClickHeroItem(this DlgHeroInfoLayerUI self, Scroll_ItemHeroCard heroCard)
         {
+            
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_HeroInfoLayerUI);
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_MainSceneBg);
             // Log.Debug($"click hero {heroCard.HeroCardInfo.HeroId}");
             await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_ShowHeroInfoLayer, WindowID.WindowID_Invaild,
                 new ShowWindowData() { contextData = heroCard });
-            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_HeroInfoLayerUI);
+
         }
 
-        public static void ShowWindow(this DlgHeroInfoLayerUI self, Entity contextData = null)
+        public static async void ShowWindow(this DlgHeroInfoLayerUI self, Entity contextData = null)
         {
             self.RequestHerosInfo().Coroutine();
+            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainSceneMenu);
+            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GoldInfoUI);
         }
     }
 }

@@ -16,10 +16,18 @@ namespace ET
             Log.Debug("DlgLoginSystem RegisterUIEvent");
             // self.View.E_LoginButton.AddListener(() => { self.OnLoginClickHandler(); });
             self.View.E_LoginButton.AddListenerAsync(() => { return self.OnLoginClickHandler(); });
+            // self.View.E_CancelButton.AddListenerAsync(() =>
+            // {
+            //     return self.
+            // });
             // self.View.E_LoginButton.AddListener(() =>
             // {
             //     Log.Debug("buttoin click");
             // });
+        }
+
+        public static void OnCancelClickhandler(this DlgLogin self)
+        {
         }
 
         public static void ShowWindow(this DlgLogin self, Entity contextData = null)
@@ -29,6 +37,11 @@ namespace ET
         public static async ETTask OnLoginClickHandler(this DlgLogin self)
         {
             Log.Debug("OnLoginClickHandler");
+            if (self.View.E_AccountInputField.GetComponent<InputField>().text.Length == 0 ||
+                self.View.E_PasswordInputField.GetComponent<InputField>().text.Length == 0)
+            {
+                return;
+            }
             try
             {
                 int errorCode = await LoginHelper.Login(self.DomainScene(),
@@ -69,7 +82,6 @@ namespace ET
                             // Addressables.LoadSceneAsync()
                             await AddressableComponent.Instance.LoadAssetsByLabelAsync<GameObject>("UI", (result) => { });
                             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_LoadingLayer);
-
                         }
                     }
                 }

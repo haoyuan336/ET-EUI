@@ -29,5 +29,6 @@
         WindowID_MainSceneMenu, //主页面按钮
         WindowID_LoadingLayer,  //加载游戏层
         WindowID_GameLoaseUI,   //游戏失败UI
+        WindowID_Store,         //商店
     }
 }

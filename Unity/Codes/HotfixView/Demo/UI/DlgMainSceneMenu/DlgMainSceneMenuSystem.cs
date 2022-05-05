@@ -48,6 +48,7 @@ namespace ET
             uiComponent.HideWindow(WindowID.WindowID_HeroInfoLayerUI);
             uiComponent.HideWindow(WindowID.WindowID_CallHeroLayer);
             uiComponent.HideWindow(WindowID.WindowID_ShowHeroInfoLayer);
+            uiComponent.HideWindow(WindowID.WindowID_Store);
             if (buttonName.Equals(self.View.E_MainImage.name))
             {
                 Log.Debug("hero main");
@@ -72,8 +73,10 @@ namespace ET
             {
                 Log.Debug("bag label");
             }
-            else
+            else if (buttonName.Equals(self.View.E_ShopImage.name))
+
             {
+                await uiComponent.ShowWindow(WindowID.WindowID_Store);
                 Log.Debug("Shop label");
             }
             // uiComponent.HideWindow(WindowID.WindowID_CallHeroLayer);
