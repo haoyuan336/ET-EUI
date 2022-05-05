@@ -5,57 +5,6 @@ namespace ET
 {
 	public  class DlgShowHeroInfoLayerViewComponent : Entity,IAwake,IDestroy 
 	{
-		public UnityEngine.UI.Text E_HPText
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_HPText == null )
-     			{
-		    		this.m_E_HPText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"InfoBgPlane/Image/Scroll View/Viewport/Content/HP/E_HP");
-     			}
-     			return this.m_E_HPText;
-     		}
-     	}
-
-		public UnityEngine.UI.Text E_ATKText
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_ATKText == null )
-     			{
-		    		this.m_E_ATKText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"InfoBgPlane/Image/Scroll View/Viewport/Content/ATK/E_ATK");
-     			}
-     			return this.m_E_ATKText;
-     		}
-     	}
-
-		public UnityEngine.UI.Text E_DEFText
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_DEFText == null )
-     			{
-		    		this.m_E_DEFText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"InfoBgPlane/Image/Scroll View/Viewport/Content/DEF/E_DEF");
-     			}
-     			return this.m_E_DEFText;
-     		}
-     	}
-
 		public UnityEngine.UI.Text E_HeroNameText
      	{
      		get
@@ -87,6 +36,23 @@ namespace ET
 		    		this.m_E_LevelText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"InfoBgPlane/Level/E_Level");
      			}
      			return this.m_E_LevelText;
+     		}
+     	}
+
+		public UnityEngine.UI.Text E_FightText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_FightText == null )
+     			{
+		    		this.m_E_FightText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"InfoBgPlane/Scroll View/Viewport/Content/HP/E_Fight");
+     			}
+     			return this.m_E_FightText;
      		}
      	}
 
@@ -328,30 +294,11 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Text E_FightValueText
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_FightValueText == null )
-     			{
-		    		this.m_E_FightValueText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_FightValue");
-     			}
-     			return this.m_E_FightValueText;
-     		}
-     	}
-
 		public void DestroyWidget()
 		{
-			this.m_E_HPText = null;
-			this.m_E_ATKText = null;
-			this.m_E_DEFText = null;
 			this.m_E_HeroNameText = null;
 			this.m_E_LevelText = null;
+			this.m_E_FightText = null;
 			this.m_E_ComposeButton = null;
 			this.m_E_ComposeImage = null;
 			this.m_E_WeaponButton = null;
@@ -366,15 +313,12 @@ namespace ET
 			this.m_E_TalentImage = null;
 			this.m_E_BackButton = null;
 			this.m_E_BackImage = null;
-			this.m_E_FightValueText = null;
 			this.uiTransform = null;
 		}
 
-		private UnityEngine.UI.Text m_E_HPText = null;
-		private UnityEngine.UI.Text m_E_ATKText = null;
-		private UnityEngine.UI.Text m_E_DEFText = null;
 		private UnityEngine.UI.Text m_E_HeroNameText = null;
 		private UnityEngine.UI.Text m_E_LevelText = null;
+		private UnityEngine.UI.Text m_E_FightText = null;
 		private UnityEngine.UI.Button m_E_ComposeButton = null;
 		private UnityEngine.UI.Image m_E_ComposeImage = null;
 		private UnityEngine.UI.Button m_E_WeaponButton = null;
@@ -389,7 +333,6 @@ namespace ET
 		private UnityEngine.UI.Image m_E_TalentImage = null;
 		private UnityEngine.UI.Button m_E_BackButton = null;
 		private UnityEngine.UI.Image m_E_BackImage = null;
-		private UnityEngine.UI.Text m_E_FightValueText = null;
 		public Transform uiTransform = null;
 	}
 }
