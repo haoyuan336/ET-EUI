@@ -115,13 +115,17 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_List_1_Object_Binding_Enumerator_Binding.Register(app);
             System_Runtime_CompilerServices_AsyncVoidMethodBuilder_Binding.Register(app);
             ET_ETTask_1_GameObject_Binding.Register(app);
+            ET_ColorTool_Binding.Register(app);
+            UnityEngine_Color32_Binding.Register(app);
+            UnityEngine_UI_Graphic_Binding.Register(app);
+            UnityEngine_UI_Image_Binding.Register(app);
+            UnityEngine_Camera_Binding.Register(app);
             UnityEngine_TextMesh_Binding.Register(app);
             UnityEngine_Time_Binding.Register(app);
             UnityEngine_Animator_Binding.Register(app);
             UnityEngine_LayerMask_Binding.Register(app);
             UnityEngine_Input_Binding.Register(app);
             UnityEngine_Vector2_Binding.Register(app);
-            UnityEngine_Camera_Binding.Register(app);
             UnityEngine_Physics_Binding.Register(app);
             UnityEngine_RaycastHit_Binding.Register(app);
             HeroCardViewCtl_Binding.Register(app);
@@ -144,9 +148,10 @@ namespace ILRuntime.Runtime.Generated
             System_Console_Binding.Register(app);
             UnityEngine_UI_InputField_Binding.Register(app);
             ET_ETTask_1_List_1_GameObject_Binding.Register(app);
-            ET_ColorTool_Binding.Register(app);
-            UnityEngine_Color32_Binding.Register(app);
-            UnityEngine_UI_Graphic_Binding.Register(app);
+            ET_ETAsyncTaskMethodBuilder_1_Int64_Binding.Register(app);
+            ET_ETTask_1_Int64_Binding.Register(app);
+            UnityEngine_Renderer_Binding.Register(app);
+            UnityEngine_Bounds_Binding.Register(app);
             UnityEngine_UI_Selectable_Binding.Register(app);
             UnityEngine_RuntimeAnimatorController_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_String_AnimationClip_Binding.Register(app);
@@ -229,7 +234,6 @@ namespace ILRuntime.Runtime.Generated
             UnityEngine_AddressableAssets_Addressables_Binding.Register(app);
             UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_IResourceLocator_Binding.Register(app);
             UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_Binding.Register(app);
-            ET_ETTask_1_Int64_Binding.Register(app);
             UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_Int64_Binding.Register(app);
             UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_TextAsset_Binding.Register(app);
             UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_GameObject_Binding.Register(app);
@@ -262,6 +266,9 @@ namespace ILRuntime.Runtime.Generated
             UnityEngine_Networking_DownloadHandler_Binding.Register(app);
             System_IO_FileStream_Binding.Register(app);
             ET_CodeLoader_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_GameObject_Vector3_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_GameObject_Vector3_Binding_KeyCollection_Binding.Register(app);
+            System_Collections_Generic_Dictionary_2_GameObject_Vector3_Binding_KeyCollection_Binding_Enumerator_Binding.Register(app);
         }
 
         /// <summary>

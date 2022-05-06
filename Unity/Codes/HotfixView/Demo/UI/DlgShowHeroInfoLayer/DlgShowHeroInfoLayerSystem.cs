@@ -16,7 +16,7 @@ namespace ET
 
         public static async void BackButtonClick(this DlgShowHeroInfoLayer self)
         {
-            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainSceneBg);
+            // await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainSceneBg);
             // await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainSceneMenu);
             await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_HeroInfoLayerUI);
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_ShowHeroInfoLayer);
@@ -37,7 +37,6 @@ namespace ET
             self.HeroModeShow = GameObject.Instantiate(Prefab);
 
             Vector3 center = self.HeroModeShow.GetComponentInChildren<SkinnedMeshRenderer>().bounds.center;
-            
             GameObject obj = GameObject.Find("MainCameraLockLook");
             obj.transform.position = center;
             GameObject mainSceneHeroBg = GameObject.Find("MainSceneHeroBG");

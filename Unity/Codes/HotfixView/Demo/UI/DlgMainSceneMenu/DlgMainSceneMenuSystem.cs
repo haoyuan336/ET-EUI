@@ -23,6 +23,11 @@ namespace ET
         {
             obj.GetComponent<Toggle>().onValueChanged.AddListener((value) =>
             {
+                // if (value && obj.GetComponent<Toggle>().isOn)
+                // {
+                //     return;
+                // }
+
                 Log.Debug($"init toggle event handler{value}");
                 if (value)
                 {
@@ -49,6 +54,8 @@ namespace ET
             uiComponent.HideWindow(WindowID.WindowID_CallHeroLayer);
             uiComponent.HideWindow(WindowID.WindowID_ShowHeroInfoLayer);
             uiComponent.HideWindow(WindowID.WindowID_Store);
+            uiComponent.HideWindow(WindowID.WindowID_MainScene);
+            // uiComponent.HideWindow(WindowID.WindowID_MainSceneBg);
             if (buttonName.Equals(self.View.E_MainImage.name))
             {
                 Log.Debug("hero main");
@@ -56,6 +63,7 @@ namespace ET
                 await uiComponent.ShowWindow(WindowID.WindowID_MessageTaskActiveInfo);
                 await uiComponent.ShowWindow(WindowID.WindowID_SettingUI);
                 await uiComponent.ShowWindow(WindowID.WindowID_FormationUI);
+                await uiComponent.ShowWindow(WindowID.WindowID_MainScene);
             }
             else if (buttonName.Equals(self.View.E_HeroImage.name))
             {
