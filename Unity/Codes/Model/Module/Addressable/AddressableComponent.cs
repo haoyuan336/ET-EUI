@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
+using UnityEngine.U2D;
 
 namespace ET
 {
@@ -137,8 +138,8 @@ namespace ET
                 if (handle.Status == AsyncOperationStatus.Failed)
                 {
                     Log.Debug($"load error {handle.Result}");
-                    
                 }
+
                 tcs.SetResult(handle.Result);
                 tcs = null;
             };
@@ -278,6 +279,45 @@ namespace ET
             {
                 tcs.SetResult(handle.Result.ToList<T>());
                 tcs = null;
+            };
+            return tcs.GetAwaiter();
+        }
+
+        /// <summary>
+        /// 异步方式，通过路径加载合图的图集
+        /// </summary>
+        /// <returns></returns>
+        public ETTask<Sprite> LoadSpriteAtlasByPathNameAsync(string path, string spriteName)
+        {
+            ETTask<Sprite> tcs = ETTask<Sprite>.Create();
+            Addressables.LoadAssetAsync<SpriteAtlas>(path).Completed += (handle) =>
+            {
+                if (handle.IsDone)
+                {
+                    Sprite[] sprites = new Sprite[handle.Result.spriteCount];
+                    handle.Result.GetSprites(sprites);
+                    Dictionary<string, Sprite> spriteMap = new Dictionary<string, Sprite>();
+                    spriteMap = sprites.ToDictionary(item => item.name.Replace("(Clone)",""), item => item);
+                    Debug.Log($"sprite map {spriteMap.Count}");
+                    Log.Debug($"sprite name {spriteName}");
+                    // foreach (var key in spriteMap.Keys)
+                    // {
+                    //     Log.Debug($"{key}");
+                    // }
+                    //
+                    // if (spriteMap.ContainsKey(spriteName))
+                    // {
+                    //     Log.Debug("包含");
+                    // }
+                    // else
+                    // {
+                    //     Log.Debug("不包含");
+                    // }
+                    // return spriteMap[spriteName];
+                    Sprite sp = null;
+                    spriteMap.TryGetValue(spriteName, out sp);
+                    tcs.SetResult(sp);
+                }
             };
             return tcs.GetAwaiter();
         }

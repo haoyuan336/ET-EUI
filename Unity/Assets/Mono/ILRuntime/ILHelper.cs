@@ -73,6 +73,9 @@ namespace ET
             appdomain.DelegateManager.RegisterFunctionDelegate<KeyValuePair<int, List<int>>, bool>();
             appdomain.DelegateManager.RegisterFunctionDelegate<KeyValuePair<int, int>, KeyValuePair<int, int>, int>();
             appdomain.DelegateManager.RegisterMethodDelegate<UnityEngine.Object>();
+            appdomain.DelegateManager.RegisterMethodDelegate<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.U2D.SpriteAtlas>>();
+            appdomain.DelegateManager.RegisterFunctionDelegate<UnityEngine.Sprite, System.String>();
+            appdomain.DelegateManager.RegisterFunctionDelegate<UnityEngine.Sprite, UnityEngine.Sprite>();
             appdomain.DelegateManager
                     .RegisterMethodDelegate<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<
                         System.Collections.Generic.IList<UnityEngine.GameObject>>>();
