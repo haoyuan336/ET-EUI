@@ -23,6 +23,7 @@ namespace ET
                 // Log.Debug($"text asset {v.name}");
                 output[v.name] = v.bytes;
             }
+            Log.Debug("config load complete");
             // await ETTask.CompletedTask;
 
             // foreach (var kv in keys)

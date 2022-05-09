@@ -152,6 +152,7 @@ namespace ILRuntime.Runtime.Generated
             ET_ETTask_1_Int64_Binding.Register(app);
             UnityEngine_Renderer_Binding.Register(app);
             UnityEngine_Bounds_Binding.Register(app);
+            ET_ETTask_1_Sprite_Binding.Register(app);
             UnityEngine_UI_Selectable_Binding.Register(app);
             UnityEngine_RuntimeAnimatorController_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_String_AnimationClip_Binding.Register(app);
@@ -239,8 +240,10 @@ namespace ILRuntime.Runtime.Generated
             UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_GameObject_Binding.Register(app);
             UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_IList_1_Object_Binding.Register(app);
             UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_IList_1_GameObject_Binding.Register(app);
+            UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_SpriteAtlas_Binding.Register(app);
             UnityEngine_ResourceManagement_ResourceProviders_SceneInstance_Binding.Register(app);
             UnityEngine_AsyncOperation_Binding.Register(app);
+            UnityEngine_U2D_SpriteAtlas_Binding.Register(app);
             System_Collections_Generic_Queue_1_ValueTuple_3_Int32_Int64_Int32_Binding.Register(app);
             System_Collections_Generic_SortedDictionary_2_Int64_List_1_ILTypeInstance_Binding.Register(app);
             System_ValueTuple_3_Int32_Int64_Int32_Binding.Register(app);

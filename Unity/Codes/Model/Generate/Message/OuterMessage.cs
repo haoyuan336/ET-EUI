@@ -1507,6 +1507,40 @@ namespace ET
 
 	}
 
+	[ResponseType(nameof(M2C_AddPowerResponse))]
+	[Message(OuterOpcode.C2M_AddPowerRequest)]
+	[ProtoContract]
+	public partial class C2M_AddPowerRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public int Count { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_AddPowerResponse)]
+	[ProtoContract]
+	public partial class M2C_AddPowerResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public int Count { get; set; }
+
+	}
+
 	[ResponseType(nameof(M2C_GetGoldInfoResponse))]
 	[Message(OuterOpcode.C2M_GetGoldInfoRequest)]
 	[ProtoContract]

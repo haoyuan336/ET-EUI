@@ -681,6 +681,22 @@ message M2C_SyncHeroCardTurnData	//IActorMessage
 	repeated HeroCardInfo HeroCardInfos = 1;
 }
 
+//ResponseType M2C_AddPowerResponse
+message C2M_AddPowerRequest	// IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int32 Count = 2;
+}
+message M2C_AddPowerResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	int32 Count = 1;
+
+}
+
 //ResponseType M2C_GetGoldInfoResponse
 message C2M_GetGoldInfoRequest	//IActorLocationRequest
 {

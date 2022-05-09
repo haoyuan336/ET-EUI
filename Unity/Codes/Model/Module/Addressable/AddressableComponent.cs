@@ -294,29 +294,15 @@ namespace ET
             {
                 if (handle.IsDone)
                 {
-                    Sprite[] sprites = new Sprite[handle.Result.spriteCount];
-                    handle.Result.GetSprites(sprites);
-                    Dictionary<string, Sprite> spriteMap = new Dictionary<string, Sprite>();
-                    spriteMap = sprites.ToDictionary(item => item.name.Replace("(Clone)",""), item => item);
-                    Debug.Log($"sprite map {spriteMap.Count}");
-                    Log.Debug($"sprite name {spriteName}");
-                    // foreach (var key in spriteMap.Keys)
-                    // {
-                    //     Log.Debug($"{key}");
-                    // }
-                    //
-                    // if (spriteMap.ContainsKey(spriteName))
-                    // {
-                    //     Log.Debug("包含");
-                    // }
-                    // else
-                    // {
-                    //     Log.Debug("不包含");
-                    // }
-                    // return spriteMap[spriteName];
-                    Sprite sp = null;
-                    spriteMap.TryGetValue(spriteName, out sp);
-                    tcs.SetResult(sp);
+                    Sprite sprite = handle.Result.GetSprite(spriteName);
+                    if (sprite != null)
+                    {
+                        tcs.SetResult(sprite);
+                    }
+                    else
+                    {
+                        Log.Warning($"不存在此经理{spriteName}");
+                    }
                 }
             };
             return tcs.GetAwaiter();

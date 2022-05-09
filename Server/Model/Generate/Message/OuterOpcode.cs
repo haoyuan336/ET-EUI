@@ -95,11 +95,13 @@ namespace ET
 		 public const ushort C2M_PlayerReadyTurnRequest = 10092;
 		 public const ushort M2C_PlayerReadyTurnResponse = 10093;
 		 public const ushort M2C_SyncHeroCardTurnData = 10094;
-		 public const ushort C2M_GetGoldInfoRequest = 10095;
-		 public const ushort M2C_GetGoldInfoResponse = 10096;
-		 public const ushort C2M_GetUserExpInfoRequest = 10097;
-		 public const ushort M2C_GetUserExpInfoResponse = 10098;
-		 public const ushort C2M_BackGameToMainMenuRequest = 10099;
-		 public const ushort M2C_BackGameToMainMenuResponse = 10100;
+		 public const ushort C2M_AddPowerRequest = 10095;
+		 public const ushort M2C_AddPowerResponse = 10096;
+		 public const ushort C2M_GetGoldInfoRequest = 10097;
+		 public const ushort M2C_GetGoldInfoResponse = 10098;
+		 public const ushort C2M_GetUserExpInfoRequest = 10099;
+		 public const ushort M2C_GetUserExpInfoResponse = 10100;
+		 public const ushort C2M_BackGameToMainMenuRequest = 10101;
+		 public const ushort M2C_BackGameToMainMenuResponse = 10102;
 	}
 }

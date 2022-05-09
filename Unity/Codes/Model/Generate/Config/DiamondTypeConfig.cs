@@ -80,7 +80,7 @@ namespace ET
 		[ProtoMember(7)]
 		public string AddAngry { get; set; }
 		[ProtoMember(9)]
-		public string ModeName { get; set; }
+		public string TextureName { get; set; }
 		[ProtoMember(10)]
 		public int BoomType { get; set; }
 

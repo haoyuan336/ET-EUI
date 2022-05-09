@@ -15,7 +15,7 @@ namespace ET
 
             GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(heroModeStr);
             self.HeroMode = GameObject.Instantiate(prefab);
-            Vector3 pos = new Vector3(-2.5f + heroCard.InTroopIndex * 2.5f, 0, -5 * (heroCard.CampIndex == 0? 1 : -1));
+            Vector3 pos = new Vector3(-1.5f + heroCard.InTroopIndex * 1.5f, 0, -3 * (heroCard.CampIndex == 0? 1 : -1));
             self.HeroMode.transform.position = pos;
             self.HeroMode.transform.forward = heroCard.CampIndex == 0? Vector3.forward : Vector3.back;
             self.HeroModeInitPos = new Vector3(pos.x, pos.y, pos.z);

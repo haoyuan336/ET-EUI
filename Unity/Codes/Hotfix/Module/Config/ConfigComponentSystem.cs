@@ -77,13 +77,14 @@ namespace ET
         {
             byte[] oneConfigBytes = configBytes[configType.Name];
 
-            // Log.Debug($"load one in thread config {configType.Name}");
+            Log.Debug($"load one in thread config {configType.Name}");
             // Log.Debug($"one config bytes {oneConfigBytes.Length}");
             
             object category = ProtobufHelper.FromBytes(configType, oneConfigBytes, 0, oneConfigBytes.Length);
 
             lock (self)
             {
+                Log.Debug($"lock self {configType}");
                 self.AllConfig[configType] = category;
             }
         }

@@ -30,5 +30,6 @@
         WindowID_LoadingLayer,  //加载游戏层
         WindowID_GameLoaseUI,   //游戏失败UI
         WindowID_Store,         //商店
+        WindowID_PowerNotEnoughAlert,   //体力不足的提示
     }
 }

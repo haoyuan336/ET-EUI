@@ -270,7 +270,7 @@ namespace ET
             if (heroCardInfo != null)
             {
                 // itemTroopHeroCard.E_TextText.text = heroCardInfo.HeroName + heroCardInfo.ConfigId;
-                
+
                 itemTroopHeroCard.SetHeroInfo(heroCardInfo);
             }
             else
@@ -300,17 +300,46 @@ namespace ET
 
         public static async ETTask StartGameButtonClick(this DlgEditorTroopLayer self)
         {
+            bool isPowerEnough = await self.CheckPowerIsEnough();
+            if (!isPowerEnough)
+            {
+                await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_PowerNotEnoughAlert);
+                return;
+            }
+
             var Account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             M2C_StartPVEGameResponse m2CStartPveGameResponse =
-                    (M2C_StartPVEGameResponse) await session.Call(new C2M_StartPVEGameRequest() { AccoundId = Account ,TroopId = self.CurrentChooseTroopId});
+                    (M2C_StartPVEGameResponse) await session.Call(new C2M_StartPVEGameRequest()
+                    {
+                        AccoundId = Account, TroopId = self.CurrentChooseTroopId
+                    });
             if (m2CStartPveGameResponse.Error == ErrorCode.ERR_Success)
             {
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_EditorTroopLayer);
             }
-            
 
             await ETTask.CompletedTask;
+        }
+
+        /// <summary>
+        /// 检查体力是否足够
+        /// </summary>
+        /// <param name="self"></param>
+        public static async ETTask<bool> CheckPowerIsEnough(this DlgEditorTroopLayer self)
+        {
+            long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            M2C_GetGoldInfoResponse response = (M2C_GetGoldInfoResponse) await session.Call(new C2M_GetGoldInfoRequest() { AccountId = AccountId });
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                if (response.PowerCount > 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
