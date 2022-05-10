@@ -1011,6 +1011,33 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.C2M_PlayerClickHeroMode)]
+	[ProtoContract]
+	public partial class C2M_PlayerClickHeroMode: Object, IActorLocationMessage
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long HeroId { get; set; }
+
+		[ProtoMember(2)]
+		public long RoomId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_PlayerChooseAttackHero)]
+	[ProtoContract]
+	public partial class M2C_PlayerChooseAttackHero: Object, IActorMessage
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long HeroId { get; set; }
+
+	}
+
 	[Message(OuterOpcode.M2C_ChangeCurrentTurnSeatIndex)]
 	[ProtoContract]
 	public partial class M2C_ChangeCurrentTurnSeatIndex: Object, IActorMessage

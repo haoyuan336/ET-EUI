@@ -946,6 +946,16 @@ namespace ET
             return component;
         }
 
+        // public T AddChildWithId<T, A>(long id, A a, bool isFromPool = false, ETTask task) where T : Entity, IAwake<A>
+        // {
+        //     Type type = typeof (T);
+        //     T component = (T) Entity.Create(type, isFromPool);
+        //     component.Id = id;
+        //     component.Parent = this;
+        //
+        //     EventSystem.Instance.Awake(component, a);
+        //     return component;
+        // }
         public T AddChildWithId<T, A, B>(long id, A a, B b, bool isFromPool = false) where T : Entity, IAwake<A, B>
         {
             Type type = typeof (T);

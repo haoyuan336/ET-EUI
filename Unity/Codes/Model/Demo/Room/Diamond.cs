@@ -1,6 +1,6 @@
 ﻿namespace ET
 {
-    public class Diamond: Entity, IAwake, IAwake<DiamondInfo>, IAwake<int, int>
+    public class Diamond: Entity, IAwake, IAwake<DiamondInfo>, IAwake<int, int>, IAwake<DiamondInfo, ETTask>
     {
         public int HangIndex = 0;
         public int LieIndex = 0;

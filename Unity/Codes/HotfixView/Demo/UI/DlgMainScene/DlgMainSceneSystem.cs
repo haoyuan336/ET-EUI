@@ -107,6 +107,11 @@ namespace ET
             Log.Debug("show hero Mode");
             HeroConfig config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
             var prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(config.HeroMode);
+            if (self.HeroMode != null)
+            {
+                GameObject.Destroy(self.HeroMode);
+                self.HeroMode = null;
+            }
             self.HeroMode = GameObject.Instantiate(prefab);
             Vector3 center = self.HeroMode.GetComponentInChildren<SkinnedMeshRenderer>().bounds.center;
             GameObject obj = GameObject.Find("MainCameraLockLook");
@@ -118,6 +123,7 @@ namespace ET
         public static void HideWindow(this DlgMainScene self)
         {
             GameObject.Destroy(self.HeroMode);
+            self.HeroMode = null;
         }
     }
 }

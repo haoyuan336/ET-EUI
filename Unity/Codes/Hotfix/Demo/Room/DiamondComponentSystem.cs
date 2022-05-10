@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 namespace ET
 {
     public class DiamondComponentAwakeSystem: AwakeSystem<DiamondComponent>
@@ -113,19 +114,21 @@ namespace ET
             // return diamond;
         }
 
-        public static Diamond CreateDiamoneWithMessage(this DiamondComponent self, DiamondInfo diamondInfo)
+        public static async ETTask CreateDiamoneWithMessage(this DiamondComponent self, DiamondInfo diamondInfo)
         {
             long id = diamondInfo.Id;
-            Diamond diamond = self.AddChildWithId<Diamond, DiamondInfo>(id, diamondInfo);
+            ETTask tsk = ETTask.Create();
+            self.AddChildWithId<Diamond, DiamondInfo, ETTask>(id, diamondInfo, tsk);
             // diamond.InitWithMessageInfo(diamondInfo);
-            return diamond;
+            await tsk.GetAwaiter();
+            // return diamond;
         }
 
         public static void InitMapWithMessage(this DiamondComponent self, M2C_InitMapData message)
         {
             foreach (var diamondInfo in message.DiamondInfo)
             {
-                self.CreateDiamoneWithMessage(diamondInfo);
+                self.CreateDiamoneWithMessage(diamondInfo).Coroutine();
             }
         }
 
@@ -142,7 +145,7 @@ namespace ET
 
             // return self.Diamonds[LieIndex, HangIndex];
             // return self.Diamonds[HangIndex].Diamonds[LieIndex];
-            var index =ConstValue.LieCount * HangIndex + LieIndex;
+            var index = ConstValue.LieCount * HangIndex + LieIndex;
             if (index >= self.Diamonds.Length)
             {
                 return null;
@@ -153,6 +156,10 @@ namespace ET
 
         public static Diamond GetDiamondWithDir(this DiamondComponent self, Diamond diamond, int type)
         {
+            if (diamond == null)
+            {
+                return null;
+            }
             int lieIndex = diamond.LieIndex;
             int hangIndex = diamond.HangIndex;
             switch (type)

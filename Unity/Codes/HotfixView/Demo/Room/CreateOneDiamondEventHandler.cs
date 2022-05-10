@@ -17,9 +17,7 @@ namespace ET
             DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamondInfo.ConfigId);
 
             var imageStr = $"Assets/Res/Texture/Diamond/{config.TextureName}.png";
-            Log.Debug($"load image str {imageStr}");
             Texture texture = await AddressableComponent.Instance.LoadAssetByPathAsync<Texture>(imageStr);
-            Log.Debug($"load success {imageStr}");
             var str = "Assets/Bundles/Unit/DiamondPrefabs/DiamondPrefab.prefab";
             GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(str);
             GameObject go = GameObject.Instantiate(prefab);

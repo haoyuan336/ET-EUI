@@ -252,5 +252,23 @@ namespace ET
         {
             public Scene ZoneScene;
         }
+
+        /// <summary>
+        /// 设置英雄为选择状态
+        /// </summary>
+        public struct SetHeroCardChooseState
+        {
+            public List<HeroCard> AllHeroCard;
+            public HeroCard HeroCard;
+            public bool Show;
+        }
+
+        /// <summary>
+        /// 回合结束
+        /// </summary>
+        public struct GameAroundOver
+        {
+            public List<HeroCard> HeroCards;
+        }
     }
 }

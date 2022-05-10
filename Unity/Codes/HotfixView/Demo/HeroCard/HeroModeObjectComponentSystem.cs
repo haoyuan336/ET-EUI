@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 namespace ET
@@ -20,21 +21,88 @@ namespace ET
             self.HeroMode.transform.forward = heroCard.CampIndex == 0? Vector3.forward : Vector3.back;
             self.HeroModeInitPos = new Vector3(pos.x, pos.y, pos.z);
 
-
             self.AddComponent<HeroCardInfoObjectComponent>();
             await ETTask.CompletedTask;
         }
     }
 
-   
+    public class HeroModeObjectComponentUpdateSystem: UpdateSystem<HeroModeObjectCompoent>
+    {
+        public override void Update(HeroModeObjectCompoent self)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                self.IsTouching = true;
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                self.IsTouching = false;
+            }
+
+            if (self.IsTouching)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                RaycastHit raycastHit;
+                var maskCode = LayerMask.GetMask("Default");
+                var isHided = Physics.Raycast(ray, out raycastHit, 10000, maskCode);
+                if (isHided && raycastHit.transform.gameObject.Equals(self.HeroMode))
+                {
+                    self.IsTouching = false;
+                    Log.Debug($"is hitde obj {self.HeroMode.name}");
+                    HeroCard heroCard = self.GetParent<HeroCard>();
+                    Log.Debug($"hero card camp index{heroCard.CampIndex}");
+                    if (heroCard.CampIndex != 0)
+                    {
+                        //点击了 非本阵营的英雄，开启集火模式
+                        // heroCard.GetComponent<>()
+
+                        // zoneScene.GetComponent<OperaComponent>().TouchLock = false;
+                        var touchLock = heroCard.DomainScene().GetComponent<OperaComponent>().TouchLock;
+                        if (touchLock)
+                        {
+                            Log.Debug("不可操作阶段");
+                            return;
+                        }
+
+                        var roomId = self.ZoneScene().GetComponent<PlayerComponent>().RoomId;
+                        C2M_PlayerClickHeroMode clickHeroMode = new C2M_PlayerClickHeroMode() { HeroId = heroCard.Id, RoomId = roomId };
+                        heroCard.ZoneScene().GetComponent<SessionComponent>().Session.Send(clickHeroMode);
+                    }
+                }
+            }
+        }
+    }
+
     public static class HeroModeObjectComponentSystem
     {
+        public static async void ShowChooseMark(this HeroModeObjectCompoent self, bool isShow)
+        {
+            if (self.ChooseMark != null)
+            {
+                GameObject.Destroy(self.ChooseMark);
+                self.ChooseMark = null;
+            }
+
+            if (isShow)
+            {
+                var path = "Assets/Bundles/Unit/HeroModePrefabs/HeroChooseMark.prefab";
+                GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(path);
+                self.ChooseMark = GameObject.Instantiate(prefab);
+                var height = self.HeroMode.GetComponentInChildren<SkinnedMeshRenderer>().bounds.size.y;
+
+                self.ChooseMark.transform.position = self.HeroMode.transform.position + Vector3.up * height;
+            }
+        }
+
         public static void UpdateShowDataView(this HeroModeObjectCompoent self, HeroCardInfo heroCardInfo)
         {
             //todo 更新显示的英雄数据
             HeroCardInfoObjectComponent component = self.GetComponent<HeroCardInfoObjectComponent>();
             component.UpdateView(heroCardInfo);
         }
+
         public static async ETTask PlayMoveToAnim(this HeroModeObjectCompoent self, Vector3 startPos, Vector3 targetPos)
         {
             float time = 0;
@@ -54,6 +122,10 @@ namespace ET
 
         public static async ETTask PlayAttackAnimLogic(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message)
         {
+            // if (self.ChooseMark != null)
+            // {
+            //     GameObject.Destroy(self.ChooseMark);
+            // }
             HeroCard beAttackHeroCard = message.BeAttackHeroCard;
 
             HeroModeObjectCompoent beAttackHeroModeCom = beAttackHeroCard.GetComponent<HeroModeObjectCompoent>();

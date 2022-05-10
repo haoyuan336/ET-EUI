@@ -186,7 +186,7 @@ namespace ET
      			}
      			if( this.m_E_CurrentUPTenButton == null )
      			{
-		    		this.m_E_CurrentUPTenButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Panel/Ten/E_CurrentUPTen");
+		    		this.m_E_CurrentUPTenButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Scroll View/Viewport/Content/Ten/E_CurrentUPTen");
      			}
      			return this.m_E_CurrentUPTenButton;
      		}
@@ -203,7 +203,7 @@ namespace ET
      			}
      			if( this.m_E_CurrentUPTenImage == null )
      			{
-		    		this.m_E_CurrentUPTenImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Panel/Ten/E_CurrentUPTen");
+		    		this.m_E_CurrentUPTenImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Scroll View/Viewport/Content/Ten/E_CurrentUPTen");
      			}
      			return this.m_E_CurrentUPTenImage;
      		}
@@ -220,7 +220,7 @@ namespace ET
      			}
      			if( this.m_E_TenButton == null )
      			{
-		    		this.m_E_TenButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Panel/Ten/E_Ten");
+		    		this.m_E_TenButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Scroll View/Viewport/Content/Ten/E_Ten");
      			}
      			return this.m_E_TenButton;
      		}
@@ -237,7 +237,7 @@ namespace ET
      			}
      			if( this.m_E_TenImage == null )
      			{
-		    		this.m_E_TenImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Panel/Ten/E_Ten");
+		    		this.m_E_TenImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Scroll View/Viewport/Content/Ten/E_Ten");
      			}
      			return this.m_E_TenImage;
      		}
@@ -254,7 +254,7 @@ namespace ET
      			}
      			if( this.m_E_DiamondTenText == null )
      			{
-		    		this.m_E_DiamondTenText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"Panel/Ten/E_Ten/E_DiamondTen");
+		    		this.m_E_DiamondTenText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"Scroll View/Viewport/Content/Ten/E_Ten/E_DiamondTen");
      			}
      			return this.m_E_DiamondTenText;
      		}
@@ -271,7 +271,7 @@ namespace ET
      			}
      			if( this.m_E_RateTenText == null )
      			{
-		    		this.m_E_RateTenText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"Panel/Ten/E_RateTen");
+		    		this.m_E_RateTenText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"Scroll View/Viewport/Content/Ten/E_RateTen");
      			}
      			return this.m_E_RateTenText;
      		}
@@ -288,7 +288,7 @@ namespace ET
      			}
      			if( this.m_E_CurrentUPButton == null )
      			{
-		    		this.m_E_CurrentUPButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Panel/One/E_CurrentUP");
+		    		this.m_E_CurrentUPButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Scroll View/Viewport/Content/One/E_CurrentUP");
      			}
      			return this.m_E_CurrentUPButton;
      		}
@@ -305,7 +305,7 @@ namespace ET
      			}
      			if( this.m_E_CurrentUPImage == null )
      			{
-		    		this.m_E_CurrentUPImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Panel/One/E_CurrentUP");
+		    		this.m_E_CurrentUPImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Scroll View/Viewport/Content/One/E_CurrentUP");
      			}
      			return this.m_E_CurrentUPImage;
      		}
@@ -322,7 +322,7 @@ namespace ET
      			}
      			if( this.m_E_OneButton == null )
      			{
-		    		this.m_E_OneButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Panel/One/E_One");
+		    		this.m_E_OneButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Scroll View/Viewport/Content/One/E_One");
      			}
      			return this.m_E_OneButton;
      		}
@@ -339,7 +339,7 @@ namespace ET
      			}
      			if( this.m_E_OneImage == null )
      			{
-		    		this.m_E_OneImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Panel/One/E_One");
+		    		this.m_E_OneImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Scroll View/Viewport/Content/One/E_One");
      			}
      			return this.m_E_OneImage;
      		}
@@ -356,7 +356,7 @@ namespace ET
      			}
      			if( this.m_E_DiamondOneText == null )
      			{
-		    		this.m_E_DiamondOneText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"Panel/One/E_One/E_DiamondOne");
+		    		this.m_E_DiamondOneText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"Scroll View/Viewport/Content/One/E_One/E_DiamondOne");
      			}
      			return this.m_E_DiamondOneText;
      		}
@@ -373,7 +373,7 @@ namespace ET
      			}
      			if( this.m_E_RateText == null )
      			{
-		    		this.m_E_RateText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"Panel/One/E_Rate");
+		    		this.m_E_RateText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"Scroll View/Viewport/Content/One/E_Rate");
      			}
      			return this.m_E_RateText;
      		}
@@ -390,7 +390,7 @@ namespace ET
      			}
      			if( this.m_E_Call10Button == null )
      			{
-		    		this.m_E_Call10Button = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Panel/One/E_Call10");
+		    		this.m_E_Call10Button = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Scroll View/Viewport/Content/One/E_Call10");
      			}
      			return this.m_E_Call10Button;
      		}
@@ -407,7 +407,7 @@ namespace ET
      			}
      			if( this.m_E_Call10Image == null )
      			{
-		    		this.m_E_Call10Image = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Panel/One/E_Call10");
+		    		this.m_E_Call10Image = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Scroll View/Viewport/Content/One/E_Call10");
      			}
      			return this.m_E_Call10Image;
      		}
@@ -424,7 +424,7 @@ namespace ET
      			}
      			if( this.m_E_CallButton == null )
      			{
-		    		this.m_E_CallButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Panel/One/E_Call");
+		    		this.m_E_CallButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Scroll View/Viewport/Content/One/E_Call");
      			}
      			return this.m_E_CallButton;
      		}
@@ -441,7 +441,7 @@ namespace ET
      			}
      			if( this.m_E_CallImage == null )
      			{
-		    		this.m_E_CallImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Panel/One/E_Call");
+		    		this.m_E_CallImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Scroll View/Viewport/Content/One/E_Call");
      			}
      			return this.m_E_CallImage;
      		}

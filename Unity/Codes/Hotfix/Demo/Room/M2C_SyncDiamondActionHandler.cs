@@ -58,11 +58,12 @@ namespace ET
                             tasks.Add(diamondComponent.RemoveChild(diamond));
                             break;
                         case (int) DiamondActionType.Create:
-                            diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo);
-                            ETTask task = ETTask.Create();
-                            tasks.Add(task);
-                            await TimerComponent.Instance.WaitFrameAsync();
-                            task.SetResult();
+
+                            tasks.Add(diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo));
+
+                            // ETTask task = ETTask.Create();
+                            // await TimerComponent.Instance.WaitAsync(100);
+                            // task.SetResult();
                             // Diamond newDiamond = diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo);
                             // tasks.Add(Game.EventSystem.PublishAsync(new EventType.InitDiamondAndMoveDown() { Diamond = newDiamond }));
                             break;
@@ -85,6 +86,8 @@ namespace ET
                 await ETTaskHelper.WaitAll(tasks);
             }
 
+            List<HeroCard> heroCards = heroCardComponent.GetChilds<HeroCard>();
+            Game.EventSystem.Publish(new EventType.GameAroundOver(){HeroCards = heroCards});
             //
             long AccountId = session.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
 

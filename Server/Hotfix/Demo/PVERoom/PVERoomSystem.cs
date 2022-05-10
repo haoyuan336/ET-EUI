@@ -37,6 +37,35 @@ namespace ET
             self.InitGameMap(levelNum);
         }
 
+        public static void PlayChooseAttackHero(this PVERoom self, long heroId)
+        {
+            Log.Debug($"寻找英雄 {heroId}");
+            //玩家选择了一个可以攻击的英雄，根据id找到相应的herocard
+            foreach (var unit in self.Units)
+            {
+                // List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
+                // foreach (var herocard in heroCards)
+                // {
+                // Log.Warning($"hero card {herocard.Id}");
+                // }
+                HeroCard heroCard = unit.GetChild<HeroCard>(heroId);
+                if (heroCard != null)
+                {
+                    self.CurrentBeAttackHeroCard = heroCard;
+                }
+            }
+
+            foreach (var unit in self.Units)
+            {
+                if (unit.IsAI)
+                {
+                    continue;
+                }
+
+                MessageHelper.SendToClient(unit, new M2C_PlayerChooseAttackHero() { HeroId = heroId });
+            }
+        }
+
         public static async ETTask PlayerReadyTurn(this PVERoom self)
         {
             // self.CurrentAttackHeroCard = null;
@@ -358,7 +387,7 @@ namespace ET
             Log.Debug("处理攻击逻辑");
             self.ProcessAttackLogic(m2CSyncDiamondAction); //处理攻击逻辑
             Log.Debug("处理反击逻辑");
-
+            self.CurrentBeAttackHeroCard = null;
             self.ProcessReBackAttackLogic(m2CSyncDiamondAction);
 
             // self.CurrentAttackHeroCard = null;
@@ -502,6 +531,11 @@ namespace ET
             {
                 AttackAction attackAction = new AttackAction();
                 HeroCard beAttackHeroCard = self.GetBeAttackHeroCard(heroCard, beUnit);
+                if (self.CurrentBeAttackHeroCard != null && !self.CurrentBeAttackHeroCard.GetIsDead())
+                {
+                    beAttackHeroCard = self.CurrentBeAttackHeroCard;
+                }
+
                 heroCard.CastSkill();
                 beAttackHeroCard.BeAttack(heroCard);
                 attackAction.AttackHeroCardInfo = heroCard.GetMessageInfo();

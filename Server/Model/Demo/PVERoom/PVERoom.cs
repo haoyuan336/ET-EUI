@@ -10,6 +10,7 @@ namespace ET
         public int LieCount = 0;
         public DiamondComponent DiamondComponent = null;
         public LevelConfig LevelConfig;
-        public HeroCard CurrentAttackHeroCard;
+        public HeroCard CurrentBeAttackHeroCard;
+        // public HeroCard Current
     }
 }

@@ -72,7 +72,6 @@ namespace ET
     {
         public override void Awake(Diamond self, DiamondInfo a)
         {
-#if !SERVER
             self.Id = a.Id;
             self.LieIndex = a.LieIndex;
             self.HangIndex = a.HangIndex;
@@ -81,10 +80,32 @@ namespace ET
             self.InitLieIndex = a.InitLieIndex;
             self.BoomType = a.BoomType;
             self.ConfigId = a.ConfigId;
+#if !SERVER
+
             Game.EventSystem.Publish(new EventType.CreateOneDiamondView() { Diamond = self, DiamondInfo = a });
 #endif
         }
     }
+#if !SERVER
+
+    public class DiamondAwakeSystem3: AwakeSystem<Diamond, DiamondInfo, ETTask>
+    {
+        public override async void Awake(Diamond self, DiamondInfo a, ETTask b)
+        {
+            self.Id = a.Id;
+            self.LieIndex = a.LieIndex;
+            self.HangIndex = a.HangIndex;
+            self.DiamondType = a.DiamondType;
+            self.InitHangIndex = a.InitHangIndex;
+            self.InitLieIndex = a.InitLieIndex;
+            self.BoomType = a.BoomType;
+            self.ConfigId = a.ConfigId;
+
+            await Game.EventSystem.PublishAsync(new EventType.CreateOneDiamondView() { Diamond = self, DiamondInfo = a });
+            b.SetResult();
+        }
+    }
+#endif
 
     public static class DiamondSystem
     {
