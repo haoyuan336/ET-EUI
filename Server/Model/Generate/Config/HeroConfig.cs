@@ -95,6 +95,8 @@ namespace ET
 		public string UpdateLevelHP { get; set; }
 		[ProtoMember(14)]
 		public string HeroQuality { get; set; }
+		[ProtoMember(16)]
+		public string HeroIconFrameImage { get; set; }
 
 	}
 }

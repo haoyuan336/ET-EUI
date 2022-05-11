@@ -24,9 +24,12 @@ namespace ET
 
             if (response.Error == ErrorCode.ERR_Success)
             {
-                Log.Debug(" back game success");
+                Log.Debug("game win back game success");
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameWinUI);
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameUI);
+                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameLevelLayer);
+                // Game.EventSystem.Publish(new EventType.ExitGameScene());
+                // Game.EventSystem.RegisterSystem();
             }
 
             await ETTask.CompletedTask;

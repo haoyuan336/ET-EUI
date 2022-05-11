@@ -94,16 +94,14 @@ namespace ET
 		 public const ushort M2C_StartPVEGameResponse = 10091;
 		 public const ushort C2M_GameReadyMessage = 10092;
 		 public const ushort M2C_CreateHeroCardInRoom = 10093;
-		 public const ushort C2M_PlayerReadyTurnRequest = 10094;
-		 public const ushort M2C_PlayerReadyTurnResponse = 10095;
-		 public const ushort M2C_SyncHeroCardTurnData = 10096;
-		 public const ushort C2M_AddPowerRequest = 10097;
-		 public const ushort M2C_AddPowerResponse = 10098;
-		 public const ushort C2M_GetGoldInfoRequest = 10099;
-		 public const ushort M2C_GetGoldInfoResponse = 10100;
-		 public const ushort C2M_GetUserExpInfoRequest = 10101;
-		 public const ushort M2C_GetUserExpInfoResponse = 10102;
-		 public const ushort C2M_BackGameToMainMenuRequest = 10103;
-		 public const ushort M2C_BackGameToMainMenuResponse = 10104;
+		 public const ushort M2C_SyncHeroCardTurnData = 10094;
+		 public const ushort C2M_AddPowerRequest = 10095;
+		 public const ushort M2C_AddPowerResponse = 10096;
+		 public const ushort C2M_GetGoldInfoRequest = 10097;
+		 public const ushort M2C_GetGoldInfoResponse = 10098;
+		 public const ushort C2M_GetUserExpInfoRequest = 10099;
+		 public const ushort M2C_GetUserExpInfoResponse = 10100;
+		 public const ushort C2M_BackGameToMainMenuRequest = 10101;
+		 public const ushort M2C_BackGameToMainMenuResponse = 10102;
 	}
 }

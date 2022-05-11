@@ -6,7 +6,6 @@ namespace ET
 	public  class Scroll_ItemHeroCard : Entity,IAwake,IDestroy 
 	{
 		private bool isCacheNode = false;
-		public HeroCardInfo HeroCardInfo;
 		public void SetCacheMode(bool isCache)
 		{
 			this.isCacheNode = isCache;
@@ -18,7 +17,7 @@ namespace ET
 			return this;
 		}
 
-		public UnityEngine.UI.Button E_ClickButton
+		public UnityEngine.UI.Image E_HeadImage
      	{
      		get
      		{
@@ -29,20 +28,20 @@ namespace ET
      			}
      			if (this.isCacheNode)
      			{
-     				if( this.m_E_ClickButton == null )
+     				if( this.m_E_HeadImage == null )
      				{
-		    			this.m_E_ClickButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Click");
+		    			this.m_E_HeadImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Head");
      				}
-     				return this.m_E_ClickButton;
+     				return this.m_E_HeadImage;
      			}
      			else
      			{
-		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Click");
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Head");
      			}
      		}
      	}
 
-		public UnityEngine.UI.Image E_ClickImage
+		public UnityEngine.UI.Image E_FrameImage
      	{
      		get
      		{
@@ -53,39 +52,15 @@ namespace ET
      			}
      			if (this.isCacheNode)
      			{
-     				if( this.m_E_ClickImage == null )
+     				if( this.m_E_FrameImage == null )
      				{
-		    			this.m_E_ClickImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Click");
+		    			this.m_E_FrameImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Frame");
      				}
-     				return this.m_E_ClickImage;
+     				return this.m_E_FrameImage;
      			}
      			else
      			{
-		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Click");
-     			}
-     		}
-     	}
-
-		public UnityEngine.UI.Text E_TextText
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if (this.isCacheNode)
-     			{
-     				if( this.m_E_TextText == null )
-     				{
-		    			this.m_E_TextText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Click/E_Text");
-     				}
-     				return this.m_E_TextText;
-     			}
-     			else
-     			{
-		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Click/E_Text");
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Frame");
      			}
      		}
      	}
@@ -114,19 +89,43 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Toggle E_ChooseToggle
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_ChooseToggle == null )
+     				{
+		    			this.m_E_ChooseToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"E_Choose");
+     				}
+     				return this.m_E_ChooseToggle;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"E_Choose");
+     			}
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
-			this.m_E_ClickButton = null;
-			this.m_E_ClickImage = null;
-			this.m_E_TextText = null;
+			this.m_E_HeadImage = null;
+			this.m_E_FrameImage = null;
 			this.m_E_InTroopMarkImage = null;
+			this.m_E_ChooseToggle = null;
 			this.uiTransform = null;
 		}
 
-		private UnityEngine.UI.Button m_E_ClickButton = null;
-		private UnityEngine.UI.Image m_E_ClickImage = null;
-		private UnityEngine.UI.Text m_E_TextText = null;
+		private UnityEngine.UI.Image m_E_HeadImage = null;
+		private UnityEngine.UI.Image m_E_FrameImage = null;
 		private UnityEngine.UI.Image m_E_InTroopMarkImage = null;
+		private UnityEngine.UI.Toggle m_E_ChooseToggle = null;
 		public Transform uiTransform = null;
 	}
 }

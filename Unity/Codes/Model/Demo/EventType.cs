@@ -6,6 +6,10 @@ namespace ET
 {
     namespace EventType
     {
+        public struct ShowHeroInfo
+        {
+            public HeroCardInfo HeroCardInfo;
+        }
         public struct AppStart
         {
         }
@@ -269,6 +273,13 @@ namespace ET
         public struct GameAroundOver
         {
             public List<HeroCard> HeroCards;
+        }
+        /// <summary>
+        /// 退出游戏场景
+        /// </summary>
+        public struct ExitGameScene
+        {
+        
         }
     }
 }

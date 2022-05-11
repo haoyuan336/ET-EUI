@@ -6,7 +6,6 @@ namespace ET
     {
         protected override async ETTask Run(Unit unit, C2M_BackGameToMainMenuRequest request, M2C_BackGameToMainMenuResponse response, Action reply)
         {
-            Log.Warning("收到了客户端发来的返回主页面的消息");
             switch (unit.DomainScene().SceneType)
             {
                 case SceneType.PVEGameScene:

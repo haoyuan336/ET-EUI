@@ -618,5 +618,11 @@ namespace ET
 
             return attackUnit;
         }
+
+        public static void PlayerRequestExitGame(this PVERoom self, long AccoundId)
+        {
+            //玩家发来了，强制退出房间的消息
+            
+        }
     }
 }

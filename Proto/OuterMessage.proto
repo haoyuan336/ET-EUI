@@ -650,6 +650,7 @@ message M2C_SetHeroToTroopResponse //IActorLocationResponse
 	int32 Error = 91;
 	string Message = 92;
 	HeroCardInfo HeroCardInfo = 1;
+	
 }
 //ResponseType M2C_StartPVEGameResponse
 message C2M_StartPVEGameRequest //IActorLocationRequest
@@ -676,19 +677,18 @@ message M2C_CreateHeroCardInRoom //IActorMessage
 	repeated HeroCardInfo HeroCardInfos = 1;
 	repeated SkillInfo SkillInfos = 2;
 }
-//ResponseType M2C_PlayerReadyTurnResponse
-message C2M_PlayerReadyTurnRequest //IActorLocationRequest
-{
-	int32 RpcId = 90;
-	int64 AccountId = 1;
-	int64 RoomId = 2;	//房间iD
-}
-message M2C_PlayerReadyTurnResponse //IActorLocationResponse
-{
-	int32 RpcId = 90;
-	int32 Error = 91;
-	string Message = 92;
-}
+// message C2M_PlayerReadyTurnRequest //IActorLocationRequest
+// {
+// 	int32 RpcId = 90;
+// 	int64 AccountId = 1;
+// 	int64 RoomId = 2;	//房间iD
+// }
+// message M2C_PlayerReadyTurnResponse //IActorLocationResponse
+// {
+// 	int32 RpcId = 90;
+// 	int32 Error = 91;
+// 	string Message = 92;
+// }
 message M2C_SyncHeroCardTurnData	//IActorMessage
 {
 	repeated HeroCardInfo HeroCardInfos = 1;
@@ -755,3 +755,4 @@ message M2C_BackGameToMainMenuResponse	//IActorLocationResponse
 	int32 Error = 91;
 	string Message = 92;
 }
+

@@ -9,7 +9,7 @@ namespace ET
         {
             GameObject prefab =
                     await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>("Assets/Bundles/UI/CustomUI/HeroCardInfoUI.prefab");
-            self.GameObject = GameObject.Instantiate(prefab, GlobalComponent.Instance.OtherRoot.transform);
+            self.GameObject = GameObject.Instantiate(prefab, GlobalComponent.Instance.NormalRoot.transform);
             self.HeroMode = self.GetParent<HeroModeObjectCompoent>().HeroMode;
 
             self.GameObject.name = self.Id.ToString();

@@ -74,6 +74,19 @@ namespace ET
             appdomain.DelegateManager.RegisterFunctionDelegate<KeyValuePair<int, int>, KeyValuePair<int, int>, int>();
             appdomain.DelegateManager.RegisterMethodDelegate<UnityEngine.Object>();
             appdomain.DelegateManager
+                    .RegisterFunctionDelegate<ILRuntime.Runtime.Intepreter.ILTypeInstance, ILRuntime.Runtime.Intepreter.ILTypeInstance,
+                        System.Int32>();
+            appdomain.DelegateManager.RegisterDelegateConvertor<System.Comparison<ILRuntime.Runtime.Intepreter.ILTypeInstance>>((act) =>
+            {
+                return new System.Comparison<ILRuntime.Runtime.Intepreter.ILTypeInstance>((x, y) =>
+                {
+                    return (
+                        (Func<ILRuntime.Runtime.Intepreter.ILTypeInstance, ILRuntime.Runtime.Intepreter.ILTypeInstance, System.Int32>) act)(x,
+                        y);
+                });
+            });
+
+            appdomain.DelegateManager
                     .RegisterMethodDelegate<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.U2D.SpriteAtlas>>();
             appdomain.DelegateManager.RegisterFunctionDelegate<UnityEngine.Sprite, System.String>();
             appdomain.DelegateManager.RegisterFunctionDelegate<UnityEngine.Sprite, UnityEngine.Sprite>();

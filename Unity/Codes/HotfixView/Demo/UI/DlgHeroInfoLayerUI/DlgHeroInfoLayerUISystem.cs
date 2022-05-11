@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using ET.Account;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
@@ -23,13 +24,34 @@ namespace ET
             });
         }
 
-        public static void OnLoopListItemRefreshHandler(this DlgHeroInfoLayerUI self, Transform tr, int index)
+        public static async void OnLoopListItemRefreshHandler(this DlgHeroInfoLayerUI self, Transform tr, int index)
         {
             Debug.Log("显示卡牌信息");
-            Scroll_ItemHeroCard scrollItemHeroCard = self.ItemHeroCards[index].BindTrans(tr);
-            scrollItemHeroCard.SetHeroInfo(self.HeroCardInfos[index]);
-            scrollItemHeroCard.E_ClickButton.onClick.RemoveAllListeners();
-            scrollItemHeroCard.E_ClickButton.onClick.AddListener(() => { self.OnClickHeroItem(scrollItemHeroCard); });
+            Scroll_ItemHeroCard itemHeroCard = self.ItemHeroCards[index].BindTrans(tr);
+            itemHeroCard.E_ChooseToggle.isOn = false;
+            HeroCardInfo heroCardInfo = self.HeroCardInfos[index];
+            var configId = heroCardInfo.ConfigId;
+            var config = HeroConfigCategory.Instance.Get(configId);
+            var spriteAtlas = "Assets/Res/HeroCards/HeroCardSpriteAtlas.spriteatlas";
+            var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
+            itemHeroCard.E_HeadImage.sprite = headImage;
+            itemHeroCard.E_ChooseToggle.group = self.View.E_ContentToggleGroup;
+            itemHeroCard.E_ChooseToggle.onValueChanged.RemoveAllListeners();
+            itemHeroCard.E_ChooseToggle.onValueChanged.AddListener((value) =>
+            {
+                if (value)
+                {
+                    self.OnClickHeroItem(heroCardInfo);
+                }
+            });
+            // scrollItemHeroCard.SetHeroInfo(self.HeroCardInfos[index]);
+            // scrollItemHeroCard.E_ClickImage
+            // scrollItemHeroCard.E_ClickButton.onClick.RemoveAllListeners();
+            // scrollItemHeroCard.E_ClickButton.onClick.AddListener(() => { self.OnClickHeroItem(scrollItemHeroCard); });
+        }
+
+        public static void InitHeroCardInfo(this DlgHeroInfoLayerUI self)
+        {
         }
 
         public static void InitColorToggleEvent(this DlgHeroInfoLayerUI self, GameObject go, int index)
@@ -125,15 +147,17 @@ namespace ET
             }
         }
 
-        public static async void OnClickHeroItem(this DlgHeroInfoLayerUI self, Scroll_ItemHeroCard heroCard)
+        public static async void OnClickHeroItem(this DlgHeroInfoLayerUI self, HeroCardInfo heroCardInfo)
         {
-            
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_HeroInfoLayerUI);
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_MainSceneBg);
             // Log.Debug($"click hero {heroCard.HeroCardInfo.HeroId}");
-            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_ShowHeroInfoLayer, WindowID.WindowID_Invaild,
-                new ShowWindowData() { contextData = heroCard });
+            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_ShowHeroInfoLayer);
+            // self.DomainScene().GetComponent<UIComponent>().GetChild<UIBaseWindow>(WindowID.WindowID_ShowHeroInfoLayer);
 
+            // UIEventComponent.Instance.GetUIEventHandler(WindowID.WindowID_ShowHeroInfoLayer).OnInitWindowCoreData(baseWindow);
+            UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().AllWindowsDic[(int) WindowID.WindowID_ShowHeroInfoLayer];
+            baseWindow.GetComponent<DlgShowHeroInfoLayer>().SetHeroInfo(heroCardInfo);
         }
 
         public static async void ShowWindow(this DlgHeroInfoLayerUI self, Entity contextData = null)

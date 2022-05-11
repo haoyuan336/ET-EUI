@@ -23,7 +23,7 @@ namespace ET
         public static void OnLoopListItemRefreshHandler(this DlgBagLayer self, Transform transform, int index)
         {
             Scroll_ItemHeroCard scrollItemHeroCard = self.ItemHeroCards[index].BindTrans(transform);
-            scrollItemHeroCard.E_TextText.text = $"{self.HeroCardInfos[index].HeroName}";
+            // scrollItemHeroCard.E_TextText.text = $"{self.HeroCardInfos[index].HeroName}";
         }
 
         public static async ETTask BackButtonClick(this DlgBagLayer self)

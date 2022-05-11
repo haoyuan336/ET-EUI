@@ -110,6 +110,7 @@ namespace ET
         public static void ShowWindow(this DlgMainSceneMenu self, Entity contextData = null)
         {
             Log.Debug("macin scene show window");
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameLevelLayer);
         }
     }
 }

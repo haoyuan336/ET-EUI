@@ -1,5 +1,14 @@
-﻿namespace ET
+﻿using ET.EventType;
+
+namespace ET
 {
+
+	// public class DlgShowHeroInfoLayerEventHandlerEvent: AEvent<EventType.ShowHeroInfo>
+	// {
+	// 	protected override ETTask Run(ShowHeroInfo a)
+	// 	{
+	// 	}
+	// }
 	[AUIEvent(WindowID.WindowID_ShowHeroInfoLayer)]
 	public  class DlgShowHeroInfoLayerEventHandler : IAUIEventHandler
 	{

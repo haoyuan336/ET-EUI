@@ -1494,37 +1494,18 @@ namespace ET
 
 	}
 
-	[ResponseType(nameof(M2C_PlayerReadyTurnResponse))]
-	[Message(OuterOpcode.C2M_PlayerReadyTurnRequest)]
-	[ProtoContract]
-	public partial class C2M_PlayerReadyTurnRequest: Object, IActorLocationRequest
-	{
-		[ProtoMember(90)]
-		public int RpcId { get; set; }
-
-		[ProtoMember(1)]
-		public long AccountId { get; set; }
-
-		[ProtoMember(2)]
-		public long RoomId { get; set; }
-
-	}
-
-	[Message(OuterOpcode.M2C_PlayerReadyTurnResponse)]
-	[ProtoContract]
-	public partial class M2C_PlayerReadyTurnResponse: Object, IActorLocationResponse
-	{
-		[ProtoMember(90)]
-		public int RpcId { get; set; }
-
-		[ProtoMember(91)]
-		public int Error { get; set; }
-
-		[ProtoMember(92)]
-		public string Message { get; set; }
-
-	}
-
+// message C2M_PlayerReadyTurnRequest //IActorLocationRequest
+// {
+// 	int32 RpcId = 90;
+// 	int64 AccountId = 1;
+// 	int64 RoomId = 2;	//房间iD
+// }
+// message M2C_PlayerReadyTurnResponse //IActorLocationResponse
+// {
+// 	int32 RpcId = 90;
+// 	int32 Error = 91;
+// 	string Message = 92;
+// }
 	[Message(OuterOpcode.M2C_SyncHeroCardTurnData)]
 	[ProtoContract]
 	public partial class M2C_SyncHeroCardTurnData: Object, IActorMessage

@@ -260,6 +260,23 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.ToggleGroup E_ContentToggleGroup
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_ContentToggleGroup == null )
+     			{
+		    		this.m_E_ContentToggleGroup = UIFindHelper.FindDeepChild<UnityEngine.UI.ToggleGroup>(this.uiTransform.gameObject,"E_LoopScrollListHero/E_Content");
+     			}
+     			return this.m_E_ContentToggleGroup;
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_E_BagButton = null;
@@ -277,6 +294,7 @@ namespace ET
 			this.m_E_PurpleToggle = null;
 			this.m_E_PurpleImage = null;
 			this.m_E_LoopScrollListHeroLoopVerticalScrollRect = null;
+			this.m_E_ContentToggleGroup = null;
 			this.uiTransform = null;
 		}
 
@@ -295,6 +313,7 @@ namespace ET
 		private UnityEngine.UI.Toggle m_E_PurpleToggle = null;
 		private UnityEngine.UI.Image m_E_PurpleImage = null;
 		private UnityEngine.UI.LoopVerticalScrollRect m_E_LoopScrollListHeroLoopVerticalScrollRect = null;
+		private UnityEngine.UI.ToggleGroup m_E_ContentToggleGroup = null;
 		public Transform uiTransform = null;
 	}
 }

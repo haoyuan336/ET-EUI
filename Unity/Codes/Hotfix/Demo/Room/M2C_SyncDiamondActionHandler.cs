@@ -94,15 +94,6 @@ namespace ET
             if (gameLoseResultAction == null)
             {
                 Log.Debug("一回合结束了");
-                // todo 给服务器发送ready消息
-                // long RoomId = session.ZoneScene().GetComponent<PlayerComponent>().RoomId;
-                // M2C_PlayerReadyTurnResponse m2CPlayerReadyTurnResponse =
-                //         (M2C_PlayerReadyTurnResponse) await session.Call(new C2M_PlayerReadyTurnRequest() { AccountId = AccountId, RoomId = RoomId });
-                // if (m2CPlayerReadyTurnResponse.Error == ErrorCode.ERR_Success)
-                // {
-                //     // await Game.EventSystem.PublishAsync(new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene() });
-                // }
-
                 await Game.EventSystem.PublishAsync(new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene() });
             }
             else

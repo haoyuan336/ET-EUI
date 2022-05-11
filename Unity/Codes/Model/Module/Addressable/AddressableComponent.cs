@@ -244,6 +244,25 @@ namespace ET
             return tcs.GetAwaiter();
         }
 
+        public async ETTask LoadAssetsByLabelAsyncNotReturn<T>(string label) where T : UnityEngine.Object
+        {
+            ETTask task = ETTask.Create();
+            ETTask<List<T>> tcs = ETTask<List<T>>.Create(true);
+            AsyncOperationHandle<IList<T>> assetHandle = Addressables.LoadAssetsAsync<T>(label, (result) => { });
+            assetHandle.Completed += (handle) =>
+            {
+                tcs.SetResult(handle.Result.ToList<T>());
+                tcs = null;
+
+                if (handle.IsDone)
+                {
+                    task.SetResult();
+                }
+            };
+            // return tcs.GetAwaiter();
+            await task.GetAwaiter();
+        }
+
         /// <summary>
         /// 通过一个Label异步加载多个资源
         /// </summary>

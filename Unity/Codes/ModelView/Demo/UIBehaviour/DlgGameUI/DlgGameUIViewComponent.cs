@@ -5,7 +5,7 @@ namespace ET
 {
 	public  class DlgGameUIViewComponent : Entity,IAwake,IDestroy 
 	{
-		public UnityEngine.UI.Image E_ProgressBar_1Image
+		public UnityEngine.UI.Button E_BackButton
      	{
      		get
      		{
@@ -14,15 +14,15 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_ProgressBar_1Image == null )
+     			if( this.m_E_BackButton == null )
      			{
-		    		this.m_E_ProgressBar_1Image = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_ProgressBar_1");
+		    		this.m_E_BackButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Back");
      			}
-     			return this.m_E_ProgressBar_1Image;
+     			return this.m_E_BackButton;
      		}
      	}
 
-		public UnityEngine.UI.Image E_ProgressBar_2Image
+		public UnityEngine.UI.Image E_BackImage
      	{
      		get
      		{
@@ -31,23 +31,23 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_ProgressBar_2Image == null )
+     			if( this.m_E_BackImage == null )
      			{
-		    		this.m_E_ProgressBar_2Image = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_ProgressBar_2");
+		    		this.m_E_BackImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Back");
      			}
-     			return this.m_E_ProgressBar_2Image;
+     			return this.m_E_BackImage;
      		}
      	}
 
 		public void DestroyWidget()
 		{
-			this.m_E_ProgressBar_1Image = null;
-			this.m_E_ProgressBar_2Image = null;
+			this.m_E_BackButton = null;
+			this.m_E_BackImage = null;
 			this.uiTransform = null;
 		}
 
-		private UnityEngine.UI.Image m_E_ProgressBar_1Image = null;
-		private UnityEngine.UI.Image m_E_ProgressBar_2Image = null;
+		private UnityEngine.UI.Button m_E_BackButton = null;
+		private UnityEngine.UI.Image m_E_BackImage = null;
 		public Transform uiTransform = null;
 	}
 }

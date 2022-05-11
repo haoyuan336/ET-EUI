@@ -31,5 +31,7 @@
         WindowID_GameLoaseUI,   //游戏失败UI
         WindowID_Store,         //商店
         WindowID_PowerNotEnoughAlert,   //体力不足的提示
+        WindowID_GameLevelLayer,    //当前游戏关卡显示层
+        WindowID_ExitGameAlert,     //退出游戏提醒
     }
 }

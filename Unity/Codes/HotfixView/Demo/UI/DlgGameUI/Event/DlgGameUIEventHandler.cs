@@ -1,5 +1,7 @@
 ﻿namespace ET
 {
+
+	
 	[AUIEvent(WindowID.WindowID_GameUI)]
 	public  class DlgGameUIEventHandler : IAUIEventHandler
 	{
@@ -27,6 +29,7 @@
 
 		public void OnHideWindow(UIBaseWindow uiBaseWindow)
 		{
+			uiBaseWindow.GetComponent<DlgGameUI>().HideWindow();
 		}
 
 		public void BeforeUnload(UIBaseWindow uiBaseWindow)

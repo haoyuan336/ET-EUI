@@ -1,4 +1,6 @@
-﻿using ET.Account;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using ET.Account;
 using UnityEditor.UI;
 using UnityEngine;
 
@@ -11,35 +13,30 @@ namespace ET
             // args.ZoneScene.GetComponent<UIComponent>().HideWindow(WindowID.WindowID_Lobby);
             Log.Debug($"scene change finish {args.CurrentScene.Name}");
 
+            UIComponent uiComponent = args.CurrentScene.GetComponent<UIComponent>();
+
             switch (args.CurrentScene.Name)
             {
                 case "MainScene":
                     Log.Debug("进入了游戏主页面");
 
-                    await args.CurrentScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainScene);
+                    uiComponent.ShowWindow(WindowID.WindowID_MainScene).Coroutine();
 
-                    // DiamondComponent diamondComponent =  args.CurrentScene.GetComponent<DiamondComponent>();
-                    // diamondComponent.RemoveAllChild();
-
-                    // DiamondComponent diamondComponent = args.CurrentScene.ZoneScene().GetComponent<DiamondComponent>();
-                    // diamondComponent.RemoveAllChild<Diamond>();
-                    //
-                    // HeroCardComponent heroCardComponent = args.CurrentScene.ZoneScene().GetComponent<HeroCardComponent>();
-                    // heroCardComponent.RemoveAllChild<HeroCard>();
-                    // foreach (var child in children)
-                    // {
-                    //     child?.Dispose();
-                    // }
                     break;
                 case "PVEGameScene":
                     Log.Debug("进入了pve 游戏页面");
 
-                    await AddressableComponent.Instance.LoadAssetsByLabelAsync<GameObject>("HeroCard", (result) => { });
-                    await AddressableComponent.Instance.LoadAssetsByLabelAsync<GameObject>("Unit", (result) => { });
-                    await AddressableComponent.Instance.LoadAssetsByLabelAsync<GameObject>("Effect", (result) => { });
-
+                    List<ETTask> tasks = new List<ETTask>();
+                    tasks.Add(AddressableComponent.Instance.LoadAssetsByLabelAsyncNotReturn<GameObject>("HeroCard"));
+                    tasks.Add(AddressableComponent.Instance.LoadAssetsByLabelAsyncNotReturn<GameObject>("Unit"));
+                    tasks.Add(AddressableComponent.Instance.LoadAssetsByLabelAsyncNotReturn<GameObject>("Effect"));
+                    await ETTaskHelper.WaitAll(tasks);
                     long AccountId = args.CurrentScene.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
                     args.CurrentScene.ZoneScene().GetComponent<SessionComponent>().Session.Send(new C2M_GameReadyMessage() { AccountId = AccountId });
+
+                    await args.CurrentScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameLevelLayer);
+                    await args.CurrentScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameUI);
+
                     break;
             }
 
