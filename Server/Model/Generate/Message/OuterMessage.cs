@@ -1515,10 +1515,10 @@ namespace ET
 
 	}
 
-	[ResponseType(nameof(M2C_AddPowerResponse))]
-	[Message(OuterOpcode.C2M_AddPowerRequest)]
+	[ResponseType(nameof(M2C_AddItemResponse))]
+	[Message(OuterOpcode.C2M_AddItemRequest)]
 	[ProtoContract]
-	public partial class C2M_AddPowerRequest: Object, IActorLocationRequest
+	public partial class C2M_AddItemRequest: Object, IActorLocationRequest
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -1529,11 +1529,14 @@ namespace ET
 		[ProtoMember(2)]
 		public int Count { get; set; }
 
+		[ProtoMember(3)]
+		public int ConfigId { get; set; }
+
 	}
 
-	[Message(OuterOpcode.M2C_AddPowerResponse)]
+	[Message(OuterOpcode.M2C_AddItemResponse)]
 	[ProtoContract]
-	public partial class M2C_AddPowerResponse: Object, IActorLocationResponse
+	public partial class M2C_AddItemResponse: Object, IActorLocationResponse
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -1545,7 +1548,7 @@ namespace ET
 		public string Message { get; set; }
 
 		[ProtoMember(1)]
-		public int Count { get; set; }
+		public ItemInfo ItemInfo { get; set; }
 
 	}
 
@@ -1562,6 +1565,21 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.ItemInfo)]
+	[ProtoContract]
+	public partial class ItemInfo: Object
+	{
+		[ProtoMember(1)]
+		public long ItemId { get; set; }
+
+		[ProtoMember(2)]
+		public int ConfigId { get; set; }
+
+		[ProtoMember(3)]
+		public int Count { get; set; }
+
+	}
+
 	[Message(OuterOpcode.M2C_GetGoldInfoResponse)]
 	[ProtoContract]
 	public partial class M2C_GetGoldInfoResponse: Object, IActorLocationResponse
@@ -1575,14 +1593,11 @@ namespace ET
 		[ProtoMember(92)]
 		public string Message { get; set; }
 
+// int32 GoldCount = 1;
+// int32 PowerCount = 2;
+// int32 DiamondCount = 3;
 		[ProtoMember(1)]
-		public int GoldCount { get; set; }
-
-		[ProtoMember(2)]
-		public int PowerCount { get; set; }
-
-		[ProtoMember(3)]
-		public int DiamondCount { get; set; }
+		public List<ItemInfo> ItemInfos = new List<ItemInfo>();
 
 	}
 
@@ -1652,6 +1667,89 @@ namespace ET
 
 		[ProtoMember(92)]
 		public string Message { get; set; }
+
+	}
+
+	[Message(OuterOpcode.WeaponInfo)]
+	[ProtoContract]
+	public partial class WeaponInfo: Object
+	{
+		[ProtoMember(1)]
+		public long WeaponId { get; set; }
+
+		[ProtoMember(2)]
+		public int ConfigId { get; set; }
+
+		[ProtoMember(3)]
+		public int Count { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_BuyWeaponResponse))]
+	[Message(OuterOpcode.C2M_BuyWeaponRequest)]
+	[ProtoContract]
+	public partial class C2M_BuyWeaponRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public int Count { get; set; }
+
+		[ProtoMember(3)]
+		public int ConfigId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_BuyWeaponResponse)]
+	[ProtoContract]
+	public partial class M2C_BuyWeaponResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public WeaponInfo WeaponInfo { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_GetAllWeaponsResponse))]
+	[Message(OuterOpcode.C2M_GetAllWeaponsRequest)]
+	[ProtoContract]
+	public partial class C2M_GetAllWeaponsRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetAllWeaponsResponse)]
+	[ProtoContract]
+	public partial class M2C_GetAllWeaponsResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<WeaponInfo> WeaponInfos = new List<WeaponInfo>();
 
 	}
 

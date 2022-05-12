@@ -13,56 +13,31 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgBagLayer self)
         {
-            self.View.E_BackButton.AddListenerAsync(() => { return self.BackButtonClick(); });
-            self.View.ELoopScrollListHeroLoopVerticalScrollRect.AddItemRefreshListener((Transform tr, int index) =>
-            {
-                self.OnLoopListItemRefreshHandler(tr, index);
-            });
+            self.View.E_WeaponLoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopListItemRefreshHandler);
         }
-
-        public static void OnLoopListItemRefreshHandler(this DlgBagLayer self, Transform transform, int index)
+        public static async void OnLoopListItemRefreshHandler(this DlgBagLayer self, Transform transform, int index)
         {
-            Scroll_ItemHeroCard scrollItemHeroCard = self.ItemHeroCards[index].BindTrans(transform);
-            // scrollItemHeroCard.E_TextText.text = $"{self.HeroCardInfos[index].HeroName}";
+            Scroll_ItemWeapon itemWeapon = self.ItemWeapons[index].BindTrans(transform);
+            WeaponInfo weaponInfo = self.WeaponInfos[index];
+            var config = WeaponConfigCategory.Instance.Get(weaponInfo.ConfigId);
+            Sprite sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.WeaponAtlasPath, config.IconResName);
+            itemWeapon.E_WeaponImage.sprite = sprite;
         }
-
-        public static async ETTask BackButtonClick(this DlgBagLayer self)
-        {
-            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainScene);
-            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_BagLayer);
-            await ETTask.CompletedTask;
-        }
-
         public static async void ShowWindow(this DlgBagLayer self, Entity contextData = null)
         {
+            //todo 首先取出来，玩家拥有的所有装备
             long Account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            Log.Debug($"account = {Account}");
-            M2C_GetAllHeroCardListResponse m2CGetAllHeroCardListResponse;
-            try
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            M2C_GetAllWeaponsResponse m2CGetAllWeaponsResponse =
+                    (M2C_GetAllWeaponsResponse) await session.Call(new C2M_GetAllWeaponsRequest() { AccountId = Account });
+            if (m2CGetAllWeaponsResponse.Error == ErrorCode.ERR_Success)
             {
-                m2CGetAllHeroCardListResponse = (M2C_GetAllHeroCardListResponse) await self.ZoneScene().GetComponent<SessionComponent>().Session
-                        .Call(new C2M_GetAllHeroCardListRequest() { Account = Account });
-                if (m2CGetAllHeroCardListResponse.Error == ErrorCode.ERR_Success)
-                {
-                    List<HeroCardInfo> heroCardInfos = m2CGetAllHeroCardListResponse.HeroCardInfos;
-                    self.HeroCardInfos.Clear();
-                    foreach (var heroCardInfo in heroCardInfos)
-                    {
-                        self.HeroCardInfos.Add(heroCardInfo);
-                    }
-
-                    self.AddUIScrollItems(ref self.ItemHeroCards, self.HeroCardInfos.Count);
-                    self.View.ELoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, self.HeroCardInfos.Count);
-                }
-                else
-                {
-                    Log.Error($"c2c get all hero card list error {m2CGetAllHeroCardListResponse.Error}");
-                }
+                Log.Debug($"get all weapon success {m2CGetAllWeaponsResponse.WeaponInfos.Count}");
+                self.WeaponInfos = m2CGetAllWeaponsResponse.WeaponInfos;
+                self.AddUIScrollItems(ref self.ItemWeapons, self.WeaponInfos.Count);
+                self.View.E_WeaponLoopVerticalScrollRect.SetVisible(true, self.WeaponInfos.Count);
             }
-            catch (Exception e)
-            {
-                Log.Error($"get all hero card list error {e}");
-            }
+            await ETTask.CompletedTask;
         }
     }
 }

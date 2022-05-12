@@ -19,17 +19,14 @@ namespace ET
             Session session = self.DomainScene().GetComponent<SessionComponent>().Session;
             long AccountId = self.DomainScene().GetComponent<AccountInfoComponent>().AccountId;
             long RoomId = self.DomainScene().GetComponent<PlayerComponent>().RoomId;
+            self.ZoneScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameLoaseUI);
+            self.ZoneScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameUI);
+            self.ZoneScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameLevelLayer);
             M2C_BackGameToMainMenuResponse response =
                     (M2C_BackGameToMainMenuResponse) await session.Call(new C2M_BackGameToMainMenuRequest() { Account = AccountId, RoomId = RoomId });
-
             if (response.Error == ErrorCode.ERR_Success)
             {
-                Log.Debug(" game lose back game success");
-                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameLoaseUI);
-                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameUI);
-                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameLevelLayer);
             }
-
             await ETTask.CompletedTask;
         }
 

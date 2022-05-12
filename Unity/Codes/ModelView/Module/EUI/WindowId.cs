@@ -33,5 +33,6 @@
         WindowID_PowerNotEnoughAlert,   //体力不足的提示
         WindowID_GameLevelLayer,    //当前游戏关卡显示层
         WindowID_ExitGameAlert,     //退出游戏提醒
+        WindowID_BuyAlert,          //确定购买提示
     }
 }

@@ -30,6 +30,10 @@
       <Link>Demo\HeroCard\HeroCard.cs</Link>
     </Compile>
 
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Item\Item.cs">
+      <Link>Demo\Item\Item.cs</Link>
+    </Compile>
+
     <Compile Include="..\..\Unity\Codes\Model\Demo\Room\BoomType.cs">
       <Link>Demo\Room\BoomType.cs</Link>
     </Compile>
@@ -76,6 +80,10 @@
 
     <Compile Include="..\..\Unity\Codes\Model\Demo\Unit\UnitType.cs">
       <Link>Demo\Unit\UnitType.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Weapon\Weapon.cs">
+      <Link>Demo\Weapon\Weapon.cs</Link>
     </Compile>
 
     <Compile Include="..\..\Unity\Codes\Model\Module\Recast\**\*.cs">

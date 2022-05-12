@@ -55,6 +55,7 @@ namespace ET
             uiComponent.HideWindow(WindowID.WindowID_ShowHeroInfoLayer);
             uiComponent.HideWindow(WindowID.WindowID_Store);
             uiComponent.HideWindow(WindowID.WindowID_MainScene);
+            uiComponent.HideWindow(WindowID.WindowID_BagLayer);
             // uiComponent.HideWindow(WindowID.WindowID_MainSceneBg);
             if (buttonName.Equals(self.View.E_MainImage.name))
             {
@@ -80,6 +81,9 @@ namespace ET
             else if (buttonName.Equals(self.View.E_BagImage.name))
             {
                 Log.Debug("bag label");
+                await uiComponent.ShowWindow(WindowID.WindowID_BagLayer);
+                await uiComponent.ShowWindow(WindowID.WindowID_MainSceneMenu);
+                await uiComponent.ShowWindow(WindowID.WindowID_GoldInfoUI);
             }
             else if (buttonName.Equals(self.View.E_ShopImage.name))
 

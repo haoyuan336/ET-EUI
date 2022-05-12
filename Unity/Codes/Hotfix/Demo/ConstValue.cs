@@ -8,5 +8,8 @@ namespace ET
         public const int LieCount = 8;
         public const float Distance = 0.6f;
 
+        public const string WeaponAtlasPath = "Assets/Res/WeaponTextures/WeaponSpriteAtlas.spriteatlas";
+        public const string HeroCardAtlasPath = "Assets/Res/HeroCards/HeroCardSpriteAtlas.spriteatlas";
+        public const string CommonUIAtlasPath = "Assets/Res/UI/CommonUIAtlas.spriteatlas"; //通用UI合图
     }
-}  
+}

@@ -76,7 +76,13 @@ namespace ET
 		[ProtoMember(3)]
 		public string IconResName { get; set; }
 		[ProtoMember(4)]
-		public string Price { get; set; }
+		public int Price { get; set; }
+		[ProtoMember(5)]
+		public int MoneyType { get; set; }
+		[ProtoMember(6)]
+		public string Name { get; set; }
+		[ProtoMember(7)]
+		public int WeaponType { get; set; }
 
 	}
 }

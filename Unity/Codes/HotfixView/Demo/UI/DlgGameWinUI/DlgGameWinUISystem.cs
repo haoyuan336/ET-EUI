@@ -16,6 +16,17 @@ namespace ET
 
         public static async ETTask BackButtonClick(this DlgGameWinUI self)
         {
+ 
+            
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameWinUI);
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameUI);
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameLevelLayer);
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_ExitGameAlert);
+            
+            
+            self.ZoneScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameLoaseUI);
+            self.ZoneScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameUI);
+            self.ZoneScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameLevelLayer);
             Session session = self.DomainScene().GetComponent<SessionComponent>().Session;
             long AccountId = self.DomainScene().GetComponent<AccountInfoComponent>().AccountId;
             long RoomId = self.DomainScene().GetComponent<PlayerComponent>().RoomId;
@@ -25,11 +36,6 @@ namespace ET
             if (response.Error == ErrorCode.ERR_Success)
             {
                 Log.Debug("game win back game success");
-                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameWinUI);
-                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameUI);
-                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_GameLevelLayer);
-                // Game.EventSystem.Publish(new EventType.ExitGameScene());
-                // Game.EventSystem.RegisterSystem();
             }
 
             await ETTask.CompletedTask;

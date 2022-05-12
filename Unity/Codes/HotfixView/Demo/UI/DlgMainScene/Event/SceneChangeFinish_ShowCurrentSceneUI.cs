@@ -34,8 +34,8 @@ namespace ET
                     long AccountId = args.CurrentScene.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
                     args.CurrentScene.ZoneScene().GetComponent<SessionComponent>().Session.Send(new C2M_GameReadyMessage() { AccountId = AccountId });
 
-                    await args.CurrentScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameLevelLayer);
-                    await args.CurrentScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameUI);
+                    await args.ZoneScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameLevelLayer);
+                    await args.ZoneScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameUI);
 
                     break;
             }

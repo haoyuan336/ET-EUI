@@ -694,19 +694,20 @@ message M2C_SyncHeroCardTurnData	//IActorMessage
 	repeated HeroCardInfo HeroCardInfos = 1;
 }
 
-//ResponseType M2C_AddPowerResponse
-message C2M_AddPowerRequest	// IActorLocationRequest
+//ResponseType M2C_AddItemResponse
+message C2M_AddItemRequest	// IActorLocationRequest
 {
 	int32 RpcId = 90;
 	int64 AccountId = 1;
 	int32 Count = 2;
+	int32 ConfigId = 3;
 }
-message M2C_AddPowerResponse	//IActorLocationResponse
+message M2C_AddItemResponse	//IActorLocationResponse
 {
 	int32 RpcId = 90;
 	int32 Error = 91;
 	string Message = 92;
-	int32 Count = 1;
+	ItemInfo ItemInfo = 1;
 
 }
 
@@ -716,14 +717,21 @@ message C2M_GetGoldInfoRequest	//IActorLocationRequest
 	int32 RpcId = 90;
 	int64 AccountId = 1;
 }
+message ItemInfo
+{
+	int64 ItemId = 1;
+	int32 ConfigId = 2;	//配置id
+	int32 Count = 3;	//个数
+}
 message M2C_GetGoldInfoResponse	//IActorLocationResponse
 {
 	int32 RpcId = 90;
 	int32 Error = 91;
 	string Message = 92;
-	int32 GoldCount = 1;		
-	int32 PowerCount = 2;
-	int32 DiamondCount = 3;
+	// int32 GoldCount = 1;		
+	// int32 PowerCount = 2;
+	// int32 DiamondCount = 3;
+	repeated ItemInfo ItemInfos = 1;	//道具个数信息
 }
 //ResponseType M2C_GetUserExpInfoResponse
 message C2M_GetUserExpInfoRequest	//IActorLocationRequest
@@ -756,3 +764,40 @@ message M2C_BackGameToMainMenuResponse	//IActorLocationResponse
 	string Message = 92;
 }
 
+message WeaponInfo
+{
+	int64 WeaponId = 1;
+	int32 ConfigId = 2;
+	int32 Count = 3;
+	
+
+}
+//ResponseType M2C_BuyWeaponResponse
+message C2M_BuyWeaponRequest	// IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int32 Count = 2;
+	int32 ConfigId = 3;
+}
+message M2C_BuyWeaponResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	WeaponInfo WeaponInfo = 1;
+
+}
+//ResponseType M2C_GetAllWeaponsResponse
+message C2M_GetAllWeaponsRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message M2C_GetAllWeaponsResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated WeaponInfo WeaponInfos = 1;
+}

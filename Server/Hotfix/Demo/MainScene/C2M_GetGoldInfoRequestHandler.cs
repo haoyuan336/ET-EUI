@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualBasic;
 
 namespace ET.MainScene
@@ -11,15 +12,35 @@ namespace ET.MainScene
             long AccountId = request.AccountId;
             Log.Debug($"get gold info {AccountId}");
 
-            List<Account> list = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<Account>(a => a.Id.Equals(AccountId));
+            // List<Account> list = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<Account>(a => a.Id.Equals(AccountId));
 
-            if (list.Count > 0)
+            // if (list.Count > 0)
+            // {
+            // response.Error = ErrorCode.ERR_Success;
+            // response.GoldCount = list[0].GoldCount;
+            // response.PowerCount = list[0].PowerCount;
+            // response.DiamondCount = list[0].DiamondCount;
+            // }
+            List<Item> list = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<Item>(a => a.OwnerId.Equals(AccountId));
+
+            if (list.Count == 0)
             {
-                response.Error = ErrorCode.ERR_Success;
-                response.GoldCount = list[0].GoldCount;
-                response.PowerCount = list[0].PowerCount;
-                response.DiamondCount = list[0].DiamondCount;
+                List<ItemConfig> itemConfigs = ItemConfigCategory.Instance.GetAll().Values.ToList();
+                foreach (var config in itemConfigs)
+                {
+                    Item item = new Item() { Id = IdGenerater.Instance.GenerateId(), ConfigId = config.Id, Count = 0, OwnerId = AccountId };
+                    await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(item);
+                    list.Add(item);
+                }
             }
+
+            List<ItemInfo> infos = new List<ItemInfo>();
+            foreach (var item in list)
+            {
+                infos.Add(item.GetInfo());
+            }
+
+            response.ItemInfos = infos;
 
             reply();
             await ETTask.CompletedTask;

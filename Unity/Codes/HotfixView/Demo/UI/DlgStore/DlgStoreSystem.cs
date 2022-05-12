@@ -32,14 +32,24 @@ namespace ET
             });
             self.View.ELoopScrollListLoopVerticalScrollRect.AddItemRefreshListener(self.OnScrollListEvennt);
             self.ShowAllWeapon();
-
         }
 
-        public static void OnScrollListEvennt(this DlgStore self, Transform transform, int i)
+        public static async void OnWeaponIconClick(this DlgStore self, WeaponConfig config)
         {
-            // transform.gameObject.GetComponent<>()
-            Scroll_ItemWeapon itemHeroCard = self.ItemWeapons[i].BindTrans(transform);
-            itemHeroCard.SetInfo(self.WeaponConfigs[i]);
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_BuyAlert);
+            UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_BuyAlert];
+            baseWindow.GetComponent<DlgBuyAlert>().SetInfo(config);
+        }
+
+        public static async void OnScrollListEvennt(this DlgStore self, Transform transform, int i)
+        {
+            Scroll_ItemWeapon itemWeapon = self.ItemWeapons[i].BindTrans(transform);
+            WeaponConfig config = self.WeaponConfigs[i];
+            itemWeapon.E_WeaponButton.onClick.RemoveAllListeners();
+            itemWeapon.E_WeaponButton.onClick.AddListener(() => { self.OnWeaponIconClick(config); });
+            var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.WeaponAtlasPath, config.IconResName);
+            itemWeapon.E_WeaponImage.sprite = sprite;
         }
 
         /// <summary>

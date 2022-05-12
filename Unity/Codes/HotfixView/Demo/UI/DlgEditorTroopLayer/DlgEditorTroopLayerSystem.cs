@@ -66,6 +66,7 @@ namespace ET
             if (m2CGetAllHeroCardListResponse.Error == ErrorCode.ERR_Success)
             {
                 self.HeroCardInfos = m2CGetAllHeroCardListResponse.HeroCardInfos;
+                // self.RemoveUIScrollItems(ref self.ItemHeroCards);
                 self.AddUIScrollItems(ref self.ItemHeroCards, m2CGetAllHeroCardListResponse.HeroCardInfos.Count);
                 self.View.ELoopScrollList_HeroLoopVerticalScrollRect.SetVisible(true, m2CGetAllHeroCardListResponse.HeroCardInfos.Count);
             }
@@ -192,14 +193,18 @@ namespace ET
             itemHeroCard.E_ChooseToggle.isOn = false;
             self.InitHeroCardItem(itemHeroCard, self.HeroCardInfos[index]).Coroutine();
             HeroCardInfo heroCardInfo = self.HeroCardInfos[index];
-
+            // itemHeroCard.E_ChooseToggle.enabled = false;
+            // itemHeroCard.E_HeadButton.onClick.RemoveAllListeners();
+            // itemHeroCard.E_HeadButton.onClick.AddListener(() =>
+            // {
+            //     Log.Debug("button on click");
+            //     self.OnHeroCardClick(index);
+            // });
             if (heroCardInfo.TroopId != 0)
             {
                 itemHeroCard.E_ChooseToggle.isOn = true;
             }
 
-            //
-            // itemHeroCard.E_ChooseToggle.AddListenerAsync(() => { return self.OnHeroCardClick(index); });
             itemHeroCard.E_ChooseToggle.onValueChanged.AddListener((value) => { self.OnHeroCardClick(index); });
         }
 
@@ -231,28 +236,7 @@ namespace ET
                 if (m2CSetHeroToTroopResponse.Error == ErrorCode.ERR_Success)
                 {
                     self.ShowBagHeroItems();
-                    // self.ShowTroopItems();
                     self.ChooseTroop(self.CurrentChooseTroopId);
-                    // Log.Debug("设置英雄进队伍成功");
-                    // HeroCardInfo cardInfo = m2CSetHeroToTroopResponse.HeroCardInfo;
-                    //
-                    // foreach (var value in self.TroopHeroCardInfos)
-                    // {
-                    //     if (value.HeroId.Equals(cardInfo.HeroId))
-                    //     {
-                    //         self.TroopHeroCardInfos.Remove(value);
-                    //         break;
-                    //     }
-                    //
-                    //     if (value.InTroopIndex.Equals(cardInfo.InTroopIndex))
-                    //     {
-                    //         self.TroopHeroCardInfos.Remove(value);
-                    //         break;
-                    //     }
-                    // }
-                    //
-                    // self.TroopHeroCardInfos.Add(cardInfo);
-                    // self.View.ELoopScrollList_TroopHeroLoopHorizontalScrollRect.SetVisible(true, 3);
                 }
                 else
                 {
@@ -309,7 +293,6 @@ namespace ET
                 self.CurrentChooseInTroopIndex = index;
             }
         }
-
         public static async ETTask StartGameButtonClick(this DlgEditorTroopLayer self)
         {
             bool isPowerEnough = await self.CheckPowerIsEnough();
@@ -333,7 +316,6 @@ namespace ET
 
             await ETTask.CompletedTask;
         }
-
         /// <summary>
         /// 检查体力是否足够
         /// </summary>
@@ -345,13 +327,28 @@ namespace ET
             M2C_GetGoldInfoResponse response = (M2C_GetGoldInfoResponse) await session.Call(new C2M_GetGoldInfoRequest() { AccountId = AccountId });
             if (response.Error == ErrorCode.ERR_Success)
             {
-                if (response.PowerCount > 0)
+                // if (response.PowerCount > 0)
+                // {
+                //     return true;
+                // }
+                var powerCount = 0;
+                foreach (var itemCountInfo in response.ItemInfos)
+                {
+                    if (itemCountInfo.ConfigId == 1003)
+                    {
+                        powerCount = itemCountInfo.Count;
+                    }
+                }
+
+                if (powerCount > 0)
                 {
                     return true;
                 }
             }
 
+            // return false;
             return false;
+            // await ETTask.CompletedTask;
         }
     }
 }
