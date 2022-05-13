@@ -24,21 +24,32 @@ namespace ET
             });
         }
 
-        public static async void OnLoopListItemRefreshHandler(this DlgHeroInfoLayerUI self, Transform tr, int index)
+        public static async void SetHeroHeadImage(this DlgHeroInfoLayerUI self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
+        {
+            var configId = heroCardInfo.ConfigId;
+            var config = HeroConfigCategory.Instance.Get(configId);
+            var spriteAtlas = ConstValue.HeroCardAtlasPath;
+            var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
+            itemHeroCard.E_HeadImage.sprite = headImage;
+        }
+
+        public static async void SetHeroElementImage(this DlgHeroInfoLayerUI self,Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
+        {
+            var c
+        }
+        public static void OnLoopListItemRefreshHandler(this DlgHeroInfoLayerUI self, Transform tr, int index)
         {
             Debug.Log("显示卡牌信息");
             Scroll_ItemHeroCard itemHeroCard = self.ItemHeroCards[index].BindTrans(tr);
             itemHeroCard.E_ChooseToggle.isOn = false;
             HeroCardInfo heroCardInfo = self.HeroCardInfos[index];
-            var configId = heroCardInfo.ConfigId;
-            var config = HeroConfigCategory.Instance.Get(configId);
-            var spriteAtlas = "Assets/Res/HeroCards/HeroCardSpriteAtlas.spriteatlas";
-            var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
-            itemHeroCard.E_HeadImage.sprite = headImage;
+            self.SetHeroHeadImage(itemHeroCard, heroCardInfo);
+            // var spriteAtlas = "Assets/Res/HeroCards/HeroCardSpriteAtlas.spriteatlas";
+
             itemHeroCard.E_ChooseToggle.group = self.View.E_ContentToggleGroup;
             itemHeroCard.E_ChooseToggle.onValueChanged.RemoveAllListeners();
             itemHeroCard.E_ChooseToggle.onValueChanged.AddListener((value) =>
-            {
+            { weah WAD AWD AW   
                 if (value)
                 {
                     self.OnClickHeroItem(heroCardInfo);
