@@ -34,5 +34,7 @@
         WindowID_GameLevelLayer,    //当前游戏关卡显示层
         WindowID_ExitGameAlert,     //退出游戏提醒
         WindowID_BuyAlert,          //确定购买提示
+        WindowID_WeaponStrengthenLayer, //装备强化层
+        WindowID_AddSubPlane, //
     }
 }

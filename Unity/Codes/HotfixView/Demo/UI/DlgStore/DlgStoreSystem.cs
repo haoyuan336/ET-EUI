@@ -34,7 +34,7 @@ namespace ET
             self.ShowAllWeapon();
         }
 
-        public static async void OnWeaponIconClick(this DlgStore self, WeaponConfig config)
+        public static async void OnWeaponIconClick(this DlgStore self, WeaponsConfig config)
         {
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             await uiComponent.ShowWindow(WindowID.WindowID_BuyAlert);
@@ -45,9 +45,18 @@ namespace ET
         public static async void OnScrollListEvennt(this DlgStore self, Transform transform, int i)
         {
             Scroll_ItemWeapon itemWeapon = self.ItemWeapons[i].BindTrans(transform);
-            WeaponConfig config = self.WeaponConfigs[i];
-            itemWeapon.E_WeaponButton.onClick.RemoveAllListeners();
-            itemWeapon.E_WeaponButton.onClick.AddListener(() => { self.OnWeaponIconClick(config); });
+            WeaponsConfig config = self.WeaponConfigs[i];
+            itemWeapon.E_ClickToggle.onValueChanged.RemoveAllListeners();
+            itemWeapon.E_ClickToggle.onValueChanged.AddListener((value) =>
+            {
+                Log.Debug($"index {i}");
+                Log.Debug($"config materialtype {config.Type}");
+                if (value)
+                {
+                    self.OnWeaponIconClick(config);
+                }
+                itemWeapon.E_ClickToggle.isOn = false;
+            });
             var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.WeaponAtlasPath, config.IconResName);
             itemWeapon.E_WeaponImage.sprite = sprite;
         }
@@ -57,7 +66,7 @@ namespace ET
         /// </summary>
         public static void ShowAllWeapon(this DlgStore self)
         {
-            self.WeaponConfigs = WeaponConfigCategory.Instance.GetAll().Values.ToList();
+            self.WeaponConfigs = WeaponsConfigCategory.Instance.GetAll().Values.ToList();
             self.AddUIScrollItems(ref self.ItemWeapons, self.WeaponConfigs.Count);
             self.View.ELoopScrollListLoopVerticalScrollRect.SetVisible(true, self.WeaponConfigs.Count);
         }

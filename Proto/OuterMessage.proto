@@ -769,6 +769,7 @@ message WeaponInfo
 	int64 WeaponId = 1;
 	int32 ConfigId = 2;
 	int32 Count = 3;
+	int32 Level = 4;
 	
 
 }

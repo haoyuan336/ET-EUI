@@ -1683,6 +1683,9 @@ namespace ET
 		[ProtoMember(3)]
 		public int Count { get; set; }
 
+		[ProtoMember(4)]
+		public int Level { get; set; }
+
 	}
 
 	[ResponseType(nameof(M2C_BuyWeaponResponse))]

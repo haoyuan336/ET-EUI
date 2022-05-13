@@ -17,7 +17,7 @@ namespace ET
 			return this;
 		}
 
-		public UnityEngine.UI.Button E_WeaponButton
+		public UnityEngine.UI.Toggle E_ClickToggle
      	{
      		get
      		{
@@ -28,15 +28,15 @@ namespace ET
      			}
      			if (this.isCacheNode)
      			{
-     				if( this.m_E_WeaponButton == null )
+     				if( this.m_E_ClickToggle == null )
      				{
-		    			this.m_E_WeaponButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Weapon");
+		    			this.m_E_ClickToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"E_Click");
      				}
-     				return this.m_E_WeaponButton;
+     				return this.m_E_ClickToggle;
      			}
      			else
      			{
-		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Weapon");
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"E_Click");
      			}
      		}
      	}
@@ -54,26 +54,78 @@ namespace ET
      			{
      				if( this.m_E_WeaponImage == null )
      				{
-		    			this.m_E_WeaponImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Weapon");
+		    			this.m_E_WeaponImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Click/E_Weapon");
      				}
      				return this.m_E_WeaponImage;
      			}
      			else
      			{
-		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Weapon");
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Click/E_Weapon");
+     			}
+     		}
+     	}
+
+		public UnityEngine.UI.Text E_LevelText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_LevelText == null )
+     				{
+		    			this.m_E_LevelText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Level");
+     				}
+     				return this.m_E_LevelText;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Level");
+     			}
+     		}
+     	}
+
+		public UnityEngine.UI.Text E_CountText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_CountText == null )
+     				{
+		    			this.m_E_CountText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Count");
+     				}
+     				return this.m_E_CountText;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Count");
      			}
      		}
      	}
 
 		public void DestroyWidget()
 		{
-			this.m_E_WeaponButton = null;
+			this.m_E_ClickToggle = null;
 			this.m_E_WeaponImage = null;
+			this.m_E_LevelText = null;
+			this.m_E_CountText = null;
 			this.uiTransform = null;
 		}
 
-		private UnityEngine.UI.Button m_E_WeaponButton = null;
+		private UnityEngine.UI.Toggle m_E_ClickToggle = null;
 		private UnityEngine.UI.Image m_E_WeaponImage = null;
+		private UnityEngine.UI.Text m_E_LevelText = null;
+		private UnityEngine.UI.Text m_E_CountText = null;
 		public Transform uiTransform = null;
 	}
 }

@@ -13,7 +13,7 @@ namespace ET.MainScene
             var count = request.Count;
             var accountId = request.AccountId;
             //首先取出这个id对应的配置
-            WeaponConfig weaponConfig = WeaponConfigCategory.Instance.Get(configId);
+            WeaponsConfig weaponConfig = WeaponsConfigCategory.Instance.Get(configId);
             var price = weaponConfig.Price;
 
             //取出这个玩家拥有的这个道具的数量

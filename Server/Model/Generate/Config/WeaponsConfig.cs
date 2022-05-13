@@ -7,26 +7,26 @@ namespace ET
 {
     [ProtoContract]
     [Config]
-    public partial class WeaponConfigCategory : ProtoObject
+    public partial class WeaponsConfigCategory : ProtoObject
     {
-        public static WeaponConfigCategory Instance;
+        public static WeaponsConfigCategory Instance;
 		
         [ProtoIgnore]
         [BsonIgnore]
-        private Dictionary<int, WeaponConfig> dict = new Dictionary<int, WeaponConfig>();
+        private Dictionary<int, WeaponsConfig> dict = new Dictionary<int, WeaponsConfig>();
 		
         [BsonElement]
         [ProtoMember(1)]
-        private List<WeaponConfig> list = new List<WeaponConfig>();
+        private List<WeaponsConfig> list = new List<WeaponsConfig>();
 		
-        public WeaponConfigCategory()
+        public WeaponsConfigCategory()
         {
             Instance = this;
         }
 		
         public override void EndInit()
         {
-            foreach (WeaponConfig config in list)
+            foreach (WeaponsConfig config in list)
             {
                 config.EndInit();
                 this.dict.Add(config.Id, config);
@@ -34,13 +34,13 @@ namespace ET
             this.AfterEndInit();
         }
 		
-        public WeaponConfig Get(int id)
+        public WeaponsConfig Get(int id)
         {
-            this.dict.TryGetValue(id, out WeaponConfig item);
+            this.dict.TryGetValue(id, out WeaponsConfig item);
 
             if (item == null)
             {
-                throw new Exception($"配置找不到，配置表名: {nameof (WeaponConfig)}，配置id: {id}");
+                throw new Exception($"配置找不到，配置表名: {nameof (WeaponsConfig)}，配置id: {id}");
             }
 
             return item;
@@ -51,12 +51,12 @@ namespace ET
             return this.dict.ContainsKey(id);
         }
 
-        public Dictionary<int, WeaponConfig> GetAll()
+        public Dictionary<int, WeaponsConfig> GetAll()
         {
             return this.dict;
         }
 
-        public WeaponConfig GetOne()
+        public WeaponsConfig GetOne()
         {
             if (this.dict == null || this.dict.Count <= 0)
             {
@@ -67,7 +67,7 @@ namespace ET
     }
 
     [ProtoContract]
-	public partial class WeaponConfig: ProtoObject, IConfig
+	public partial class WeaponsConfig: ProtoObject, IConfig
 	{
 		[ProtoMember(1)]
 		public int Id { get; set; }
@@ -83,6 +83,8 @@ namespace ET
 		public string Name { get; set; }
 		[ProtoMember(7)]
 		public int WeaponType { get; set; }
+		[ProtoMember(8)]
+		public int Type { get; set; }
 
 	}
 }

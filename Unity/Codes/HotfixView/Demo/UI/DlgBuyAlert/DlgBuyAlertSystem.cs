@@ -43,7 +43,7 @@ namespace ET
         {
         }
 
-        public static async void SetInfo(this DlgBuyAlert self, WeaponConfig config)
+        public static async void SetInfo(this DlgBuyAlert self, WeaponsConfig config)
         {
             self.Config = config;
             var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.WeaponAtlasPath, config.IconResName);

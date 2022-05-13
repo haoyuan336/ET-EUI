@@ -9,7 +9,7 @@ namespace ET
 
 
 		public Dictionary<int, Scroll_ItemWeapon> ItemWeapons = new Dictionary<int, Scroll_ItemWeapon>();
-		public List<WeaponConfig> WeaponConfigs = new List<WeaponConfig>();
+		public List<WeaponsConfig> WeaponConfigs = new List<WeaponsConfig>();
 
 	}
 }

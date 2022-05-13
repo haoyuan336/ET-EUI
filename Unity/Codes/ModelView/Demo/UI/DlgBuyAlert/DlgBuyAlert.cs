@@ -5,7 +5,7 @@
 
 		public DlgBuyAlertViewComponent View { get => this.Parent.GetComponent<DlgBuyAlertViewComponent>();}
 
-		public WeaponConfig Config;
+		public WeaponsConfig Config;
 
 	}
 }

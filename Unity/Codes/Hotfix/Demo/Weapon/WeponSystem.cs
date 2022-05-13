@@ -11,7 +11,7 @@
     {
         public static WeaponInfo GetInfo(this Weapon self)
         {
-            return new WeaponInfo() { WeaponId = self.Id, ConfigId = self.ConfigId, Count = self.Count, };
+            return new WeaponInfo() { WeaponId = self.Id, ConfigId = self.ConfigId, Count = self.Count, Level = self.Level};
         }
     }
 }
