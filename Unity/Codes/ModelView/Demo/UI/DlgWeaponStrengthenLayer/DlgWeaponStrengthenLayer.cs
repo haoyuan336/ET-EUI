@@ -14,5 +14,7 @@ namespace ET
 
         public List<WeaponInfo> WeaponInfos = new List<WeaponInfo>();
         public List<WeaponInfo> TargetWeaponInfos = new List<WeaponInfo>();
+
+        public List<WeaponInfo> AlChooseWeaponInfos = new List<WeaponInfo>();   //已经选择的武器信息
     }
 }

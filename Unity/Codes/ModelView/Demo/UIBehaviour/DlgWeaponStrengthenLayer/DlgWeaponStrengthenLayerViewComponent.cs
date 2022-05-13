@@ -73,12 +73,48 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Button E_StrengthenButton
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_StrengthenButton == null )
+     			{
+		    		this.m_E_StrengthenButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Strengthen");
+     			}
+     			return this.m_E_StrengthenButton;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_StrengthenImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_StrengthenImage == null )
+     			{
+		    		this.m_E_StrengthenImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Strengthen");
+     			}
+     			return this.m_E_StrengthenImage;
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_E_TargetWeaponContentLoopVerticalScrollRect = null;
 			this.m_E_BagContentLoopVerticalScrollRect = null;
 			this.m_E_BackButton = null;
 			this.m_E_BackImage = null;
+			this.m_E_StrengthenButton = null;
+			this.m_E_StrengthenImage = null;
 			this.uiTransform = null;
 		}
 
@@ -86,6 +122,8 @@ namespace ET
 		private UnityEngine.UI.LoopVerticalScrollRect m_E_BagContentLoopVerticalScrollRect = null;
 		private UnityEngine.UI.Button m_E_BackButton = null;
 		private UnityEngine.UI.Image m_E_BackImage = null;
+		private UnityEngine.UI.Button m_E_StrengthenButton = null;
+		private UnityEngine.UI.Image m_E_StrengthenImage = null;
 		public Transform uiTransform = null;
 	}
 }

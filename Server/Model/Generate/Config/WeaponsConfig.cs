@@ -84,7 +84,7 @@ namespace ET
 		[ProtoMember(7)]
 		public int WeaponType { get; set; }
 		[ProtoMember(8)]
-		public int Type { get; set; }
+		public int MaterialType { get; set; }
 
 	}
 }

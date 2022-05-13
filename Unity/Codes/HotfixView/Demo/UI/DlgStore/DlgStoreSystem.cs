@@ -49,8 +49,6 @@ namespace ET
             itemWeapon.E_ClickToggle.onValueChanged.RemoveAllListeners();
             itemWeapon.E_ClickToggle.onValueChanged.AddListener((value) =>
             {
-                Log.Debug($"index {i}");
-                Log.Debug($"config materialtype {config.Type}");
                 if (value)
                 {
                     self.OnWeaponIconClick(config);

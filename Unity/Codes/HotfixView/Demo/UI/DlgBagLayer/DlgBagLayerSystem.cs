@@ -24,7 +24,15 @@ namespace ET
 
             itemWeapon.E_ClickToggle.onValueChanged.RemoveAllListeners();
             itemWeapon.E_ClickToggle.isOn = false;
-            itemWeapon.E_ClickToggle.onValueChanged.AddListener((value) => { self.OnItemWeaponClick(weaponInfo); });
+            itemWeapon.E_ClickToggle.onValueChanged.AddListener((value) =>
+            {
+                if (value)
+                {
+                    self.OnItemWeaponClick(weaponInfo);
+                }
+
+                itemWeapon.E_ClickToggle.isOn = false;
+            });
             Sprite sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.WeaponAtlasPath, config.IconResName);
             itemWeapon.E_WeaponImage.sprite = sprite;
             itemWeapon.E_LevelText.text = $"Lv.{weaponInfo.Level}";

@@ -9,6 +9,11 @@ namespace ET
 {
     public static class DlgWeaponStrengthenLayerSystem
     {
+        public static void HideWindow(this DlgWeaponStrengthenLayer self)
+        {
+            self.AlChooseWeaponInfos.Clear();
+        }
+
         public static void RegisterUIEvent(this DlgWeaponStrengthenLayer self)
         {
             self.View.E_BackButton.onClick.AddListener(() =>
@@ -52,28 +57,107 @@ namespace ET
             }
 
             itemWeapon.E_ClickToggle.onValueChanged.RemoveAllListeners();
-            itemWeapon.E_ClickToggle.onValueChanged.AddListener((value) => { self.OnWeaponItemClick(self.WeaponInfos[index], itemWeapon); });
+
+            itemWeapon.E_ClickToggle.isOn = false;
+            itemWeapon.E_ClickToggle.onValueChanged.AddListener((value) =>
+            {
+                WeaponInfo info = self.WeaponInfos[index];
+                WeaponsConfig config = WeaponsConfigCategory.Instance.Get(info.ConfigId);
+                if (config.MaterialType == 1)
+                {
+                    if (value)
+                    {
+                        if (self.CheckIsFull())
+                        {
+                            itemWeapon.E_ClickToggle.isOn = false;
+                        }
+                        else
+                        {
+                            self.AlChooseWeaponInfos.Add(new WeaponInfo() { WeaponId = info.WeaponId, Count = 1, ConfigId = info.ConfigId });
+                        }
+                    }
+                    else
+                    {
+                        self.AlChooseWeaponInfos.RemoveAll(a => a.WeaponId.Equals(info.WeaponId));
+                    }
+                }
+                else
+                {
+                    if (value)
+                    {
+                        self.OnWeaponItemClick(info, itemWeapon);
+                    }
+                }
+
+                var isFull = self.CheckIsFull();
+                self.View.E_StrengthenButton.gameObject.SetActive(isFull);
+            });
         }
 
         public static async void OnWeaponItemClick(this DlgWeaponStrengthenLayer self, WeaponInfo info, Scroll_ItemWeapon itemWeapon)
         {
-            Log.Debug($"on click config id {info.ConfigId}");
-            WeaponsConfig config = WeaponsConfigCategory.Instance.Get(info.ConfigId);
-            // Log.Debug($"on weapon team clic{config.MaterialTypes}");
-            // if (config.MaterialTypes == "1")
-            // {
-            //     //如果是装备类型的材料，那么直接选择
-            // }
-            // else
-            // {
-                //如果是普通材料。那么需要选择个数
-                UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
-                await uiComponent.ShowWindow(WindowID.WindowID_AddSubPlane, WindowID.WindowID_Invaild,
-                    new ShowWindowData() { contextData = itemWeapon });
+            itemWeapon.E_ClickToggle.isOn = false;
 
-                UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AddSubPlane];
-                baseWindow.GetComponent<DlgAddSubPlane>().SetInfo(info);
-            // }
+            
+            //如果是普通材料。那么需要选择个数
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_AddSubPlane, WindowID.WindowID_Invaild,
+                new ShowWindowData() { contextData = itemWeapon });
+
+            UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AddSubPlane];
+            baseWindow.GetComponent<DlgAddSubPlane>().SetInfo(info);
+            baseWindow.GetComponent<DlgAddSubPlane>().AddAction += () => { self.AddItemCount(info, itemWeapon); };
+            baseWindow.GetComponent<DlgAddSubPlane>().SubAction += () => { self.SubItemCount(info, itemWeapon); };
+            self.UpdateAddSubPlaneButtonState();
+        }
+
+        public static void AddItemCount(this DlgWeaponStrengthenLayer self, WeaponInfo info, Scroll_ItemWeapon itemWeapon)
+        {
+            if (self.CheckIsFull())
+            {
+                return;
+            }
+            Log.Debug("加道具");
+            //首先确定一下 ，已选择的数据里面包含不包含此道具
+            WeaponInfo findInfo = self.AlChooseWeaponInfos.Find(a => a.WeaponId.Equals(info.WeaponId));
+            if (findInfo == null)
+            {
+                findInfo = new WeaponInfo() { WeaponId = info.WeaponId, Count = 0 };
+                self.AlChooseWeaponInfos.Add(findInfo);
+            }
+
+            findInfo.Count++;
+            itemWeapon.E_CountText.gameObject.SetActive(true);
+            itemWeapon.E_CountText.text = findInfo.Count.ToString();
+            self.UpdateAddSubPlaneButtonState();
+        }
+
+        public static void UpdateAddSubPlaneButtonState(this DlgWeaponStrengthenLayer self)
+        {
+            var isFull = self.CheckIsFull();
+            Log.Debug($"is full {isFull}");
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AddSubPlane];
+            baseWindow.GetComponent<DlgAddSubPlane>().SetFull(isFull);
+            self.View.E_StrengthenButton.gameObject.SetActive(isFull);
+        }
+
+        public static void SubItemCount(this DlgWeaponStrengthenLayer self, WeaponInfo info, Scroll_ItemWeapon itemWeapon)
+        {
+            Log.Debug("减道具");
+            var findInfo = self.AlChooseWeaponInfos.Find(a => a.WeaponId.Equals(info.WeaponId));
+            if (findInfo != null && findInfo.Count > 0)
+            {
+                findInfo.Count--;
+                itemWeapon.E_CountText.text = findInfo.Count.ToString();
+                self.UpdateAddSubPlaneButtonState();
+                if (findInfo.Count == 0)
+                {
+                    itemWeapon.E_CountText.gameObject.SetActive(false);
+                    self.AlChooseWeaponInfos.Remove(findInfo);
+                    self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AddSubPlane);
+                }
+            }
         }
 
         public static async void InitWeaponItem(this DlgWeaponStrengthenLayer self, WeaponInfo info, Scroll_ItemWeapon weapon)
@@ -86,6 +170,7 @@ namespace ET
 
         public static void ShowWindow(this DlgWeaponStrengthenLayer self, Entity contextData = null)
         {
+            self.AlChooseWeaponInfos.Clear();
         }
 
         public static void SetInfo(this DlgWeaponStrengthenLayer self, WeaponInfo info)
@@ -95,6 +180,22 @@ namespace ET
             self.AddUIScrollItems(ref self.TargetItemWeapons, self.TargetWeaponInfos.Count);
             self.View.E_TargetWeaponContentLoopVerticalScrollRect.SetVisible(true, self.TargetWeaponInfos.Count);
             self.RequestBagInfo();
+        }
+
+        public static bool CheckIsFull(this DlgWeaponStrengthenLayer self)
+        {
+            var count = 0;
+            foreach (var info in self.AlChooseWeaponInfos)
+            {
+                count += info.Count;
+            }
+
+            if (count == 5)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
