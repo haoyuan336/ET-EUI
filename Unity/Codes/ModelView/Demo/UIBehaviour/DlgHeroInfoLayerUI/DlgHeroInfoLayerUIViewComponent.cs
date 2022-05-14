@@ -243,6 +243,40 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Toggle E_AllToggle
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_AllToggle == null )
+     			{
+		    		this.m_E_AllToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ColorContent/E_All");
+     			}
+     			return this.m_E_AllToggle;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_AllImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_AllImage == null )
+     			{
+		    		this.m_E_AllImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"ColorContent/E_All");
+     			}
+     			return this.m_E_AllImage;
+     		}
+     	}
+
 		public UnityEngine.UI.LoopVerticalScrollRect E_LoopScrollListHeroLoopVerticalScrollRect
      	{
      		get
@@ -293,6 +327,8 @@ namespace ET
 			this.m_E_BlueImage = null;
 			this.m_E_PurpleToggle = null;
 			this.m_E_PurpleImage = null;
+			this.m_E_AllToggle = null;
+			this.m_E_AllImage = null;
 			this.m_E_LoopScrollListHeroLoopVerticalScrollRect = null;
 			this.m_E_ContentToggleGroup = null;
 			this.uiTransform = null;
@@ -312,6 +348,8 @@ namespace ET
 		private UnityEngine.UI.Image m_E_BlueImage = null;
 		private UnityEngine.UI.Toggle m_E_PurpleToggle = null;
 		private UnityEngine.UI.Image m_E_PurpleImage = null;
+		private UnityEngine.UI.Toggle m_E_AllToggle = null;
+		private UnityEngine.UI.Image m_E_AllImage = null;
 		private UnityEngine.UI.LoopVerticalScrollRect m_E_LoopScrollListHeroLoopVerticalScrollRect = null;
 		private UnityEngine.UI.ToggleGroup m_E_ContentToggleGroup = null;
 		public Transform uiTransform = null;

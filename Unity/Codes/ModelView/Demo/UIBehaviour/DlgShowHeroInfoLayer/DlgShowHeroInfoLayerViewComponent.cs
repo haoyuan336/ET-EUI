@@ -22,6 +22,23 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Image E_StarContentImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_StarContentImage == null )
+     			{
+		    		this.m_E_StarContentImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"InfoBgPlane/E_StarContent");
+     			}
+     			return this.m_E_StarContentImage;
+     		}
+     	}
+
 		public UnityEngine.UI.Text E_LevelText
      	{
      		get
@@ -56,7 +73,7 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Button E_ComposeButton
+		public UnityEngine.UI.Image E_ElementImage
      	{
      		get
      		{
@@ -65,198 +82,11 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_ComposeButton == null )
+     			if( this.m_E_ElementImage == null )
      			{
-		    		this.m_E_ComposeButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Compose");
+		    		this.m_E_ElementImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"InfoBgPlane/E_Element");
      			}
-     			return this.m_E_ComposeButton;
-     		}
-     	}
-
-		public UnityEngine.UI.Image E_ComposeImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_ComposeImage == null )
-     			{
-		    		this.m_E_ComposeImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Compose");
-     			}
-     			return this.m_E_ComposeImage;
-     		}
-     	}
-
-		public UnityEngine.UI.Button E_WeaponButton
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_WeaponButton == null )
-     			{
-		    		this.m_E_WeaponButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Weapon");
-     			}
-     			return this.m_E_WeaponButton;
-     		}
-     	}
-
-		public UnityEngine.UI.Image E_WeaponImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_WeaponImage == null )
-     			{
-		    		this.m_E_WeaponImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Weapon");
-     			}
-     			return this.m_E_WeaponImage;
-     		}
-     	}
-
-		public UnityEngine.UI.Button E_UpRankButton
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_UpRankButton == null )
-     			{
-		    		this.m_E_UpRankButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_UpRank");
-     			}
-     			return this.m_E_UpRankButton;
-     		}
-     	}
-
-		public UnityEngine.UI.Image E_UpRankImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_UpRankImage == null )
-     			{
-		    		this.m_E_UpRankImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_UpRank");
-     			}
-     			return this.m_E_UpRankImage;
-     		}
-     	}
-
-		public UnityEngine.UI.Button E_UpStarButton
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_UpStarButton == null )
-     			{
-		    		this.m_E_UpStarButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_UpStar");
-     			}
-     			return this.m_E_UpStarButton;
-     		}
-     	}
-
-		public UnityEngine.UI.Image E_UpStarImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_UpStarImage == null )
-     			{
-		    		this.m_E_UpStarImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_UpStar");
-     			}
-     			return this.m_E_UpStarImage;
-     		}
-     	}
-
-		public UnityEngine.UI.Button E_SkillButton
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_SkillButton == null )
-     			{
-		    		this.m_E_SkillButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Skill");
-     			}
-     			return this.m_E_SkillButton;
-     		}
-     	}
-
-		public UnityEngine.UI.Image E_SkillImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_SkillImage == null )
-     			{
-		    		this.m_E_SkillImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Skill");
-     			}
-     			return this.m_E_SkillImage;
-     		}
-     	}
-
-		public UnityEngine.UI.Button E_TalentButton
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_TalentButton == null )
-     			{
-		    		this.m_E_TalentButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Talent");
-     			}
-     			return this.m_E_TalentButton;
-     		}
-     	}
-
-		public UnityEngine.UI.Image E_TalentImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_TalentImage == null )
-     			{
-		    		this.m_E_TalentImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Talent");
-     			}
-     			return this.m_E_TalentImage;
+     			return this.m_E_ElementImage;
      		}
      	}
 
@@ -294,45 +124,139 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Toggle E_ComposeToggle
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_ComposeToggle == null )
+     			{
+		    		this.m_E_ComposeToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ButtonContent/E_Compose");
+     			}
+     			return this.m_E_ComposeToggle;
+     		}
+     	}
+
+		public UnityEngine.UI.Toggle E_WeaponToggle
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_WeaponToggle == null )
+     			{
+		    		this.m_E_WeaponToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ButtonContent/E_Weapon");
+     			}
+     			return this.m_E_WeaponToggle;
+     		}
+     	}
+
+		public UnityEngine.UI.Toggle E_UpRankToggle
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_UpRankToggle == null )
+     			{
+		    		this.m_E_UpRankToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ButtonContent/E_UpRank");
+     			}
+     			return this.m_E_UpRankToggle;
+     		}
+     	}
+
+		public UnityEngine.UI.Toggle E_UpStarToggle
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_UpStarToggle == null )
+     			{
+		    		this.m_E_UpStarToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ButtonContent/E_UpStar");
+     			}
+     			return this.m_E_UpStarToggle;
+     		}
+     	}
+
+		public UnityEngine.UI.Toggle E_SkillToggle
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_SkillToggle == null )
+     			{
+		    		this.m_E_SkillToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ButtonContent/E_Skill");
+     			}
+     			return this.m_E_SkillToggle;
+     		}
+     	}
+
+		public UnityEngine.UI.Toggle E_TalentToggle
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_TalentToggle == null )
+     			{
+		    		this.m_E_TalentToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ButtonContent/E_Talent");
+     			}
+     			return this.m_E_TalentToggle;
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_E_HeroNameText = null;
+			this.m_E_StarContentImage = null;
 			this.m_E_LevelText = null;
 			this.m_E_FightText = null;
-			this.m_E_ComposeButton = null;
-			this.m_E_ComposeImage = null;
-			this.m_E_WeaponButton = null;
-			this.m_E_WeaponImage = null;
-			this.m_E_UpRankButton = null;
-			this.m_E_UpRankImage = null;
-			this.m_E_UpStarButton = null;
-			this.m_E_UpStarImage = null;
-			this.m_E_SkillButton = null;
-			this.m_E_SkillImage = null;
-			this.m_E_TalentButton = null;
-			this.m_E_TalentImage = null;
+			this.m_E_ElementImage = null;
 			this.m_E_BackButton = null;
 			this.m_E_BackImage = null;
+			this.m_E_ComposeToggle = null;
+			this.m_E_WeaponToggle = null;
+			this.m_E_UpRankToggle = null;
+			this.m_E_UpStarToggle = null;
+			this.m_E_SkillToggle = null;
+			this.m_E_TalentToggle = null;
 			this.uiTransform = null;
 		}
 
 		private UnityEngine.UI.Text m_E_HeroNameText = null;
+		private UnityEngine.UI.Image m_E_StarContentImage = null;
 		private UnityEngine.UI.Text m_E_LevelText = null;
 		private UnityEngine.UI.Text m_E_FightText = null;
-		private UnityEngine.UI.Button m_E_ComposeButton = null;
-		private UnityEngine.UI.Image m_E_ComposeImage = null;
-		private UnityEngine.UI.Button m_E_WeaponButton = null;
-		private UnityEngine.UI.Image m_E_WeaponImage = null;
-		private UnityEngine.UI.Button m_E_UpRankButton = null;
-		private UnityEngine.UI.Image m_E_UpRankImage = null;
-		private UnityEngine.UI.Button m_E_UpStarButton = null;
-		private UnityEngine.UI.Image m_E_UpStarImage = null;
-		private UnityEngine.UI.Button m_E_SkillButton = null;
-		private UnityEngine.UI.Image m_E_SkillImage = null;
-		private UnityEngine.UI.Button m_E_TalentButton = null;
-		private UnityEngine.UI.Image m_E_TalentImage = null;
+		private UnityEngine.UI.Image m_E_ElementImage = null;
 		private UnityEngine.UI.Button m_E_BackButton = null;
 		private UnityEngine.UI.Image m_E_BackImage = null;
+		private UnityEngine.UI.Toggle m_E_ComposeToggle = null;
+		private UnityEngine.UI.Toggle m_E_WeaponToggle = null;
+		private UnityEngine.UI.Toggle m_E_UpRankToggle = null;
+		private UnityEngine.UI.Toggle m_E_UpStarToggle = null;
+		private UnityEngine.UI.Toggle m_E_SkillToggle = null;
+		private UnityEngine.UI.Toggle m_E_TalentToggle = null;
 		public Transform uiTransform = null;
 	}
 }

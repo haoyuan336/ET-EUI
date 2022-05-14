@@ -5,7 +5,7 @@ namespace ET
 {
 	public  class DlgEditorTroopLayerViewComponent : Entity,IAwake,IDestroy 
 	{
-		public UnityEngine.UI.Image ELoopScrollList_TroopImage
+		public UnityEngine.UI.Image E_LoopTroopImage
      	{
      		get
      		{
@@ -14,15 +14,15 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_ELoopScrollList_TroopImage == null )
+     			if( this.m_E_LoopTroopImage == null )
      			{
-		    		this.m_ELoopScrollList_TroopImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"ELoopScrollList_Troop");
+		    		this.m_E_LoopTroopImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_LoopTroop");
      			}
-     			return this.m_ELoopScrollList_TroopImage;
+     			return this.m_E_LoopTroopImage;
      		}
      	}
 
-		public UnityEngine.UI.LoopHorizontalScrollRect ELoopScrollList_TroopLoopHorizontalScrollRect
+		public UnityEngine.UI.LoopHorizontalScrollRect E_LoopTroopLoopHorizontalScrollRect
      	{
      		get
      		{
@@ -31,11 +31,11 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_ELoopScrollList_TroopLoopHorizontalScrollRect == null )
+     			if( this.m_E_LoopTroopLoopHorizontalScrollRect == null )
      			{
-		    		this.m_ELoopScrollList_TroopLoopHorizontalScrollRect = UIFindHelper.FindDeepChild<UnityEngine.UI.LoopHorizontalScrollRect>(this.uiTransform.gameObject,"ELoopScrollList_Troop");
+		    		this.m_E_LoopTroopLoopHorizontalScrollRect = UIFindHelper.FindDeepChild<UnityEngine.UI.LoopHorizontalScrollRect>(this.uiTransform.gameObject,"E_LoopTroop");
      			}
-     			return this.m_ELoopScrollList_TroopLoopHorizontalScrollRect;
+     			return this.m_E_LoopTroopLoopHorizontalScrollRect;
      		}
      	}
 
@@ -50,9 +50,77 @@ namespace ET
      			}
      			if( this.m_E_Content_TroopToggleGroup == null )
      			{
-		    		this.m_E_Content_TroopToggleGroup = UIFindHelper.FindDeepChild<UnityEngine.UI.ToggleGroup>(this.uiTransform.gameObject,"ELoopScrollList_Troop/E_Content_Troop");
+		    		this.m_E_Content_TroopToggleGroup = UIFindHelper.FindDeepChild<UnityEngine.UI.ToggleGroup>(this.uiTransform.gameObject,"E_LoopTroop/E_Content_Troop");
      			}
      			return this.m_E_Content_TroopToggleGroup;
+     		}
+     	}
+
+		public UnityEngine.UI.LoopVerticalScrollRect E_HeroBagLoopLoopVerticalScrollRect
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_HeroBagLoopLoopVerticalScrollRect == null )
+     			{
+		    		this.m_E_HeroBagLoopLoopVerticalScrollRect = UIFindHelper.FindDeepChild<UnityEngine.UI.LoopVerticalScrollRect>(this.uiTransform.gameObject,"E_HeroBagLoop");
+     			}
+     			return this.m_E_HeroBagLoopLoopVerticalScrollRect;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_LoopTroopHeroImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_LoopTroopHeroImage == null )
+     			{
+		    		this.m_E_LoopTroopHeroImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_LoopTroopHero");
+     			}
+     			return this.m_E_LoopTroopHeroImage;
+     		}
+     	}
+
+		public UnityEngine.UI.LoopHorizontalScrollRect E_LoopTroopHeroLoopHorizontalScrollRect
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_LoopTroopHeroLoopHorizontalScrollRect == null )
+     			{
+		    		this.m_E_LoopTroopHeroLoopHorizontalScrollRect = UIFindHelper.FindDeepChild<UnityEngine.UI.LoopHorizontalScrollRect>(this.uiTransform.gameObject,"E_LoopTroopHero");
+     			}
+     			return this.m_E_LoopTroopHeroLoopHorizontalScrollRect;
+     		}
+     	}
+
+		public UnityEngine.UI.ToggleGroup E_Content_TroopHeroToggleGroup
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_Content_TroopHeroToggleGroup == null )
+     			{
+		    		this.m_E_Content_TroopHeroToggleGroup = UIFindHelper.FindDeepChild<UnityEngine.UI.ToggleGroup>(this.uiTransform.gameObject,"E_LoopTroopHero/E_Content_TroopHero");
+     			}
+     			return this.m_E_Content_TroopHeroToggleGroup;
      		}
      	}
 
@@ -107,74 +175,6 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Image ELoopScrollList_TroopHeroImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_ELoopScrollList_TroopHeroImage == null )
-     			{
-		    		this.m_ELoopScrollList_TroopHeroImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"ELoopScrollList_TroopHero");
-     			}
-     			return this.m_ELoopScrollList_TroopHeroImage;
-     		}
-     	}
-
-		public UnityEngine.UI.LoopHorizontalScrollRect ELoopScrollList_TroopHeroLoopHorizontalScrollRect
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_ELoopScrollList_TroopHeroLoopHorizontalScrollRect == null )
-     			{
-		    		this.m_ELoopScrollList_TroopHeroLoopHorizontalScrollRect = UIFindHelper.FindDeepChild<UnityEngine.UI.LoopHorizontalScrollRect>(this.uiTransform.gameObject,"ELoopScrollList_TroopHero");
-     			}
-     			return this.m_ELoopScrollList_TroopHeroLoopHorizontalScrollRect;
-     		}
-     	}
-
-		public UnityEngine.UI.ToggleGroup E_Content_TroopHeroToggleGroup
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_Content_TroopHeroToggleGroup == null )
-     			{
-		    		this.m_E_Content_TroopHeroToggleGroup = UIFindHelper.FindDeepChild<UnityEngine.UI.ToggleGroup>(this.uiTransform.gameObject,"ELoopScrollList_TroopHero/E_Content_TroopHero");
-     			}
-     			return this.m_E_Content_TroopHeroToggleGroup;
-     		}
-     	}
-
-		public UnityEngine.UI.LoopVerticalScrollRect ELoopScrollList_HeroLoopVerticalScrollRect
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_ELoopScrollList_HeroLoopVerticalScrollRect == null )
-     			{
-		    		this.m_ELoopScrollList_HeroLoopVerticalScrollRect = UIFindHelper.FindDeepChild<UnityEngine.UI.LoopVerticalScrollRect>(this.uiTransform.gameObject,"ELoopScrollList_Hero");
-     			}
-     			return this.m_ELoopScrollList_HeroLoopVerticalScrollRect;
-     		}
-     	}
-
 		public UnityEngine.UI.Button E_StartGameButton
      	{
      		get
@@ -211,31 +211,31 @@ namespace ET
 
 		public void DestroyWidget()
 		{
-			this.m_ELoopScrollList_TroopImage = null;
-			this.m_ELoopScrollList_TroopLoopHorizontalScrollRect = null;
+			this.m_E_LoopTroopImage = null;
+			this.m_E_LoopTroopLoopHorizontalScrollRect = null;
 			this.m_E_Content_TroopToggleGroup = null;
+			this.m_E_HeroBagLoopLoopVerticalScrollRect = null;
+			this.m_E_LoopTroopHeroImage = null;
+			this.m_E_LoopTroopHeroLoopHorizontalScrollRect = null;
+			this.m_E_Content_TroopHeroToggleGroup = null;
 			this.m_E_BackButton = null;
 			this.m_E_BackImage = null;
 			this.m_E_TroopNameText = null;
-			this.m_ELoopScrollList_TroopHeroImage = null;
-			this.m_ELoopScrollList_TroopHeroLoopHorizontalScrollRect = null;
-			this.m_E_Content_TroopHeroToggleGroup = null;
-			this.m_ELoopScrollList_HeroLoopVerticalScrollRect = null;
 			this.m_E_StartGameButton = null;
 			this.m_E_StartGameImage = null;
 			this.uiTransform = null;
 		}
 
-		private UnityEngine.UI.Image m_ELoopScrollList_TroopImage = null;
-		private UnityEngine.UI.LoopHorizontalScrollRect m_ELoopScrollList_TroopLoopHorizontalScrollRect = null;
+		private UnityEngine.UI.Image m_E_LoopTroopImage = null;
+		private UnityEngine.UI.LoopHorizontalScrollRect m_E_LoopTroopLoopHorizontalScrollRect = null;
 		private UnityEngine.UI.ToggleGroup m_E_Content_TroopToggleGroup = null;
+		private UnityEngine.UI.LoopVerticalScrollRect m_E_HeroBagLoopLoopVerticalScrollRect = null;
+		private UnityEngine.UI.Image m_E_LoopTroopHeroImage = null;
+		private UnityEngine.UI.LoopHorizontalScrollRect m_E_LoopTroopHeroLoopHorizontalScrollRect = null;
+		private UnityEngine.UI.ToggleGroup m_E_Content_TroopHeroToggleGroup = null;
 		private UnityEngine.UI.Button m_E_BackButton = null;
 		private UnityEngine.UI.Image m_E_BackImage = null;
 		private UnityEngine.UI.Text m_E_TroopNameText = null;
-		private UnityEngine.UI.Image m_ELoopScrollList_TroopHeroImage = null;
-		private UnityEngine.UI.LoopHorizontalScrollRect m_ELoopScrollList_TroopHeroLoopHorizontalScrollRect = null;
-		private UnityEngine.UI.ToggleGroup m_E_Content_TroopHeroToggleGroup = null;
-		private UnityEngine.UI.LoopVerticalScrollRect m_ELoopScrollList_HeroLoopVerticalScrollRect = null;
 		private UnityEngine.UI.Button m_E_StartGameButton = null;
 		private UnityEngine.UI.Image m_E_StartGameImage = null;
 		public Transform uiTransform = null;

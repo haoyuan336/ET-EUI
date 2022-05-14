@@ -9,5 +9,6 @@ namespace ET
 		public List<HeroCardInfo> HeroCardInfos = new List<HeroCardInfo>();
 		public Dictionary<int, Scroll_ItemHeroCard> ItemHeroCards = new Dictionary<int, Scroll_ItemHeroCard>();
 
+		public int CurrentChooseTypeIndex = 5;
 	}
 }

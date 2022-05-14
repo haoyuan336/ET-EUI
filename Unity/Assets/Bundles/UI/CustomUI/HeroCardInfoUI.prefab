@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7356201597063047980}
   - component: {fileID: 7303982908759600883}
   m_Layer: 5
-  m_Name: HeroColorMark
+  m_Name: HeroElementIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -42.1, y: 28.8}
-  m_SizeDelta: {x: 10, y: 10}
+  m_AnchoredPosition: {x: -31.2, y: 39.8}
+  m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7356201597063047980
 CanvasRenderer:
@@ -630,7 +630,7 @@ GameObject:
   - component: {fileID: 1721890465882816559}
   - component: {fileID: 1721890465882816552}
   m_Layer: 5
-  m_Name: Bar
+  m_Name: AngryBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -784,7 +784,7 @@ GameObject:
   - component: {fileID: 1721890465991675971}
   - component: {fileID: 1721890465991675996}
   m_Layer: 5
-  m_Name: Bar
+  m_Name: HpBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

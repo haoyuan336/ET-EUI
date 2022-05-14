@@ -41,6 +41,54 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Image E_ElementImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_ElementImage == null )
+     				{
+		    			this.m_E_ElementImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Head/E_Element");
+     				}
+     				return this.m_E_ElementImage;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Head/E_Element");
+     			}
+     		}
+     	}
+
+		public UnityEngine.UI.Text E_AddTextText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_AddTextText == null )
+     				{
+		    			this.m_E_AddTextText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Head/E_AddText");
+     				}
+     				return this.m_E_AddTextText;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Head/E_AddText");
+     			}
+     		}
+     	}
+
 		public UnityEngine.UI.Image E_FrameImage
      	{
      		get
@@ -61,6 +109,30 @@ namespace ET
      			else
      			{
 		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Frame");
+     			}
+     		}
+     	}
+
+		public UnityEngine.UI.Text E_LevelText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_LevelText == null )
+     				{
+		    			this.m_E_LevelText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Level");
+     				}
+     				return this.m_E_LevelText;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Level");
      			}
      		}
      	}
@@ -137,47 +209,27 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Image E_ElementImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if (this.isCacheNode)
-     			{
-     				if( this.m_E_ElementImage == null )
-     				{
-		    			this.m_E_ElementImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Element");
-     				}
-     				return this.m_E_ElementImage;
-     			}
-     			else
-     			{
-		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Element");
-     			}
-     		}
-     	}
-
 		public void DestroyWidget()
 		{
 			this.m_E_HeadImage = null;
+			this.m_E_ElementImage = null;
+			this.m_E_AddTextText = null;
 			this.m_E_FrameImage = null;
+			this.m_E_LevelText = null;
 			this.m_E_InTroopMarkImage = null;
 			this.m_E_ChooseToggle = null;
 			this.m_E_CheckmarkImage = null;
-			this.m_E_ElementImage = null;
 			this.uiTransform = null;
 		}
 
 		private UnityEngine.UI.Image m_E_HeadImage = null;
+		private UnityEngine.UI.Image m_E_ElementImage = null;
+		private UnityEngine.UI.Text m_E_AddTextText = null;
 		private UnityEngine.UI.Image m_E_FrameImage = null;
+		private UnityEngine.UI.Text m_E_LevelText = null;
 		private UnityEngine.UI.Image m_E_InTroopMarkImage = null;
 		private UnityEngine.UI.Toggle m_E_ChooseToggle = null;
 		private UnityEngine.UI.Image m_E_CheckmarkImage = null;
-		private UnityEngine.UI.Image m_E_ElementImage = null;
 		public Transform uiTransform = null;
 	}
 }

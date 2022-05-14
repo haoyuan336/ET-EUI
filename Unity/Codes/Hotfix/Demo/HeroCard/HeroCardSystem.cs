@@ -196,7 +196,9 @@ namespace ET
                 Defence = self.GetDefence(),
                 Level = self.Level == 0? 1 : self.Level,
                 SkillInfos = skillInfos,
-                TotalHP = self.GetTotalHP()
+                TotalHP = self.GetTotalHP(),
+                Star = self.Star,
+                // Star = self.Angry
             };
 
             return heroCardInfo;

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Diagnostics.Eventing.Reader;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace ET
@@ -13,22 +14,21 @@ namespace ET
             self.HeroMode = self.GetParent<HeroModeObjectCompoent>().HeroMode;
 
             self.GameObject.name = self.Id.ToString();
-            self.HpBarImage = GameObject.Find($"{self.GameObject.name}/HpProgress/Bar");
-            // self.AttackBarImage = GameObject.Find($"{self.GameObject.name}/AttackProgress/Bar");
-            self.AngryBarImage = GameObject.Find($"{self.GameObject.name}/AngryProgress/Bar");
-
-            var HeroColorMark = GameObject.Find($"{self.GameObject.name}/HeroColorMark");
+            self.AngryBarImage = UIFindHelper.FindDeepChild(self.GameObject, "AngryBar").gameObject;
+            self.HeroElementIcon = UIFindHelper.FindDeepChild(self.GameObject, "HeroElementIcon").gameObject;
+            self.HpBarImage = UIFindHelper.FindDeepChild(self.GameObject, "HpBar").gameObject;
 
             HeroCard heroCard = self.GetParent<HeroModeObjectCompoent>().GetParent<HeroCard>();
 
-            DiamondTypeConfig diamondTypeConfig = heroCard.GetHeroCardColor();
-            var colorStr = diamondTypeConfig.ColorValue;
-            Color color = ColorTool.HexToColor(colorStr);
-            HeroColorMark.GetComponent<Image>().color = color;
-
+            var configId = heroCard.ConfigId;
+            var config = HeroConfigCategory.Instance.Get(configId);
+            var elemengConfig = ElementConfigCategory.Instance.Get(config.HeroColor);
+            var elemengImageStr = elemengConfig.IconImage;
+            var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elemengImageStr);
+            self.HeroElementIcon.GetComponent<Image>().sprite = sprite;
+            
             self.HpBarImage.GetComponent<Image>().fillAmount = 1;
             self.AngryBarImage.GetComponent<Image>().fillAmount = 0;
-            // self.HeroHeight = self.HeroMode.GetComponentInChildren<SkinnedMeshRenderer>().bounds.size.y;
             self.HeroHeight = 0;
         }
     }

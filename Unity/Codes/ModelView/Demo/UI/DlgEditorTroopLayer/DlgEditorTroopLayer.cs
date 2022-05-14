@@ -26,6 +26,8 @@ namespace ET
 
         public int CurrentChooseInTroopIndex;   //当前选择的 在队伍里面的index   
 
+        public int CurrentChooseFilterIndex = 5;    //当前选择的过滤index
+
 
     }
 }

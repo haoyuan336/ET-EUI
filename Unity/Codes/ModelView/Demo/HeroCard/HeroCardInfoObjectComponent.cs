@@ -9,6 +9,7 @@ namespace ET
         public GameObject HpBarImage;
         public GameObject AttackBarImage;
         public GameObject AngryBarImage;
+        public GameObject HeroElementIcon;
         public float HeroHeight;
     }
 }
