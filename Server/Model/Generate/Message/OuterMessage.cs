@@ -1238,6 +1238,9 @@ namespace ET
 		[ProtoMember(18)]
 		public float Star { get; set; }
 
+		[ProtoMember(19)]
+		public int Count { get; set; }
+
 // repeated long SkillIdList = 11;	//技能id
 	}
 

@@ -11,7 +11,17 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgShowHeroInfoLayer self)
         {
-            self.View.E_BackButton.AddListener(() => { self.BackButtonClick(); });
+            self.View.E_BackButton.AddListener(self.BackButtonClick);
+            self.View.E_ComposeButton.AddListener(self.OnComposeButtonClick);
+        }
+
+        public static async void OnComposeButtonClick(this DlgShowHeroInfoLayer self)
+        {
+            // 点击强化按钮，显示强化页面
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_HeroStrengthenLayer);
+            UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int)WindowID.WindowID_HeroStrengthenLayer];
+            baseWindow.GetComponent<DlgHeroStrengthenLayer>().SetTargetInfo(self.HeroCardInfo);
         }
 
         public static async void BackButtonClick(this DlgShowHeroInfoLayer self)
@@ -23,7 +33,7 @@ namespace ET
         public static async void SetHeroInfo(this DlgShowHeroInfoLayer self, HeroCardInfo heroCardInfo)
         {
             Log.Debug("Set hero info");
-
+            self.HeroCardInfo = heroCardInfo;
             self.View.E_LevelText.text = $"Lv:{heroCardInfo.Level}";
             HeroConfig config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
             string heroModeStr = config.HeroMode;
@@ -48,8 +58,8 @@ namespace ET
             var elementStr = elementConfig.IconImage;
             Sprite sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elementStr);
             self.View.E_ElementImage.sprite = sprite;
-
         }
+
         public static void SethetoStar(this DlgShowHeroInfoLayer self, HeroCardInfo heroCardInfo)
         {
             for (int i = 0; i < 5; i++)

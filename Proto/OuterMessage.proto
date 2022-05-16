@@ -563,6 +563,7 @@ message HeroCardInfo
 	int32 Level = 16;	//等级
 	float TotalHP = 17;	//总血量
 	float Star = 18;	//英雄的星级
+	int32 Count = 19;	//英雄个数
 
 	// repeated long SkillIdList = 11;	//技能id
 }

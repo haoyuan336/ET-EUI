@@ -18,212 +18,48 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgHeroInfoLayerUI self)
         {
-            self.InitAllToggleEvent();
-            self.View.E_LoopScrollListHeroLoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopListItemRefreshHandler);
         }
 
-        public static async void SetHeroHeadImage(this DlgHeroInfoLayerUI self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
+        public static void HideWindow(this DlgHeroInfoLayerUI self)
         {
-            var configId = heroCardInfo.ConfigId;
-            var config = HeroConfigCategory.Instance.Get(configId);
-            var spriteAtlas = ConstValue.HeroCardAtlasPath;
-            var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
-            itemHeroCard.E_HeadImage.sprite = headImage;
-        }
-
-        public static async void SetHeroElementImage(this DlgHeroInfoLayerUI self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
-        {
-            // var c
-            var configId = heroCardInfo.ConfigId;
-            var config = HeroConfigCategory.Instance.Get(configId);
-            var elementConfig = ElementConfigCategory.Instance.Get(config.HeroColor);
-            var elementImageStr = elementConfig.IconImage;
-            var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elementImageStr);
-            itemHeroCard.E_ElementImage.sprite = sprite;
-        }
-
-        public static void SetHeroStar(this DlgHeroInfoLayerUI self, Scroll_ItemHeroCard heroCard, HeroCardInfo cardInfo)
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                // var star    
-                var starStr = $"Star_{i}";
-                Transform starObj = UIFindHelper.FindDeepChild(heroCard.uiTransform.gameObject, starStr);
-                if (starObj != null)
-                {
-                    starObj.gameObject.SetActive(i < cardInfo.Star);
-                }
-            }
-        }
-
-        public static void OnLoopListItemRefreshHandler(this DlgHeroInfoLayerUI self, Transform tr, int index)
-        {
-            Debug.Log("显示卡牌信息");
-            Scroll_ItemHeroCard itemHeroCard = self.ItemHeroCards[index].BindTrans(tr);
-            itemHeroCard.E_ChooseToggle.isOn = false;
-            HeroCardInfo heroCardInfo = self.HeroCardInfos[index];
-            self.SetHeroHeadImage(itemHeroCard, heroCardInfo);
-            self.SetHeroElementImage(itemHeroCard, heroCardInfo);
-            self.SetHeroStar(itemHeroCard, heroCardInfo);
-            // var spriteAtlas = "Assets/Res/HeroCards/HeroCardSpriteAtlas.spriteatlas";
-
-            itemHeroCard.E_ChooseToggle.group = self.View.E_ContentToggleGroup;
-            itemHeroCard.E_ChooseToggle.onValueChanged.RemoveAllListeners();
-            itemHeroCard.E_ChooseToggle.onValueChanged.AddListener((value) =>
-            {
-                if (value)
-                {
-                    self.OnClickHeroItem(heroCardInfo);
-                }
-            });
-            // scrollItemHeroCard.SetHeroInfo(self.HeroCardInfos[index]);
-            // scrollItemHeroCard.E_ClickImage
-            // scrollItemHeroCard.E_ClickButton.onClick.RemoveAllListeners();
-            // scrollItemHeroCard.E_ClickButton.onClick.AddListener(() => { self.OnClickHeroItem(scrollItemHeroCard); });
-        }
-
-        public static void InitHeroCardInfo(this DlgHeroInfoLayerUI self)
-        {
-        }
-
-        public static void InitColorToggleEvent(this DlgHeroInfoLayerUI self, GameObject go, int index)
-        {
-            go.GetComponent<Toggle>().onValueChanged.AddListener((value) =>
-            {
-                if (value)
-                {
-                    self.CurrentChooseTypeIndex = index;
-                    // Log.Debug(go.name);
-                    self.FilterColor(index).Coroutine();
-                    go.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 160);
-                }
-                else
-                {
-                    go.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 140);
-                }
-            });
-        }
-
-        public static async ETTask FilterColor(this DlgHeroInfoLayerUI self, int index)
-        {
-            Log.Debug("filter color");
-            long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            M2C_GetAllHeroCardListResponse m2CGetAllTroopInfosResponse = (M2C_GetAllHeroCardListResponse) await self.ZoneScene()
-                    .GetComponent<SessionComponent>().Session.Call(new C2M_GetAllHeroCardListRequest() { Account = AccountId });
-            Log.Debug($"filter index{index}");
-            if (m2CGetAllTroopInfosResponse.Error == ErrorCode.ERR_Success)
-            {
-                Dictionary<int, List<HeroCardInfo>> map = new Dictionary<int, List<HeroCardInfo>>();
-                self.HeroCardInfos = m2CGetAllTroopInfosResponse.HeroCardInfos;
-                if (index != 5)
-                {
-                    foreach (var heroCardInfo in self.HeroCardInfos)
-                    {
-                        if (!map.ContainsKey(heroCardInfo.HeroColor))
-                        {
-                            // map[heroCardInfo.HeroColor] = new List<HeroCardInfo>();
-                            map.Add(heroCardInfo.HeroColor, new List<HeroCardInfo>());
-                        }
-
-                        map[heroCardInfo.HeroColor].Add(heroCardInfo);
-                    }
-
-                    List<HeroCardInfo> list = new List<HeroCardInfo>();
-                    list = map[index + 1];
-                    self.HeroCardInfos = list;
-                }
-
-                // map.Remove(index + 1);
-                self.AddUIScrollItems(ref self.ItemHeroCards, self.HeroCardInfos.Count);
-                self.View.E_LoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, self.HeroCardInfos.Count);
-            }
-        }
-
-        public static void InitAllToggleEvent(this DlgHeroInfoLayerUI self)
-        {
-            List<GameObject> list = new List<GameObject>();
-            list.Add(self.View.E_RedImage.gameObject);
-            list.Add(self.View.E_YellowImage.gameObject);
-            list.Add(self.View.E_GreenImage.gameObject);
-            list.Add(self.View.E_BlueImage.gameObject);
-            list.Add(self.View.E_PurpleImage.gameObject);
-            list.Add(self.View.E_AllImage.gameObject);
-            var index = 0;
-            foreach (var go in list)
-            {
-                self.InitColorToggleEvent(go, index);
-                index++;
-            }
-        }
-
-        // public static async ETTask RequestHerosInfo(this DlgHeroInfoLayerUI self)
-        // {
-        //     long Account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-        //     Log.Debug($"account = {Account}");
-        //     M2C_GetAllHeroCardListResponse m2CGetAllHeroCardListResponse;
-        //     try
-        //     {
-        //         m2CGetAllHeroCardListResponse = (M2C_GetAllHeroCardListResponse) await self.ZoneScene().GetComponent<SessionComponent>().Session
-        //                 .Call(new C2M_GetAllHeroCardListRequest() { Account = Account });
-        //         if (m2CGetAllHeroCardListResponse.Error == ErrorCode.ERR_Success)
-        //         {
-        //             List<HeroCardInfo> heroCardInfos = m2CGetAllHeroCardListResponse.HeroCardInfos;
-        //             self.HeroCardInfos.Clear();
-        //             foreach (var heroCardInfo in heroCardInfos)
-        //             {
-        //                 self.HeroCardInfos.Add(heroCardInfo);
-        //             }
-        //
-        //             self.AddUIScrollItems(ref self.ItemHeroCards, self.HeroCardInfos.Count);
-        //             self.View.E_LoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, self.HeroCardInfos.Count);
-        //         }
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         Console.WriteLine(e);
-        //         throw;
-        //     }
-        // }
-
-        public static async void OnClickHeroItem(this DlgHeroInfoLayerUI self, HeroCardInfo heroCardInfo)
-        {
-            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_HeroInfoLayerUI);
-            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_MainSceneBg);
-            // Log.Debug($"click hero {heroCard.HeroCardInfo.HeroId}");
-            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_ShowHeroInfoLayer);
-            // self.DomainScene().GetComponent<UIComponent>().GetChild<UIBaseWindow>(WindowID.WindowID_ShowHeroInfoLayer);
-
-            // UIEventComponent.Instance.GetUIEventHandler(WindowID.WindowID_ShowHeroInfoLayer).OnInitWindowCoreData(baseWindow);
-            UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().AllWindowsDic[(int) WindowID.WindowID_ShowHeroInfoLayer];
-            baseWindow.GetComponent<DlgShowHeroInfoLayer>().SetHeroInfo(heroCardInfo);
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer);
         }
 
         public static async void ShowWindow(this DlgHeroInfoLayerUI self, Entity contextData = null)
         {
+            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_AllHeroBagLayer);
             await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainSceneMenu);
             await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GoldInfoUI);
-            // await self.RequestHerosInfo();
-            self.FilterColor(self.CurrentChooseTypeIndex).Coroutine();
-            // List<GameObject> list = new List<GameObject>();
-            // list.Add(self.View.E_RedImage.gameObject);
-            // list.Add(self.View.E_YellowImage.gameObject);
-            // list.Add(self.View.E_GreenImage.gameObject);
-            // list.Add(self.View.E_BlueImage.gameObject);
-            // list.Add(self.View.E_PurpleImage.gameObject);
-            // list.Add(self.View.E_AllImage.gameObject);
-            //
-            // Log.Debug($"current choose hero {self.CurrentChooseTypeIndex}");
 
-            // for (int i = 0; i < list.Count; i++)
-            // {
-            //
-            //     var target = list[i];
-            //     if (i == self.CurrentChooseTypeIndex)
-            //     {
-            //         Log.Debug("set target is on");
-            //         target.GetComponent<Toggle>().isOn = true;
-            //     }
-            // }
+            UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer];
+            baseWindow.GetComponent<DlgAllHeroBagLayer>().OnHeroItemInfoClick = self.OnClickHeroItem;
+            baseWindow.uiTransform.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
+        }
+
+        public static async void OnClickHeroItem(this DlgHeroInfoLayerUI self, HeroCardInfo heroCardInfo, Scroll_ItemHeroCard itemHeroCard, bool value)
+        {
+            var config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
+            if (config.MaterialType == 2)
+            {
+                itemHeroCard.E_ChooseToggle.isOn = false;
+                return;
+            }
+
+            if (value)
+            {
+                itemHeroCard.E_ChooseToggle.isOn = false;
+                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_HeroInfoLayerUI);
+                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_MainSceneBg);
+                // Log.Debug($"click hero {heroCard.HeroCardInfo.HeroId}");
+                await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_ShowHeroInfoLayer);
+                // self.DomainScene().GetComponent<UIComponent>().GetChild<UIBaseWindow>(WindowID.WindowID_ShowHeroInfoLayer);
+
+                // UIEventComponent.Instance.GetUIEventHandler(WindowID.WindowID_ShowHeroInfoLayer).OnInitWindowCoreData(baseWindow);
+                UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().AllWindowsDic[(int) WindowID.WindowID_ShowHeroInfoLayer];
+                baseWindow.GetComponent<DlgShowHeroInfoLayer>().SetHeroInfo(heroCardInfo);
+            }
+            
+           
         }
     }
 }

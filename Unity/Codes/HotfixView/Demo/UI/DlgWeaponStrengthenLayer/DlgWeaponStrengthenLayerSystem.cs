@@ -106,8 +106,9 @@ namespace ET
 
             UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AddSubPlane];
             baseWindow.GetComponent<DlgAddSubPlane>().SetInfo(info);
-            baseWindow.GetComponent<DlgAddSubPlane>().AddAction += () => { self.AddItemCount(info, itemWeapon); };
-            baseWindow.GetComponent<DlgAddSubPlane>().SubAction += () => { self.SubItemCount(info, itemWeapon); };
+            baseWindow.GetComponent<DlgAddSubPlane>().AddAction = () => { self.AddItemCount(info, itemWeapon); };
+            baseWindow.GetComponent<DlgAddSubPlane>().SubAction = () => { self.SubItemCount(info, itemWeapon); };
+            baseWindow.GetComponent<DlgAddSubPlane>().View.E_ContentImage.transform.position = itemWeapon.E_CountText.transform.position;
             self.UpdateAddSubPlaneButtonState();
         }
 

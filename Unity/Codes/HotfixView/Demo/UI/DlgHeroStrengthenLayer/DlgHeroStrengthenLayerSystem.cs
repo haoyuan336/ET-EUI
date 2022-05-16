@@ -1,0 +1,239 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using System;
+using System.Diagnostics.Eventing.Reader;
+using UnityEngine;
+using UnityEngine.PlayerLoop;
+using UnityEngine.UI;
+
+namespace ET
+{
+    public static class DlgHeroStrengthenLayerSystem
+    {
+        public static void RegisterUIEvent(this DlgHeroStrengthenLayer self)
+        {
+            self.View.E_BackButton.AddListener(() =>
+            {
+                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_HeroStrengthenLayer);
+            });
+
+            self.View.ETargetHeroContentLoopHorizontalScrollRect.AddItemRefreshListener(self.OnLoopTargetHeroItem);
+            self.View.E_OKButton.AddListenerAsync(self.OnOkButtonClick);
+        }
+
+        public static async ETTask OnOkButtonClick(this DlgHeroStrengthenLayer self)
+        {
+            await ETTask.CompletedTask;
+        }
+
+        public static void OnLoopTargetHeroItem(this DlgHeroStrengthenLayer self, Transform tr, int index)
+        {
+            Scroll_ItemHeroCard itemHeroCard = self.ItemHeroCards[index].BindTrans(tr);
+
+            self.SetHeroHeadImage(itemHeroCard, self.HeroCardInfo);
+            self.SetHeroStar(itemHeroCard, self.HeroCardInfo);
+            self.SetHeroElementImage(itemHeroCard, self.HeroCardInfo);
+            self.SetCountInfo(itemHeroCard, self.HeroCardInfo);
+        }
+
+        public static void SetCountInfo(this DlgHeroStrengthenLayer self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
+        {
+            var configId = heroCardInfo.ConfigId;
+            var config = HeroConfigCategory.Instance.Get(configId);
+            // itemHeroCard.
+            itemHeroCard.E_CountText.gameObject.SetActive(config.MaterialType == 2);
+            itemHeroCard.E_CountText.text = heroCardInfo.Count.ToString();
+        }
+
+        public static void HideWindow(this DlgHeroStrengthenLayer self)
+        {
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer);
+            self.AlChooseHeroCardInfo.Clear();
+        }
+
+        public static async void ShowWindow(this DlgHeroStrengthenLayer self, Entity contextData = null)
+        {
+            //首先展示英雄背包层
+            // UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            // await uiComponent.ShowWindow(WindowID.WindowID_AllHeroBagLayer);
+            // // uiComponent.GetComponent<DlgAllHeroBagLayer>().UnAbleHeroItemWhitHeroInfo();
+            // UIBaseWindow uiBaseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer];
+            // uiBaseWindow.uiTransform.GetComponent<RectTransform>().offsetMax = new Vector2(0, -400);
+            // // uiBaseWindow.GetComponent<DlgAllHeroBagLayer>().OnHeroItemClick = null;
+            // uiBaseWindow.GetComponent<DlgAllHeroBagLayer>().OnHeroItemInfoClick = self.OnHeroItemClick;
+            await ETTask.CompletedTask;
+        }
+
+        public static async void ShowAddSubPlane(this DlgHeroStrengthenLayer self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
+        {
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_AddSubPlane, WindowID.WindowID_Invaild,
+                new ShowWindowData() { contextData = itemHeroCard });
+
+            UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AddSubPlane];
+            // baseWindow.uiTransform.position = itemHeroCard.uiTransform.position;
+            // itemWeapon.uiTransform.position;
+            DlgAddSubPlane dlgAddSubPlane = baseWindow.GetComponent<DlgAddSubPlane>();
+            dlgAddSubPlane.View.E_ContentImage.transform.position = itemHeroCard.E_ChooseToggle.transform.position;
+
+            // var isFull = self.CheckIsFull();
+            dlgAddSubPlane.EnableAddButton(!self.CheckIsFull());
+            dlgAddSubPlane.AddAction = () =>
+            {
+                var isFull = self.CheckIsFull();
+                if (!isFull)
+                {
+                    HeroCardInfo findInfo = self.AlChooseHeroCardInfo.Find(a => a.HeroId.Equals(heroCardInfo.HeroId));
+                    if (findInfo == null)
+                    {
+                        findInfo = new HeroCardInfo() { HeroId = heroCardInfo.HeroId, Count = 1, };
+                        self.AlChooseHeroCardInfo.Add(findInfo);
+                    }
+                    else
+                    {
+                        findInfo.Count++;
+                    }
+
+                    dlgAddSubPlane.EnabelSubButton(true);
+
+                    if (findInfo.Count == heroCardInfo.Count)
+                    {
+                        dlgAddSubPlane.EnableAddButton(false);
+                    }
+
+                    itemHeroCard.E_ChooseCountText.gameObject.SetActive(true);
+                    itemHeroCard.E_ChooseCountText.text = findInfo.Count.ToString();
+                }
+
+                isFull = self.CheckIsFull();
+                self.View.E_OKButton.gameObject.SetActive(isFull);
+                if (isFull)
+                {
+                    dlgAddSubPlane.EnableAddButton(false);
+                }
+            };
+            dlgAddSubPlane.SubAction = () =>
+            {
+                var findInfo = self.AlChooseHeroCardInfo.Find(a => a.HeroId.Equals(heroCardInfo.HeroId));
+                if (findInfo != null && findInfo.Count > 0)
+                {
+                    findInfo.Count--;
+                    itemHeroCard.E_ChooseCountText.text = findInfo.Count.ToString();
+                    
+                    if (findInfo.Count == 0)
+                    {
+                        self.AlChooseHeroCardInfo.Remove(findInfo);
+                        dlgAddSubPlane.EnabelSubButton(false);
+                        itemHeroCard.E_ChooseCountText.gameObject.SetActive(false);
+                    }
+
+                    dlgAddSubPlane.EnableAddButton(true);
+                }
+            };
+        }
+
+        public static void OnHeroItemClick(this DlgHeroStrengthenLayer self, HeroCardInfo heroCardInfo, Scroll_ItemHeroCard itemHeroCard, bool value)
+        {
+            var config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
+            HeroCardInfo fingInfo = self.AlChooseHeroCardInfo.Find(a => a.HeroId.Equals(heroCardInfo.HeroId));
+            var isFull = self.CheckIsFull();
+            if (config.MaterialType == 2)
+            {
+                if (value)
+                {
+                    self.ShowAddSubPlane(itemHeroCard, heroCardInfo);
+                }
+
+                itemHeroCard.E_ChooseToggle.isOn = false;
+            }
+            else
+            {
+                if (fingInfo == null)
+                {
+                    if (isFull)
+                    {
+                        itemHeroCard.E_ChooseToggle.isOn = false;
+                        return;
+                    }
+
+                    if (value && !isFull)
+                    {
+                        self.AlChooseHeroCardInfo.Add(heroCardInfo);
+                    }
+                }
+                else
+                {
+                    if (!value)
+                    {
+                        self.AlChooseHeroCardInfo.Remove(fingInfo);
+                    }
+                }
+            }
+
+            
+            self.View.E_OKButton.gameObject.SetActive(self.CheckIsFull());
+        }
+
+        public static bool CheckIsFull(this DlgHeroStrengthenLayer self)
+        {
+            var count = 0;
+            foreach (var info in self.AlChooseHeroCardInfo)
+            {
+                count += info.Count;
+            }
+
+            var full = count == 5;
+            return full;
+        }
+
+        public static async void SetTargetInfo(this DlgHeroStrengthenLayer self, HeroCardInfo heroCardInfo)
+        {
+            self.HeroCardInfo = heroCardInfo;
+            self.AddUIScrollItems(ref self.ItemHeroCards, 1);
+            self.View.ETargetHeroContentLoopHorizontalScrollRect.SetVisible(true, 1);
+
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_AllHeroBagLayer);
+            // uiComponent.GetComponent<DlgAllHeroBagLayer>().UnAbleHeroItemWhitHeroInfo();
+            UIBaseWindow uiBaseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer];
+            uiBaseWindow.uiTransform.GetComponent<RectTransform>().offsetMax = new Vector2(0, -400);
+            // uiBaseWindow.GetComponent<DlgAllHeroBagLayer>().OnHeroItemClick = null;
+            uiBaseWindow.GetComponent<DlgAllHeroBagLayer>().OnHeroItemInfoClick = self.OnHeroItemClick;
+            uiBaseWindow.GetComponent<DlgAllHeroBagLayer>().UnAbleHeroItemWhitHeroInfo(self.HeroCardInfo);
+        }
+
+        public static async void SetHeroHeadImage(this DlgHeroStrengthenLayer self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
+        {
+            var configId = heroCardInfo.ConfigId;
+            var config = HeroConfigCategory.Instance.Get(configId);
+            var spriteAtlas = ConstValue.HeroCardAtlasPath;
+            var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
+            itemHeroCard.E_HeadImage.sprite = headImage;
+        }
+
+        public static async void SetHeroElementImage(this DlgHeroStrengthenLayer self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
+        {
+            // var c
+            var configId = heroCardInfo.ConfigId;
+            var config = HeroConfigCategory.Instance.Get(configId);
+            var elementConfig = ElementConfigCategory.Instance.Get(config.HeroColor);
+            var elementImageStr = elementConfig.IconImage;
+            var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elementImageStr);
+            itemHeroCard.E_ElementImage.sprite = sprite;
+        }
+
+        public static void SetHeroStar(this DlgHeroStrengthenLayer self, Scroll_ItemHeroCard heroCard, HeroCardInfo cardInfo)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                // var star    
+                var starStr = $"Star_{i}";
+                Transform starObj = UIFindHelper.FindDeepChild(heroCard.uiTransform.gameObject, starStr);
+                if (starObj != null)
+                {
+                    starObj.gameObject.SetActive(i < cardInfo.Star);
+                }
+            }
+        }
+    }
+}

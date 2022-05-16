@@ -161,6 +161,54 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Text E_CountText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_CountText == null )
+     				{
+		    			this.m_E_CountText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Count");
+     				}
+     				return this.m_E_CountText;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Count");
+     			}
+     		}
+     	}
+
+		public UnityEngine.UI.Text E_ChooseCountText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_ChooseCountText == null )
+     				{
+		    			this.m_E_ChooseCountText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_ChooseCount");
+     				}
+     				return this.m_E_ChooseCountText;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_ChooseCount");
+     			}
+     		}
+     	}
+
 		public UnityEngine.UI.Toggle E_ChooseToggle
      	{
      		get
@@ -217,6 +265,8 @@ namespace ET
 			this.m_E_FrameImage = null;
 			this.m_E_LevelText = null;
 			this.m_E_InTroopMarkImage = null;
+			this.m_E_CountText = null;
+			this.m_E_ChooseCountText = null;
 			this.m_E_ChooseToggle = null;
 			this.m_E_CheckmarkImage = null;
 			this.uiTransform = null;
@@ -228,6 +278,8 @@ namespace ET
 		private UnityEngine.UI.Image m_E_FrameImage = null;
 		private UnityEngine.UI.Text m_E_LevelText = null;
 		private UnityEngine.UI.Image m_E_InTroopMarkImage = null;
+		private UnityEngine.UI.Text m_E_CountText = null;
+		private UnityEngine.UI.Text m_E_ChooseCountText = null;
 		private UnityEngine.UI.Toggle m_E_ChooseToggle = null;
 		private UnityEngine.UI.Image m_E_CheckmarkImage = null;
 		public Transform uiTransform = null;

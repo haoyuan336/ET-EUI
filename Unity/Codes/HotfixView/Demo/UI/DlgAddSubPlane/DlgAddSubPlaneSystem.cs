@@ -11,7 +11,11 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgAddSubPlane self)
         {
-            self.View.E_BgButton.AddListener(() => { self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AddSubPlane); });
+            self.View.E_BgButton.AddListener(() =>
+            {
+                Log.Debug("隐藏 加减层");
+                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AddSubPlane);
+            });
             // self.View.E_AddButton.AddListener();
             self.View.E_AddButton.AddListener(() =>
             {
@@ -34,9 +38,17 @@ namespace ET
             self.AddAction = null;
             self.SubAction = null;
             // self.View.E_countText
-            Scroll_ItemWeapon itemWeapon = contextData as Scroll_ItemWeapon;
-            self.View.E_ContentImage.transform.position =
-                    itemWeapon.uiTransform.position;
+            // T itemWeapon = (T)contextData;
+            // self.View.E_ContentImage.transform.position =
+            // itemWeapon.uiTransform.position;
+        }
+
+        public static void HideWindow(this DlgAddSubPlane self)
+        {
+            self.AddAction = null;
+            self.SubAction = null;
+            self.View.E_AddButton.interactable = true;
+            self.View.E_SubButton.interactable = true;
         }
 
         public static void SetInfo(this DlgAddSubPlane self, WeaponInfo info)
@@ -48,5 +60,14 @@ namespace ET
             self.View.E_AddButton.interactable = !full;
         }
 
+        public static void EnableAddButton(this DlgAddSubPlane self, bool able)
+        {
+            self.View.E_AddButton.interactable = able;
+        }
+
+        public static void EnabelSubButton(this DlgAddSubPlane self, bool able)
+        {
+            self.View.E_SubButton.interactable = able;
+        }
     }
 }

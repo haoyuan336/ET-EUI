@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace ET
 {
@@ -9,6 +10,9 @@ namespace ET
 
 
 		public GameObject HeroModeShow;
+
+		public HeroCardInfo HeroCardInfo;
+
 
 
 	}

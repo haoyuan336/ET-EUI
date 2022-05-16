@@ -25,16 +25,18 @@
         WindowID_FormationUI, //战斗相关按钮
         WindowID_HeroInfoLayerUI, //英雄信息层
         WindowID_ShowHeroInfoLayer, //显示英雄的详细信息
-        WindowID_MainSceneBg,   //主背景的背景层
+        WindowID_MainSceneBg, //主背景的背景层
         WindowID_MainSceneMenu, //主页面按钮
-        WindowID_LoadingLayer,  //加载游戏层
-        WindowID_GameLoaseUI,   //游戏失败UI
-        WindowID_Store,         //商店
-        WindowID_PowerNotEnoughAlert,   //体力不足的提示
-        WindowID_GameLevelLayer,    //当前游戏关卡显示层
-        WindowID_ExitGameAlert,     //退出游戏提醒
-        WindowID_BuyAlert,          //确定购买提示
+        WindowID_LoadingLayer, //加载游戏层
+        WindowID_GameLoaseUI, //游戏失败UI
+        WindowID_Store, //商店
+        WindowID_PowerNotEnoughAlert, //体力不足的提示
+        WindowID_GameLevelLayer, //当前游戏关卡显示层
+        WindowID_ExitGameAlert, //退出游戏提醒
+        WindowID_BuyAlert, //确定购买提示
         WindowID_WeaponStrengthenLayer, //装备强化层
         WindowID_AddSubPlane, //
+        WindowID_AllHeroBagLayer, //所有英雄的背包页面
+        WindowID_HeroStrengthenLayer, //强化英雄页面
     }
 }

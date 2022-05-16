@@ -198,6 +198,7 @@ namespace ET
                 SkillInfos = skillInfos,
                 TotalHP = self.GetTotalHP(),
                 Star = self.Star,
+                Count = self.Count
                 // Star = self.Angry
             };
 

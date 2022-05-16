@@ -24,5 +24,6 @@ namespace ET
         public long CurrentSkillId; //当前需要释放的技能
         // public HeroCardInfo HeroCardInfo;
         public int Star = 0; //英雄的星级数量
+        public int Count = 1;   //材料数量
     }
 }
