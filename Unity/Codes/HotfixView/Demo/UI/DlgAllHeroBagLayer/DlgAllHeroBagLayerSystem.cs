@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using System.Diagnostics.Eventing.Reader;
+using System.Linq;
 using ET.Account;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,8 @@ namespace ET
         {
             self.InitAllToggleEvent();
             self.View.E_LoopScrollListHeroLoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopListItemRefreshHandler);
+            // self.AddUIScrollItems();
+            // self.ItemHeroCards
         }
 
         public static void InitAllToggleEvent(this DlgAllHeroBagLayer self)
@@ -36,7 +39,13 @@ namespace ET
         public static void UnAbleHeroItemWhitHeroInfo(this DlgAllHeroBagLayer self, HeroCardInfo heroCardInfo)
         {
             self.UnAbleHeroCardInfo = heroCardInfo;
-            self.View.E_LoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, self.HeroCardInfos.Count);
+            self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefreshCells();
+        }
+
+        public static void EnableItemWhitHeroInfos(this DlgAllHeroBagLayer self, List<HeroCardInfo> heroCardInfos)
+        {
+            self.EnabelHeroCardInfos = heroCardInfos;
+            self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefreshCells();
         }
 
         public static async void InitHeroCardView(this DlgAllHeroBagLayer self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
@@ -45,7 +54,8 @@ namespace ET
             var config = HeroConfigCategory.Instance.Get(configId);
             itemHeroCard.E_CountText.gameObject.SetActive(config.MaterialType == 2);
             itemHeroCard.E_CountText.text = heroCardInfo.Count.ToString();
-            itemHeroCard.E_ChooseCountText.gameObject.SetActive(false);
+
+            // itemHeroCard.E_ChooseCountText.gameObject.SetActive(config.MaterialType == 2 && heroCardInfo.Count != 0);
             var spriteAtlas = ConstValue.HeroCardAtlasPath;
             var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
             itemHeroCard.E_HeadImage.sprite = headImage;
@@ -69,90 +79,53 @@ namespace ET
             }
         }
 
-        // public static void SetCountInfo(this DlgAllHeroBagLayer self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
-        // {
-        //     var configId = heroCardInfo.ConfigId;
-        //     var config = HeroConfigCategory.Instance.Get(configId);
-        //     // itemHeroCard.
-        //     itemHeroCard.E_CountText.gameObject.SetActive(config.MaterialType == 2);
-        //     itemHeroCard.E_CountText.text = heroCardInfo.Count.ToString();
-        // }
-
-        // public static async void SetHeroHeadImage(this DlgAllHeroBagLayer self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
-        // {
-        //     var configId = heroCardInfo.ConfigId;
-        //     var config = HeroConfigCategory.Instance.Get(configId);
-        //     var spriteAtlas = ConstValue.HeroCardAtlasPath;
-        //     var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
-        //     itemHeroCard.E_HeadImage.sprite = headImage;
-        // }
-
-        // public static async void SetHeroElementImage(this DlgAllHeroBagLayer self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
-        // {
-        //     // var c
-        //     var configId = heroCardInfo.ConfigId;
-        //     var config = HeroConfigCategory.Instance.Get(configId);
-        //     var elementConfig = ElementConfigCategory.Instance.Get(config.HeroColor);
-        //     var elementImageStr = elementConfig.IconImage;
-        //     var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elementImageStr);
-        //     itemHeroCard.E_ElementImage.sprite = sprite;
-        // }
-
-        // public static void SetHeroStar(this DlgAllHeroBagLayer self, Scroll_ItemHeroCard heroCard, HeroCardInfo cardInfo)
-        // {
-        //     for (int i = 0; i < 5; i++)
-        //     {
-        //         // var star    
-        //         var starStr = $"Star_{i}";
-        //         Transform starObj = UIFindHelper.FindDeepChild(heroCard.uiTransform.gameObject, starStr);
-        //         if (starObj != null)
-        //         {
-        //             starObj.gameObject.SetActive(i < cardInfo.Star);
-        //         }
-        //     }
-        // }
-
         public static void OnLoopListItemRefreshHandler(this DlgAllHeroBagLayer self, Transform tr, int index)
         {
-            // Debug.Log("显示卡牌信息");
             Scroll_ItemHeroCard itemHeroCard = self.ItemHeroCards[index].BindTrans(tr);
-            itemHeroCard.E_ChooseToggle.isOn = false;
             HeroCardInfo heroCardInfo = self.HeroCardInfos[index];
             self.InitHeroCardView(itemHeroCard, heroCardInfo);
-            // self.SetHeroHeadImage(itemHeroCard, heroCardInfo);
-            // self.SetHeroElementImage(itemHeroCard, heroCardInfo);
-            // self.SetHeroStar(itemHeroCard, heroCardInfo);
-            // self.SetCountInfo(itemHeroCard, heroCardInfo);
-            // var spriteAtlas = "Assets/Res/HeroCards/HeroCardSpriteAtlas.spriteatlas";
-
+            itemHeroCard.E_ChooseToggle.interactable = true;
             if (self.UnAbleHeroCardInfo != null && self.UnAbleHeroCardInfo.HeroId.Equals(heroCardInfo.HeroId))
             {
                 itemHeroCard.E_ChooseToggle.interactable = false;
             }
-            else
+
+            itemHeroCard.E_ChooseToggle.onValueChanged.RemoveAllListeners();
+            itemHeroCard.E_ChooseToggle.isOn = false;
+            if (self.AllChooseHeroCardInfos != null)
             {
-                itemHeroCard.E_ChooseToggle.interactable = true;
+                var findInfo = self.AllChooseHeroCardInfos.Find(a => a.HeroId.Equals(heroCardInfo.HeroId));
+                if (findInfo != null)
+                {
+                    var config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
+                    if (config.MaterialType == 1)
+                    {
+                        itemHeroCard.E_ChooseToggle.isOn = true;
+                    }
+                    else if (config.MaterialType == 2)
+                    {
+                        itemHeroCard.E_ChooseCountText.gameObject.SetActive(true);
+                        itemHeroCard.E_ChooseCountText.text = findInfo.Count.ToString();
+                    }
+                    // itemHeroCard.E_ChooseToggle.isOn = true;
+                }
             }
 
-            // itemHeroCard.E_ChooseToggle.group = self.View.E_ContentToggleGroup;
-            itemHeroCard.E_ChooseToggle.onValueChanged.RemoveAllListeners();
+            if (self.EnabelHeroCardInfos != null)
+            {
+                //找一下是否包含
+                itemHeroCard.E_ChooseToggle.interactable = false;
+                bool isCon = self.EnabelHeroCardInfos.Exists(a => a.HeroId.Equals(heroCardInfo.HeroId));
+                itemHeroCard.E_ChooseToggle.interactable = isCon;
+            }
+
             itemHeroCard.E_ChooseToggle.onValueChanged.AddListener((value) =>
             {
-                // self.OnClickHeroItem(heroCardInfo);
-                // if (self.OnHeroItemClick != null)
-                // {
-                //     self.OnHeroItemClick(heroCardInfo);
-                // }
-
                 if (self.OnHeroItemInfoClick != null)
                 {
                     self.OnHeroItemInfoClick(heroCardInfo, itemHeroCard, value);
                 }
             });
-            // scrollItemHeroCard.SetHeroInfo(self.HeroCardInfos[index]);
-            // scrollItemHeroCard.E_ClickImage
-            // scrollItemHeroCard.E_ClickButton.onClick.RemoveAllListeners();
-            // scrollItemHeroCard.E_ClickButton.onClick.AddListener(() => { self.OnClickHeroItem(scrollItemHeroCard); });
         }
 
         public static void InitColorToggleEvent(this DlgAllHeroBagLayer self, GameObject go, int index)
@@ -177,23 +150,19 @@ namespace ET
         {
             self.OnHeroItemInfoClick = null;
             self.UnAbleHeroCardInfo = null;
+            self.EnabelHeroCardInfos = null;
+            self.AllChooseHeroCardInfos = null;
         }
 
-        // public static async void OnClickHeroItem(this DlgAllHeroBagLayer self, HeroCardInfo heroCardInfo)
-        // {
-        //     self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_HeroInfoLayerUI);
-        //     self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_MainSceneBg);
-        //     // Log.Debug($"click hero {heroCard.HeroCardInfo.HeroId}");
-        //     await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_ShowHeroInfoLayer);
-        //     // self.DomainScene().GetComponent<UIComponent>().GetChild<UIBaseWindow>(WindowID.WindowID_ShowHeroInfoLayer);
-        //
-        //     // UIEventComponent.Instance.GetUIEventHandler(WindowID.WindowID_ShowHeroInfoLayer).OnInitWindowCoreData(baseWindow);
-        //     UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().AllWindowsDic[(int) WindowID.WindowID_ShowHeroInfoLayer];
-        //     baseWindow.GetComponent<DlgShowHeroInfoLayer>().SetHeroInfo(heroCardInfo);
-        // }
         public static void ShowWindow(this DlgAllHeroBagLayer self, Entity contextData = null)
         {
             self.FilterColor(self.CurrentChooseTypeIndex).Coroutine();
+        }
+
+        public static void SetAllChooseHeroCardInfos(this DlgAllHeroBagLayer self, List<HeroCardInfo> heroCardInfos)
+        {
+            self.AllChooseHeroCardInfos = heroCardInfos;
+            self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefreshCells();
         }
 
         public static async ETTask FilterColor(this DlgAllHeroBagLayer self, int index)
@@ -226,6 +195,7 @@ namespace ET
                 }
 
                 // map.Remove(index + 1);
+
                 self.AddUIScrollItems(ref self.ItemHeroCards, self.HeroCardInfos.Count);
                 self.View.E_LoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, self.HeroCardInfos.Count);
             }
