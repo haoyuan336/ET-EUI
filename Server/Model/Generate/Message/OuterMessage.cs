@@ -1762,4 +1762,42 @@ namespace ET
 
 	}
 
+	[ResponseType(nameof(M2C_StrenthenHeroResponse))]
+	[Message(OuterOpcode.C2M_StrenthenHeroRequest)]
+	[ProtoContract]
+	public partial class C2M_StrenthenHeroRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public HeroCardInfo TargetHeroCardInfo { get; set; }
+
+		[ProtoMember(3)]
+		public List<HeroCardInfo> ChooseHeroCardInfos = new List<HeroCardInfo>();
+
+	}
+
+	[Message(OuterOpcode.M2C_StrenthenHeroResponse)]
+	[ProtoContract]
+	public partial class M2C_StrenthenHeroResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+// repeated WeaponInfo WeaponInfos = 1;
+		[ProtoMember(1)]
+		public HeroCardInfo HeroCardInfo { get; set; }
+
+	}
+
 }

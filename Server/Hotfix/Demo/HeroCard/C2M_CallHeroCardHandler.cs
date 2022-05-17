@@ -15,10 +15,11 @@ namespace ET
             Log.Debug($"keys = {keys.Length}");
             int randomIndex = RandomHelper.RandomNumber(0, keys.Length);
             int key = keys[randomIndex];
-
+            
             HeroConfig config = HeroConfigCategory.Instance.Get(key);
             if (config.MaterialType == 2)
             {
+                Log.Warning("召唤到的是材料");
                 //召唤出来的是 材料
                 //首先从数据库里面查询一下 ，玩家是否拥有此类型的英雄材料
                 List<HeroCard> heroCards = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
@@ -27,10 +28,12 @@ namespace ET
                 {
                     //说明数据库里面存在此类型的英雄材料，那么数目自加并且保存
                     heroCards[0].Count++;
+                    Log.Warning($"存在此材料 自加1 {key}");
                     await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(heroCards[0]);
                 }
                 else
                 {
+                    Log.Warning("不存在此材料，需要重新创建");
                     HeroCard heroCard = unit.AddChild<HeroCard, int>(key);
                     await heroCard.Call(unit.DomainZone(), request.Account);
                 }

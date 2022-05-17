@@ -48,6 +48,14 @@ namespace ET
             self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefreshCells();
         }
 
+        public static  void ReferView(this DlgAllHeroBagLayer self)
+        {
+            self.AllChooseHeroCardInfos = null;
+            self.EnabelHeroCardInfos = null;
+            // self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefreshCells();
+            self.FilterColor(self.CurrentChooseTypeIndex).Coroutine();
+        }
+        
         public static async void InitHeroCardView(this DlgAllHeroBagLayer self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
         {
             var configId = heroCardInfo.ConfigId;
@@ -55,13 +63,14 @@ namespace ET
             itemHeroCard.E_CountText.gameObject.SetActive(config.MaterialType == 2);
             itemHeroCard.E_CountText.text = heroCardInfo.Count.ToString();
 
-            // itemHeroCard.E_ChooseCountText.gameObject.SetActive(config.MaterialType == 2 && heroCardInfo.Count != 0);
+            itemHeroCard.E_ChooseCountText.gameObject.SetActive(false);
             var spriteAtlas = ConstValue.HeroCardAtlasPath;
             var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
             itemHeroCard.E_HeadImage.sprite = headImage;
             itemHeroCard.E_ElementImage.gameObject.SetActive(config.MaterialType == 1);
             itemHeroCard.E_LevelText.gameObject.SetActive(config.MaterialType == 1);
-
+            itemHeroCard.E_LevelText.text = $"Lv.{heroCardInfo.Level.ToString()}";
+        
             var elementConfig = ElementConfigCategory.Instance.Get(config.HeroColor);
             var elementImageStr = elementConfig.IconImage;
             var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elementImageStr);
@@ -190,8 +199,16 @@ namespace ET
                     }
 
                     List<HeroCardInfo> list = new List<HeroCardInfo>();
-                    list = map[index + 1];
-                    self.HeroCardInfos = list;
+                    if (map.Keys.Contains(index + 1))
+                    {
+                        list = map[index + 1];
+                        self.HeroCardInfos = list;
+                    }
+                    else
+                    {
+                        self.HeroCardInfos = new List<HeroCardInfo>();
+                    }
+             
                 }
 
                 // map.Remove(index + 1);

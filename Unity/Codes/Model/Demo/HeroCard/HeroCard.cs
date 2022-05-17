@@ -13,7 +13,9 @@ namespace ET
         public int InTroopIndex; //在队伍里面的index
         public int HeroColor; //英雄属性
         public float Attack;
+
         public float HP;
+
         // public float Defence;
         public float DiamondAttack;
         public float DiamondDefence;
@@ -21,9 +23,13 @@ namespace ET
         public float Angry; //怒气值
         public float TotalAngry; //怒气值上线
         public int Level = 1; //当前英雄的等级
+
         public long CurrentSkillId; //当前需要释放的技能
+
         // public HeroCardInfo HeroCardInfo;
         public int Star = 0; //英雄的星级数量
-        public int Count = 1;   //材料数量
+        public int Count = 1; //材料数量
+        public int State = 1; //英雄的状态 
+        public string CallTime;    //召唤时间戳
     }
 }

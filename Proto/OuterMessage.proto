@@ -804,3 +804,20 @@ message M2C_GetAllWeaponsResponse //IActorLocationResponse
 	string Message = 92;
 	repeated WeaponInfo WeaponInfos = 1;
 }
+
+//ResponseType M2C_StrenthenHeroResponse
+message C2M_StrenthenHeroRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	HeroCardInfo TargetHeroCardInfo = 2;	//目标英雄信息
+	repeated HeroCardInfo ChooseHeroCardInfos = 3;	//选择的材料的信息
+}
+message M2C_StrenthenHeroResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	// repeated WeaponInfo WeaponInfos = 1;
+	HeroCardInfo HeroCardInfo = 1;	//升级完成的英雄信息
+}

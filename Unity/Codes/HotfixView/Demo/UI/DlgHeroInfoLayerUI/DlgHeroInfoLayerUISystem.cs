@@ -33,7 +33,9 @@ namespace ET
 
             UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer];
             baseWindow.GetComponent<DlgAllHeroBagLayer>().OnHeroItemInfoClick = self.OnClickHeroItem;
-            baseWindow.uiTransform.GetComponent<RectTransform>().offsetMax = new Vector2(0, 0);
+            baseWindow.uiTransform.GetComponent<RectTransform>().offsetMax = new Vector2(0, -400);
+            baseWindow.uiTransform.GetComponent<RectTransform>().offsetMin = new Vector2(0, 200);
+
         }
 
         public static async void OnClickHeroItem(this DlgHeroInfoLayerUI self, HeroCardInfo heroCardInfo, Scroll_ItemHeroCard itemHeroCard, bool value)

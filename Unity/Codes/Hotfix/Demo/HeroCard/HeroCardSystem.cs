@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ET
@@ -141,6 +142,7 @@ namespace ET
         public static async ETTask Call(this HeroCard self, int zone, long ownerId)
         {
             self.OwnerId = ownerId;
+            self.CallTime = TimeHelper.DateTimeNow().ToString();
             //todo 先创建继承数据
             await self.CallSkill(zone);
 #if SERVER

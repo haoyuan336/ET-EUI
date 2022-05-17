@@ -32,6 +32,7 @@ namespace ET
         public const int ERR_NotFoundRoom = 200013;
         public const int ERR_GoldNotEnough = 200014; //金币不足
         public const int ERR_DiamondNotEnough = 200015; //钻石不足
+        public const int ERR_MaterialNotEnough = 200016; //材料不足
 
         // 200001以上不抛异常
     }

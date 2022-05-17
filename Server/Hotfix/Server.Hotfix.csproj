@@ -70,6 +70,10 @@
     <Compile Include="..\..\Unity\Codes\Hotfix\Module\Message\**\*.cs">
       <Link>Module\Message\%(RecursiveDir)%(FileName)%(Extension)</Link>
     </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\HeroCard\HeroCardState.cs">
+      <Link>Demo\HeroCard\HeroCardState.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Server.Model.csproj" />

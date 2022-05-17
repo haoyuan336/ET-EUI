@@ -1,10 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
-using System.Diagnostics.Eventing.Reader;
+﻿using ET.Account;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
-using UnityEngine.UI;
 
 namespace ET
 {
@@ -25,17 +20,71 @@ namespace ET
 
         public static async ETTask OnOkButtonClick(this DlgHeroStrengthenLayer self)
         {
+            Log.Debug("强化");
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+
+            M2C_StrenthenHeroResponse response = (M2C_StrenthenHeroResponse) await session.Call(new C2M_StrenthenHeroRequest()
+            {
+                AccountId = accountId, TargetHeroCardInfo = self.HeroCardInfo, ChooseHeroCardInfos = self.AlChooseHeroCardInfo
+            });
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                Log.Debug("强化成功");
+                self.AlChooseHeroCardInfo.Clear();
+                self.HeroCardInfo = response.HeroCardInfo;
+                self.View.ETargetHeroContentLoopHorizontalScrollRect.RefreshCells();
+                UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+                UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer];
+                baseWindow.GetComponent<DlgAllHeroBagLayer>().ReferView();
+                self.View.E_OKButton.gameObject.SetActive(false);
+            }
+
             await ETTask.CompletedTask;
+        }
+
+        public static async void InitHeroCardView(this DlgHeroStrengthenLayer self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
+        {
+            var configId = heroCardInfo.ConfigId;
+            var config = HeroConfigCategory.Instance.Get(configId);
+            itemHeroCard.E_CountText.gameObject.SetActive(config.MaterialType == 2);
+            itemHeroCard.E_CountText.text = heroCardInfo.Count.ToString();
+
+            // itemHeroCard.E_ChooseCountText.gameObject.SetActive(config.MaterialType == 2 && heroCardInfo.Count != 0);
+            var spriteAtlas = ConstValue.HeroCardAtlasPath;
+            var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
+            itemHeroCard.E_HeadImage.sprite = headImage;
+            itemHeroCard.E_ElementImage.gameObject.SetActive(config.MaterialType == 1);
+            itemHeroCard.E_LevelText.gameObject.SetActive(config.MaterialType == 1);
+            itemHeroCard.E_LevelText.text = $"Lv.{heroCardInfo.Level.ToString()}";
+
+            var elementConfig = ElementConfigCategory.Instance.Get(config.HeroColor);
+            var elementImageStr = elementConfig.IconImage;
+            var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elementImageStr);
+            itemHeroCard.E_ElementImage.sprite = sprite;
+
+            for (int i = 0; i < 5; i++)
+            {
+                // var star    
+                var starStr = $"Star_{i}";
+                Transform starObj = UIFindHelper.FindDeepChild(itemHeroCard.uiTransform.gameObject, starStr);
+                if (starObj != null)
+                {
+                    starObj.gameObject.SetActive(i < heroCardInfo.Star);
+                }
+            }
         }
 
         public static void OnLoopTargetHeroItem(this DlgHeroStrengthenLayer self, Transform tr, int index)
         {
             Scroll_ItemHeroCard itemHeroCard = self.ItemHeroCards[index].BindTrans(tr);
 
-            self.SetHeroHeadImage(itemHeroCard, self.HeroCardInfo);
-            self.SetHeroStar(itemHeroCard, self.HeroCardInfo);
-            self.SetHeroElementImage(itemHeroCard, self.HeroCardInfo);
-            self.SetCountInfo(itemHeroCard, self.HeroCardInfo);
+            self.InitHeroCardView(itemHeroCard, self.HeroCardInfo);
+
+            // self.SetHeroHeadImage(itemHeroCard, self.HeroCardInfo);
+            // self.SetHeroStar(itemHeroCard, self.HeroCardInfo);
+            // self.SetHeroElementImage(itemHeroCard, self.HeroCardInfo);
+            // self.SetCountInfo(itemHeroCard, self.HeroCardInfo);
         }
 
         public static void SetCountInfo(this DlgHeroStrengthenLayer self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
@@ -72,8 +121,9 @@ namespace ET
             DlgAddSubPlane dlgAddSubPlane = baseWindow.GetComponent<DlgAddSubPlane>();
             dlgAddSubPlane.View.E_ContentImage.transform.position = itemHeroCard.E_ChooseToggle.transform.position;
 
-            DlgAllHeroBagLayer dlgAllHeroBagLayer = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer].GetComponent<DlgAllHeroBagLayer>();
-            
+            DlgAllHeroBagLayer dlgAllHeroBagLayer =
+                    uiComponent.AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer].GetComponent<DlgAllHeroBagLayer>();
+
             // var isFull = self.CheckIsFull();
             dlgAddSubPlane.EnableAddButton(!self.CheckIsFull());
             dlgAddSubPlane.AddAction = () =>
@@ -112,7 +162,6 @@ namespace ET
                     uiComponent.AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer].GetComponent<DlgAllHeroBagLayer>()
                             .EnableItemWhitHeroInfos(self.AlChooseHeroCardInfo);
                 }
-                
             };
             dlgAddSubPlane.SubAction = () =>
             {
@@ -212,10 +261,9 @@ namespace ET
 
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             await uiComponent.ShowWindow(WindowID.WindowID_AllHeroBagLayer);
-            // uiComponent.GetComponent<DlgAllHeroBagLayer>().UnAbleHeroItemWhitHeroInfo();
             UIBaseWindow uiBaseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer];
-            uiBaseWindow.uiTransform.GetComponent<RectTransform>().offsetMax = new Vector2(0, -400);
-            // uiBaseWindow.GetComponent<DlgAllHeroBagLayer>().OnHeroItemClick = null;
+            uiBaseWindow.uiTransform.GetComponent<RectTransform>().offsetMax = new Vector2(0, -600);
+            uiBaseWindow.uiTransform.GetComponent<RectTransform>().offsetMin = new Vector2(0, 300);
             uiBaseWindow.GetComponent<DlgAllHeroBagLayer>().OnHeroItemInfoClick = self.OnHeroItemClick;
             uiBaseWindow.GetComponent<DlgAllHeroBagLayer>().UnAbleHeroItemWhitHeroInfo(self.HeroCardInfo);
         }
