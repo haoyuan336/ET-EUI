@@ -13,7 +13,7 @@ namespace ET
 
         // public Dictionary<int, Scroll_ItemTroopHeroCard> ItemTroopHeroCards = new Dictionary<int, Scroll_ItemTroopHeroCard>();
 
-        public Dictionary<int, Scroll_ItemHeroCard> ItemTroopHeroCards = new Dictionary<int, Scroll_ItemHeroCard>();
+        // public Dictionary<int, Scroll_ItemHeroCard> ItemTroopHeroCards = new Dictionary<int, Scroll_ItemHeroCard>();
         // public Dictionary<int, Scroll_ItemHeroCard> ItemHeroCards = new Dictionary<int, Scroll_ItemHeroCard>();
 
         // public List<TroopInfo> TroopInfos = new List<TroopInfo>();

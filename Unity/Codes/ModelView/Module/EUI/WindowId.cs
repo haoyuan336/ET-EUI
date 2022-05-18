@@ -38,5 +38,6 @@
         WindowID_AddSubPlane, //
         WindowID_AllHeroBagLayer, //所有英雄的背包页面
         WindowID_HeroStrengthenLayer, //强化英雄页面
+        WindowID_TroopHeroCardLayer, //队伍里面的卡牌信息
     }
 }

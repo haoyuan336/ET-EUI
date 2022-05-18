@@ -138,12 +138,13 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
-        public static async ETTask PlayBeAttackAnim(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message)
+        public static async ETTask PlayBeAttackAnim(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message, SkillConfig skillConfig)
         {
             self.HeroMode.GetComponent<Animator>().SetTrigger("BeAttack");
             self.Parent.GetComponent<HeroCardObjectComponent>().UpdateHeroCardTextView(message.BeAttackHeroCardInfo);
             self.GetComponent<HeroCardInfoObjectComponent>().UpdateView(message.BeAttackHeroCardInfo);
-            await TimerComponent.Instance.WaitAsync(1000);
+            var damageTime = long.Parse(skillConfig.SkillAnimTime);
+            await TimerComponent.Instance.WaitAsync(damageTime);
             if (message.BeAttackHeroCardInfo.HP <= 0)
             {
                 self.HeroMode.GetComponent<Animator>().SetBool("Dead", true);
@@ -156,13 +157,14 @@ namespace ET
         {
             HeroCard heroCard = message.AttackHeroCard;
             HeroCard beAttackCard = message.BeAttackHeroCard;
-
-            beAttackCard.GetComponent<HeroModeObjectCompoent>().PlayBeAttackAnim(message).Coroutine();
-
             long skillId = heroCard.CurrentSkillId;
             Log.Debug($"Skill id {skillId}");
             Skill skill = heroCard.GetChild<Skill>(skillId);
             SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
+            beAttackCard.GetComponent<HeroModeObjectCompoent>().PlayBeAttackAnim(message, skillConfig).Coroutine();
+
+      
+        
             string skillAnimStr = skillConfig.SkillAnimName;
             self.UpdateShowDataView(message.AttackHeroCardInfo);
             // switch (skillConfig.SkillType)
@@ -179,7 +181,9 @@ namespace ET
             // GameObject selfGo = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode;
 
             self.HeroMode.GetComponent<Animator>().SetTrigger(skillAnimStr);
-            await TimerComponent.Instance.WaitAsync(1000);
+            var damageTimeTime =float.Parse(skillConfig.DamageTime);
+            var skillTime = long.Parse(skillConfig.SkillAnimTime);
+            await TimerComponent.Instance.WaitAsync(skillTime);
         }
 
         // public static async ETTask PlayAddAngryEffect(this HeroModeObjectCompoent self, EventType.PlayAddAngryViewAnim message)
