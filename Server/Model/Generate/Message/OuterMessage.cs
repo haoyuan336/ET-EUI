@@ -1255,6 +1255,9 @@ namespace ET
 		[ProtoMember(1)]
 		public long Account { get; set; }
 
+		[ProtoMember(2)]
+		public int BagType { get; set; }
+
 	}
 
 	[Message(OuterOpcode.M2C_GetAllHeroCardListResponse)]
@@ -1423,8 +1426,9 @@ namespace ET
 		public long HeroId { get; set; }
 
 		[ProtoMember(3)]
-		public int InTroopIndex { get; set; }
+		public long AccountId { get; set; }
 
+// int32 InTroopIndex = 3;
 	}
 
 	[Message(OuterOpcode.M2C_SetHeroToTroopResponse)]
@@ -1441,7 +1445,45 @@ namespace ET
 		public string Message { get; set; }
 
 		[ProtoMember(1)]
-		public HeroCardInfo HeroCardInfo { get; set; }
+		public List<HeroCardInfo> HeroCardInfos = new List<HeroCardInfo>();
+
+	}
+
+	[ResponseType(nameof(M2C_UnSetHeroToTroopResponse))]
+	[Message(OuterOpcode.C2M_UnSetHeroToTroopRequest)]
+	[ProtoContract]
+	public partial class C2M_UnSetHeroToTroopRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long TroopId { get; set; }
+
+		[ProtoMember(2)]
+		public long HeroId { get; set; }
+
+		[ProtoMember(3)]
+		public long AccountId { get; set; }
+
+// int32 InTroopIndex = 3;
+	}
+
+	[Message(OuterOpcode.M2C_UnSetHeroToTroopResponse)]
+	[ProtoContract]
+	public partial class M2C_UnSetHeroToTroopResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<HeroCardInfo> HeroCardInfos = new List<HeroCardInfo>();
 
 	}
 

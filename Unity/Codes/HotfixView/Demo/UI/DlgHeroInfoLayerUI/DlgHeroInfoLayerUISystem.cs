@@ -33,15 +33,16 @@ namespace ET
 
             UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer];
             baseWindow.GetComponent<DlgAllHeroBagLayer>().OnHeroItemInfoClick = self.OnClickHeroItem;
+            baseWindow.GetComponent<DlgAllHeroBagLayer>().SetShowHeroType(HeroBagType.HeroAndMaterial);
             baseWindow.uiTransform.GetComponent<RectTransform>().offsetMax = new Vector2(0, -400);
             baseWindow.uiTransform.GetComponent<RectTransform>().offsetMin = new Vector2(0, 200);
-
         }
 
-        public static async void OnClickHeroItem(this DlgHeroInfoLayerUI self, HeroCardInfo heroCardInfo, Scroll_ItemHeroCard itemHeroCard, bool value)
+        public static async void OnClickHeroItem(this DlgHeroInfoLayerUI self, HeroCardInfo heroCardInfo, Scroll_ItemHeroCard itemHeroCard,
+        bool value)
         {
             var config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
-            if (config.MaterialType == 2)
+            if (config.MaterialType == (int) HeroBagType.Materail)
             {
                 itemHeroCard.E_ChooseToggle.isOn = false;
                 return;
@@ -60,8 +61,6 @@ namespace ET
                 UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().AllWindowsDic[(int) WindowID.WindowID_ShowHeroInfoLayer];
                 baseWindow.GetComponent<DlgShowHeroInfoLayer>().SetHeroInfo(heroCardInfo);
             }
-            
-           
         }
     }
 }

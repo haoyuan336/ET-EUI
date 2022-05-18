@@ -63,7 +63,7 @@ namespace ET
             {
                 WeaponInfo info = self.WeaponInfos[index];
                 WeaponsConfig config = WeaponsConfigCategory.Instance.Get(info.ConfigId);
-                if (config.MaterialType == 1)
+                if (config.MaterialType == (int)HeroBagType.Hero)
                 {
                     if (value)
                     {

@@ -13,6 +13,7 @@ namespace ET
             List<HeroCard> heroCards =
                     await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<HeroCard>((a) => a.TroopId.Equals(TroopId));
             List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>();
+            
             foreach (var heroCard in heroCards)
             {
                 heroCardInfos.Add(heroCard.GetMessageInfo());

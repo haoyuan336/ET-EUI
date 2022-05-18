@@ -3,7 +3,7 @@
     public class Troop: Entity
     {
         public long OnwerId;
-        public long State;
+        public int State = 1;
         public string CreateTime;
     }
 }

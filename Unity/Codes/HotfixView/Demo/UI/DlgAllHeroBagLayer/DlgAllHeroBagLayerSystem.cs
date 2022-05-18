@@ -48,29 +48,29 @@ namespace ET
             self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefreshCells();
         }
 
-        public static  void ReferView(this DlgAllHeroBagLayer self)
+        public static void ReferView(this DlgAllHeroBagLayer self)
         {
             self.AllChooseHeroCardInfos = null;
             self.EnabelHeroCardInfos = null;
             // self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefreshCells();
             self.FilterColor(self.CurrentChooseTypeIndex).Coroutine();
         }
-        
+
         public static async void InitHeroCardView(this DlgAllHeroBagLayer self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
         {
             var configId = heroCardInfo.ConfigId;
             var config = HeroConfigCategory.Instance.Get(configId);
-            itemHeroCard.E_CountText.gameObject.SetActive(config.MaterialType == 2);
+            itemHeroCard.E_CountText.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Materail);
             itemHeroCard.E_CountText.text = heroCardInfo.Count.ToString();
 
             itemHeroCard.E_ChooseCountText.gameObject.SetActive(false);
             var spriteAtlas = ConstValue.HeroCardAtlasPath;
             var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
             itemHeroCard.E_HeadImage.sprite = headImage;
-            itemHeroCard.E_ElementImage.gameObject.SetActive(config.MaterialType == 1);
-            itemHeroCard.E_LevelText.gameObject.SetActive(config.MaterialType == 1);
+            itemHeroCard.E_ElementImage.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
+            itemHeroCard.E_LevelText.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
             itemHeroCard.E_LevelText.text = $"Lv.{heroCardInfo.Level.ToString()}";
-        
+
             var elementConfig = ElementConfigCategory.Instance.Get(config.HeroColor);
             var elementImageStr = elementConfig.IconImage;
             var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elementImageStr);
@@ -107,11 +107,11 @@ namespace ET
                 if (findInfo != null)
                 {
                     var config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
-                    if (config.MaterialType == 1)
+                    if (config.MaterialType == (int) HeroBagType.Hero)
                     {
                         itemHeroCard.E_ChooseToggle.isOn = true;
                     }
-                    else if (config.MaterialType == 2)
+                    else if (config.MaterialType == (int) HeroBagType.Materail)
                     {
                         itemHeroCard.E_ChooseCountText.gameObject.SetActive(true);
                         itemHeroCard.E_ChooseCountText.text = findInfo.Count.ToString();
@@ -165,7 +165,20 @@ namespace ET
 
         public static void ShowWindow(this DlgAllHeroBagLayer self, Entity contextData = null)
         {
+            // self.FilterColor(self.CurrentChooseTypeIndex).Coroutine();
+        }
+
+        public static void SetShowHeroType(this DlgAllHeroBagLayer self, HeroBagType type)
+        {
+            self.BagType = type;
             self.FilterColor(self.CurrentChooseTypeIndex).Coroutine();
+        }
+
+        public static async ETTask SetShowHeroTypeAsync(this DlgAllHeroBagLayer self, HeroBagType type)
+        {
+            self.BagType = type;
+            await self.FilterColor(self.CurrentChooseTypeIndex);
+            
         }
 
         public static void SetAllChooseHeroCardInfos(this DlgAllHeroBagLayer self, List<HeroCardInfo> heroCardInfos)
@@ -178,13 +191,32 @@ namespace ET
         {
             Log.Debug("filter color");
             long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            M2C_GetAllHeroCardListResponse m2CGetAllTroopInfosResponse = (M2C_GetAllHeroCardListResponse) await self.ZoneScene()
-                    .GetComponent<SessionComponent>().Session.Call(new C2M_GetAllHeroCardListRequest() { Account = AccountId });
+            M2C_GetAllHeroCardListResponse m2CGetAllHeroCardListResponse = (M2C_GetAllHeroCardListResponse) await self.ZoneScene()
+                    .GetComponent<SessionComponent>().Session
+                    .Call(new C2M_GetAllHeroCardListRequest() { Account = AccountId, BagType = (int) self.BagType });
             Log.Debug($"filter index{index}");
-            if (m2CGetAllTroopInfosResponse.Error == ErrorCode.ERR_Success)
+            if (m2CGetAllHeroCardListResponse.Error == ErrorCode.ERR_Success)
             {
                 Dictionary<int, List<HeroCardInfo>> map = new Dictionary<int, List<HeroCardInfo>>();
-                self.HeroCardInfos = m2CGetAllTroopInfosResponse.HeroCardInfos;
+                self.HeroCardInfos = m2CGetAllHeroCardListResponse.HeroCardInfos;
+                //根据当前类型，过滤一下列表
+                if (self.BagType != HeroBagType.HeroAndMaterial)
+                {
+                    Log.Debug($"self bag type {(int) self.BagType}");
+                    //过滤调与背包类型不符的 元素
+                    self.HeroCardInfos.RemoveAll(a =>
+                    {
+                        var config = HeroConfigCategory.Instance.Get(a.ConfigId);
+                        if (config.MaterialType == (int) self.BagType)
+                        {
+                            return false;
+                        }
+
+                        return true;
+                    });
+                    Log.Debug($"hero card info {self.HeroCardInfos.Count}");
+                }
+
                 if (index != 5)
                 {
                     foreach (var heroCardInfo in self.HeroCardInfos)
@@ -208,11 +240,10 @@ namespace ET
                     {
                         self.HeroCardInfos = new List<HeroCardInfo>();
                     }
-             
                 }
 
                 // map.Remove(index + 1);
-
+                Log.Debug($"add ui item {self.HeroCardInfos.Count}");
                 self.AddUIScrollItems(ref self.ItemHeroCards, self.HeroCardInfos.Count);
                 self.View.E_LoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, self.HeroCardInfos.Count);
             }

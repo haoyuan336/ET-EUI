@@ -22,5 +22,6 @@ namespace ET
         public List<HeroCardInfo> EnabelHeroCardInfos = null; //不禁用的英雄信息列表
         public List<HeroCardInfo> AllChooseHeroCardInfos = null; //当前已经选择的英雄列表
         public Action<HeroCardInfo, Scroll_ItemHeroCard, bool> OnHeroItemInfoClick;
+        public HeroBagType BagType = HeroBagType.HeroAndMaterial;
     }
 }

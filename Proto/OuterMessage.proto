@@ -573,6 +573,7 @@ message C2M_GetAllHeroCardListRequest //IActorLocationRequest
 {
 	int RpcId = 90;
 	int64 Account = 1;
+	int32 BagType = 2;
 }
 message M2C_GetAllHeroCardListResponse //IActorLocationResponse
 {
@@ -644,14 +645,32 @@ message C2M_SetHeroToTroopRequest //IActorLocationRequest
 	int32 RpcId = 90;
 	int64 TroopId = 1;
 	int64 HeroId = 2;
-	int32 InTroopIndex = 3;
+	int64 AccountId = 3;	
+	// int32 InTroopIndex = 3;
 }
 message M2C_SetHeroToTroopResponse //IActorLocationResponse
 {
 	int32 RpcId = 90;
 	int32 Error = 91;
 	string Message = 92;
-	HeroCardInfo HeroCardInfo = 1;
+	repeated HeroCardInfo HeroCardInfos = 1;
+	
+}
+//ResponseType M2C_UnSetHeroToTroopResponse
+message C2M_UnSetHeroToTroopRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 TroopId = 1;
+	int64 HeroId = 2;
+	int64 AccountId = 3;	
+	// int32 InTroopIndex = 3;
+}
+message M2C_UnSetHeroToTroopResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated HeroCardInfo HeroCardInfos = 1;
 	
 }
 //ResponseType M2C_StartPVEGameResponse

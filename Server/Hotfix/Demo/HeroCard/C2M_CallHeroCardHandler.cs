@@ -17,7 +17,7 @@ namespace ET
             int key = keys[randomIndex];
             
             HeroConfig config = HeroConfigCategory.Instance.Get(key);
-            if (config.MaterialType == 2)
+            if (config.MaterialType == (int)HeroBagType.Materail)
             {
                 Log.Warning("召唤到的是材料");
                 //召唤出来的是 材料

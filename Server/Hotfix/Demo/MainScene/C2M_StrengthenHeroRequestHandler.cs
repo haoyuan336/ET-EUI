@@ -34,7 +34,7 @@ namespace ET
                         else
                         {
                             var config = HeroConfigCategory.Instance.Get(card.ConfigId);
-                            if (config.MaterialType == 2)
+                            if (config.MaterialType == (int) HeroBagType.Materail)
                             {
                                 if (info.Count > card.Count)
                                 {
@@ -63,7 +63,7 @@ namespace ET
                     foreach (var card in heroCards)
                     {
                         var config = HeroConfigCategory.Instance.Get(card.ConfigId);
-                        if (config.MaterialType == 2)
+                        if (config.MaterialType == (int) HeroBagType.Materail)
                         {
                             HeroCardInfo info = heroCardInfos.Find(a => a.HeroId.Equals(card.Id));
                             if (info != null)

@@ -47,15 +47,15 @@ namespace ET
         {
             var configId = heroCardInfo.ConfigId;
             var config = HeroConfigCategory.Instance.Get(configId);
-            itemHeroCard.E_CountText.gameObject.SetActive(config.MaterialType == 2);
+            itemHeroCard.E_CountText.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Materail);
             itemHeroCard.E_CountText.text = heroCardInfo.Count.ToString();
 
             // itemHeroCard.E_ChooseCountText.gameObject.SetActive(config.MaterialType == 2 && heroCardInfo.Count != 0);
             var spriteAtlas = ConstValue.HeroCardAtlasPath;
             var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
             itemHeroCard.E_HeadImage.sprite = headImage;
-            itemHeroCard.E_ElementImage.gameObject.SetActive(config.MaterialType == 1);
-            itemHeroCard.E_LevelText.gameObject.SetActive(config.MaterialType == 1);
+            itemHeroCard.E_ElementImage.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
+            itemHeroCard.E_LevelText.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
             itemHeroCard.E_LevelText.text = $"Lv.{heroCardInfo.Level.ToString()}";
 
             var elementConfig = ElementConfigCategory.Instance.Get(config.HeroColor);
@@ -92,7 +92,7 @@ namespace ET
             var configId = heroCardInfo.ConfigId;
             var config = HeroConfigCategory.Instance.Get(configId);
             // itemHeroCard.
-            itemHeroCard.E_CountText.gameObject.SetActive(config.MaterialType == 2);
+            itemHeroCard.E_CountText.gameObject.SetActive(config.MaterialType == (int)HeroBagType.Materail);
             itemHeroCard.E_CountText.text = heroCardInfo.Count.ToString();
         }
 
@@ -190,7 +190,7 @@ namespace ET
             var config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
             HeroCardInfo fingInfo = self.AlChooseHeroCardInfo.Find(a => a.HeroId.Equals(heroCardInfo.HeroId));
             var isFull = self.CheckIsFull();
-            if (config.MaterialType == 2)
+            if (config.MaterialType == (int)HeroBagType.Materail)
             {
                 Log.Debug($"materail type {config.MaterialType}");
                 if (value)
