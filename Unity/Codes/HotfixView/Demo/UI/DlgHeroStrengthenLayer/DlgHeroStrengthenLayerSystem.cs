@@ -42,53 +42,10 @@ namespace ET
 
             await ETTask.CompletedTask;
         }
-
-        public static async void InitHeroCardView(this DlgHeroStrengthenLayer self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
-        {
-            var configId = heroCardInfo.ConfigId;
-            var config = HeroConfigCategory.Instance.Get(configId);
-            itemHeroCard.E_CountText.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Materail);
-            itemHeroCard.E_CountText.text = heroCardInfo.Count.ToString();
-
-            // itemHeroCard.E_ChooseCountText.gameObject.SetActive(config.MaterialType == 2 && heroCardInfo.Count != 0);
-            var spriteAtlas = ConstValue.HeroCardAtlasPath;
-            var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
-            itemHeroCard.E_HeadImage.sprite = headImage;
-            itemHeroCard.E_ElementImage.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
-            itemHeroCard.E_LevelText.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
-            itemHeroCard.E_LevelText.text = $"Lv.{heroCardInfo.Level.ToString()}";
-
-            var elementConfig = ElementConfigCategory.Instance.Get(config.HeroColor);
-            var elementImageStr = elementConfig.IconImage;
-            var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elementImageStr);
-            itemHeroCard.E_ElementImage.sprite = sprite;
-            
-            HeroQualityTypeConfig heroQualityTypeConfig = HeroQualityTypeConfigCategory.Instance.Get(config.HeroQuality);
-            var aualityIcon = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, heroQualityTypeConfig.Icon);
-            itemHeroCard.E_QualityIconImage.sprite = aualityIcon;
-
-            for (int i = 0; i < 5; i++)
-            {
-                // var star    
-                var starStr = $"Star_{i}";
-                Transform starObj = UIFindHelper.FindDeepChild(itemHeroCard.uiTransform.gameObject, starStr);
-                if (starObj != null)
-                {
-                    starObj.gameObject.SetActive(i < heroCardInfo.Star);
-                }
-            }
-        }
-
         public static void OnLoopTargetHeroItem(this DlgHeroStrengthenLayer self, Transform tr, int index)
         {
             Scroll_ItemHeroCard itemHeroCard = self.ItemHeroCards[index].BindTrans(tr);
-
-            self.InitHeroCardView(itemHeroCard, self.HeroCardInfo);
-
-            // self.SetHeroHeadImage(itemHeroCard, self.HeroCardInfo);
-            // self.SetHeroStar(itemHeroCard, self.HeroCardInfo);
-            // self.SetHeroElementImage(itemHeroCard, self.HeroCardInfo);
-            // self.SetCountInfo(itemHeroCard, self.HeroCardInfo);
+            itemHeroCard.InitHeroCard(self.HeroCardInfo);
         }
 
         public static void SetCountInfo(this DlgHeroStrengthenLayer self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
