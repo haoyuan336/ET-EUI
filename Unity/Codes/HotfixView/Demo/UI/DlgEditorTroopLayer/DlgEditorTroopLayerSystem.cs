@@ -15,18 +15,11 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgEditorTroopLayer self)
         {
-            // self.View.E_TroopCardContentLoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopEvent);
-            // self.View.E_StartGameButton.AddListenerAsync(self.StartGameClickAction);
+            self.View.ESTroopHeroCards.RegisterUIEvent();
         }
 
         public static async void ShowBackButton(this DlgEditorTroopLayer self)
         {
-            // self.View.E_BackButton.AddListener(() =>
-            // {
-            //     self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer);
-            //     self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_EditorTroopLayer);
-            //     self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainScene).Coroutine();
-            // });
 
             await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_BackButton);
             UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_BackButton);
@@ -36,8 +29,6 @@ namespace ET
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_EditorTroopLayer);
             };
         }
-
-      
 
         public static async void ShowTroopHeroCardInfo(this DlgEditorTroopLayer self)
         {
@@ -98,19 +89,17 @@ namespace ET
                 }
             }
         }
+
         public static void SetAlChooseHeroCardInfo(this DlgEditorTroopLayer self)
         {
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer];
             baseWindow.GetComponent<DlgAllHeroBagLayer>().SetAllChooseHeroCardInfos(self.TroopHeroCardInfos);
-            // self.View.E_StartGameButton.gameObject.SetActive(self.TroopHeroCardInfos.Count == 3);
         }
 
         public static void UpdateTroopHeroCardInfoAsync(this DlgEditorTroopLayer self, List<HeroCardInfo> heroCardInfos)
         {
-            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
-            UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_TroopHeroCardLayer];
-            baseWindow.GetComponent<DlgTroopHeroCardLayer>().UpdateHeroCardInfo(heroCardInfos);
+            self.View.ESTroopHeroCards.UpdateHeroCardInfo(heroCardInfos);
         }
 
         public static async void OnHeroCardItemClickAction(this DlgEditorTroopLayer self, HeroCardInfo info, Scroll_ItemHeroCard heroCard, bool value)
@@ -135,10 +124,7 @@ namespace ET
                 {
                     // Log.Debug($"设置队伍成功{response.HeroCardInfos.Count}");
                     self.TroopHeroCardInfos = response.HeroCardInfos;
-
                     self.UpdateTroopHeroCardInfoAsync(self.TroopHeroCardInfos);
-
-                    // self.View.E_TroopCardContentLoopVerticalScrollRect.RefreshCells();
                 }
                 else
                 {
@@ -164,18 +150,7 @@ namespace ET
             DlgAllHeroBagLayer allHeroBagLayer = baseWindow.GetComponent<DlgAllHeroBagLayer>();
             allHeroBagLayer.OnHeroItemInfoClick = self.OnHeroCardItemClickAction;
             await allHeroBagLayer.SetShowHeroTypeAsync(HeroBagType.Hero);
-            // self.AddUIScrollItems(ref self.ItemTroopHeroCards, 3);
-            // self.View.E_TroopCardContentLoopVerticalScrollRect.SetVisible(true, 3);
-
-            await uiComponent.ShowWindow(WindowID.WindowID_TroopHeroCardLayer);
-            UIBaseWindow heroCardLayerBaseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_TroopHeroCardLayer];
-            // heroCardLayerBaseWindow.GetComponent<DlgTroopHeroCardLayer>()
-            RectTransform heroCardBaseWindowRect = heroCardLayerBaseWindow.uiTransform.GetComponent<RectTransform>();
-            heroCardLayerBaseWindow.GetComponent<DlgTroopHeroCardLayer>().ItemCardClickAction = self.OnTroopHeroCardItemClickAction;
-            heroCardBaseWindowRect.anchorMax = new Vector2(0.5f, 1);
-            heroCardBaseWindowRect.anchorMin = new Vector2(0.5f, 1);
-            heroCardBaseWindowRect.offsetMax = new Vector2(0, -500);
-            heroCardBaseWindowRect.offsetMin = new Vector2(0, -500);
+            self.View.ESTroopHeroCards.ItemCardClickAction = self.OnTroopHeroCardItemClickAction;
             self.ShowTroopHeroCardInfo();
             self.ShowBackButton();
         }
@@ -190,7 +165,5 @@ namespace ET
                 self.HideEditorTroopLayerAction();
             }
         }
-
-       
     }
 }

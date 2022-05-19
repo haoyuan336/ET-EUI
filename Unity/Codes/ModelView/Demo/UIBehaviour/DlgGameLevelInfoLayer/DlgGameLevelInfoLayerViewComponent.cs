@@ -124,6 +124,24 @@ namespace ET
      		}
      	}
 
+		public ESTroopHeroCards ESTroopHeroCards
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_estroopherocards == null )
+     			{
+		    	   Transform subTrans = UIFindHelper.FindDeepChild<Transform>(this.uiTransform.gameObject,"ESTroopHeroCards");
+		    	   this.m_estroopherocards = this.AddChild<ESTroopHeroCards,Transform>(subTrans);
+     			}
+     			return this.m_estroopherocards;
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_E_EditorTroopButton = null;
@@ -133,6 +151,8 @@ namespace ET
 			this.m_E_LevelText = null;
 			this.m_E_StartGameButton = null;
 			this.m_E_StartGameImage = null;
+			this.m_estroopherocards?.Dispose();
+			this.m_estroopherocards = null;
 			this.uiTransform = null;
 		}
 
@@ -143,6 +163,7 @@ namespace ET
 		private UnityEngine.UI.Text m_E_LevelText = null;
 		private UnityEngine.UI.Button m_E_StartGameButton = null;
 		private UnityEngine.UI.Image m_E_StartGameImage = null;
+		private ESTroopHeroCards m_estroopherocards = null;
 		public Transform uiTransform = null;
 	}
 }

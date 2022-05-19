@@ -1,30 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
-using ET.Account;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ET
 {
-    public static class DlgTroopHeroCardLayerSystem
+    public static class ESTroopHeroCardsSystem
     {
-        public static void RegisterUIEvent(this DlgTroopHeroCardLayer self)
+
+        public static void RegisterUIEvent(this ESTroopHeroCards self)
         {
-            self.View.E_TroopCardContentLoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopEvent);
+            Log.Debug("注册公共组件的事件");
+            self.E_TroopCardContentLoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopEvent);
+            self.AddUIScrollItems(ref self.ItemTroopHeroCards, 3);
+            self.E_TroopCardContentLoopVerticalScrollRect.SetVisible(true, 3);
         }
-        public static void UpdateHeroCardInfo(this DlgTroopHeroCardLayer self, List<HeroCardInfo> heroCardInfos)
+        public static void UpdateHeroCardInfos(this ESTroopHeroCards self, List<HeroCardInfo> heroCardInfos)
         {
             self.TroopHeroCardInfos = heroCardInfos;
-            self.View.E_TroopCardContentLoopVerticalScrollRect.RefreshCells();
+            self.E_TroopCardContentLoopVerticalScrollRect.RefreshCells();
         }
 
-        public static void ShowWindow(this DlgTroopHeroCardLayer self, Entity contextData = null)
+        public static void UpdateHeroCardInfo(this ESTroopHeroCards self, List<HeroCardInfo> heroCardInfos)
         {
-            self.AddUIScrollItems(ref self.ItemTroopHeroCards, 3);
-            self.View.E_TroopCardContentLoopVerticalScrollRect.SetVisible(true, 3);
+            self.TroopHeroCardInfos = heroCardInfos;
+            self.E_TroopCardContentLoopVerticalScrollRect.RefreshCells();
         }
-        public static void OnLoopEvent(this DlgTroopHeroCardLayer self, Transform transform, int index)
+        public static void OnLoopEvent(this ESTroopHeroCards self, Transform transform, int index)
         {
             Scroll_ItemHeroCard itemHeroCard = self.ItemTroopHeroCards[index].BindTrans(transform);
             HeroCardInfo heroCardInfo = self.TroopHeroCardInfos.Find(a => a.InTroopIndex.Equals(index));
@@ -38,7 +38,7 @@ namespace ET
                 itemHeroCard.E_ElementImage.gameObject.SetActive(false);
                 itemHeroCard.E_QualityIconImage.gameObject.SetActive(false);
             }
-
+        
             itemHeroCard.E_ChooseToggle.onValueChanged.RemoveAllListeners();
             itemHeroCard.E_ChooseToggle.onValueChanged.AddListener((value) =>
             {
@@ -49,10 +49,6 @@ namespace ET
                     self.ItemCardClickAction(heroCardInfo, value);
                 }
             });
-        }
-        public static void HideWindow(this DlgTroopHeroCardLayer self)
-        {
-            self.ItemCardClickAction = null;
         }
     }
 }

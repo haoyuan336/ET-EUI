@@ -26,6 +26,7 @@ namespace ET
 
             HeroQualityTypeConfig heroQualityTypeConfig = HeroQualityTypeConfigCategory.Instance.Get(config.HeroQuality);
             var aualityIcon = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, heroQualityTypeConfig.Icon);
+            self.E_QualityIconImage.gameObject.SetActive(true);
             self.E_QualityIconImage.sprite = aualityIcon;
             
             for (int i = 0; i < 5; i++)

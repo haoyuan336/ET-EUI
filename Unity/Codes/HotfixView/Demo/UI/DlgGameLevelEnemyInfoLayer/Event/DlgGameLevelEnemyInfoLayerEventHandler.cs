@@ -1,7 +1,7 @@
 ﻿namespace ET
 {
-	[AUIEvent(WindowID.WindowID_TroopHeroCardLayer)]
-	public  class DlgTroopHeroCardLayerEventHandler : IAUIEventHandler
+	[AUIEvent(WindowID.WindowID_GameLevelEnemyInfoLayer)]
+	public  class DlgGameLevelEnemyInfoLayerEventHandler : IAUIEventHandler
 	{
 
 		public void OnInitWindowCoreData(UIBaseWindow uiBaseWindow)
@@ -11,23 +11,22 @@
 
 		public void OnInitComponent(UIBaseWindow uiBaseWindow)
 		{
-		  uiBaseWindow.AddComponent<DlgTroopHeroCardLayerViewComponent>(); 
-		  uiBaseWindow.AddComponent<DlgTroopHeroCardLayer>(); 
+		  uiBaseWindow.AddComponent<DlgGameLevelEnemyInfoLayerViewComponent>(); 
+		  uiBaseWindow.AddComponent<DlgGameLevelEnemyInfoLayer>(); 
 		}
 
 		public void OnRegisterUIEvent(UIBaseWindow uiBaseWindow)
 		{
-		  uiBaseWindow.GetComponent<DlgTroopHeroCardLayer>().RegisterUIEvent(); 
+		  uiBaseWindow.GetComponent<DlgGameLevelEnemyInfoLayer>().RegisterUIEvent(); 
 		}
 
 		public void OnShowWindow(UIBaseWindow uiBaseWindow, Entity contextData = null)
 		{
-		  uiBaseWindow.GetComponent<DlgTroopHeroCardLayer>().ShowWindow(contextData); 
+		  uiBaseWindow.GetComponent<DlgGameLevelEnemyInfoLayer>().ShowWindow(contextData); 
 		}
 
 		public void OnHideWindow(UIBaseWindow uiBaseWindow)
 		{
-			uiBaseWindow.GetComponent<DlgTroopHeroCardLayer>().HideWindow();
 		}
 
 		public void BeforeUnload(UIBaseWindow uiBaseWindow)

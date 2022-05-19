@@ -3157,7 +3157,7 @@ RectTransform:
   - {fileID: 2863323261257233769}
   - {fileID: 3740673152379120575}
   - {fileID: 3651954616104443302}
-  - {fileID: 4407167513218738525}
+  - {fileID: 1981745570417900722}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4444,7 +4444,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
---- !u!1001 &662384281738052264
+--- !u!1001 &3429691669022349127
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -4539,7 +4539,7 @@ PrefabInstance:
     - target: {fileID: 3753791514166684661, guid: d4a22cfbb065af541810ad3578dffaa4,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 313
       objectReference: {fileID: 0}
     - target: {fileID: 3753791514166684661, guid: d4a22cfbb065af541810ad3578dffaa4,
         type: 3}
@@ -4559,13 +4559,13 @@ PrefabInstance:
     - target: {fileID: 8269151784023646610, guid: d4a22cfbb065af541810ad3578dffaa4,
         type: 3}
       propertyPath: m_Name
-      value: ESTroopHeroCard
+      value: ESTroopHeroCards
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4a22cfbb065af541810ad3578dffaa4, type: 3}
---- !u!224 &4407167513218738525 stripped
+--- !u!224 &1981745570417900722 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3753791514166684661, guid: d4a22cfbb065af541810ad3578dffaa4,
     type: 3}
-  m_PrefabInstance: {fileID: 662384281738052264}
+  m_PrefabInstance: {fileID: 3429691669022349127}
   m_PrefabAsset: {fileID: 0}

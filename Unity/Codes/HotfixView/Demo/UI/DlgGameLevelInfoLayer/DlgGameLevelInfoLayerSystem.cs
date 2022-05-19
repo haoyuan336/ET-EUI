@@ -13,6 +13,7 @@ namespace ET
         {
             self.View.E_EditorTroopButton.AddListenerAsync(self.ShowEditorTroopLayer);
             self.View.E_StartGameButton.AddListenerAsync(self.StartGameClickAction);
+            self.View.ESTroopHeroCards.RegisterUIEvent();
         }
 
         // public static async ETTask StartGame(this DlgGameLevelInfoLayer self)
@@ -104,23 +105,25 @@ namespace ET
             DlgBackButton dlgBackButton = baseWindow.GetComponent<DlgBackButton>();
             dlgBackButton.BackButtonClickAction = self.OnBackButtonClick;
             self.ShowTroopHeroCardInfo();
-            ;
-
-            // GetComponent<RectTransform>().offsetMax = new Vector2(GetComponent<RectTransform>().offsetMax.x, top);
+            
+            //显示游戏详情页面
+            self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameLevelEnemyInfoLayer).Coroutine();
         }
 
         public static async void ShowTroopHeroCardInfo(this DlgGameLevelInfoLayer self)
         {
             List<HeroCardInfo> heroCardInfos = await self.RequestCurrentTroopInfo();
-            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_TroopHeroCardLayer);
-            UIBaseWindow heroCardBaseWindos = self.DomainScene().GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_TroopHeroCardLayer);
-            heroCardBaseWindos.GetComponent<DlgTroopHeroCardLayer>().UpdateHeroCardInfo(heroCardInfos);
+            // await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_TroopHeroCardLayer);
+            // UIBaseWindow heroCardBaseWindos = self.DomainScene().GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_TroopHeroCardLayer);
+            // heroCardBaseWindos.GetComponent<DlgTroopHeroCardLayer>().UpdateHeroCardInfo(heroCardInfos);
+            self.View.ESTroopHeroCards.UpdateHeroCardInfos(heroCardInfos);
+            
             // heroCardBaseWindos.uiTransform.GetComponent<RectTransform>().offsetMax = new vec;
-            var heroCardBaseWindowRect = heroCardBaseWindos.uiTransform.GetComponent<RectTransform>();
-            heroCardBaseWindowRect.anchorMax = new Vector2(0.5f, 1);
-            heroCardBaseWindowRect.anchorMin = new Vector2(0.5f, 1);
-            heroCardBaseWindowRect.offsetMax = new Vector2(0, -700);
-            heroCardBaseWindowRect.offsetMin = new Vector2(0, -700);
+            // var heroCardBaseWindowRect = heroCardBaseWindos.uiTransform.GetComponent<RectTransform>();
+            // heroCardBaseWindowRect.anchorMax = new Vector2(0.5f, 1);
+            // heroCardBaseWindowRect.anchorMin = new Vector2(0.5f, 1);
+            // heroCardBaseWindowRect.offsetMax = new Vector2(0, -700);
+            // heroCardBaseWindowRect.offsetMin = new Vector2(0, -700);
             // heroCardBaseWindos.GetComponent<DlgTroopHeroCardLayer>().acti
         }
 
@@ -162,7 +165,7 @@ namespace ET
         public static void HideWindow(this DlgGameLevelInfoLayer self)
         {
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_BackButton);
-            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_TroopHeroCardLayer);
+            // self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_TroopHeroCardLayer);
         }
     }
 }

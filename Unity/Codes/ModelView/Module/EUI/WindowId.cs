@@ -38,8 +38,8 @@
         WindowID_AddSubPlane, //
         WindowID_AllHeroBagLayer, //所有英雄的背包页面
         WindowID_HeroStrengthenLayer, //强化英雄页面
-        WindowID_TroopHeroCardLayer, //队伍里面的卡牌信息
         WindowID_GameLevelInfoLayer, // 游戏关卡详情页面
         WindowID_BackButton,    //返回按钮
+        WindowID_GameLevelEnemyInfoLayer,   //游戏关卡敌人信息层
     }
 }
