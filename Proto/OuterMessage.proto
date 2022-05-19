@@ -599,6 +599,7 @@ message M2C_CallHeroCardResponse	//IActorLocationResponse
 message TroopInfo
 {
 	int64 TroopId = 1;
+	int32 Index = 2;
 }
 //ResponseType M2C_GetAllTroopInfosResponse
 message C2M_GetAllTroopInfosRequest	//IActorLocationRequest

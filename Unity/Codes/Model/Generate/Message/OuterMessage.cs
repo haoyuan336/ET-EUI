@@ -1316,6 +1316,9 @@ namespace ET
 		[ProtoMember(1)]
 		public long TroopId { get; set; }
 
+		[ProtoMember(2)]
+		public int Index { get; set; }
+
 	}
 
 	[ResponseType(nameof(M2C_GetAllTroopInfosResponse))]

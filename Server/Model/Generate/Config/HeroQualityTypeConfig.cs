@@ -73,6 +73,8 @@ namespace ET
 		public int Id { get; set; }
 		[ProtoMember(2)]
 		public string Des { get; set; }
+		[ProtoMember(3)]
+		public string Icon { get; set; }
 
 	}
 }

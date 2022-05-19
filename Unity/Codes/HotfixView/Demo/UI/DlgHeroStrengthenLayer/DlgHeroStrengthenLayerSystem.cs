@@ -62,6 +62,10 @@ namespace ET
             var elementImageStr = elementConfig.IconImage;
             var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elementImageStr);
             itemHeroCard.E_ElementImage.sprite = sprite;
+            
+            HeroQualityTypeConfig heroQualityTypeConfig = HeroQualityTypeConfigCategory.Instance.Get(config.HeroQuality);
+            var aualityIcon = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, heroQualityTypeConfig.Icon);
+            itemHeroCard.E_QualityIconImage.sprite = aualityIcon;
 
             for (int i = 0; i < 5; i++)
             {

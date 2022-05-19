@@ -15,38 +15,29 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgEditorTroopLayer self)
         {
-            self.View.E_BackButton.AddListener(() =>
+            // self.View.E_TroopCardContentLoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopEvent);
+            // self.View.E_StartGameButton.AddListenerAsync(self.StartGameClickAction);
+        }
+
+        public static async void ShowBackButton(this DlgEditorTroopLayer self)
+        {
+            // self.View.E_BackButton.AddListener(() =>
+            // {
+            //     self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer);
+            //     self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_EditorTroopLayer);
+            //     self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainScene).Coroutine();
+            // });
+
+            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_BackButton);
+            UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_BackButton);
+            baseWindow.GetComponent<DlgBackButton>().BackButtonClickAction = () =>
             {
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer);
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_EditorTroopLayer);
-                self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainScene).Coroutine();
-            });
-
-            // self.View.E_TroopCardContentLoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopEvent);
-            self.View.E_StartGameButton.AddListenerAsync(self.StartGameClickAction);
+            };
         }
 
-        public static async ETTask StartGameClickAction(this DlgEditorTroopLayer self)
-        {
-            bool isPowerEnough = await self.CheckPowerIsEnough();
-            if (!isPowerEnough)
-            {
-                await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_PowerNotEnoughAlert);
-                return;
-            }
-
-            var Account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
-            M2C_StartPVEGameResponse m2CStartPveGameResponse =
-                    (M2C_StartPVEGameResponse) await session.Call(new C2M_StartPVEGameRequest()
-                    {
-                        AccoundId = Account, TroopId = self.CurrentChooseTroopId
-                    });
-            if (m2CStartPveGameResponse.Error == ErrorCode.ERR_Success)
-            {
-                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_EditorTroopLayer);
-            }
-        }
+      
 
         public static async void ShowTroopHeroCardInfo(this DlgEditorTroopLayer self)
         {
@@ -171,7 +162,7 @@ namespace ET
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer];
             baseWindow.GetComponent<DlgAllHeroBagLayer>().SetAllChooseHeroCardInfos(self.TroopHeroCardInfos);
-            self.View.E_StartGameButton.gameObject.SetActive(self.TroopHeroCardInfos.Count == 3);
+            // self.View.E_StartGameButton.gameObject.SetActive(self.TroopHeroCardInfos.Count == 3);
         }
 
         public static void UpdateTroopHeroCardInfoAsync(this DlgEditorTroopLayer self, List<HeroCardInfo> heroCardInfos)
@@ -238,51 +229,27 @@ namespace ET
             await uiComponent.ShowWindow(WindowID.WindowID_TroopHeroCardLayer);
             UIBaseWindow heroCardLayerBaseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_TroopHeroCardLayer];
             // heroCardLayerBaseWindow.GetComponent<DlgTroopHeroCardLayer>()
-            heroCardLayerBaseWindow.uiTransform.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 600);
+            RectTransform heroCardBaseWindowRect = heroCardLayerBaseWindow.uiTransform.GetComponent<RectTransform>();
             heroCardLayerBaseWindow.GetComponent<DlgTroopHeroCardLayer>().ItemCardClickAction = self.OnTroopHeroCardItemClickAction;
+            heroCardBaseWindowRect.anchorMax = new Vector2(0.5f, 1);
+            heroCardBaseWindowRect.anchorMin = new Vector2(0.5f, 1);
+            heroCardBaseWindowRect.offsetMax = new Vector2(0, -500);
+            heroCardBaseWindowRect.offsetMin = new Vector2(0, -500);
             self.ShowTroopHeroCardInfo();
+            self.ShowBackButton();
         }
 
         public static void HideWindow(this DlgEditorTroopLayer self)
         {
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer);
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_TroopHeroCardLayer);
-            self.View.E_StartGameButton.gameObject.SetActive(false);
-        }
-
-        /// <summary>
-        /// 检查体力是否足够
-        /// </summary>
-        /// <param name="self"></param>
-        public static async ETTask<bool> CheckPowerIsEnough(this DlgEditorTroopLayer self)
-        {
-            long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
-            M2C_GetGoldInfoResponse response = (M2C_GetGoldInfoResponse) await session.Call(new C2M_GetGoldInfoRequest() { AccountId = AccountId });
-            if (response.Error == ErrorCode.ERR_Success)
+            // self.View.E_StartGameButton.gameObject.SetActive(false);
+            if (self.HideEditorTroopLayerAction != null)
             {
-                // if (response.PowerCount > 0)
-                // {
-                //     return true;
-                // }
-                var powerCount = 0;
-                foreach (var itemCountInfo in response.ItemInfos)
-                {
-                    if (itemCountInfo.ConfigId == 1003)
-                    {
-                        powerCount = itemCountInfo.Count;
-                    }
-                }
-
-                if (powerCount > 0)
-                {
-                    return true;
-                }
+                self.HideEditorTroopLayerAction();
             }
-
-            // return false;
-            return false;
-            // await ETTask.CompletedTask;
         }
+
+       
     }
 }

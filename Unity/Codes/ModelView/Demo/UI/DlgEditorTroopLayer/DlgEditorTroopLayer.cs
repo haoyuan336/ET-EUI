@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ET
 {
@@ -30,6 +31,7 @@ namespace ET
 
         // public List<HeroCardInfo> HeroCardInfos = new List<HeroCardInfo>();
 
+        public Action HideEditorTroopLayerAction;
 
     }
 }

@@ -289,7 +289,7 @@ namespace ET
             self.ClearAllWindow();
         }
 
-        private static UIBaseWindow GetUIBaseWindow(this UIComponent self, WindowID id)
+        public static UIBaseWindow GetUIBaseWindow(this UIComponent self, WindowID id)
         {
             if (self.AllWindowsDic.ContainsKey((int) id))
             {
