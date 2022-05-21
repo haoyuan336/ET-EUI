@@ -5,6 +5,7 @@ using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using ET.Account;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 namespace ET
@@ -55,53 +56,69 @@ namespace ET
             // self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefreshCells();
             self.FilterColor(self.CurrentChooseTypeIndex).Coroutine();
         }
-        public static void OnLoopListItemRefreshHandler(this DlgAllHeroBagLayer self, Transform tr, int index)
+
+        public static async void OnLoopListItemRefreshHandler(this DlgAllHeroBagLayer self, Transform tr, int index)
         {
             Scroll_ItemHeroCard itemHeroCard = self.ItemHeroCards[index].BindTrans(tr);
-            HeroCardInfo heroCardInfo = self.HeroCardInfos[index];
-            itemHeroCard.InitHeroCard(heroCardInfo);
             itemHeroCard.E_ChooseToggle.interactable = true;
-            if (self.UnAbleHeroCardInfo != null && self.UnAbleHeroCardInfo.HeroId.Equals(heroCardInfo.HeroId))
+            if (index >= self.HeroCardInfos.Count)
             {
-                itemHeroCard.E_ChooseToggle.interactable = false;
+                itemHeroCard.E_LevelText.gameObject.SetActive(false);
+                itemHeroCard.E_ElementImage.gameObject.SetActive(false);
+                itemHeroCard.E_QualityIconImage.gameObject.SetActive(false);
+                itemHeroCard.E_CountText.gameObject.SetActive(false);
+                itemHeroCard.E_ChooseToggle.gameObject.SetActive(false);
+                var commonAtlas = ConstValue.CommonUIAtlasPath;
+                var defaultSprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonAtlas, "bgpic");
+                itemHeroCard.E_HeadImage.sprite = defaultSprite;
             }
-
-            itemHeroCard.E_ChooseToggle.onValueChanged.RemoveAllListeners();
-            itemHeroCard.E_ChooseToggle.isOn = false;
-            if (self.AllChooseHeroCardInfos != null)
+            else
             {
-                var findInfo = self.AllChooseHeroCardInfos.Find(a => a.HeroId.Equals(heroCardInfo.HeroId));
-                if (findInfo != null)
+                itemHeroCard.E_ChooseToggle.gameObject.SetActive(true);
+                HeroCardInfo heroCardInfo = self.HeroCardInfos[index];
+                itemHeroCard.InitHeroCard(heroCardInfo);
+                if (self.UnAbleHeroCardInfo != null && self.UnAbleHeroCardInfo.HeroId.Equals(heroCardInfo.HeroId))
                 {
-                    var config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
-                    if (config.MaterialType == (int) HeroBagType.Hero)
-                    {
-                        itemHeroCard.E_ChooseToggle.isOn = true;
-                    }
-                    else if (config.MaterialType == (int) HeroBagType.Materail)
-                    {
-                        itemHeroCard.E_ChooseCountText.gameObject.SetActive(true);
-                        itemHeroCard.E_ChooseCountText.text = findInfo.Count.ToString();
-                    }
-                    // itemHeroCard.E_ChooseToggle.isOn = true;
+                    itemHeroCard.E_ChooseToggle.interactable = false;
                 }
-            }
 
-            if (self.EnabelHeroCardInfos != null)
-            {
-                //找一下是否包含
-                itemHeroCard.E_ChooseToggle.interactable = false;
-                bool isCon = self.EnabelHeroCardInfos.Exists(a => a.HeroId.Equals(heroCardInfo.HeroId));
-                itemHeroCard.E_ChooseToggle.interactable = isCon;
-            }
-
-            itemHeroCard.E_ChooseToggle.onValueChanged.AddListener((value) =>
-            {
-                if (self.OnHeroItemInfoClick != null)
+                itemHeroCard.E_ChooseToggle.onValueChanged.RemoveAllListeners();
+                itemHeroCard.E_ChooseToggle.isOn = false;
+                if (self.AllChooseHeroCardInfos != null)
                 {
-                    self.OnHeroItemInfoClick(heroCardInfo, itemHeroCard, value);
+                    var findInfo = self.AllChooseHeroCardInfos.Find(a => a.HeroId.Equals(heroCardInfo.HeroId));
+                    if (findInfo != null)
+                    {
+                        var config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
+                        if (config.MaterialType == (int) HeroBagType.Hero)
+                        {
+                            itemHeroCard.E_ChooseToggle.isOn = true;
+                        }
+                        else if (config.MaterialType == (int) HeroBagType.Materail)
+                        {
+                            itemHeroCard.E_ChooseCountText.gameObject.SetActive(true);
+                            itemHeroCard.E_ChooseCountText.text = findInfo.Count.ToString();
+                        }
+                        // itemHeroCard.E_ChooseToggle.isOn = true;
+                    }
                 }
-            });
+
+                if (self.EnabelHeroCardInfos != null)
+                {
+                    //找一下是否包含
+                    itemHeroCard.E_ChooseToggle.interactable = false;
+                    bool isCon = self.EnabelHeroCardInfos.Exists(a => a.HeroId.Equals(heroCardInfo.HeroId));
+                    itemHeroCard.E_ChooseToggle.interactable = isCon;
+                }
+
+                itemHeroCard.E_ChooseToggle.onValueChanged.AddListener((value) =>
+                {
+                    if (self.OnHeroItemInfoClick != null)
+                    {
+                        self.OnHeroItemInfoClick(heroCardInfo, itemHeroCard, value);
+                    }
+                });
+            }
         }
 
         public static void InitColorToggleEvent(this DlgAllHeroBagLayer self, GameObject go, int index)
@@ -133,6 +150,32 @@ namespace ET
         public static void ShowWindow(this DlgAllHeroBagLayer self, Entity contextData = null)
         {
             // self.FilterColor(self.CurrentChooseTypeIndex).Coroutine();
+
+            //请求背包数据
+        }
+
+        public static async ETTask InitBagCount(this DlgAllHeroBagLayer self)
+        {
+            //初始化背包个数
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            C2M_GetAllItemRequest request = new C2M_GetAllItemRequest() { AccountId = account };
+            M2C_GetAllItemResponse response = (M2C_GetAllItemResponse) await session.Call(request);
+            // Log.Debug("获取道具数据成功");
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                List<ItemInfo> itemInfos = response.ItemInfos;
+                ItemInfo findInfo = itemInfos.Find(a => a.ConfigId.Equals(1004));
+                Log.Debug($"item info {itemInfos.Count}");
+                if (findInfo != null)
+                {
+                    Log.Debug($"玩家背包的个数是{findInfo.Count}");
+                    self.AddUIScrollItems(ref self.ItemHeroCards, findInfo.Count);
+                    self.View.E_LoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, findInfo.Count);
+                }
+            }
+
+            await ETTask.CompletedTask;
         }
 
         public static void SetShowHeroType(this DlgAllHeroBagLayer self, HeroBagType type)
@@ -145,7 +188,6 @@ namespace ET
         {
             self.BagType = type;
             await self.FilterColor(self.CurrentChooseTypeIndex);
-            
         }
 
         public static void SetAllChooseHeroCardInfos(this DlgAllHeroBagLayer self, List<HeroCardInfo> heroCardInfos)
@@ -156,7 +198,8 @@ namespace ET
 
         public static async ETTask FilterColor(this DlgAllHeroBagLayer self, int index)
         {
-            Log.Debug("filter color");
+            await self.InitBagCount();
+            // Log.Debug("filter color");
             long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             M2C_GetAllHeroCardListResponse m2CGetAllHeroCardListResponse = (M2C_GetAllHeroCardListResponse) await self.ZoneScene()
                     .GetComponent<SessionComponent>().Session
@@ -211,8 +254,9 @@ namespace ET
 
                 // map.Remove(index + 1);
                 Log.Debug($"add ui item {self.HeroCardInfos.Count}");
-                self.AddUIScrollItems(ref self.ItemHeroCards, self.HeroCardInfos.Count);
-                self.View.E_LoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, self.HeroCardInfos.Count);
+                // self.AddUIScrollItems(ref self.ItemHeroCards, self.HeroCardInfos.Count);
+                // self.View.E_LoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, self.HeroCardInfos.Count);
+                self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefreshCells();
             }
         }
     }

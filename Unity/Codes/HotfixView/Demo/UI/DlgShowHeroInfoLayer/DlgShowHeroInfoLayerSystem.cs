@@ -40,11 +40,13 @@ namespace ET
             self.View.E_HeroNameText.text = config.HeroName;
 
             self.HeroModeShow = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(heroModeStr);
-            Vector3 center = self.HeroModeShow.GetComponentInChildren<SkinnedMeshRenderer>().bounds.center;
-            GameObject obj = GameObject.Find("MainCameraLockLook");
-            obj.transform.position = center;
-            GameObject mainSceneHeroBg = GameObject.Find("MainSceneHeroBG");
-            mainSceneHeroBg.transform.position = center + self.HeroModeShow.transform.forward * -10;
+            // Transform shadow = UIFindHelper.FindDeepChild(self.HeroModeShow.transform.parent.gameObject, "Shadow");
+            // shadow.gameObject.SetActive(true);
+            // Vector3 center = self.HeroModeShow.GetComponentInChildren<SkinnedMeshRenderer>().bounds.center;
+            // GameObject obj = GameObject.Find("MainCameraLockLook");
+            // obj.transform.position = center;
+            // GameObject mainSceneHeroBg = GameObject.Find("MainSceneHeroBG");
+            // mainSceneHeroBg.transform.position = center + self.HeroModeShow.transform.forward * -10;
 
             self.SethetoStar(heroCardInfo);
             self.SetElementInfo(heroCardInfo);
@@ -79,6 +81,8 @@ namespace ET
         {
             // Log.Debug("hide window show hero info layer");
             GameObject.Destroy(self.HeroModeShow);
+            Transform shadow = UIFindHelper.FindDeepChild(GlobalComponent.Instance.Global.gameObject, "Shadow");
+            shadow.gameObject.SetActive(false);
         }
     }
 }

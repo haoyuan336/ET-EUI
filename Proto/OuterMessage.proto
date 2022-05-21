@@ -573,7 +573,8 @@ message C2M_GetAllHeroCardListRequest //IActorLocationRequest
 {
 	int RpcId = 90;
 	int64 Account = 1;
-	int32 BagType = 2;
+	string Token = 3;
+	int32 BagType = 4;
 }
 message M2C_GetAllHeroCardListResponse //IActorLocationResponse
 {
@@ -678,7 +679,7 @@ message M2C_UnSetHeroToTroopResponse //IActorLocationResponse
 message C2M_StartPVEGameRequest //IActorLocationRequest
 {
 	int32 RpcId = 90;
-	int64 AccoundId = 1;
+	int64 AccountId = 1;
 	int64 TroopId = 2;	//队伍id
 
 }
@@ -840,4 +841,18 @@ message M2C_StrenthenHeroResponse //IActorLocationResponse
 	string Message = 92;
 	// repeated WeaponInfo WeaponInfos = 1;
 	HeroCardInfo HeroCardInfo = 1;	//升级完成的英雄信息
+}
+
+//ResponseType M2C_GetAllItemResponse
+message C2M_GetAllItemRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message M2C_GetAllItemResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated ItemInfo ItemInfos = 1;
 }

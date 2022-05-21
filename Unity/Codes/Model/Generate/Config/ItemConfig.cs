@@ -75,6 +75,8 @@ namespace ET
 		public string IconImageStr { get; set; }
 		[ProtoMember(3)]
 		public string Des { get; set; }
+		[ProtoMember(4)]
+		public int DefaultValue { get; set; }
 
 	}
 }

@@ -158,7 +158,7 @@ namespace ET
         public static void HideWindow(this DlgEditorTroopLayer self)
         {
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer);
-            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_TroopHeroCardLayer);
+            // self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_TroopHeroCardLayer);
             // self.View.E_StartGameButton.gameObject.SetActive(false);
             if (self.HideEditorTroopLayerAction != null)
             {

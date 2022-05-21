@@ -10,6 +10,7 @@ namespace ET
             var config = HeroConfigCategory.Instance.Get(configId);
             self.E_CountText.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Materail);
             self.E_CountText.text = heroCardInfo.Count.ToString();
+          
 
             self.E_ChooseCountText.gameObject.SetActive(false);
             var spriteAtlas = ConstValue.HeroCardAtlasPath;
@@ -28,7 +29,7 @@ namespace ET
             var aualityIcon = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, heroQualityTypeConfig.Icon);
             self.E_QualityIconImage.gameObject.SetActive(true);
             self.E_QualityIconImage.sprite = aualityIcon;
-            
+            self.E_QualityIconImage.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
             for (int i = 0; i < 5; i++)
             {
                 // var star    

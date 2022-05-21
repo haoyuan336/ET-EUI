@@ -1255,7 +1255,10 @@ namespace ET
 		[ProtoMember(1)]
 		public long Account { get; set; }
 
-		[ProtoMember(2)]
+		[ProtoMember(3)]
+		public string Token { get; set; }
+
+		[ProtoMember(4)]
 		public int BagType { get; set; }
 
 	}
@@ -1499,7 +1502,7 @@ namespace ET
 		public int RpcId { get; set; }
 
 		[ProtoMember(1)]
-		public long AccoundId { get; set; }
+		public long AccountId { get; set; }
 
 		[ProtoMember(2)]
 		public long TroopId { get; set; }
@@ -1842,6 +1845,37 @@ namespace ET
 // repeated WeaponInfo WeaponInfos = 1;
 		[ProtoMember(1)]
 		public HeroCardInfo HeroCardInfo { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_GetAllItemResponse))]
+	[Message(OuterOpcode.C2M_GetAllItemRequest)]
+	[ProtoContract]
+	public partial class C2M_GetAllItemRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetAllItemResponse)]
+	[ProtoContract]
+	public partial class M2C_GetAllItemResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<ItemInfo> ItemInfos = new List<ItemInfo>();
 
 	}
 

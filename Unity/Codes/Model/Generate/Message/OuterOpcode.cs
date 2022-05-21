@@ -113,5 +113,7 @@ namespace ET
 		 public const ushort M2C_GetAllWeaponsResponse = 10110;
 		 public const ushort C2M_StrenthenHeroRequest = 10111;
 		 public const ushort M2C_StrenthenHeroResponse = 10112;
+		 public const ushort C2M_GetAllItemRequest = 10113;
+		 public const ushort M2C_GetAllItemResponse = 10114;
 	}
 }

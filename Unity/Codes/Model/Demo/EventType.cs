@@ -281,5 +281,10 @@ namespace ET
         {
         
         }
+
+        public struct ChangeFightCameraLook
+        {
+            public bool Value;
+        }
     }
 }

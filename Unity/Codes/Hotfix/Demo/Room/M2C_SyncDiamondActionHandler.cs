@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ET.Account;
+using ET.EventType;
 
 namespace ET
 {
@@ -73,6 +74,7 @@ namespace ET
                 await ETTaskHelper.WaitAll(tasks);
             }
 
+            await Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook() { Value = true });
             foreach (var attackActionItem in attackActionItems)
             {
                 List<ETTask> tasks = new List<ETTask>();
@@ -86,8 +88,13 @@ namespace ET
                 await ETTaskHelper.WaitAll(tasks);
             }
 
+            
+            
+            
+            await Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook() { Value = false });
+
             List<HeroCard> heroCards = heroCardComponent.GetChilds<HeroCard>();
-            Game.EventSystem.Publish(new EventType.GameAroundOver(){HeroCards = heroCards});
+            Game.EventSystem.Publish(new EventType.GameAroundOver() { HeroCards = heroCards });
             //
             long AccountId = session.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
 

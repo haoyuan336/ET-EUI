@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace ET
@@ -87,6 +89,22 @@ namespace ET
                         account.Password = request.Password;
                         account.CreateTime = TimeHelper.ServerNow();
                         account.AccountType = (int) AccountType.General;
+                        //储存用户道具信息
+                        KeyValuePair<int, ItemConfig>[] itemConfigs = ItemConfigCategory.Instance.GetAll().ToArray();
+                        foreach (var itemConfig in itemConfigs)
+                        {
+                            Item item = new Item()
+                            {
+                                Id = IdGenerater.Instance.GenerateId(),
+                                ConfigId = itemConfig.Key,
+                                Count = itemConfig.Value.DefaultValue,
+                                OwnerId = account.Id
+                            };
+                           
+                            await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save(item);
+                            item.Dispose();
+                        }
+
                         await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save<Account>(account);
                     }
 

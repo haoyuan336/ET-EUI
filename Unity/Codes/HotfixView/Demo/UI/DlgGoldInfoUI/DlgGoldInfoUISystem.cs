@@ -59,7 +59,8 @@ namespace ET
         {
             long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
-            M2C_GetGoldInfoResponse response = (M2C_GetGoldInfoResponse) await session.Call(new C2M_GetGoldInfoRequest() { AccountId = AccountId });
+            // M2C_GetGoldInfoResponse response = (M2C_GetGoldInfoResponse) await session.Call(new C2M_GetGoldInfoRequest() { AccountId = AccountId });
+            M2C_GetAllItemResponse response = (M2C_GetAllItemResponse) await session.Call(new C2M_GetAllItemRequest() { AccountId = AccountId });
             if (response.Error == ErrorCode.ERR_Success)
             {
                 var goldItem = response.ItemInfos.Find((a) => { return a.ConfigId == 1001; });

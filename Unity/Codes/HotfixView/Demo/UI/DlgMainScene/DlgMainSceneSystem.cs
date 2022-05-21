@@ -106,24 +106,29 @@ namespace ET
         {
             Log.Debug("show hero Mode");
             HeroConfig config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
-            var prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(config.HeroMode);
+            // var prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(config.HeroMode);
             if (self.HeroMode != null)
             {
                 GameObject.Destroy(self.HeroMode);
                 self.HeroMode = null;
             }
-            self.HeroMode = GameObject.Instantiate(prefab);
-            Vector3 center = self.HeroMode.GetComponentInChildren<SkinnedMeshRenderer>().bounds.center;
-            GameObject obj = GameObject.Find("MainCameraLockLook");
-            obj.transform.position = center;
-            GameObject mainSceneHeroBg = GameObject.Find("MainSceneHeroBG");
-            mainSceneHeroBg.transform.position = center + self.HeroMode.transform.forward * -10;
+            // self.HeroMode = GameObject.Instantiate(prefab);
+            self.HeroMode = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(config.HeroMode);
+            Transform shadow = UIFindHelper.FindDeepChild(GlobalComponent.Instance.Global.gameObject, "Shadow");
+            shadow.gameObject.SetActive(true);
+            // Vector3 center = self.HeroMode.GetComponentInChildren<SkinnedMeshRenderer>().bounds.center;
+            // GameObject obj = GameObject.Find("MainCameraLockLook");
+            // obj.transform.position = center;
+            // GameObject mainSceneHeroBg = GameObject.Find("MainSceneHeroBG");
+            // mainSceneHeroBg.transform.position = center + self.HeroMode.transform.forward * -10;
         }
 
         public static void HideWindow(this DlgMainScene self)
         {
             GameObject.Destroy(self.HeroMode);
             self.HeroMode = null;
+            Transform shadow = UIFindHelper.FindDeepChild(GlobalComponent.Instance.Global.gameObject, "Shadow");
+            shadow.gameObject.SetActive(false);
         }
     }
 }

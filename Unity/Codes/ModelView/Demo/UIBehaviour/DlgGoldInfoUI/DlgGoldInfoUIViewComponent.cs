@@ -107,40 +107,6 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Button E_InfoButton
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_InfoButton == null )
-     			{
-		    		this.m_E_InfoButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Info");
-     			}
-     			return this.m_E_InfoButton;
-     		}
-     	}
-
-		public UnityEngine.UI.Image E_InfoImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_InfoImage == null )
-     			{
-		    		this.m_E_InfoImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Info");
-     			}
-     			return this.m_E_InfoImage;
-     		}
-     	}
-
 		public UnityEngine.UI.Text E_DiamondText
      	{
      		get
@@ -200,8 +166,6 @@ namespace ET
 			this.m_E_PowerText = null;
 			this.m_E_AddPowerButton = null;
 			this.m_E_AddPowerImage = null;
-			this.m_E_InfoButton = null;
-			this.m_E_InfoImage = null;
 			this.m_E_DiamondText = null;
 			this.m_E_AddDiamondButton = null;
 			this.m_E_AddDiamondImage = null;
@@ -214,8 +178,6 @@ namespace ET
 		private UnityEngine.UI.Text m_E_PowerText = null;
 		private UnityEngine.UI.Button m_E_AddPowerButton = null;
 		private UnityEngine.UI.Image m_E_AddPowerImage = null;
-		private UnityEngine.UI.Button m_E_InfoButton = null;
-		private UnityEngine.UI.Image m_E_InfoImage = null;
 		private UnityEngine.UI.Text m_E_DiamondText = null;
 		private UnityEngine.UI.Button m_E_AddDiamondButton = null;
 		private UnityEngine.UI.Image m_E_AddDiamondImage = null;

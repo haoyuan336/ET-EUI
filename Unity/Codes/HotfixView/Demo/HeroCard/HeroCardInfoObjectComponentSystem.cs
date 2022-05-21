@@ -26,7 +26,7 @@ namespace ET
             var elemengImageStr = elemengConfig.IconImage;
             var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elemengImageStr);
             self.HeroElementIcon.GetComponent<Image>().sprite = sprite;
-            
+
             self.HpBarImage.GetComponent<Image>().fillAmount = 1;
             self.AngryBarImage.GetComponent<Image>().fillAmount = 0;
             self.HeroHeight = 0;
@@ -48,7 +48,9 @@ namespace ET
         {
             if (self.GameObject != null && self.HeroMode != null)
             {
-                Vector3 pos = Camera.main.WorldToScreenPoint(self.HeroMode.transform.position);
+                // float height =  self.HeroMode.GetComponentInChildren<SkinnedMeshRenderer>().bounds.size.y;
+                Vector3 pos = Camera.main.WorldToScreenPoint(self.HeroMode.transform.position + Vector3.up * 1.8f);
+                // self.HeroMode.getchi<SkinnedMeshRenderer>()
                 self.GameObject.transform.position = pos;
             }
         }

@@ -23,11 +23,9 @@ namespace ET
             if (m2CGetUserExpInfoResponse.Error == ErrorCode.ERR_Success)
             {
                 int level = m2CGetUserExpInfoResponse.UserLevel;
-                int exp = m2CGetUserExpInfoResponse.Exp;
-                int nextExp = UserUpdateLevelConfigCategory.Instance.Get(level).NeedExp;
-                self.View.E_ExpText.text = $"Exp:{exp}/{nextExp}";
+                // int exp = m2CGetUserExpInfoResponse.Exp;
+                // int nextExp = UserUpdateLevelConfigCategory.Instance.Get(level).NeedExp;
                 self.View.E_AccountText.text = $"ID:{AccountId}";
-                self.View.E_LevelText.text = $"Lv:{level}";
                 self.View.E_NameText.text = m2CGetUserExpInfoResponse.UserName;
             }
 

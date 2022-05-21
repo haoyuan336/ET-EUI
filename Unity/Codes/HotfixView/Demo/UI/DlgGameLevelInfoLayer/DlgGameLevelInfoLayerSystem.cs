@@ -69,7 +69,7 @@ namespace ET
             M2C_StartPVEGameResponse m2CStartPveGameResponse =
                     (M2C_StartPVEGameResponse) await session.Call(new C2M_StartPVEGameRequest()
                     {
-                        AccoundId = Account, TroopId = self.CurrentChooseTroopId
+                        AccountId = Account, TroopId = self.CurrentChooseTroopId
                     });
             if (m2CStartPveGameResponse.Error == ErrorCode.ERR_Success)
             {

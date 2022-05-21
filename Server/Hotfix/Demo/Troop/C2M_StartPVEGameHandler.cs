@@ -8,9 +8,9 @@ namespace ET
     {
         protected override async ETTask Run(Unit unit, C2M_StartPVEGameRequest request, M2C_StartPVEGameResponse response, Action reply)
         {
-            Log.Debug($"start game {request.AccoundId}");
+            Log.Debug($"start game {request.AccountId}");
             List<Account> accounts = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
-                    .Query<Account>((a) => a.Id.Equals(request.AccoundId));
+                    .Query<Account>((a) => a.Id.Equals(request.AccountId));
 
             
             if (accounts.Count > 0)
