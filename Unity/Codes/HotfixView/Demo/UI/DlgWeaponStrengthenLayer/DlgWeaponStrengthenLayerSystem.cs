@@ -50,16 +50,16 @@ namespace ET
         {
             Scroll_ItemWeapon itemWeapon = self.ItemWeapons[index].BindTrans(tr);
             self.InitWeaponItem(self.WeaponInfos[index], itemWeapon);
-            itemWeapon.E_ClickToggle.interactable = true;
+            itemWeapon.E_ChooseToggle.interactable = true;
             if (self.WeaponInfos[index].WeaponId.Equals(self.TargetWeaponInfos[0].WeaponId))
             {
-                itemWeapon.E_ClickToggle.interactable = false;
+                itemWeapon.E_ChooseToggle.interactable = false;
             }
 
-            itemWeapon.E_ClickToggle.onValueChanged.RemoveAllListeners();
+            itemWeapon.E_ChooseToggle.onValueChanged.RemoveAllListeners();
 
-            itemWeapon.E_ClickToggle.isOn = false;
-            itemWeapon.E_ClickToggle.onValueChanged.AddListener((value) =>
+            itemWeapon.E_ChooseToggle.isOn = false;
+            itemWeapon.E_ChooseToggle.onValueChanged.AddListener((value) =>
             {
                 WeaponInfo info = self.WeaponInfos[index];
                 WeaponsConfig config = WeaponsConfigCategory.Instance.Get(info.ConfigId);
@@ -69,7 +69,7 @@ namespace ET
                     {
                         if (self.CheckIsFull())
                         {
-                            itemWeapon.E_ClickToggle.isOn = false;
+                            itemWeapon.E_ChooseToggle.isOn = false;
                         }
                         else
                         {
@@ -96,7 +96,7 @@ namespace ET
 
         public static async void OnWeaponItemClick(this DlgWeaponStrengthenLayer self, WeaponInfo info, Scroll_ItemWeapon itemWeapon)
         {
-            itemWeapon.E_ClickToggle.isOn = false;
+            itemWeapon.E_ChooseToggle.isOn = false;
 
             
             //如果是普通材料。那么需要选择个数

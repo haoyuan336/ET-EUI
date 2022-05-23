@@ -7,5 +7,6 @@
         public long OwnerId;
         public int ConfigId;
         public int Count;
+        public int State;
     }
 }

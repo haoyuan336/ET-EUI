@@ -43,6 +43,18 @@ namespace ET
             self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefreshCells();
         }
 
+        public static void SetUnableElementHeroCardInfo(this DlgAllHeroBagLayer self, List<HeroCardInfo> heroCardInfos)
+        {
+            self.UnableElementHeroCardInfos = heroCardInfos;
+            self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefreshCells();
+        }
+
+        public static void SetUnabelNameHeroCardInfo(this DlgAllHeroBagLayer self, List<HeroCardInfo> heroCardInfos)
+        {
+            self.UnableNameHeroCardInfos = heroCardInfos;
+            self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefreshCells();
+        }
+
         public static void EnableItemWhitHeroInfos(this DlgAllHeroBagLayer self, List<HeroCardInfo> heroCardInfos)
         {
             self.EnabelHeroCardInfos = heroCardInfos;
@@ -76,6 +88,7 @@ namespace ET
             {
                 itemHeroCard.E_ChooseToggle.gameObject.SetActive(true);
                 HeroCardInfo heroCardInfo = self.HeroCardInfos[index];
+                var heroConfig = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
                 itemHeroCard.InitHeroCard(heroCardInfo);
                 if (self.UnAbleHeroCardInfo != null && self.UnAbleHeroCardInfo.HeroId.Equals(heroCardInfo.HeroId))
                 {
@@ -89,12 +102,11 @@ namespace ET
                     var findInfo = self.AllChooseHeroCardInfos.Find(a => a.HeroId.Equals(heroCardInfo.HeroId));
                     if (findInfo != null)
                     {
-                        var config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
-                        if (config.MaterialType == (int) HeroBagType.Hero)
+                        if (heroConfig.MaterialType == (int) HeroBagType.Hero)
                         {
                             itemHeroCard.E_ChooseToggle.isOn = true;
                         }
-                        else if (config.MaterialType == (int) HeroBagType.Materail)
+                        else if (heroConfig.MaterialType == (int) HeroBagType.Materail)
                         {
                             itemHeroCard.E_ChooseCountText.gameObject.SetActive(true);
                             itemHeroCard.E_ChooseCountText.text = findInfo.Count.ToString();
@@ -109,6 +121,41 @@ namespace ET
                     itemHeroCard.E_ChooseToggle.interactable = false;
                     bool isCon = self.EnabelHeroCardInfos.Exists(a => a.HeroId.Equals(heroCardInfo.HeroId));
                     itemHeroCard.E_ChooseToggle.interactable = isCon;
+                }
+
+                if (self.UnableElementHeroCardInfos != null)
+                {
+                    if (self.UnableElementHeroCardInfos.Exists(a =>
+                        {
+                            HeroConfig config = HeroConfigCategory.Instance.Get(a.ConfigId);
+                            if (config.HeroColor.Equals(heroConfig.HeroColor) && !heroCardInfo.HeroId.Equals(a.HeroId))
+                            {
+                                return true;
+                            }
+
+                            return false;
+                        }))
+                    {
+                        itemHeroCard.E_ChooseToggle.interactable = false;
+                    }
+                }
+
+                if (self.UnableNameHeroCardInfos != null)
+                {
+                    if (self.UnableNameHeroCardInfos.Exists(a =>
+                        {
+                            HeroConfig config = HeroConfigCategory.Instance.Get(a.ConfigId);
+                            if (config.HeroName.Equals(heroConfig.HeroName) && !heroCardInfo.HeroId.Equals(a.HeroId))
+                            {
+                                return true;
+                            }
+
+                            return false;
+                        }))
+                    {
+                        itemHeroCard.E_ChooseToggle.interactable = false;
+                    }
+                    
                 }
 
                 itemHeroCard.E_ChooseToggle.onValueChanged.AddListener((value) =>
@@ -145,6 +192,8 @@ namespace ET
             self.UnAbleHeroCardInfo = null;
             self.EnabelHeroCardInfos = null;
             self.AllChooseHeroCardInfos = null;
+            // self.UnableElementType = HeroElementType.Invalide;
+            self.UnableElementHeroCardInfos = null;
         }
 
         public static void ShowWindow(this DlgAllHeroBagLayer self, Entity contextData = null)
@@ -165,13 +214,24 @@ namespace ET
             if (response.Error == ErrorCode.ERR_Success)
             {
                 List<ItemInfo> itemInfos = response.ItemInfos;
-                ItemInfo findInfo = itemInfos.Find(a => a.ConfigId.Equals(1004));
+                //todo 1006 为英雄背包格子扩展包
+                itemInfos = itemInfos.FindAll(a => a.ConfigId.Equals(1004) || a.ConfigId.Equals(1006));
                 Log.Debug($"item info {itemInfos.Count}");
-                if (findInfo != null)
+                if (itemInfos.Count > 0)
                 {
-                    Log.Debug($"玩家背包的个数是{findInfo.Count}");
-                    self.AddUIScrollItems(ref self.ItemHeroCards, findInfo.Count);
-                    self.View.E_LoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, findInfo.Count);
+                    var bagCount = 0;
+                    foreach (var itemInfo in itemInfos)
+                    {
+                        Log.Debug($"item infos {itemInfo.Count} + {itemInfo.ConfigId}");
+                        ItemConfig config = ItemConfigCategory.Instance.Get(itemInfo.ConfigId);
+                        bagCount += config.DefaultValue;
+                    }
+
+                    self.AddUIScrollItems(ref self.ItemHeroCards, bagCount);
+                    self.View.E_LoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, bagCount);
+                    // self.View.E_BagCountText.text = bagCount.ToString();
+                    self.BagCount = bagCount;
+                    self.View.E_BagCountText.text = $"{self.HeroCount}/{self.BagCount}";
                 }
             }
 
@@ -195,6 +255,7 @@ namespace ET
             self.AllChooseHeroCardInfos = heroCardInfos;
             self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefreshCells();
         }
+        // public static void SetUnable
 
         public static async ETTask FilterColor(this DlgAllHeroBagLayer self, int index)
         {
@@ -209,10 +270,12 @@ namespace ET
             {
                 Dictionary<int, List<HeroCardInfo>> map = new Dictionary<int, List<HeroCardInfo>>();
                 self.HeroCardInfos = m2CGetAllHeroCardListResponse.HeroCardInfos;
+                self.HeroCount = self.HeroCardInfos.Count;
+                self.View.E_BagCountText.text = $"{self.HeroCount}/{self.BagCount}";
+
                 //根据当前类型，过滤一下列表
                 if (self.BagType != HeroBagType.HeroAndMaterial)
                 {
-                    Log.Debug($"self bag type {(int) self.BagType}");
                     //过滤调与背包类型不符的 元素
                     self.HeroCardInfos.RemoveAll(a =>
                     {
@@ -224,38 +287,17 @@ namespace ET
 
                         return true;
                     });
-                    Log.Debug($"hero card info {self.HeroCardInfos.Count}");
                 }
 
                 if (index != 5)
                 {
-                    foreach (var heroCardInfo in self.HeroCardInfos)
+                    HeroElementType[] indexs =
                     {
-                        if (!map.ContainsKey(heroCardInfo.HeroColor))
-                        {
-                            // map[heroCardInfo.HeroColor] = new List<HeroCardInfo>();
-                            map.Add(heroCardInfo.HeroColor, new List<HeroCardInfo>());
-                        }
-
-                        map[heroCardInfo.HeroColor].Add(heroCardInfo);
-                    }
-
-                    List<HeroCardInfo> list = new List<HeroCardInfo>();
-                    if (map.Keys.Contains(index + 1))
-                    {
-                        list = map[index + 1];
-                        self.HeroCardInfos = list;
-                    }
-                    else
-                    {
-                        self.HeroCardInfos = new List<HeroCardInfo>();
-                    }
+                        HeroElementType.Fire, HeroElementType.Dark, HeroElementType.Water, HeroElementType.Wind, HeroElementType.Light
+                    };
+                    HeroElementType type = indexs[index];
+                    self.HeroCardInfos = self.HeroCardInfos.FindAll(a => { return a.HeroColor == (int) type; });
                 }
-
-                // map.Remove(index + 1);
-                Log.Debug($"add ui item {self.HeroCardInfos.Count}");
-                // self.AddUIScrollItems(ref self.ItemHeroCards, self.HeroCardInfos.Count);
-                // self.View.E_LoopScrollListHeroLoopVerticalScrollRect.SetVisible(true, self.HeroCardInfos.Count);
                 self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefreshCells();
             }
         }

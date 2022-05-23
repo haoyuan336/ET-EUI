@@ -9,7 +9,7 @@ namespace ET
             get => this.Parent.GetComponent<DlgBagLayerViewComponent>();
         }
 
-        public Dictionary<int, Scroll_ItemWeapon> ItemWeapons = new Dictionary<int, Scroll_ItemWeapon>();
-        public List<WeaponInfo> WeaponInfos = new List<WeaponInfo>();
+        // public Dictionary<int, Scroll_ItemWeapon> ItemWeapons = new Dictionary<int, Scroll_ItemWeapon>();
+        // public List<WeaponInfo> WeaponInfos = new List<WeaponInfo>();
     }
 }

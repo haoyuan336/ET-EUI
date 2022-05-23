@@ -14,8 +14,7 @@ namespace ET
 
             self.E_ChooseCountText.gameObject.SetActive(false);
             var spriteAtlas = ConstValue.HeroCardAtlasPath;
-            var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
-            self.E_HeadImage.sprite = headImage;
+          
             self.E_ElementImage.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
             self.E_LevelText.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
             self.E_LevelText.text = $"Lv.{heroCardInfo.Level.ToString()}";
@@ -40,6 +39,9 @@ namespace ET
                     starObj.gameObject.SetActive(i < heroCardInfo.Star);
                 }
             }
+            var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
+            // Log.Debug("Head image load succcess");
+            self.E_HeadImage.sprite = headImage;
         }
     }
 }

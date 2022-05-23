@@ -1742,10 +1742,22 @@ namespace ET
 
 	}
 
-	[ResponseType(nameof(M2C_BuyWeaponResponse))]
-	[Message(OuterOpcode.C2M_BuyWeaponRequest)]
+	[Message(OuterOpcode.GoodsInfo)]
 	[ProtoContract]
-	public partial class C2M_BuyWeaponRequest: Object, IActorLocationRequest
+	public partial class GoodsInfo: Object
+	{
+		[ProtoMember(1)]
+		public long GoodsId { get; set; }
+
+		[ProtoMember(2)]
+		public int ConfigId { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_BuyGoodsResponse))]
+	[Message(OuterOpcode.C2M_BuyGoodsRequest)]
+	[ProtoContract]
+	public partial class C2M_BuyGoodsRequest: Object, IActorLocationRequest
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -1761,9 +1773,9 @@ namespace ET
 
 	}
 
-	[Message(OuterOpcode.M2C_BuyWeaponResponse)]
+	[Message(OuterOpcode.M2C_BuyGoodsResponse)]
 	[ProtoContract]
-	public partial class M2C_BuyWeaponResponse: Object, IActorLocationResponse
+	public partial class M2C_BuyGoodsResponse: Object, IActorLocationResponse
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -1775,7 +1787,10 @@ namespace ET
 		public string Message { get; set; }
 
 		[ProtoMember(1)]
-		public WeaponInfo WeaponInfo { get; set; }
+		public GoodsInfo GoodsInfo { get; set; }
+
+		[ProtoMember(2)]
+		public ItemInfo ItemInfo { get; set; }
 
 	}
 
@@ -1876,6 +1891,40 @@ namespace ET
 
 		[ProtoMember(1)]
 		public List<ItemInfo> ItemInfos = new List<ItemInfo>();
+
+	}
+
+	[ResponseType(nameof(M2C_GetItemInfoResponse))]
+	[Message(OuterOpcode.C2M_GetItemInfoRequest)]
+	[ProtoContract]
+	public partial class C2M_GetItemInfoRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public int ConfigId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetItemInfoResponse)]
+	[ProtoContract]
+	public partial class M2C_GetItemInfoResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public ItemInfo ItemInfo { get; set; }
 
 	}
 

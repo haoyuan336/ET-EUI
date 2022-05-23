@@ -55,6 +55,7 @@ namespace ET
             return false;
             // await ETTask.CompletedTask;
         }
+
         public static async ETTask StartGameClickAction(this DlgGameLevelInfoLayer self)
         {
             bool isPowerEnough = await self.CheckPowerIsEnough();
@@ -105,7 +106,7 @@ namespace ET
             DlgBackButton dlgBackButton = baseWindow.GetComponent<DlgBackButton>();
             dlgBackButton.BackButtonClickAction = self.OnBackButtonClick;
             self.ShowTroopHeroCardInfo();
-            
+
             //显示游戏详情页面
             self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameLevelEnemyInfoLayer).Coroutine();
         }
@@ -113,11 +114,12 @@ namespace ET
         public static async void ShowTroopHeroCardInfo(this DlgGameLevelInfoLayer self)
         {
             List<HeroCardInfo> heroCardInfos = await self.RequestCurrentTroopInfo();
+            self.View.E_StartGameButton.gameObject.SetActive(heroCardInfos.Count == 3);
             // await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_TroopHeroCardLayer);
             // UIBaseWindow heroCardBaseWindos = self.DomainScene().GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_TroopHeroCardLayer);
             // heroCardBaseWindos.GetComponent<DlgTroopHeroCardLayer>().UpdateHeroCardInfo(heroCardInfos);
             self.View.ESTroopHeroCards.UpdateHeroCardInfos(heroCardInfos);
-            
+
             // heroCardBaseWindos.uiTransform.GetComponent<RectTransform>().offsetMax = new vec;
             // var heroCardBaseWindowRect = heroCardBaseWindos.uiTransform.GetComponent<RectTransform>();
             // heroCardBaseWindowRect.anchorMax = new Vector2(0.5f, 1);

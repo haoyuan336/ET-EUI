@@ -1,4 +1,4 @@
-﻿namespace ET.Account
+﻿namespace ET
 {
     public class AccountInfoComponent:Entity,IAwake,IDestroy
     {

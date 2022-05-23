@@ -23,5 +23,9 @@ namespace ET
         public List<HeroCardInfo> AllChooseHeroCardInfos = null; //当前已经选择的英雄列表
         public Action<HeroCardInfo, Scroll_ItemHeroCard, bool> OnHeroItemInfoClick;
         public HeroBagType BagType = HeroBagType.HeroAndMaterial;
+        public List<HeroCardInfo> UnableElementHeroCardInfos = new List<HeroCardInfo>(); //需要禁用的相同元素的英雄列表
+        public List<HeroCardInfo> UnableNameHeroCardInfos = new List<HeroCardInfo>();   //需要禁用的相同名称的英雄列表
+        public int BagCount = 0;
+        public int HeroCount = 0;
     }
 }

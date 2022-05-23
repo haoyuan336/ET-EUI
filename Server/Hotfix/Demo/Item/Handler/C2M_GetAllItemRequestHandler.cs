@@ -12,9 +12,14 @@ namespace ET
             long accountId = request.AccountId;
             List<Item> items = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
                     .Query<Item>(a => a.OwnerId.Equals(accountId) && a.State.Equals(1));
+            Log.Warning($"items {items.Count}");
+            foreach (var item in items)
+            {
+                Log.Warning($"item {item.ConfigId}, count{item.Count}");
+            }
+
             response.Error = ErrorCode.ERR_Success;
             List<ItemInfo> itemInfos = new List<ItemInfo>();
-
             List<KeyValuePair<int, ItemConfig>> itemConfigs = ItemConfigCategory.Instance.GetAll().ToList();
             List<Item> addItems = new List<Item>();
             foreach (var itemConfig in itemConfigs)
@@ -22,6 +27,7 @@ namespace ET
                 bool isEx = items.Exists(a => a.ConfigId.Equals(itemConfig.Key));
                 if (!isEx)
                 {
+                    Log.Warning($"初始化道具{itemConfig.Key}");
                     Item item = new Item()
                     {
                         Id = IdGenerater.Instance.GenerateId(),
@@ -30,6 +36,7 @@ namespace ET
                         State = 1,
                         Count = itemConfig.Value.DefaultValue
                     };
+
                     addItems.Add(item);
                     await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(item);
                     // item.Dispose();

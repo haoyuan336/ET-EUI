@@ -243,6 +243,23 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Text E_BagCountText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_BagCountText == null )
+     			{
+		    		this.m_E_BagCountText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_BagCount");
+     			}
+     			return this.m_E_BagCountText;
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_E_RedToggle = null;
@@ -259,6 +276,7 @@ namespace ET
 			this.m_E_AllImage = null;
 			this.m_E_LoopScrollListHeroLoopVerticalScrollRect = null;
 			this.m_E_ContentToggleGroup = null;
+			this.m_E_BagCountText = null;
 			this.uiTransform = null;
 		}
 
@@ -276,6 +294,7 @@ namespace ET
 		private UnityEngine.UI.Image m_E_AllImage = null;
 		private UnityEngine.UI.LoopVerticalScrollRect m_E_LoopScrollListHeroLoopVerticalScrollRect = null;
 		private UnityEngine.UI.ToggleGroup m_E_ContentToggleGroup = null;
+		private UnityEngine.UI.Text m_E_BagCountText = null;
 		public Transform uiTransform = null;
 	}
 }

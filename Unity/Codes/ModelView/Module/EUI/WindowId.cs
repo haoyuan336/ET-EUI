@@ -41,5 +41,6 @@
         WindowID_GameLevelInfoLayer, // 游戏关卡详情页面
         WindowID_BackButton,    //返回按钮
         WindowID_GameLevelEnemyInfoLayer,   //游戏关卡敌人信息层
+        WindowID_WeaponInfoLayer,  //装备相信层
     }
 }

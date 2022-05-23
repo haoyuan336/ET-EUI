@@ -796,20 +796,27 @@ message WeaponInfo
 	
 
 }
-//ResponseType M2C_BuyWeaponResponse
-message C2M_BuyWeaponRequest	// IActorLocationRequest
+message GoodsInfo
+{
+	int64 GoodsId = 1;
+	int32 ConfigId = 2;
+}
+
+//ResponseType M2C_BuyGoodsResponse
+message C2M_BuyGoodsRequest	// IActorLocationRequest
 {
 	int32 RpcId = 90;
 	int64 AccountId = 1;
 	int32 Count = 2;
 	int32 ConfigId = 3;
 }
-message M2C_BuyWeaponResponse	//IActorLocationResponse
+message M2C_BuyGoodsResponse	//IActorLocationResponse
 {
 	int32 RpcId = 90;
 	int32 Error = 91;
 	string Message = 92;
-	WeaponInfo WeaponInfo = 1;
+	GoodsInfo GoodsInfo = 1;
+	ItemInfo ItemInfo = 2;
 
 }
 //ResponseType M2C_GetAllWeaponsResponse
@@ -855,4 +862,19 @@ message M2C_GetAllItemResponse //IActorLocationResponse
 	int32 Error = 91;
 	string Message = 92;
 	repeated ItemInfo ItemInfos = 1;
+}
+//ResponseType M2C_GetItemInfoResponse
+message C2M_GetItemInfoRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int32 ConfigId = 2;
+}
+
+message M2C_GetItemInfoResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	ItemInfo ItemInfo = 1;
 }

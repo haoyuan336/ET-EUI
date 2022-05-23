@@ -22,7 +22,7 @@
 
 		public void OnShowWindow(UIBaseWindow uiBaseWindow, Entity contextData = null)
 		{
-		  uiBaseWindow.GetComponent<DlgGoldInfoUI>().ShowWindow(contextData).Coroutine(); 
+		  uiBaseWindow.GetComponent<DlgGoldInfoUI>().ShowWindow(contextData); 
 		}
 
 		public void OnHideWindow(UIBaseWindow uiBaseWindow)

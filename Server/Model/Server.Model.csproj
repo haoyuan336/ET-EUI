@@ -26,6 +26,18 @@
       <Link>Core\%(RecursiveDir)%(FileName)%(Extension)</Link>
     </Compile>
 
+    <Compile Include="..\..\Unity\Codes\Model\Demo\CountType.cs">
+      <Link>Demo\CountType.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\GoodsType.cs">
+      <Link>Demo\GoodsType.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Goods\Goods.cs">
+      <Link>Demo\Goods\Goods.cs</Link>
+    </Compile>
+
     <Compile Include="..\..\Unity\Codes\Model\Demo\HeroBagType.cs">
       <Link>Demo\HeroBagType.cs</Link>
     </Compile>
@@ -78,12 +90,20 @@
       <Link>Demo\Skill\SkillType.cs</Link>
     </Compile>
 
+    <Compile Include="..\..\Unity\Codes\Model\Demo\StateType.cs">
+      <Link>Demo\StateType.cs</Link>
+    </Compile>
+
     <Compile Include="..\..\Unity\Codes\Model\Demo\Troop\Troop.cs">
       <Link>Demo\Troop\Troop.cs</Link>
     </Compile>
 
     <Compile Include="..\..\Unity\Codes\Model\Demo\Unit\UnitType.cs">
       <Link>Demo\Unit\UnitType.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\WeaponType.cs">
+      <Link>Demo\WeaponType.cs</Link>
     </Compile>
 
     <Compile Include="..\..\Unity\Codes\Model\Demo\Weapon\Weapon.cs">

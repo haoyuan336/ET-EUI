@@ -107,13 +107,16 @@ namespace ET
 		 public const ushort C2M_BackGameToMainMenuRequest = 10104;
 		 public const ushort M2C_BackGameToMainMenuResponse = 10105;
 		 public const ushort WeaponInfo = 10106;
-		 public const ushort C2M_BuyWeaponRequest = 10107;
-		 public const ushort M2C_BuyWeaponResponse = 10108;
-		 public const ushort C2M_GetAllWeaponsRequest = 10109;
-		 public const ushort M2C_GetAllWeaponsResponse = 10110;
-		 public const ushort C2M_StrenthenHeroRequest = 10111;
-		 public const ushort M2C_StrenthenHeroResponse = 10112;
-		 public const ushort C2M_GetAllItemRequest = 10113;
-		 public const ushort M2C_GetAllItemResponse = 10114;
+		 public const ushort GoodsInfo = 10107;
+		 public const ushort C2M_BuyGoodsRequest = 10108;
+		 public const ushort M2C_BuyGoodsResponse = 10109;
+		 public const ushort C2M_GetAllWeaponsRequest = 10110;
+		 public const ushort M2C_GetAllWeaponsResponse = 10111;
+		 public const ushort C2M_StrenthenHeroRequest = 10112;
+		 public const ushort M2C_StrenthenHeroResponse = 10113;
+		 public const ushort C2M_GetAllItemRequest = 10114;
+		 public const ushort M2C_GetAllItemResponse = 10115;
+		 public const ushort C2M_GetItemInfoRequest = 10116;
+		 public const ushort M2C_GetItemInfoResponse = 10117;
 	}
 }

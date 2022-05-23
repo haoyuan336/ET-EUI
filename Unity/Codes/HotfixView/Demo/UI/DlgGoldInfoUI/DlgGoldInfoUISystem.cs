@@ -55,7 +55,12 @@ namespace ET
             }
         }
 
-        public static async ETTask ShowWindow(this DlgGoldInfoUI self, Entity contextData = null)
+        public static void ShowWindow(this DlgGoldInfoUI self, Entity contextData = null)
+        {
+            self.ReferGoldInfo();
+        }
+
+        public static async void ReferGoldInfo(this DlgGoldInfoUI self)
         {
             long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
@@ -68,11 +73,13 @@ namespace ET
                 {
                     self.View.E_GoldText.text = goldItem.Count.ToString();
                 }
+
                 var powerItem = response.ItemInfos.Find((a) => { return a.ConfigId == 1003; });
                 if (powerItem != null)
                 {
                     self.View.E_PowerText.text = powerItem.Count.ToString();
                 }
+
                 var diamondItem = response.ItemInfos.Find((a) => { return a.ConfigId == 1002; });
                 if (diamondItem != null)
                 {

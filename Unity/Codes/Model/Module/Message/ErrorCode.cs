@@ -34,6 +34,7 @@ namespace ET
         public const int ERR_DiamondNotEnough = 200015; //钻石不足
         public const int ERR_MaterialNotEnough = 200016; //材料不足
         public const int ERR_TroopIsFull = 200017; //队伍已经满员了
+        public const int ERR_AlOwnWeapon = 200018; //已经拥有此装备。禁止重复购买
 
         // 200001以上不抛异常
     }

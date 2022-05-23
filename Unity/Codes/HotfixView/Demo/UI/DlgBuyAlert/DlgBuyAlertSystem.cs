@@ -14,41 +14,47 @@ namespace ET
         public static void RegisterUIEvent(this DlgBuyAlert self)
         {
             self.View.E_CancelButton.AddListener(() => { self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_BuyAlert); });
-            self.View.E_OKButton.AddListenerAsync(self.OkBuy);
+            self.View.E_OKButton.AddListener(self.OkBuy);
         }
 
-        public static async ETTask OkBuy(this DlgBuyAlert self)
+        public static void OkBuy(this DlgBuyAlert self)
         {
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_BuyAlert);
             //todo 向服务器发起购买武器的请求
-
-            Log.Debug($"config id {self.Config.Id}");
-            // M2C_BuyWeaponResponse response
-            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
-            var accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            M2C_BuyWeaponResponse response = (M2C_BuyWeaponResponse) await session.Call(new C2M_BuyWeaponRequest()
+            if (self.OkButtonClickAction != null)
             {
-                Count = 1, ConfigId = self.Config.Id, AccountId = accountId
-            });
-            if (response.Error == ErrorCode.ERR_Success)
-            {
-                Log.Debug("购买成功");
-                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_BuyAlert);
-                self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GoldInfoUI).Coroutine();
+                self.OkButtonClickAction(self.Config);
             }
 
-            await ETTask.CompletedTask;
+            // Log.Debug($"config id {self.Config.Id}");
+            // // M2C_BuyWeaponResponse response
+            // Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            // var accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            // M2C_BuyWeaponResponse response = (M2C_BuyWeaponResponse) await session.Call(new C2M_BuyWeaponRequest()
+            // {
+            //     Count = 1, ConfigId = self.Config.Id, AccountId = accountId
+            // });
+            // if (response.Error == ErrorCode.ERR_Success)
+            // {
+            //     Log.Debug("购买成功");
+            //     self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_BuyAlert);
+            //     self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GoldInfoUI).Coroutine();
+            // }
+            //
+            // await ETTask.CompletedTask;
         }
 
         public static void ShowWindow(this DlgBuyAlert self, Entity contextData = null)
         {
         }
 
-        public static async void SetInfo(this DlgBuyAlert self, WeaponsConfig config)
+        public static async void SetInfo(this DlgBuyAlert self, GoodsConfig config)
         {
             self.Config = config;
-            var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.WeaponAtlasPath, config.IconResName);
-            self.View.E_IconImage.sprite = sprite;
-            self.View.E_NameText.text = config.Name;
+            
+            // var 
+            ItemConfig itemConfig = ItemConfigCategory.Instance.Get(config.ConfigId);
+            self.View.E_NameText.text = itemConfig.Des;
 
             var moneyType = config.MoneyType;
             var moneyConfig = ItemConfigCategory.Instance.Get(moneyType);

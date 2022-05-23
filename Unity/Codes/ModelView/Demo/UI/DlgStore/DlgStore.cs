@@ -8,8 +8,9 @@ namespace ET
 		public DlgStoreViewComponent View { get => this.Parent.GetComponent<DlgStoreViewComponent>();}
 
 
-		public Dictionary<int, Scroll_ItemWeapon> ItemWeapons = new Dictionary<int, Scroll_ItemWeapon>();
-		public List<WeaponsConfig> WeaponConfigs = new List<WeaponsConfig>();
+		public Dictionary<int, Scroll_ItemGoods> ItemGoods = new Dictionary<int, Scroll_ItemGoods>();
+		// public List<WeaponsConfig> WeaponConfigs = new List<WeaponsConfig>();
+		public List<GoodsConfig> GoodsConfigs = new List<GoodsConfig>();
 
 	}
 }

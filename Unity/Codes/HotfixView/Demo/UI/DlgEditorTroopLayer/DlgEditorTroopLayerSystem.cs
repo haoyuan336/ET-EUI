@@ -27,6 +27,7 @@ namespace ET
             {
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer);
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_EditorTroopLayer);
+                
             };
         }
 
@@ -95,6 +96,9 @@ namespace ET
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer];
             baseWindow.GetComponent<DlgAllHeroBagLayer>().SetAllChooseHeroCardInfos(self.TroopHeroCardInfos);
+            baseWindow.GetComponent<DlgAllHeroBagLayer>().SetUnabelNameHeroCardInfo(self.TroopHeroCardInfos);
+            // baseWindow.GetComponent<DlgAllHeroBagLayer>().SetUnableElementHeroCardInfo(self.TroopHeroCardInfos);
+            // baseWindow.GetComponent<DlgAllHeroBagLayer>().UnableElementHeroCardInfos = self.TroopHeroCardInfos;
         }
 
         public static void UpdateTroopHeroCardInfoAsync(this DlgEditorTroopLayer self, List<HeroCardInfo> heroCardInfos)

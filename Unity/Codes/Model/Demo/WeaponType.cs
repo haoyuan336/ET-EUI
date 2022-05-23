@@ -1,0 +1,17 @@
+﻿namespace ET
+{
+    public enum WeaponBagType
+    {
+        Weapon = 1,
+        Materail = 2,
+        WeaponAndMaterial = 3,
+    }
+
+    public enum WeaponType
+    {
+        Accessory = 4, //饰品
+        Equip = 2, //护甲
+        Ring = 3, //戒指
+        Weapon = 1, //武器
+    }
+}
