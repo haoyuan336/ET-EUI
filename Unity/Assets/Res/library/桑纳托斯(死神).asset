@@ -19,7 +19,7 @@ MonoBehaviour:
   - SkillName: Attack
     SkillTime: 1
     ShouJiTime: 2
-    effectPrefab: {fileID: 129228, guid: 57bfcb5b51cb8774d97a30a174c54316, type: 3}
+    effectPrefab: {fileID: 166850, guid: 72801eb1e79347349ae826d88b888228, type: 3}
     EffectStartTime: 1
     BeAttacckEffectPrefab: {fileID: 192556, guid: 5cb04277d455ddc4288db3e212262ddd,
       type: 3}
@@ -52,13 +52,13 @@ MonoBehaviour:
     TargetPosType: 1
     BeHitedBoneName: 
   - SkillName: BigSkill
-    SkillTime: 3.5
-    ShouJiTime: 0
+    SkillTime: 1
+    ShouJiTime: 0.5
     effectPrefab: {fileID: 146694, guid: 7c5b132e625e34648aaef0bdab075657, type: 3}
     EffectStartTime: 0.5
     BeAttacckEffectPrefab: {fileID: 148836, guid: 8dee89e7d3e7d0f498c614ff61996380,
       type: 3}
-    FlyEffectStartTime: 0
+    FlyEffectStartTime: 0.5
     FlyEffectPrefab: {fileID: 181216, guid: 256aad943e090ef489958073b55390ec, type: 3}
     MoveType: 2
     TargetPosType: 1
