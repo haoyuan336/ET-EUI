@@ -26,11 +26,14 @@ namespace ILRuntime.Runtime.Generated
             method = type.GetMethod("ClientNow", flag, null, args, null);
             app.RegisterCLRMethodRedirection(method, ClientNow_0);
             args = new Type[]{};
+            method = type.GetMethod("DateTimeNow", flag, null, args, null);
+            app.RegisterCLRMethodRedirection(method, DateTimeNow_1);
+            args = new Type[]{};
             method = type.GetMethod("ServerNow", flag, null, args, null);
-            app.RegisterCLRMethodRedirection(method, ServerNow_1);
+            app.RegisterCLRMethodRedirection(method, ServerNow_2);
             args = new Type[]{};
             method = type.GetMethod("ClientFrameTime", flag, null, args, null);
-            app.RegisterCLRMethodRedirection(method, ClientFrameTime_2);
+            app.RegisterCLRMethodRedirection(method, ClientFrameTime_3);
 
 
         }
@@ -49,7 +52,18 @@ namespace ILRuntime.Runtime.Generated
             return __ret + 1;
         }
 
-        static StackObject* ServerNow_1(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        static StackObject* DateTimeNow_1(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        {
+            ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
+            StackObject* __ret = ILIntepreter.Minus(__esp, 0);
+
+
+            var result_of_this_method = ET.TimeHelper.DateTimeNow();
+
+            return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
+        }
+
+        static StackObject* ServerNow_2(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
             StackObject* __ret = ILIntepreter.Minus(__esp, 0);
@@ -62,7 +76,7 @@ namespace ILRuntime.Runtime.Generated
             return __ret + 1;
         }
 
-        static StackObject* ClientFrameTime_2(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        static StackObject* ClientFrameTime_3(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
             StackObject* __ret = ILIntepreter.Minus(__esp, 0);

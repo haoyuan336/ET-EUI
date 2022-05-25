@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: chongwu_xisui_12
+  m_Shader: {fileID: 4800000, guid: 160ea3fe40d62914bab414a86950080d, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 0.65}
+          m_Offset: {x: 0, y: -6.2}
+      data:
+        first:
+          name: _node_3082
+        second:
+          m_Texture: {fileID: 2800000, guid: b84e6b6dbcf58614198d545865e8ab57, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _node_8517
+        second:
+          m_Texture: {fileID: 2800000, guid: f6392bcb65970f94eb288f66ec6a7400, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _power
+        second: 1
+      data:
+        first:
+          name: _liang
+        second: 2.5
+      data:
+        first:
+          name: _InvFade
+        second: 1
+    m_Colors:
+      data:
+        first:
+          name: _node_7752
+        second: {r: 0.5764705, g: 0.4705882, b: 1, a: 1}
+      data:
+        first:
+          name: _TintColor
+        second: {r: 1, g: 0.89350915, b: 0.44852942, a: 0.5}

@@ -9,8 +9,8 @@ namespace ET
         {
             HeroCard heroCard = a.HeroCard;
             GameObject go = heroCard.GetComponent<HeroCardObjectComponent>().HeroCard;
-            go.GetComponent<HeroCardViewCtl>()
-                    .UpdateAngryView($"{heroCard.Angry.ToString()} /{HeroConfigCategory.Instance.Get(heroCard.ConfigId).TotalAngry.ToString()}");
+            // go.GetComponent<HeroCardViewCtl>()
+            //         .UpdateAngryView($"{heroCard.Angry.ToString()} /{HeroConfigCategory.Instance.Get(heroCard.ConfigId).TotalAngry.ToString()}");
             await ETTask.CompletedTask;
         }
     }

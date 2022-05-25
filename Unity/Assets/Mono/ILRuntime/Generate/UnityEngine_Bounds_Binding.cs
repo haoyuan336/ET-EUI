@@ -23,8 +23,8 @@ namespace ILRuntime.Runtime.Generated
             Type[] args;
             Type type = typeof(UnityEngine.Bounds);
             args = new Type[]{};
-            method = type.GetMethod("get_center", flag, null, args, null);
-            app.RegisterCLRMethodRedirection(method, get_center_0);
+            method = type.GetMethod("get_size", flag, null, args, null);
+            app.RegisterCLRMethodRedirection(method, get_size_0);
 
             app.RegisterCLRCreateDefaultInstance(type, () => new UnityEngine.Bounds());
 
@@ -77,7 +77,7 @@ namespace ILRuntime.Runtime.Generated
             }
         }
 
-        static StackObject* get_center_0(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        static StackObject* get_size_0(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
             StackObject* ptr_of_this_method;
@@ -87,7 +87,7 @@ namespace ILRuntime.Runtime.Generated
             ptr_of_this_method = ILIntepreter.GetObjectAndResolveReference(ptr_of_this_method);
             UnityEngine.Bounds instance_of_this_method = (UnityEngine.Bounds)typeof(UnityEngine.Bounds).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)16);
 
-            var result_of_this_method = instance_of_this_method.center;
+            var result_of_this_method = instance_of_this_method.size;
 
             ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
             WriteBackInstance(__domain, ptr_of_this_method, __mStack, ref instance_of_this_method);

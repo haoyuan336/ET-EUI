@@ -107,6 +107,7 @@ namespace ET
         {
             float time = 0;
             // float distance = Vector3.Distance(targetPos, self.HeroModeInitPos);
+            self.HeroMode.GetComponent<Animator>().SetBool("Run", true);
             while (time < Mathf.PI * 0.5f)
             {
                 time += Time.deltaTime * 2;
@@ -116,6 +117,8 @@ namespace ET
                 // distance = Vector3.Distance(prePos, targetPos);
                 await TimerComponent.Instance.WaitFrameAsync();
             }
+
+            self.HeroMode.GetComponent<Animator>().SetBool("Run", false);
 
             await ETTask.CompletedTask;
         }
@@ -138,12 +141,13 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
-        public static async ETTask PlayBeAttackAnim(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message, SkillConfig skillConfig)
+        public static async ETTask PlayBeAttackAnim(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message,
+        SkillConfig skillConfig)
         {
             self.HeroMode.GetComponent<Animator>().SetTrigger("BeAttack");
             self.Parent.GetComponent<HeroCardObjectComponent>().UpdateHeroCardTextView(message.BeAttackHeroCardInfo);
             self.GetComponent<HeroCardInfoObjectComponent>().UpdateView(message.BeAttackHeroCardInfo);
-            var damageTime = long.Parse(skillConfig.SkillAnimTime);
+            int damageTime = skillConfig.SkillAnimTime;
             await TimerComponent.Instance.WaitAsync(damageTime);
             if (message.BeAttackHeroCardInfo.HP <= 0)
             {
@@ -161,50 +165,29 @@ namespace ET
             Log.Debug($"Skill id {skillId}");
             Skill skill = heroCard.GetChild<Skill>(skillId);
             SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
+            self.PlaySkillEffect(skillConfig);
             beAttackCard.GetComponent<HeroModeObjectCompoent>().PlayBeAttackAnim(message, skillConfig).Coroutine();
 
-      
-        
             string skillAnimStr = skillConfig.SkillAnimName;
             self.UpdateShowDataView(message.AttackHeroCardInfo);
-            // switch (skillConfig.SkillType)
-            // {
-            //     case (int) SkillType.BigSkill:
-            //         skillAnimStr = "Attack";
-            //         break;
-            //     case (int) SkillType.Skill1:
-            //         skillAnimStr = "Skill1";
-            //         break;
-            // }
-
-            // Log.Debug("skill anim str = " + skillAnimStr);
-            // GameObject selfGo = self.Parent.GetComponent<HeroModeObjectCompoent>().HeroMode;
-
             self.HeroMode.GetComponent<Animator>().SetTrigger(skillAnimStr);
-            var damageTimeTime =float.Parse(skillConfig.DamageTime);
-            var skillTime = long.Parse(skillConfig.SkillAnimTime);
+            var damageTimeTime = skillConfig.DamageTime;
+            var skillTime = skillConfig.SkillAnimTime;
             await TimerComponent.Instance.WaitAsync(skillTime);
         }
 
-        // public static async ETTask PlayAddAngryEffect(this HeroModeObjectCompoent self, EventType.PlayAddAngryViewAnim message)
-        // {
-        //     // Log.Debug("play add angry effect");
-        //     Vector3 startPos = message.Diamond.GetComponent<GameObjectComponent>().GameObject.transform.position;
-        //     await self.PlayAddEffectAnim(startPos, "DiamondAddAngryTrailEffect");
-        //     // self.Parent.GetComponent<HeroCardObjectComponent>().UpdateHeroCardTextView();
-        // }
-        //
-        // public static async ETTask PlayAddAttackEffect(this HeroModeObjectCompoent self, EventType.PlayAddAttackViewAnim message)
-        // {
-        //     Vector3 startPos = message.Diamond.GetComponent<GameObjectComponent>().GameObject.transform.position;
-        //     // Diamond diamond = message.Diamond;
-        //     // HeroCardViewCtl heroCardViewCtl = self.Parent.GetComponent<GameObjectComponent>().GameObject.GetComponent<HeroCardViewCtl>();
-        //     await self.PlayAddEffectAnim(startPos, "DiamondAddAttackTrailEffect");
-        //     // heroCardViewCtl.UpdateAttackView((message.HeroCard.Attack + message.HeroCard.DiamondAttack).ToString());
-        //
-        //     await ETTask.CompletedTask;
-        // }
-
+        public static async void PlaySkillEffect(this HeroModeObjectCompoent self, SkillConfig config)
+        {
+            if (config.SkillEffect != "")
+            {
+                
+                GameObject pre = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(config.SkillEffect);
+                await TimerComponent.Instance.WaitAsync(config.EffectStartTime);
+                GameObject obj = GameObject.Instantiate(pre);
+                obj.transform.position = self.HeroMode.transform.position;
+            }
+        }
+      
         public static async ETTask PlayAddEffectAnim(this HeroModeObjectCompoent self, Vector3 startPos, string effectName)
         {
             Log.Debug("play add effect anim");

@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 474chongji
+  m_Shader: {fileID: 4800000, guid: 68d1cf397f9f81148b91b3d81a6bd129, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _mask
+        second:
+          m_Texture: {fileID: 2800000, guid: 51e13f5bfc9a6534db863039984b9775, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _noise_rongjie
+        second:
+          m_Texture: {fileID: 2800000, guid: 0283eca0b3e8ddb41af3b5b7da0bd5bb, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _noise02
+        second:
+          m_Texture: {fileID: 2800000, guid: f6392bcb65970f94eb288f66ec6a7400, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _noise01
+        second:
+          m_Texture: {fileID: 2800000, guid: b84e6b6dbcf58614198d545865e8ab57, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Cutoff
+        second: 0.5
+      data:
+        first:
+          name: _0_
+        second: 0.1
+      data:
+        first:
+          name: _1_
+        second: 4.21
+      data:
+        first:
+          name: _2_diffuse
+        second: 1.23
+      data:
+        first:
+          name: _3_
+        second: 1
+    m_Colors: {}

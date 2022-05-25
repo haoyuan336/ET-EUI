@@ -78,7 +78,11 @@ namespace ET
 		[ProtoMember(4)]
 		public string SkillAnimName { get; set; }
 		[ProtoMember(6)]
-		public string SkillAnimTime { get; set; }
+		public int SkillAnimTime { get; set; }
+		[ProtoMember(7)]
+		public string SkillEffect { get; set; }
+		[ProtoMember(8)]
+		public int EffectStartTime { get; set; }
 
 	}
 }

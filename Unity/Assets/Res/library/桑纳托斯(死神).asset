@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 963d37fe4e1b0ac4fb0d104bb7d28504, type: 3}
+  m_Name: "\u6851\u7EB3\u6258\u65AF(\u6B7B\u795E)"
+  m_EditorClassIdentifier: 
+  HeroMode: {fileID: 5769045417017450018, guid: b5e85ad456c2c9c47bd74ae49dc4a1b9,
+    type: 3}
+  HeroName: "\u6851\u7EB3\u6258\u65AF\uFF08\u6B7B\u795E\uFF09"
+  skillConfigs:
+  - SkillName: Attack
+    SkillTime: 1
+    ShouJiTime: 2
+    effectPrefab: {fileID: 129228, guid: 57bfcb5b51cb8774d97a30a174c54316, type: 3}
+    EffectStartTime: 1
+    BeAttacckEffectPrefab: {fileID: 192556, guid: 5cb04277d455ddc4288db3e212262ddd,
+      type: 3}
+    FlyEffectStartTime: 0
+    FlyEffectPrefab: {fileID: 0}
+    MoveType: 2
+    TargetPosType: 1
+    BeHitedBoneName: 
+  - SkillName: Skill1
+    SkillTime: 1.5
+    ShouJiTime: 1
+    effectPrefab: {fileID: 132454, guid: 974026791711fb5498f1d5796e0500ec, type: 3}
+    EffectStartTime: 1
+    BeAttacckEffectPrefab: {fileID: 0}
+    FlyEffectStartTime: 1
+    FlyEffectPrefab: {fileID: 0}
+    MoveType: 1
+    TargetPosType: 1
+    BeHitedBoneName: 
+  - SkillName: Skill2
+    SkillTime: 0
+    ShouJiTime: 2
+    effectPrefab: {fileID: 148262, guid: 760390a709666204986450b45be8615f, type: 3}
+    EffectStartTime: 0.8
+    BeAttacckEffectPrefab: {fileID: 193920, guid: f497b56c68d6fd346adfee6c54583de8,
+      type: 3}
+    FlyEffectStartTime: 1
+    FlyEffectPrefab: {fileID: 0}
+    MoveType: 2
+    TargetPosType: 1
+    BeHitedBoneName: 
+  - SkillName: BigSkill
+    SkillTime: 3.5
+    ShouJiTime: 0
+    effectPrefab: {fileID: 146694, guid: 7c5b132e625e34648aaef0bdab075657, type: 3}
+    EffectStartTime: 0.5
+    BeAttacckEffectPrefab: {fileID: 148836, guid: 8dee89e7d3e7d0f498c614ff61996380,
+      type: 3}
+    FlyEffectStartTime: 0
+    FlyEffectPrefab: {fileID: 181216, guid: 256aad943e090ef489958073b55390ec, type: 3}
+    MoveType: 2
+    TargetPosType: 1
+    BeHitedBoneName: 
