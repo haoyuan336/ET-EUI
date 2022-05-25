@@ -7,7 +7,11 @@ using System.Text.RegularExpressions;
 using System;
 using System.IO;
 using System.Data;
+using System.Diagnostics;
+using ET;
 using Excel;
+using Debug = UnityEngine.Debug;
+
 public class AssetPostprocessorEditor : AssetPostprocessor
 {
 
@@ -19,6 +23,7 @@ public class AssetPostprocessorEditor : AssetPostprocessor
     public void OnPreprocessModel()
     {
 
+        Debug.Log("OnPreprocessModel");
         //找当当前页面中的表格
         if (assetPath.IndexOf(".FBX") > -1)
         {
@@ -42,6 +47,12 @@ public class AssetPostprocessorEditor : AssetPostprocessor
             {
                 DataRow dataRow = rows[i];
                 var name = dataRow[0].ToString();
+                // Log.Debug($"name {name}");
+                Debug.Log($"name  {name}");
+                if (name == "")
+                {
+                    break;
+                }
                 var startFrame = int.Parse(dataRow[1].ToString());
                 var endFrame = int.Parse(dataRow[2].ToString());
 
