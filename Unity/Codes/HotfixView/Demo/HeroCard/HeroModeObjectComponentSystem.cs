@@ -135,7 +135,7 @@ namespace ET
 
             long skillId = heroCard.CurrentSkillId;
             Skill skill = heroCard.GetChild<Skill>(skillId);
-            // skill.ConfigId = 1000012;
+            // skill.ConfigId = 1000009;
             SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
             await self.MoveToEnemyTarget(beAttackHeroCard, skillConfig);
             await self.PlayAttackAnim(message, skillConfig);

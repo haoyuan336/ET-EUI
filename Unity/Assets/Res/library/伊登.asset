@@ -17,7 +17,7 @@ MonoBehaviour:
   HeroName: "\u4F0A\u767B"
   skillConfigs:
   - SkillName: Attack
-    SkillTime: 0
+    SkillTime: 1
     ShouJiTime: 0.5
     effectPrefab: {fileID: 124020, guid: 857f59aa781f5ef4ea93260956335209, type: 3}
     EffectStartTime: 0
@@ -29,7 +29,7 @@ MonoBehaviour:
     TargetPosType: 1
     BeHitedBoneName: 
   - SkillName: Skill1
-    SkillTime: 0
+    SkillTime: 2
     ShouJiTime: 1.3
     effectPrefab: {fileID: 173210, guid: 60771b67e7a510449acdedfadc8e7f9f, type: 3}
     EffectStartTime: 0.8
@@ -40,7 +40,7 @@ MonoBehaviour:
     TargetPosType: 1
     BeHitedBoneName: 
   - SkillName: Skill2
-    SkillTime: 0
+    SkillTime: 2
     ShouJiTime: 1
     effectPrefab: {fileID: 172924, guid: 9d5510acbae0830488f5db89f5150d1d, type: 3}
     EffectStartTime: 1
@@ -51,8 +51,8 @@ MonoBehaviour:
     TargetPosType: 1
     BeHitedBoneName: 
   - SkillName: BigSkill
-    SkillTime: 0
-    ShouJiTime: 0
+    SkillTime: 3
+    ShouJiTime: 2
     effectPrefab: {fileID: 8068858114660994280, guid: 70ee0573de4d15a4c8981e81a90304e8,
       type: 3}
     EffectStartTime: 1
