@@ -20,7 +20,7 @@ namespace ET
             Texture texture = await AddressableComponent.Instance.LoadAssetByPathAsync<Texture>(imageStr);
             var str = "Assets/Bundles/Unit/DiamondPrefabs/DiamondPrefab.prefab";
             GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(str);
-            GameObject go = GameObject.Instantiate(prefab);
+            GameObject go = GameObject.Instantiate(prefab, GlobalComponent.Instance.DiamondContent);
             if (a.Diamond.IsDisposed)
             {
                 Log.Error("diamond al disposed");

@@ -259,7 +259,7 @@ namespace ET
             GameObject effect = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(config.FlyEffect);
             HeroModeObjectCompoent heroModeObject = beAttackHeroCard.GetComponent<HeroModeObjectCompoent>();
             Vector3 startPos = self.HeroMode.transform.position + Vector3.up;
-            Vector3 endPos = heroModeObject.HeroMode.transform.position + Vector3.up;
+            Vector3 endPos = heroModeObject.HeroMode.transform.position + Vector3.up * 0.5f;
             effect.transform.position = startPos;
             float time = 0;
             effect.transform.forward = endPos - startPos;

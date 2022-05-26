@@ -89,8 +89,8 @@ namespace ET
             {
                 var heroCard = self.GetChild<HeroCard>(heroCardInfo.HeroId);
                 // heroCard.Attack = heroCard.Attack;
-                heroCard.Attack = heroCardInfo.Attack;
-                heroCard.DiamondAttack = heroCardInfo.DiamondAttack;
+                // heroCard.Attack = heroCardInfo.Attack;
+                // heroCard.DiamondAttack = heroCardInfo.DiamondAttack;
                 Game.EventSystem.Publish(new EventType.UpdateAttackView() { HeroCard = heroCard });
             }
         }

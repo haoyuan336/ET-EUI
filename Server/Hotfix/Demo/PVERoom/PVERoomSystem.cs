@@ -280,7 +280,8 @@ namespace ET
             List<HeroCard> heroCards = new List<HeroCard>();
             foreach (var child in children)
             {
-                if (child.HeroColor.Equals(colorId) && !child.GetIsDead())
+                HeroConfig config = HeroConfigCategory.Instance.Get(child.ConfigId);
+                if (config.HeroColor.Equals(colorId) && !child.GetIsDead())
                 {
                     // return child;
                     heroCards.Add(child);
@@ -518,6 +519,7 @@ namespace ET
             List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
             heroCards = heroCards.FindAll(a =>
             {
+                //如果此英雄没有技能， 那么返回
                 if (a.CurrentSkillId != 0)
                 {
                     return true;
@@ -526,6 +528,10 @@ namespace ET
                 return false;
             });
             //todo 找到了发动攻击的英雄，开始寻找被攻击的英雄
+            heroCards.Sort((a, b) =>
+            {
+                return a.InTroopIndex - b.InTroopIndex;
+            });
 
             foreach (var heroCard in heroCards)
             {

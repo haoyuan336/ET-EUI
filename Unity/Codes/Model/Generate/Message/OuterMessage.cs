@@ -1928,4 +1928,38 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.HeroCardDataComponentInfo)]
+	[ProtoContract]
+	public partial class HeroCardDataComponentInfo: Object
+	{
+		[ProtoMember(1)]
+		public int DiamondAttack { get; set; }
+
+		[ProtoMember(2)]
+		public int HP { get; set; }
+
+		[ProtoMember(3)]
+		public int HeroAttack { get; set; }
+
+		[ProtoMember(4)]
+		public int WeaponAttack { get; set; }
+
+		[ProtoMember(5)]
+		public int SkillAttack { get; set; }
+
+		[ProtoMember(6)]
+		public int NormalDamage { get; set; }
+
+		[ProtoMember(7)]
+		public int CriticalDamage { get; set; }
+
+// public int HP;  //当前的血量
+// public int DiamondAttack;
+// public int HeroAttack;
+// public int WeaponAttack;
+// public int SkillAttack;
+// public int NormalDamage;
+// public int CriticalDamage; //暴击伤害
+	}
+
 }

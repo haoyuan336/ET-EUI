@@ -11,13 +11,11 @@ namespace ET
         public int ConfigId; //在配置表里面的id
         public long TroopId; //队伍Id
         public int InTroopIndex; //在队伍里面的index
-        public int HeroColor; //英雄属性
-        public float Attack;
+        // public int HeroColor; //英雄属性
 
         public float HP;
-
         // public float Defence;
-        public float DiamondAttack;
+        // public float DiamondAttack;
         public float DiamondDefence;
         public int CampIndex; //todo 阵营index
         public float Angry; //怒气值

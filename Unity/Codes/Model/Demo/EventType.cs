@@ -286,5 +286,10 @@ namespace ET
         {
             public bool Value;
         }
+
+        public struct PlayDiamondContentAnim
+        {
+            public bool Value;  //播放隐藏显示
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ET.Account;
 using ET.EventType;
 
@@ -74,7 +75,10 @@ namespace ET
                 await ETTaskHelper.WaitAll(tasks);
             }
 
-            await Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook() { Value = true });
+            List<ETTask> animTasks = new List<ETTask>();
+            animTasks.Add(Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook() { Value = true }));
+            animTasks.Add(Game.EventSystem.PublishAsync(new EventType.PlayDiamondContentAnim() { Value = false }));
+            await ETTaskHelper.WaitAll(animTasks);
             foreach (var attackActionItem in attackActionItems)
             {
                 List<ETTask> tasks = new List<ETTask>();
@@ -88,11 +92,15 @@ namespace ET
                 await ETTaskHelper.WaitAll(tasks);
             }
 
-            
-            
-            
-            await Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook() { Value = false });
 
+
+            List<ETTask> animTaskList = new List<ETTask>();
+            animTaskList.Add(Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook() { Value = false }));
+            animTaskList.Add(Game.EventSystem.PublishAsync(new EventType.PlayDiamondContentAnim() { Value = true }));
+
+            // await Game.EventSystem.PublishAsync(new EventType.PlayDiamondContentAnim() { Value = true });
+            // await Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook() { Value = false });
+            ETTaskHelper.WaitAll(animTaskList);
             List<HeroCard> heroCards = heroCardComponent.GetChilds<HeroCard>();
             Game.EventSystem.Publish(new EventType.GameAroundOver() { HeroCards = heroCards });
             //

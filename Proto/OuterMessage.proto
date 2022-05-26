@@ -878,3 +878,24 @@ message M2C_GetItemInfoResponse //IActorLocationResponse
 	string Message = 92;
 	ItemInfo ItemInfo = 1;
 }
+
+message HeroCardDataComponentInfo
+{
+	int32 DiamondAttack = 1;
+	int32 HP = 2;	//当前的血量
+	int32 HeroAttack = 3 ;	//英雄伤害
+	int32 WeaponAttack = 4;	//装备伤害
+	int32 SkillAttack = 5;	//技能伤害
+	int32 NormalDamage = 6;	//普通伤害
+	int32 CriticalDamage = 7;//暴击伤害
+	
+
+	// public int HP;  //当前的血量
+	// public int DiamondAttack;
+	// public int HeroAttack;
+	// public int WeaponAttack;
+	// public int SkillAttack;
+	// public int NormalDamage;
+	// public int CriticalDamage; //暴击伤害
+
+}
