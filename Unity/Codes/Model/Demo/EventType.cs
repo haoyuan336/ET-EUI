@@ -10,6 +10,7 @@ namespace ET
         {
             public HeroCardInfo HeroCardInfo;
         }
+
         public struct AppStart
         {
         }
@@ -215,14 +216,15 @@ namespace ET
         public struct PlayHeroCardAttackAnim
         {
             public HeroCard AttackHeroCard;
-            public HeroCard BeAttackHeroCard;
-            public HeroCardInfo AttackHeroCardInfo;
-            public HeroCardInfo BeAttackHeroCardInfo;
+            public List<HeroCard> BeAttackHeroCards;
+            public HeroCardDataComponentInfo AttackHeroCardDataComponentInfo;
+            public List<HeroCardDataComponentInfo> BeAttackHeroCardDataComponentInfos;
+            public CrashCommonInfo CommonInfo;
         }
 
         public struct PlayAddAttackViewAnim
         {
-            public AddItemAction AddItemAction;
+            public List<AddItemAction> AddItemActions;
 
             public Scene Scene;
             // public HeroCard HeroCard;
@@ -237,7 +239,7 @@ namespace ET
 
         public struct PlayAddAngryViewAnim
         {
-            public AddItemAction AddItemAction;
+            public List<AddItemAction> AddItemActions;
 
             public Scene Scene;
             // public HeroCard HeroCard;
@@ -274,12 +276,12 @@ namespace ET
         {
             public List<HeroCard> HeroCards;
         }
+
         /// <summary>
         /// 退出游戏场景
         /// </summary>
         public struct ExitGameScene
         {
-        
         }
 
         public struct ChangeFightCameraLook
@@ -289,7 +291,12 @@ namespace ET
 
         public struct PlayDiamondContentAnim
         {
-            public bool Value;  //播放隐藏显示
+            public bool Value; //播放隐藏显示
+        }
+
+        public struct DestroyHeroCard
+        {
+            public HeroCard HeroCard; //销毁卡牌
         }
     }
 }

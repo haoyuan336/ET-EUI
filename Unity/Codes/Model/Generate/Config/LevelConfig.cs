@@ -75,6 +75,12 @@ namespace ET
 		public string HeroId { get; set; }
 		[ProtoMember(3)]
 		public string DiamondTypes { get; set; }
+		[ProtoMember(4)]
+		public int AngryCount { get; set; }
+		[ProtoMember(5)]
+		public int AttackAddition { get; set; }
+		[ProtoMember(6)]
+		public string StartAttackAddition { get; set; }
 
 	}
 }

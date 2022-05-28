@@ -500,8 +500,8 @@ message DiamondAction
 message DiamondActionItem
 {
 	repeated DiamondAction DiamondActions = 1;
-	AddItemAction AddAttackItemAction = 2;
-	AddItemAction AddAngryItemAction = 3;
+	repeated AddItemAction AddAttackItemActions = 2;
+	repeated AddItemAction AddAngryItemActions = 3;
 }
 message GameLoseResultAction
 {
@@ -512,6 +512,10 @@ message AttackAction
 {
 	HeroCardInfo AttackHeroCardInfo = 1;
 	repeated HeroCardInfo BeAttackHeroCardInfo = 2;
+	repeated HeroCardDataComponentInfo BeAttackHeroCardDataComponentInfo = 3;
+	HeroCardDataComponentInfo AttackHeroCardDataComponentInfo = 4;
+
+
 }
 message AttackActionItem
 {
@@ -521,6 +525,8 @@ message AddItemAction
 {
 	repeated DiamondInfo DiamondInfos = 1;
 	HeroCardInfo HeroCardInfo = 2;
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 3;
+	CrashCommonInfo CrashCommonInfo = 4;
 }
 message M2C_SyncDiamondAction //IActorMessage
 {
@@ -562,8 +568,10 @@ message HeroCardInfo
 	float Defence = 15;			//防御值
 	int32 Level = 16;	//等级
 	float TotalHP = 17;	//总血量
-	float Star = 18;	//英雄的星级
+	int32 Star = 18;	//英雄的星级
 	int32 Count = 19;	//英雄个数
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 20;	//英雄的基础数据
+	int32 Rank = 21;		//英雄的阶数
 
 	// repeated long SkillIdList = 11;	//技能id
 }
@@ -878,17 +886,26 @@ message M2C_GetItemInfoResponse //IActorLocationResponse
 	string Message = 92;
 	ItemInfo ItemInfo = 1;
 }
+message CrashCommonInfo
+{
+	int32 FirstCrashCount = 1;	//首次消除的个数
+	int32 CommonCount = 2;	//消除的连击次数
+	int32 FirstCrashColor = 3;	//首次消除的颜色类型
 
+}
 message HeroCardDataComponentInfo
 {
-	int32 DiamondAttack = 1;
+	int32 DiamondAttackAddition = 1;	// 钻石伤害加成
 	int32 HP = 2;	//当前的血量
 	int32 HeroAttack = 3 ;	//英雄伤害
 	int32 WeaponAttack = 4;	//装备伤害
 	int32 SkillAttack = 5;	//技能伤害
 	int32 NormalDamage = 6;	//普通伤害
 	int32 CriticalDamage = 7;//暴击伤害
-	
+	int32 ConfigId = 8;	//配置Id
+	int32 Angry = 9;	//当前的怒气值
+	int32 TotalHP = 10;	//总血量
+
 
 	// public int HP;  //当前的血量
 	// public int DiamondAttack;

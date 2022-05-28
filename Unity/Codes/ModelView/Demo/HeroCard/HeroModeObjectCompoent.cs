@@ -2,7 +2,7 @@
 
 namespace ET
 {
-    public class HeroModeObjectCompoent: Entity, IAwake<HeroCard>, IUpdate
+    public class HeroModeObjectCompoent: Entity, IAwake<HeroCard>, IUpdate, IDestroy
     {
         public GameObject HeroMode;
         public Vector3 HeroModeInitPos = Vector3.zero;

@@ -21,23 +21,21 @@ namespace ET
                 List<ETTask> tasks = new List<ETTask>();
 
                 int count = 0;
-                // Log.Debug($"diamond actions  {diamondActionItem.DiamondActions.Count}");
-
-                if (diamondActionItem.AddAttackItemAction != null)
+                if (diamondActionItem.AddAttackItemActions != null)
                 {
                     // Log.Warning("存在等价攻击力的数据");
                     tasks.Add(Game.EventSystem.PublishAsync(new EventType.PlayAddAttackViewAnim()
                     {
-                        AddItemAction = diamondActionItem.AddAttackItemAction, Scene = session.ZoneScene().CurrentScene()
+                        AddItemActions = diamondActionItem.AddAttackItemActions, Scene = session.ZoneScene().CurrentScene()
                     }));
                 }
 
-                if (diamondActionItem.AddAngryItemAction != null)
+                if (diamondActionItem.AddAngryItemActions != null)
                 {
                     Log.Warning("存在增加怒气值的数据");
                     tasks.Add(Game.EventSystem.PublishAsync(new EventType.PlayAddAngryViewAnim()
                     {
-                        AddItemAction = diamondActionItem.AddAngryItemAction, Scene = session.ZoneScene().CurrentScene()
+                        AddItemActions = diamondActionItem.AddAngryItemActions, Scene = session.ZoneScene().CurrentScene()
                     }));
                 }
 
@@ -49,8 +47,6 @@ namespace ET
                     switch (diamondAction.ActionType)
                     {
                         case (int) DiamondActionType.Move:
-                            // Log.Debug($"diamond info lieinde {diamondInfo.LieIndex}, {diamondInfo.HangIndex}");
-                            // Log.Debug($"diamond {diamond}");
                             diamond.SetIndex(diamondInfo.LieIndex, diamondInfo.HangIndex);
                             count++;
                             // Log.Debug($"count {count}");
@@ -60,14 +56,7 @@ namespace ET
                             tasks.Add(diamondComponent.RemoveChild(diamond));
                             break;
                         case (int) DiamondActionType.Create:
-
                             tasks.Add(diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo));
-
-                            // ETTask task = ETTask.Create();
-                            // await TimerComponent.Instance.WaitAsync(100);
-                            // task.SetResult();
-                            // Diamond newDiamond = diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo);
-                            // tasks.Add(Game.EventSystem.PublishAsync(new EventType.InitDiamondAndMoveDown() { Diamond = newDiamond }));
                             break;
                     }
                 }
@@ -92,15 +81,13 @@ namespace ET
                 await ETTaskHelper.WaitAll(tasks);
             }
 
-
-
             List<ETTask> animTaskList = new List<ETTask>();
             animTaskList.Add(Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook() { Value = false }));
             animTaskList.Add(Game.EventSystem.PublishAsync(new EventType.PlayDiamondContentAnim() { Value = true }));
 
             // await Game.EventSystem.PublishAsync(new EventType.PlayDiamondContentAnim() { Value = true });
             // await Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook() { Value = false });
-            ETTaskHelper.WaitAll(animTaskList);
+            await ETTaskHelper.WaitAll(animTaskList);
             List<HeroCard> heroCards = heroCardComponent.GetChilds<HeroCard>();
             Game.EventSystem.Publish(new EventType.GameAroundOver() { HeroCards = heroCards });
             //

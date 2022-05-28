@@ -38,16 +38,17 @@ namespace ET
             HeroConfig config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
             string heroModeStr = config.HeroMode;
             self.View.E_HeroNameText.text = config.HeroName;
-
             self.HeroModeShow = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(heroModeStr);
-            // Transform shadow = UIFindHelper.FindDeepChild(self.HeroModeShow.transform.parent.gameObject, "Shadow");
-            // shadow.gameObject.SetActive(true);
-            // Vector3 center = self.HeroModeShow.GetComponentInChildren<SkinnedMeshRenderer>().bounds.center;
-            // GameObject obj = GameObject.Find("MainCameraLockLook");
-            // obj.transform.position = center;
-            // GameObject mainSceneHeroBg = GameObject.Find("MainSceneHeroBG");
-            // mainSceneHeroBg.transform.position = center + self.HeroModeShow.transform.forward * -10;
-
+            HeroCard heroCard = self.AddChildWithId<HeroCard, HeroCardInfo>(heroCardInfo.HeroId,heroCardInfo);
+            self.View.E_RankText.text = $"{heroCardInfo.Rank}阶";
+            HeroCardDataComponent heroCardComponent = heroCard.AddComponent<HeroCardDataComponent>();
+            var baseAttack = heroCardComponent.GetHeroBaseAttack();
+            var baseHP = heroCardComponent.GetHeroBaseHP();
+            var baseDefence = heroCardComponent.GetHeroBaseDefence();
+            self.View.E_BaseAttackText.text = $"{baseAttack}";
+            self.View.E_HPText.text = $"{baseHP}";
+            self.View.E_DefenceText.text = $"{baseDefence}";
+            heroCard.Dispose();
             self.SethetoStar(heroCardInfo);
             self.SetElementInfo(heroCardInfo);
         }

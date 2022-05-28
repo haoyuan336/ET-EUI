@@ -56,7 +56,7 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Text E_FightText
+		public UnityEngine.UI.Text E_BaseAttackText
      	{
      		get
      		{
@@ -65,11 +65,45 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_FightText == null )
+     			if( this.m_E_BaseAttackText == null )
      			{
-		    		this.m_E_FightText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"InfoBgPlane/Scroll View/Viewport/Content/HP/E_Fight");
+		    		this.m_E_BaseAttackText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"InfoBgPlane/Scroll View/Viewport/Content/Label/E_BaseAttack");
      			}
-     			return this.m_E_FightText;
+     			return this.m_E_BaseAttackText;
+     		}
+     	}
+
+		public UnityEngine.UI.Text E_HPText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_HPText == null )
+     			{
+		    		this.m_E_HPText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"InfoBgPlane/Scroll View/Viewport/Content/Label (1)/E_HP");
+     			}
+     			return this.m_E_HPText;
+     		}
+     	}
+
+		public UnityEngine.UI.Text E_DefenceText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_DefenceText == null )
+     			{
+		    		this.m_E_DefenceText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"InfoBgPlane/Scroll View/Viewport/Content/Label (2)/E_Defence");
+     			}
+     			return this.m_E_DefenceText;
      		}
      	}
 
@@ -87,6 +121,23 @@ namespace ET
 		    		this.m_E_ElementImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"InfoBgPlane/E_Element");
      			}
      			return this.m_E_ElementImage;
+     		}
+     	}
+
+		public UnityEngine.UI.Text E_RankText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_RankText == null )
+     			{
+		    		this.m_E_RankText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"InfoBgPlane/E_Rank");
+     			}
+     			return this.m_E_RankText;
      		}
      	}
 
@@ -333,8 +384,11 @@ namespace ET
 			this.m_E_HeroNameText = null;
 			this.m_E_StarContentImage = null;
 			this.m_E_LevelText = null;
-			this.m_E_FightText = null;
+			this.m_E_BaseAttackText = null;
+			this.m_E_HPText = null;
+			this.m_E_DefenceText = null;
 			this.m_E_ElementImage = null;
+			this.m_E_RankText = null;
 			this.m_E_BackButton = null;
 			this.m_E_BackImage = null;
 			this.m_E_ComposeButton = null;
@@ -355,8 +409,11 @@ namespace ET
 		private UnityEngine.UI.Text m_E_HeroNameText = null;
 		private UnityEngine.UI.Image m_E_StarContentImage = null;
 		private UnityEngine.UI.Text m_E_LevelText = null;
-		private UnityEngine.UI.Text m_E_FightText = null;
+		private UnityEngine.UI.Text m_E_BaseAttackText = null;
+		private UnityEngine.UI.Text m_E_HPText = null;
+		private UnityEngine.UI.Text m_E_DefenceText = null;
 		private UnityEngine.UI.Image m_E_ElementImage = null;
+		private UnityEngine.UI.Text m_E_RankText = null;
 		private UnityEngine.UI.Button m_E_BackButton = null;
 		private UnityEngine.UI.Image m_E_BackImage = null;
 		private UnityEngine.UI.Button m_E_ComposeButton = null;

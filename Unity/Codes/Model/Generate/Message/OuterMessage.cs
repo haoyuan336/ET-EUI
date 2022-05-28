@@ -1086,10 +1086,10 @@ namespace ET
 		public List<DiamondAction> DiamondActions = new List<DiamondAction>();
 
 		[ProtoMember(2)]
-		public AddItemAction AddAttackItemAction { get; set; }
+		public List<AddItemAction> AddAttackItemActions = new List<AddItemAction>();
 
 		[ProtoMember(3)]
-		public AddItemAction AddAngryItemAction { get; set; }
+		public List<AddItemAction> AddAngryItemActions = new List<AddItemAction>();
 
 	}
 
@@ -1112,6 +1112,12 @@ namespace ET
 		[ProtoMember(2)]
 		public List<HeroCardInfo> BeAttackHeroCardInfo = new List<HeroCardInfo>();
 
+		[ProtoMember(3)]
+		public List<HeroCardDataComponentInfo> BeAttackHeroCardDataComponentInfo = new List<HeroCardDataComponentInfo>();
+
+		[ProtoMember(4)]
+		public HeroCardDataComponentInfo AttackHeroCardDataComponentInfo { get; set; }
+
 	}
 
 	[Message(OuterOpcode.AttackActionItem)]
@@ -1132,6 +1138,12 @@ namespace ET
 
 		[ProtoMember(2)]
 		public HeroCardInfo HeroCardInfo { get; set; }
+
+		[ProtoMember(3)]
+		public HeroCardDataComponentInfo HeroCardDataComponentInfo { get; set; }
+
+		[ProtoMember(4)]
+		public CrashCommonInfo CrashCommonInfo { get; set; }
 
 	}
 
@@ -1236,10 +1248,16 @@ namespace ET
 		public float TotalHP { get; set; }
 
 		[ProtoMember(18)]
-		public float Star { get; set; }
+		public int Star { get; set; }
 
 		[ProtoMember(19)]
 		public int Count { get; set; }
+
+		[ProtoMember(20)]
+		public HeroCardDataComponentInfo HeroCardDataComponentInfo { get; set; }
+
+		[ProtoMember(21)]
+		public int Rank { get; set; }
 
 // repeated long SkillIdList = 11;	//技能id
 	}
@@ -1928,12 +1946,27 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.CrashCommonInfo)]
+	[ProtoContract]
+	public partial class CrashCommonInfo: Object
+	{
+		[ProtoMember(1)]
+		public int FirstCrashCount { get; set; }
+
+		[ProtoMember(2)]
+		public int CommonCount { get; set; }
+
+		[ProtoMember(3)]
+		public int FirstCrashColor { get; set; }
+
+	}
+
 	[Message(OuterOpcode.HeroCardDataComponentInfo)]
 	[ProtoContract]
 	public partial class HeroCardDataComponentInfo: Object
 	{
 		[ProtoMember(1)]
-		public int DiamondAttack { get; set; }
+		public int DiamondAttackAddition { get; set; }
 
 		[ProtoMember(2)]
 		public int HP { get; set; }
@@ -1952,6 +1985,15 @@ namespace ET
 
 		[ProtoMember(7)]
 		public int CriticalDamage { get; set; }
+
+		[ProtoMember(8)]
+		public int ConfigId { get; set; }
+
+		[ProtoMember(9)]
+		public int Angry { get; set; }
+
+		[ProtoMember(10)]
+		public int TotalHP { get; set; }
 
 // public int HP;  //当前的血量
 // public int DiamondAttack;

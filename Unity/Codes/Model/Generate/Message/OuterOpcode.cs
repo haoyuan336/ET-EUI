@@ -118,6 +118,7 @@ namespace ET
 		 public const ushort M2C_GetAllItemResponse = 10115;
 		 public const ushort C2M_GetItemInfoRequest = 10116;
 		 public const ushort M2C_GetItemInfoResponse = 10117;
-		 public const ushort HeroCardDataComponentInfo = 10118;
+		 public const ushort CrashCommonInfo = 10118;
+		 public const ushort HeroCardDataComponentInfo = 10119;
 	}
 }

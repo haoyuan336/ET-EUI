@@ -2,7 +2,7 @@
 
 namespace ET
 {
-    public class HeroCardInfoObjectComponent: Entity,IAwake, IUpdate, IDestroy
+    public class HeroCardInfoObjectComponent: Entity,IAwake<int>, IUpdate, IDestroy, IAwake<HeroCard, HeroCardInfo>
     {
         public GameObject GameObject;
         public GameObject HeroMode;
@@ -11,5 +11,7 @@ namespace ET
         public GameObject AngryBarImage;
         public GameObject HeroElementIcon;
         public float HeroHeight;
+        public GameObject CommonText;
+        public HeroConfig HeroConfig;
     }
 }

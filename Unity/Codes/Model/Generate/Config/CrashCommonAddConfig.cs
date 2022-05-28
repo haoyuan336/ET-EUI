@@ -7,26 +7,26 @@ namespace ET
 {
     [ProtoContract]
     [Config]
-    public partial class LevelConfigCategory : ProtoObject
+    public partial class CrashCommonAddConfigCategory : ProtoObject
     {
-        public static LevelConfigCategory Instance;
+        public static CrashCommonAddConfigCategory Instance;
 		
         [ProtoIgnore]
         [BsonIgnore]
-        private Dictionary<int, LevelConfig> dict = new Dictionary<int, LevelConfig>();
+        private Dictionary<int, CrashCommonAddConfig> dict = new Dictionary<int, CrashCommonAddConfig>();
 		
         [BsonElement]
         [ProtoMember(1)]
-        private List<LevelConfig> list = new List<LevelConfig>();
+        private List<CrashCommonAddConfig> list = new List<CrashCommonAddConfig>();
 		
-        public LevelConfigCategory()
+        public CrashCommonAddConfigCategory()
         {
             Instance = this;
         }
 		
         public override void EndInit()
         {
-            foreach (LevelConfig config in list)
+            foreach (CrashCommonAddConfig config in list)
             {
                 config.EndInit();
                 this.dict.Add(config.Id, config);
@@ -34,13 +34,13 @@ namespace ET
             this.AfterEndInit();
         }
 		
-        public LevelConfig Get(int id)
+        public CrashCommonAddConfig Get(int id)
         {
-            this.dict.TryGetValue(id, out LevelConfig item);
+            this.dict.TryGetValue(id, out CrashCommonAddConfig item);
 
             if (item == null)
             {
-                throw new Exception($"配置找不到，配置表名: {nameof (LevelConfig)}，配置id: {id}");
+                throw new Exception($"配置找不到，配置表名: {nameof (CrashCommonAddConfig)}，配置id: {id}");
             }
 
             return item;
@@ -51,12 +51,12 @@ namespace ET
             return this.dict.ContainsKey(id);
         }
 
-        public Dictionary<int, LevelConfig> GetAll()
+        public Dictionary<int, CrashCommonAddConfig> GetAll()
         {
             return this.dict;
         }
 
-        public LevelConfig GetOne()
+        public CrashCommonAddConfig GetOne()
         {
             if (this.dict == null || this.dict.Count <= 0)
             {
@@ -67,20 +67,18 @@ namespace ET
     }
 
     [ProtoContract]
-	public partial class LevelConfig: ProtoObject, IConfig
+	public partial class CrashCommonAddConfig: ProtoObject, IConfig
 	{
 		[ProtoMember(1)]
 		public int Id { get; set; }
 		[ProtoMember(2)]
-		public string HeroId { get; set; }
+		public int ConfigId { get; set; }
 		[ProtoMember(3)]
-		public string DiamondTypes { get; set; }
+		public int MoneyType { get; set; }
 		[ProtoMember(4)]
-		public int AngryCount { get; set; }
+		public int Price { get; set; }
 		[ProtoMember(5)]
-		public int AttackAddition { get; set; }
-		[ProtoMember(6)]
-		public string StartAttackAddition { get; set; }
+		public int GoodsType { get; set; }
 
 	}
 }

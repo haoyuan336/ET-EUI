@@ -6,12 +6,14 @@ namespace ET
     public class HeroCardDataComponent: Entity, IAwake
     {
         public int HP;  //当前的血量
-        public int DiamondAttack;
+        public int DiamondAttackAddition;
         public int HeroAttack;
         public int WeaponAttack;
         public int SkillAttack;
         public int NormalDamage;
+        public int CriticalRate;    //暴击率
         public int CriticalDamage; //暴击伤害
-
+        public int Angry;   //当前的怒气值
+        public long CurrentSkillId;
     }
 }

@@ -11,11 +11,11 @@ namespace ET
         public int ConfigId; //在配置表里面的id
         public long TroopId; //队伍Id
         public int InTroopIndex; //在队伍里面的index
-        // public int HeroColor; //英雄属性
+        public int HeroColor; //英雄属性
 
         public float HP;
-        // public float Defence;
-        // public float DiamondAttack;
+        public float Defence;
+        public float DiamondAttack;
         public float DiamondDefence;
         public int CampIndex; //todo 阵营index
         public float Angry; //怒气值
@@ -24,10 +24,11 @@ namespace ET
 
         public long CurrentSkillId; //当前需要释放的技能
 
-        // public HeroCardInfo HeroCardInfo;
+        public HeroCardInfo HeroCardInfo;
         public int Star = 0; //英雄的星级数量
+        public int Rank = 0; //英雄的阶数
         public int Count = 1; //材料数量
         public int State = 1; //英雄的状态 
-        public string CallTime;    //召唤时间戳
+        public string CallTime; //召唤时间戳
     }
 }
