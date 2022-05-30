@@ -19,8 +19,8 @@ namespace ET
         public override void Awake(HeroCard self, int configId)
         {
             self.ConfigId = configId;
-            self.HP = HeroConfigCategory.Instance.Get(configId).HeroHP;
-            self.HeroName = HeroConfigCategory.Instance.Get(configId).HeroName;
+            // self.HP = HeroConfigCategory.Instance.Get(configId).HeroHP;
+            // self.HeroName = HeroConfigCategory.Instance.Get(configId).HeroName;
             // self.HeroColor = HeroConfigCategory.Instance.Get(configId).HeroColor;
             var skillsStr = HeroConfigCategory.Instance.Get(configId).SkillIdList;
             var skillStrList = skillsStr.Split(',').ToList();
@@ -41,9 +41,11 @@ namespace ET
             self.CampIndex = b.CampIndex;
             self.InTroopIndex = b.InTroopIndex;
             self.Level = b.Level;
-            self.HP = b.HP;
+            // self.HP = b.HP;
             self.Star = b.Star;
             self.Rank = b.Rank;
+
+            self.AddComponent<HeroCardDataComponent>();
 
             // self.HeroColor = b.HeroColor;
 
@@ -66,7 +68,7 @@ namespace ET
             self.Level = a.Level == 0? 1 : a.Level;
             self.ConfigId = a.ConfigId;
             self.HeroName = a.HeroName;
-            self.HP = HeroConfigCategory.Instance.Get(self.ConfigId).HeroHP + HeroUpdateLevelConfigCategory.Instance.Get(self.Level).BaseHP;
+            // self.HP = HeroConfigCategory.Instance.Get(self.ConfigId).HeroHP + HeroUpdateLevelConfigCategory.Instance.Get(self.Level).BaseHP;
             // self.HP = 
             // self.HP = 
 
@@ -92,7 +94,7 @@ namespace ET
             self.CampIndex = a.CampIndex;
             self.InTroopIndex = a.InTroopIndex;
             // self.HeroColor = a.HeroColor;
-            self.HP = HeroConfigCategory.Instance.Get(self.ConfigId).HeroHP + HeroUpdateLevelConfigCategory.Instance.Get(self.Level).BaseHP;
+            // self.HP = HeroConfigCategory.Instance.Get(self.ConfigId).HeroHP + HeroUpdateLevelConfigCategory.Instance.Get(self.Level).BaseHP;
             foreach (var skill in b)
             {
                 self.AddChild(skill);
@@ -104,31 +106,71 @@ namespace ET
 
     public static class HeroCardSystem
     {
+        public static AttackAction AttackTarget(this HeroCard self, HeroCard targetHeroCard)
+        {
+            HeroCardDataComponent attackCom = self.GetComponent<HeroCardDataComponent>();
+            HeroCardDataComponent beAttackCom = targetHeroCard.GetComponent<HeroCardDataComponent>();
+            var baseAttack = attackCom.GetHeroBaseAttack();
+            var diamondAddition = attackCom.DiamondAttackAddition;
+
+            baseAttack = (int) (baseAttack * (1 + diamondAddition / 100.0f));
+            var targetDefence = beAttackCom.GetHeroBaseDefence();
+            var oldHp = beAttackCom.HP;
+            var damage = baseAttack - targetDefence;
+            beAttackCom.HP -= damage;
+            if (beAttackCom.HP < 0)
+            {
+                beAttackCom.HP = 0;
+            }
+
+            damage = oldHp - beAttackCom.HP;
+            beAttackCom.NormalDamage = damage;
+
+            // beAttackCom.NormalDamage = damage;
+
+            Log.Debug($"被打的英雄的血量是 {beAttackCom.HP}");
+            attackCom.DiamondAttackAddition = 0;
+            if (attackCom.IsAngryFull())
+            {
+                //todo 如果施放的是大招技能，那么需要将怒气值归零
+                attackCom.Angry = 0;
+            }
+
+            var attackAction = new AttackAction()
+            {
+                AttackHeroCardDataComponentInfo = attackCom.GetInfo(), BeAttackHeroCardDataComponentInfo = beAttackCom.GetInfo()
+            };
+
+            //todo 这里需要将英雄的宝石攻击力加成初始化
+
+            return attackAction;
+        }
+#if !SERVER
         public static async ETTask PlayHeroCardAttackAnimAsync(this HeroCard self, AttackAction action)
         {
             // Log.Debug("PlayHeroCardAttackAnimAsync");
             // HeroCard attackHeroCard = self.GetChild<HeroCard>(action.AttackHeroCardInfo.HeroId);
-            self.Angry = action.AttackHeroCardInfo.Angry;
-            self.CurrentSkillId = action.AttackHeroCardInfo.CastSkillId;
-            List<HeroCard> beAttackHeroCards = new List<HeroCard>();
-            foreach (var cardInfo in action.BeAttackHeroCardInfo)
-            {
-                beAttackHeroCards.Add(self.Parent.GetChild<HeroCard>(cardInfo.HeroId));
-            }
-            // HeroCard beAttackHeroCard = self.Parent.GetChild<HeroCard>(action.BeAttackHeroCardInfo[0].HeroId);
+            // self.Angry = action.AttackHeroCardDataComponentInfo.Angry;
+            // self.CurrentSkillId = action.AttackHeroCardDataComponentInfo.CurrentSkillId;
+            // List<HeroCard> beAttackHeroCards = new List<HeroCard>();
+            // foreach (var cardInfo in action.BeAttackHeroCardInfo)
+            // {
+            //     beAttackHeroCards.Add(self.Parent.GetChild<HeroCard>(cardInfo.HeroId));
+            // }
             // beAttackHeroCard.GetHP() = action.BeAttackHeroCardInfo[0].HP;
             // beAttackHeroCard.Angry = action.BeAttackHeroCardInfo[0].Angry;
-#if !SERVER
+            Log.Debug($"be attack hero id {action.BeAttackHeroCardDataComponentInfo.HeroId}");
+            HeroCard beAttackHeroCard = self.Parent.GetChild<HeroCard>(action.BeAttackHeroCardDataComponentInfo.HeroId);
             await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim()
             {
                 AttackHeroCard = self,
-                BeAttackHeroCards = beAttackHeroCards,
-                BeAttackHeroCardDataComponentInfos = action.BeAttackHeroCardDataComponentInfo,
+                BeAttackHeroCard = beAttackHeroCard,
+                BeAttackHeroCardDataComponentInfo = action.BeAttackHeroCardDataComponentInfo,
                 AttackHeroCardDataComponentInfo = action.AttackHeroCardDataComponentInfo
             });
-#endif
             await ETTask.CompletedTask;
         }
+#endif
 
         public static async ETTask Call(this HeroCard self, int zone, long ownerId)
         {
@@ -185,7 +227,7 @@ namespace ET
                 Attack = self.GetAttack(),
                 DiamondAttack = self.GetDiamondAttack(),
                 Angry = self.GetAngry(),
-                HP = self.HP,
+                // HP = self.HP,
                 Defence = self.GetDefence(),
                 Level = self.Level == 0? 1 : self.Level,
                 SkillInfos = skillInfos,
@@ -193,6 +235,7 @@ namespace ET
                 Star = self.Star,
                 Count = self.Count,
                 Rank = self.Rank,
+                // HeroCardDataComponentInfo = self.GetComponent<HeroCardDataComponent>().GetInfo()
                 // Star = self.Angry
             };
 
@@ -285,7 +328,8 @@ namespace ET
 
         public static bool GetIsDead(this HeroCard self)
         {
-            return self.HP <= 0;
+            return self.GetComponent<HeroCardDataComponent>().HP <= 0;
+            // return self.HP <= 0;
         }
 
         public static float GetAddAngryWhitBeAttackSkill(this HeroCard self, HeroCard heroCard, float damage)
@@ -301,33 +345,33 @@ namespace ET
             return damage * rate;
         }
 
-        public static void BeAttack(this HeroCard self, HeroCard attackHeroCard)
-        {
-            // HeroCardDataComponentInfo info = attackHeroCard.GetAttackInfo(self);
-            //
-            // float attack = attackHeroCard.GetAttack();
-            // float damage = attack - self.GetDefence();
-            // if (damage < 0)
-            // {
-            //     damage = 0;
-            // }
-            //
-            // HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
-            // // var addAngry = float.Parse(heroConfig.AddAngryRate) * Mathf.Abs(damage);
-            // var addAngry = self.GetAddAngryWhitBeAttackSkill(attackHeroCard, damage);
-            // self.Angry += addAngry;
-            // if (self.Angry > heroConfig.TotalAngry)
-            // {
-            //     self.Angry = heroConfig.TotalAngry;
-            // }
-            //
-            // self.HP -= damage;
-            // if (self.HP < 0)
-            // {
-            //     self.HP = 0;
-            // }
-            self.HP -= 1;
-        }
+        // public static void BeAttack(this HeroCard self, HeroCard attackHeroCard)
+        // {
+        //     // HeroCardDataComponentInfo info = attackHeroCard.GetAttackInfo(self);
+        //     //
+        //     // float attack = attackHeroCard.GetAttack();
+        //     // float damage = attack - self.GetDefence();
+        //     // if (damage < 0)
+        //     // {
+        //     //     damage = 0;
+        //     // }
+        //     //
+        //     // HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
+        //     // // var addAngry = float.Parse(heroConfig.AddAngryRate) * Mathf.Abs(damage);
+        //     // var addAngry = self.GetAddAngryWhitBeAttackSkill(attackHeroCard, damage);
+        //     // self.Angry += addAngry;
+        //     // if (self.Angry > heroConfig.TotalAngry)
+        //     // {
+        //     //     self.Angry = heroConfig.TotalAngry;
+        //     // }
+        //     //
+        //     // self.HP -= damage;
+        //     // if (self.HP < 0)
+        //     // {
+        //     //     self.HP = 0;
+        //     // }
+        //     // self.HP -= 1;
+        // }
 
         public static void MakeHeroCardAngrySkill(this HeroCard self)
         {
@@ -386,22 +430,22 @@ namespace ET
             self.CurrentSkillId = 0;
         }
 
-        public static void CastSkill(this HeroCard self)
-        {
-            //todo 如果当前施放的技能属于必杀技，那么怒气值需要归0
-
-            if (self.CurrentSkillId == 0)
-            {
-                return;
-            }
-
-            Skill skill = self.GetChild<Skill>(self.CurrentSkillId);
-            SkillConfig config = SkillConfigCategory.Instance.Get(skill.ConfigId);
-            if (config.SkillType == 4)
-            {
-                self.Angry = 0;
-            }
-        }
+        // public static void CastSkill(this HeroCard self)
+        // {
+        //     //todo 如果当前施放的技能属于必杀技，那么怒气值需要归0
+        //
+        //     if (self.CurrentSkillId == 0)
+        //     {
+        //         return;
+        //     }
+        //
+        //     Skill skill = self.GetChild<Skill>(self.CurrentSkillId);
+        //     SkillConfig config = SkillConfigCategory.Instance.Get(skill.ConfigId);
+        //     if (config.SkillType == 4)
+        //     {
+        //         self.Angry = 0;
+        //     }
+        // }
 
         //todo 获取英雄名称
         public static string GetHeroName(this HeroCard self)

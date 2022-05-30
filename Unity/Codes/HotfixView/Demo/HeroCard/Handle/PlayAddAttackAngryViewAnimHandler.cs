@@ -33,7 +33,7 @@ namespace ET
                 
                 AddAttackEffect effect = heroCard.AddChild<AddAttackEffect, List<Vector3>, Vector3>(startPosList, endPos);
                 list.Add(effect.PlayAnim());
-                list.Add(heroCard.GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(addItemAction));
+                list.Add(heroCard.GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(addItemAction.HeroCardDataComponentInfo));
             }
 
             await ETTaskHelper.WaitAll(list);
@@ -74,7 +74,7 @@ namespace ET
                 tasks.Add(heroCard.GetComponent<HeroCardInfoObjectComponent>().UpdateAttackAdditionView(addItemAction));
             }
 
-            ETTaskHelper.WaitAll(tasks);
+            await ETTaskHelper.WaitAll(tasks);
             await ETTask.CompletedTask;
         }
     }

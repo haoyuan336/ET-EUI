@@ -13,7 +13,7 @@ namespace ET
         public int InTroopIndex; //在队伍里面的index
         public int HeroColor; //英雄属性
 
-        public float HP;
+        // public float HP;
         public float Defence;
         public float DiamondAttack;
         public float DiamondDefence;

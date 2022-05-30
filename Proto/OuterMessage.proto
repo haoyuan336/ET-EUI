@@ -497,11 +497,17 @@ message DiamondAction
 	int32 ActionType = 1;
 	DiamondInfo DiamondInfo = 2;
 }
+message MakeSureAttackHeroAction
+{
+	//确定发动攻击的英雄
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
+}
 message DiamondActionItem
 {
 	repeated DiamondAction DiamondActions = 1;
 	repeated AddItemAction AddAttackItemActions = 2;
 	repeated AddItemAction AddAngryItemActions = 3;
+	repeated MakeSureAttackHeroAction MakeSureAttackHeroActions = 4;	
 }
 message GameLoseResultAction
 {
@@ -510,9 +516,9 @@ message GameLoseResultAction
 
 message AttackAction
 {
-	HeroCardInfo AttackHeroCardInfo = 1;
-	repeated HeroCardInfo BeAttackHeroCardInfo = 2;
-	repeated HeroCardDataComponentInfo BeAttackHeroCardDataComponentInfo = 3;
+	// HeroCardInfo AttackHeroCardInfo = 1;
+	// HeroCardInfo BeAttackHeroCardInfo = 2;
+	HeroCardDataComponentInfo BeAttackHeroCardDataComponentInfo = 3;
 	HeroCardDataComponentInfo AttackHeroCardDataComponentInfo = 4;
 
 
@@ -528,12 +534,19 @@ message AddItemAction
 	HeroCardDataComponentInfo HeroCardDataComponentInfo = 3;
 	CrashCommonInfo CrashCommonInfo = 4;
 }
+message InitHeroCardDataActionItem
+{
+	//初始化英雄卡牌的数据
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
+}
 message M2C_SyncDiamondAction //IActorMessage
 {
 	int32 RpcId = 90;
 	repeated DiamondActionItem DiamondActionItems = 1;
 	repeated AttackActionItem AttackActionItems = 2;
-	GameLoseResultAction GameLoseResultAction = 3;
+	// repeated InitHeroCardDataActionItem InitHeroCardDataActionItems = 3;
+	GameLoseResultAction GameLoseResultAction = 4;
+
 	// repeated AddItemAction AddAttackItemActions = 4;
 	// repeated AddItemAction AddAngryItemActions = 5;
 
@@ -706,7 +719,8 @@ message C2M_GameReadyMessage //IActorLocationMessage
 message M2C_CreateHeroCardInRoom //IActorMessage
 {
 	repeated HeroCardInfo HeroCardInfos = 1;
-	repeated SkillInfo SkillInfos = 2;
+	repeated HeroCardDataComponentInfo HeroCardDataComponentInfo = 2;
+	repeated SkillInfo SkillInfos = 3;
 }
 // message C2M_PlayerReadyTurnRequest //IActorLocationRequest
 // {
@@ -905,6 +919,8 @@ message HeroCardDataComponentInfo
 	int32 ConfigId = 8;	//配置Id
 	int32 Angry = 9;	//当前的怒气值
 	int32 TotalHP = 10;	//总血量
+	int64 HeroId = 11;	//英雄ID
+	int64 CurrentSkillId = 12;	//当前需要施放的技能id
 
 
 	// public int HP;  //当前的血量
@@ -915,4 +931,20 @@ message HeroCardDataComponentInfo
 	// public int NormalDamage;
 	// public int CriticalDamage; //暴击伤害
 
+}
+
+//ResponseType M2C_GetHeroCardByIdResponse
+message C2M_GetHeroCardByIdRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+	int64 Account = 1;
+	string Token = 3;
+	int32 BagType = 4;
+}
+message M2C_GetHeroCardByIdResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	HeroCardInfo HeroCardInfo = 1;
 }

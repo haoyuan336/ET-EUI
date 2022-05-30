@@ -9,6 +9,8 @@ namespace ET
         public bool IsTouching = false;
 
         public GameObject ChooseMark;
+
+        public GameObject AttackMark;
         // public bool IsClickSelf = false;
     }
 }

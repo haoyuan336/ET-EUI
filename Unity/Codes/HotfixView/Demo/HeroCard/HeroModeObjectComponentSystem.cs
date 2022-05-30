@@ -142,18 +142,20 @@ namespace ET
 
         public static async ETTask PlayAttackAnimLogic(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message)
         {
+            Log.Debug("play attack anim logic");
             // if (self.ChooseMark != null)
             // {
             //     GameObject.Destroy(self.ChooseMark);
             // }
-            List<HeroCard> beAttackHeroCards = message.BeAttackHeroCards;
+            HeroCard beAttackHeroCards = message.BeAttackHeroCard;
             HeroCard heroCard = message.AttackHeroCard;
 
-            long skillId = heroCard.CurrentSkillId;
+            long skillId = message.AttackHeroCardDataComponentInfo.CurrentSkillId;
+            Log.Debug($"skill id {skillId}");
             Skill skill = heroCard.GetChild<Skill>(skillId);
             // skill.ConfigId = 1000009;
             SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
-            await self.MoveToEnemyTarget(beAttackHeroCards[0], skillConfig);
+            await self.MoveToEnemyTarget(beAttackHeroCards, skillConfig);
             await self.PlayAttackAnim(message, skillConfig);
             await self.BackMoveToInitPos(skillConfig);
             // await self.PlayMoveToAnim(self.HeroMode.transform.position, self.HeroModeInitPos);
@@ -241,7 +243,8 @@ namespace ET
             await TimerComponent.Instance.WaitAsync(beAttackTime);
             self.HeroMode.GetComponent<Animator>().SetTrigger("BeAttack");
             // self.Parent.GetComponent<HeroCardObjectComponent>().UpdateHeroCardTextView(message.BeAttackHeroCardDataComponentInfo, message.CommonInfo);
-            // self.GetComponent<HeroCardInfoObjectComponent>().UpdateView(componentInfo, commonInfo);
+            self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().UpdateHPView(componentInfo);
+            self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowDamageViewAnim(componentInfo);
             self.PlayBeHitedEffect(skillConfig).Coroutine();
             if (componentInfo.HP <= 0)
             {
@@ -253,21 +256,23 @@ namespace ET
 
         public static async ETTask PlayAttackAnim(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message, SkillConfig skillConfig)
         {
-            List<HeroCard> beAttackCards = message.BeAttackHeroCards;
-            self.PlaySkillEffect(skillConfig);
-            self.PlayFlyEffect(skillConfig, beAttackCards[0]);
-            for (int i = 0; i < beAttackCards.Count; i++)
+            if (self.AttackMark != null)
             {
-                var beAttackCard = beAttackCards[i];
-                beAttackCard.GetComponent<HeroModeObjectCompoent>()
-                        .PlayBeAttackAnim(message.BeAttackHeroCardDataComponentInfos[i], skillConfig, message.CommonInfo).Coroutine();
+                self.AttackMark.SetActive(false);
             }
+            HeroCard beAttackCard = message.BeAttackHeroCard;
+            self.PlaySkillEffect(skillConfig);
+            self.PlayFlyEffect(skillConfig, beAttackCard);
+            beAttackCard.GetComponent<HeroModeObjectCompoent>()
+                    .PlayBeAttackAnim(message.BeAttackHeroCardDataComponentInfo, skillConfig, message.CommonInfo).Coroutine();
 
             string skillAnimStr = skillConfig.SkillAnimName;
             // self.UpdateShowDataView(message.AttackHeroCardDataComponentInfo, message.CommonInfo);
             self.HeroMode.GetComponent<Animator>().SetTrigger(skillAnimStr);
             var skillTime = skillConfig.SkillTime;
             await TimerComponent.Instance.WaitAsync(skillTime);
+            await self.Parent.GetComponent<HeroCardInfoObjectComponent>().InitAttackAdditionView(message.AttackHeroCardDataComponentInfo);
+            await self.Parent.GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(message.AttackHeroCardDataComponentInfo);
         }
 
         public static async void PlayFlyEffect(this HeroModeObjectCompoent self, SkillConfig config, HeroCard beAttackHeroCard)
@@ -331,6 +336,35 @@ namespace ET
             }
 
             GameObject.Destroy(go);
+        }
+
+        public static async void ShowAttackMark(this HeroModeObjectCompoent self, bool isShow)
+        {
+            if (isShow)
+            {
+                if (self.AttackMark == null)
+                {
+                    self.AttackMark =
+                            await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(
+                                "Assets/Bundles/Unit/HeroModePrefabs/AttackMark.prefab");
+                    var height = self.HeroMode.GetComponentInChildren<SkinnedMeshRenderer>().bounds.size.y;
+                    self.AttackMark.transform.position = self.HeroMode.transform.position + Vector3.up * height;
+                }
+                else
+                {
+                    self.AttackMark.SetActive(true);
+                }
+            }
+            else
+            {
+                if (self.AttackMark != null)
+                {
+                    self.AttackMark.SetActive(false);
+                }
+            }
+            
+
+            await ETTask.CompletedTask;
         }
     }
 }

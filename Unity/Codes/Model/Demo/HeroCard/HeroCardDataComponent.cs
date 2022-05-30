@@ -3,7 +3,7 @@
 namespace ET
 {
     //todo 卡牌的数值组件
-    public class HeroCardDataComponent: Entity, IAwake
+    public class HeroCardDataComponent: Entity, IAwake, IAwake<HeroCardDataComponentInfo>
     {
         public int HP;  //当前的血量
         public int DiamondAttackAddition;

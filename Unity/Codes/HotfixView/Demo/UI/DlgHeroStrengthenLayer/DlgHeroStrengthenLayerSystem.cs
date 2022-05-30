@@ -38,6 +38,9 @@ namespace ET
                 UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer];
                 baseWindow.GetComponent<DlgAllHeroBagLayer>().ReferView();
                 self.View.E_OKButton.gameObject.SetActive(false);
+
+                UIBaseWindow showHeroInfoLayer = uiComponent.GetUIBaseWindow(WindowID.WindowID_ShowHeroInfoLayer);
+                showHeroInfoLayer.GetComponent<DlgShowHeroInfoLayer>().ReferHeroCardView(response.HeroCardInfo);
             }
 
             await ETTask.CompletedTask;

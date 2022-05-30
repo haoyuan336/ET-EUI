@@ -20,6 +20,7 @@ namespace ET
                 GameObject.Destroy(self.GameObject);
                 return;
             }
+
             // self.GameObject.name = self.Id.ToString();
             self.AngryBarImage = UIFindHelper.FindDeepChild(self.GameObject, "AngryBar").gameObject;
             self.HeroElementIcon = UIFindHelper.FindDeepChild(self.GameObject, "HeroElementIcon").gameObject;
@@ -36,7 +37,10 @@ namespace ET
             var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elemengImageStr);
             self.HeroElementIcon.GetComponent<Image>().sprite = sprite;
 
-            self.HpBarImage.GetComponent<Image>().fillAmount = 1;
+            self.UpdateHPView(self.Parent.GetComponent<HeroCardDataComponent>().GetInfo());
+            // self.UpdateAngryView();
+
+            // self.HpBarImage.GetComponent<Image>().fillAmount = 1;
             self.AngryBarImage.GetComponent<Image>().fillAmount = 0;
             self.AttackBarImage.GetComponent<Image>().fillAmount = 0;
             self.CommonText.GetComponent<Text>().text = "";
@@ -52,6 +56,7 @@ namespace ET
             GameObject.Destroy(self.GameObject);
         }
     }
+
     public class HeroCardInfoObjectComponentUpdateSystem: UpdateSystem<HeroCardInfoObjectComponent>
     {
         public override void Update(HeroCardInfoObjectComponent self)
@@ -64,6 +69,7 @@ namespace ET
                     self.HeroMode = heroModeObjectCompoent.HeroMode;
                 }
             }
+
             if (self.GameObject != null && self.HeroMode != null)
             {
                 Vector3 pos = Camera.main.WorldToScreenPoint(self.HeroMode.transform.position + Vector3.up * 1.8f);
@@ -74,14 +80,60 @@ namespace ET
 
     public static class HeroCardInfoObjectComponentSystem
     {
-
-        public static async ETTask UpdateAngryView(this HeroCardInfoObjectComponent self, AddItemAction addItemAction)
+        public static async void ShowDamageViewAnim(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo component)
         {
-            self.AngryBarImage.GetComponent<Image>().fillAmount = (float) addItemAction.HeroCardDataComponentInfo.Angry / self.HeroConfig.TotalAngry;
+            var gameObject = new GameObject();
+            Text text = gameObject.AddComponent<Text>();
+            // GlobalComponent.Instance.NormalRoot
+            text.transform.SetParent(GlobalComponent.Instance.NormalRoot);
+
+            Font obj = AddressableComponent.Instance.LoadAssetByPath<Font>("Assets/Res/font/SVM-font/SVN-Aaron Script.otf");
+            text.font = obj;
+            text.text = $"{component.NormalDamage}";
+            text.fontSize = 50;
+            text.fontStyle = FontStyle.Bold;
+            Vector2 startPos = self.GameObject.transform.position;
+            // text.GetComponent<RectTransform>().anchoredPosition = self.GameObject.GetComponent<RectTransform>().anchoredPosition;
+            text.color = Color.red;
+            float time = 0;
+            while (time < 1)
+            {
+                var vec = Vector2.Lerp(startPos, startPos + new Vector2(0,100), time);
+                text.transform.position = vec;
+                time += Time.deltaTime;
+                await TimerComponent.Instance.WaitFrameAsync();
+            }
+            GameObject.Destroy(text);
+        }
+
+        public static async void UpdateHPView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo component)
+        {
+            var totalHp = self.GetParent<HeroCard>().GetComponent<HeroCardDataComponent>().GetHeroBaseHP();
+            // var totalHp
+            Log.Debug($"damage component {component.NormalDamage}");
+            Log.Debug($"total hp {totalHp}");
+            Log.Debug($"hp {component.HP}");
+            float percent = (float) component.HP / totalHp;
+            Log.Debug($"percent {percent}");
+            self.HpBarImage.GetComponent<Image>().fillAmount = percent;
             await ETTask.CompletedTask;
         }
+
+        public static async ETTask UpdateAngryView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo info)
+        {
+            self.AngryBarImage.GetComponent<Image>().fillAmount = (float) info.Angry / self.HeroConfig.TotalAngry;
+            await ETTask.CompletedTask;
+        }
+
+        public static async ETTask InitAttackAdditionView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo info)
+        {
+            self.CommonText.GetComponent<Text>().text = "";
+            self.AttackBarImage.GetComponent<Image>().fillAmount = (float) info.DiamondAttackAddition / 200;
+            await ETTask.CompletedTask;
+        }
+
         //todo 更新显示增加的攻击力加成
-        public static async  ETTask UpdateAttackAdditionView(this HeroCardInfoObjectComponent self, AddItemAction addItemAction)
+        public static async ETTask UpdateAttackAdditionView(this HeroCardInfoObjectComponent self, AddItemAction addItemAction)
         {
             // HeroConfig heroConfig = HeroConfigCategory.Instance.Get(addItemAction.HeroCardDataComponentInfo.ConfigId);
             var addition = addItemAction.HeroCardDataComponentInfo.DiamondAttackAddition;

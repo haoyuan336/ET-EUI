@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Diagnostics.Eventing.Reader;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
@@ -20,7 +21,7 @@ namespace ET
             // 点击强化按钮，显示强化页面
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             await uiComponent.ShowWindow(WindowID.WindowID_HeroStrengthenLayer);
-            UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int)WindowID.WindowID_HeroStrengthenLayer];
+            UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_HeroStrengthenLayer];
             baseWindow.GetComponent<DlgHeroStrengthenLayer>().SetTargetInfo(self.HeroCardInfo);
         }
 
@@ -28,6 +29,12 @@ namespace ET
         {
             await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_HeroInfoLayerUI);
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_ShowHeroInfoLayer);
+        }
+
+        public static void ReferHeroCardView(this DlgShowHeroInfoLayer self, HeroCardInfo heroCardInfo)
+        {
+            // C2M_GetHeroInfosWithTroopIdRequest
+            self.SetHeroInfo(heroCardInfo);
         }
 
         public static async void SetHeroInfo(this DlgShowHeroInfoLayer self, HeroCardInfo heroCardInfo)
@@ -38,10 +45,14 @@ namespace ET
             HeroConfig config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
             string heroModeStr = config.HeroMode;
             self.View.E_HeroNameText.text = config.HeroName;
-            self.HeroModeShow = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(heroModeStr);
-            HeroCard heroCard = self.AddChildWithId<HeroCard, HeroCardInfo>(heroCardInfo.HeroId,heroCardInfo);
+            if (self.HeroModeShow == null)
+            {
+                self.HeroModeShow = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(heroModeStr);
+            }
+
+            HeroCard heroCard = self.AddChildWithId<HeroCard, HeroCardInfo>(heroCardInfo.HeroId, heroCardInfo);
             self.View.E_RankText.text = $"{heroCardInfo.Rank}阶";
-            HeroCardDataComponent heroCardComponent = heroCard.AddComponent<HeroCardDataComponent>();
+            HeroCardDataComponent heroCardComponent = heroCard.GetComponent<HeroCardDataComponent>();
             var baseAttack = heroCardComponent.GetHeroBaseAttack();
             var baseHP = heroCardComponent.GetHeroBaseHP();
             var baseDefence = heroCardComponent.GetHeroBaseDefence();

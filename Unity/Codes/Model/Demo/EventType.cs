@@ -6,6 +6,12 @@ namespace ET
 {
     namespace EventType
     {
+        public struct ShowAttackMark
+        {
+            public HeroCard HeroCard;
+            //显示攻击标记
+            public bool IsShow;
+        }
         public struct ShowHeroInfo
         {
             public HeroCardInfo HeroCardInfo;
@@ -216,9 +222,9 @@ namespace ET
         public struct PlayHeroCardAttackAnim
         {
             public HeroCard AttackHeroCard;
-            public List<HeroCard> BeAttackHeroCards;
+            public HeroCard BeAttackHeroCard;
             public HeroCardDataComponentInfo AttackHeroCardDataComponentInfo;
-            public List<HeroCardDataComponentInfo> BeAttackHeroCardDataComponentInfos;
+            public HeroCardDataComponentInfo BeAttackHeroCardDataComponentInfo;
             public CrashCommonInfo CommonInfo;
         }
 

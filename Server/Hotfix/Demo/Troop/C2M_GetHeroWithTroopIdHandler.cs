@@ -11,7 +11,7 @@ namespace ET
             long TroopId = request.TroopId;
             unit.CurrentTroopId = request.TroopId;
             List<HeroCard> heroCards =
-                    await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<HeroCard>((a) => a.TroopId.Equals(TroopId));
+                    await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<HeroCard>((a) => a.TroopId.Equals(TroopId) && a.State == (int)HeroCardState.Active);
             List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>();
             
             foreach (var heroCard in heroCards)

@@ -3,10 +3,24 @@ using UnityEngine;
 
 namespace ET
 {
-    public class HeroCardDataComponentAwakeSystem: AwakeSystem<HeroCardDataComponent>
+    public class HeroCardDataComponentAwakeSystem1: AwakeSystem<HeroCardDataComponent>
     {
         public override void Awake(HeroCardDataComponent self)
         {
+            // self.HP = 0;
+            self.HP = self.GetHeroBaseHP();
+            self.Angry = 0;
+            self.DiamondAttackAddition = 0;
+            self.HeroAttack = self.GetHeroBaseAttack();
+        }
+    }
+
+    public class HeroCardDataComponentAwakeSystem: AwakeSystem<HeroCardDataComponent, HeroCardDataComponentInfo>
+    {
+        public override void Awake(HeroCardDataComponent self, HeroCardDataComponentInfo info)
+        {
+            self.HP = info.HP;
+            self.Angry = 0;
         }
     }
 
@@ -16,6 +30,7 @@ namespace ET
         {
             return new HeroCardDataComponentInfo()
             {
+                HeroId = self.GetParent<HeroCard>().Id,
                 HP = self.HP,
                 HeroAttack = self.HeroAttack,
                 // DiamondAttack = self.DiamondAttack,
@@ -25,7 +40,8 @@ namespace ET
                 NormalDamage = self.NormalDamage,
                 CriticalDamage = self.CriticalDamage,
                 ConfigId = self.GetParent<HeroCard>().ConfigId,
-                Angry = self.Angry
+                Angry = self.Angry,
+                CurrentSkillId = self.CurrentSkillId
             };
         }
 
@@ -96,7 +112,7 @@ namespace ET
             var levelValue = baseValue * (0.03f + growthCoefficient / 1000.0f) * (level + 1);
             baseValue = baseValue + levelValue; //升级后的成长值
             var starValue = growthCoefficient * 100 * (star); //升星后的成长值
-            return (int)Mathf.Ceil(baseValue + starValue);
+            return (int) Mathf.Ceil(baseValue + starValue);
         }
 
         public static bool IsAngryFull(this HeroCardDataComponent self)
@@ -109,6 +125,11 @@ namespace ET
 
         public static void MakeSureAngrySkill(this HeroCardDataComponent self)
         {
+            if (!self.IsAngryFull())
+            {
+                return;
+            }
+
             //确定一下怒气值满的技能
             List<Skill> skills = self.Parent.GetChilds<Skill>();
             Skill skill = skills.Find(a =>
@@ -124,10 +145,10 @@ namespace ET
             self.CurrentSkillId = skill.Id;
         }
 
-        public static void MakeSureSkill(this HeroCardDataComponent self, CrashCommonInfo crashCommonInfo)
+        public static void MakeSureSkill(this HeroCardDataComponent self, int firstCrashCount)
         {
             //todo 确定当前技能
-            var firstCrashCount = crashCommonInfo.FirstCrashCount;
+            // var firstCrashCount = crashCommonInfo.FirstCrashCount;
             firstCrashCount -= 3;
             if (firstCrashCount < 0)
             {
@@ -145,6 +166,7 @@ namespace ET
                 SkillConfig config = SkillConfigCategory.Instance.Get(a.ConfigId);
                 if (config.SkillType == (firstCrashCount + 1))
                 {
+                    Log.Debug($"确定的技能type {config.SkillType}");
                     return true;
                 }
 

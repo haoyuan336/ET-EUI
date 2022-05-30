@@ -1078,6 +1078,16 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.MakeSureAttackHeroAction)]
+	[ProtoContract]
+	public partial class MakeSureAttackHeroAction: Object
+	{
+//确定发动攻击的英雄
+		[ProtoMember(1)]
+		public HeroCardDataComponentInfo HeroCardDataComponentInfo { get; set; }
+
+	}
+
 	[Message(OuterOpcode.DiamondActionItem)]
 	[ProtoContract]
 	public partial class DiamondActionItem: Object
@@ -1090,6 +1100,9 @@ namespace ET
 
 		[ProtoMember(3)]
 		public List<AddItemAction> AddAngryItemActions = new List<AddItemAction>();
+
+		[ProtoMember(4)]
+		public List<MakeSureAttackHeroAction> MakeSureAttackHeroActions = new List<MakeSureAttackHeroAction>();
 
 	}
 
@@ -1106,14 +1119,10 @@ namespace ET
 	[ProtoContract]
 	public partial class AttackAction: Object
 	{
-		[ProtoMember(1)]
-		public HeroCardInfo AttackHeroCardInfo { get; set; }
-
-		[ProtoMember(2)]
-		public List<HeroCardInfo> BeAttackHeroCardInfo = new List<HeroCardInfo>();
-
+// HeroCardInfo AttackHeroCardInfo = 1;
+// HeroCardInfo BeAttackHeroCardInfo = 2;
 		[ProtoMember(3)]
-		public List<HeroCardDataComponentInfo> BeAttackHeroCardDataComponentInfo = new List<HeroCardDataComponentInfo>();
+		public HeroCardDataComponentInfo BeAttackHeroCardDataComponentInfo { get; set; }
 
 		[ProtoMember(4)]
 		public HeroCardDataComponentInfo AttackHeroCardDataComponentInfo { get; set; }
@@ -1147,6 +1156,16 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.InitHeroCardDataActionItem)]
+	[ProtoContract]
+	public partial class InitHeroCardDataActionItem: Object
+	{
+//初始化英雄卡牌的数据
+		[ProtoMember(1)]
+		public HeroCardDataComponentInfo HeroCardDataComponentInfo { get; set; }
+
+	}
+
 	[Message(OuterOpcode.M2C_SyncDiamondAction)]
 	[ProtoContract]
 	public partial class M2C_SyncDiamondAction: Object, IActorMessage
@@ -1160,7 +1179,8 @@ namespace ET
 		[ProtoMember(2)]
 		public List<AttackActionItem> AttackActionItems = new List<AttackActionItem>();
 
-		[ProtoMember(3)]
+// repeated InitHeroCardDataActionItem InitHeroCardDataActionItems = 3;
+		[ProtoMember(4)]
 		public GameLoseResultAction GameLoseResultAction { get; set; }
 
 // repeated AddItemAction AddAttackItemActions = 4;
@@ -1562,6 +1582,9 @@ namespace ET
 		public List<HeroCardInfo> HeroCardInfos = new List<HeroCardInfo>();
 
 		[ProtoMember(2)]
+		public List<HeroCardDataComponentInfo> HeroCardDataComponentInfo = new List<HeroCardDataComponentInfo>();
+
+		[ProtoMember(3)]
 		public List<SkillInfo> SkillInfos = new List<SkillInfo>();
 
 	}
@@ -1995,6 +2018,12 @@ namespace ET
 		[ProtoMember(10)]
 		public int TotalHP { get; set; }
 
+		[ProtoMember(11)]
+		public long HeroId { get; set; }
+
+		[ProtoMember(12)]
+		public long CurrentSkillId { get; set; }
+
 // public int HP;  //当前的血量
 // public int DiamondAttack;
 // public int HeroAttack;
@@ -2002,6 +2031,43 @@ namespace ET
 // public int SkillAttack;
 // public int NormalDamage;
 // public int CriticalDamage; //暴击伤害
+	}
+
+	[ResponseType(nameof(M2C_GetHeroCardByIdResponse))]
+	[Message(OuterOpcode.C2M_GetHeroCardByIdRequest)]
+	[ProtoContract]
+	public partial class C2M_GetHeroCardByIdRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long Account { get; set; }
+
+		[ProtoMember(3)]
+		public string Token { get; set; }
+
+		[ProtoMember(4)]
+		public int BagType { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetHeroCardByIdResponse)]
+	[ProtoContract]
+	public partial class M2C_GetHeroCardByIdResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public HeroCardInfo HeroCardInfo { get; set; }
+
 	}
 
 }

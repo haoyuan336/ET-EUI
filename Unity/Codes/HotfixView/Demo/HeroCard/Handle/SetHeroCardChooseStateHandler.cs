@@ -31,4 +31,14 @@ namespace ET
             await ETTask.CompletedTask;
         }
     }
+
+    public class ShowAttackMarkHandler: AEvent<EventType.ShowAttackMark>
+    {
+        protected override async ETTask Run(ShowAttackMark a)
+        {
+            HeroCard heroCard = a.HeroCard;
+            heroCard.GetComponent<HeroModeObjectCompoent>().ShowAttackMark(a.IsShow);
+            await ETTask.CompletedTask;
+        }
+    }
 }

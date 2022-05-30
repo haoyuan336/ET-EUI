@@ -16,9 +16,20 @@ namespace ET
             List<DiamondActionItem> diamondActionItems = message.DiamondActionItems;
             List<AttackActionItem> attackActionItems = message.AttackActionItems;
             GameLoseResultAction gameLoseResultAction = message.GameLoseResultAction;
+
             foreach (var diamondActionItem in diamondActionItems)
             {
                 List<ETTask> tasks = new List<ETTask>();
+
+                List<MakeSureAttackHeroAction> makeSureAttackHeroActions = diamondActionItem.MakeSureAttackHeroActions;
+                foreach (var makeSureAttackHeroAction in makeSureAttackHeroActions)
+                {
+                    Game.EventSystem.Publish(new EventType.ShowAttackMark()
+                    {
+                        IsShow = true,
+                        HeroCard = heroCardComponent.GetChild<HeroCard>(makeSureAttackHeroAction.HeroCardDataComponentInfo.HeroId)
+                    });
+                }
 
                 int count = 0;
                 if (diamondActionItem.AddAttackItemActions != null)
@@ -74,7 +85,7 @@ namespace ET
                 foreach (var attackAction in attackActionItem.AttackActions)
                 {
                     // Log.Debug("play attack action");
-                    HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(attackAction.AttackHeroCardInfo.HeroId);
+                    HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(attackAction.AttackHeroCardDataComponentInfo.HeroId);
                     await heroCard.PlayHeroCardAttackAnimAsync(attackAction);
                 }
 
