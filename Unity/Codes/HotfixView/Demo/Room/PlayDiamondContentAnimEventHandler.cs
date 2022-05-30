@@ -16,17 +16,17 @@ namespace ET
             if (!value)
             {
                 startPos = Vector3.zero;
-                endPos = Vector3.down;
+                endPos = Vector3.down * 0.5f;
             }
             else
             {
-                startPos = Vector3.down;
+                startPos = Vector3.down * 0.5f;
                 endPos = Vector3.zero;
             }
 
-            while (time < 0.5f)
+            while (time < 1f)
             {
-                var prePos = Vector3.Lerp(startPos, endPos, time * 2);
+                var prePos = Vector3.Lerp(startPos, endPos, time);
                 time += Time.deltaTime;
                 diamondContent.position = prePos;
                 await TimerComponent.Instance.WaitFrameAsync();

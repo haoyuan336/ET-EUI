@@ -2070,4 +2070,72 @@ namespace ET
 
 	}
 
+	[ResponseType(nameof(M2C_UpdateHeroRankResponse))]
+	[Message(OuterOpcode.C2M_UpdateHeroRankRequest)]
+	[ProtoContract]
+	public partial class C2M_UpdateHeroRankRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long Account { get; set; }
+
+		[ProtoMember(2)]
+		public long HeroId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_UpdateHeroRankResponse)]
+	[ProtoContract]
+	public partial class M2C_UpdateHeroRankResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public HeroCardInfo HeroCardInfo { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_UpdateHeroStarResponse))]
+	[Message(OuterOpcode.C2M_UpdateHeroStarRequest)]
+	[ProtoContract]
+	public partial class C2M_UpdateHeroStarRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long Account { get; set; }
+
+		[ProtoMember(2)]
+		public long HeroId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_UpdateHeroStarResponse)]
+	[ProtoContract]
+	public partial class M2C_UpdateHeroStarResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public HeroCardInfo HeroCardInfo { get; set; }
+
+	}
+
 }

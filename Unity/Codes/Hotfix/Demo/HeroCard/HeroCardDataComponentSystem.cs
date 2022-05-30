@@ -105,13 +105,20 @@ namespace ET
             int level = heroCard.Level;
             int star = heroCard.Star;
             int rank = heroCard.Rank;
+            Log.Debug($"level {level}star{star}rank{rank}");
+            Log.Debug($"growthCoefficient{growthCoefficient}");
             // HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
             float baseValue = value;
             baseValue = baseValue * growthCoefficient / 2; //基础值
+            Log.Debug($"component base value {baseValue}");
             baseValue = baseValue + baseValue * (rank) / 10; // 升阶后的成长值
+            Log.Debug($"component update rank {baseValue}");
             var levelValue = baseValue * (0.03f + growthCoefficient / 1000.0f) * (level + 1);
+            Log.Debug($"update level {levelValue}");
             baseValue = baseValue + levelValue; //升级后的成长值
+            Log.Debug($"update level attack {baseValue}");
             var starValue = growthCoefficient * 100 * (star); //升星后的成长值
+            Log.Debug($"update start leve {starValue}");
             return (int) Mathf.Ceil(baseValue + starValue);
         }
 

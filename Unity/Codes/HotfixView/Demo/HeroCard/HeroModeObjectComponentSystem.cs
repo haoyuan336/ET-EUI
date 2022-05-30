@@ -32,7 +32,7 @@ namespace ET
                 return;
             }
 
-            Vector3 pos = new Vector3(-1.5f + heroCard.InTroopIndex * 1.5f, 0, -3 * (heroCard.CampIndex == 0? 1 : -1));
+            Vector3 pos = new Vector3(-1.5f + heroCard.InTroopIndex * 1.5f, 0, -4 * (heroCard.CampIndex == 0? 1 : -1));
             self.HeroMode.transform.position = pos;
             self.HeroMode.transform.forward = heroCard.CampIndex == 0? Vector3.forward : Vector3.back;
             self.HeroModeInitPos = new Vector3(pos.x, pos.y, pos.z);
@@ -213,9 +213,11 @@ namespace ET
             }
 
             GameObject effect = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(skillConfig.BeAttackEffect);
+            effect.transform.SetParent(self.HeroMode.transform);
             if (skillConfig.BeAttackBoneName == "")
             {
-                effect.transform.position = self.HeroMode.transform.position;
+                effect.transform.localPosition = Vector3.one * 0.1f;
+
             }
             else
             {
@@ -227,7 +229,8 @@ namespace ET
                 }
                 else
                 {
-                    Log.Debug("未找到被攻击骨骼");
+                    // effect.transform.position = Vector3.one * 0.1f;
+                    // Log.Debug("未找到被攻击骨骼");
                 }
             }
 

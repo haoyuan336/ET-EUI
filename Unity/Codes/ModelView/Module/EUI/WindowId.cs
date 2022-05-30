@@ -42,5 +42,7 @@
         WindowID_BackButton,    //返回按钮
         WindowID_GameLevelEnemyInfoLayer,   //游戏关卡敌人信息层
         WindowID_WeaponInfoLayer,  //装备相信层
+        WindowID_UpdateHeroRankLayer,   //英雄升阶页面
+        WindowID_UpdateHeroStarLayer,   //英雄升星页面
     }
 }

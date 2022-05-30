@@ -948,3 +948,32 @@ message M2C_GetHeroCardByIdResponse //IActorLocationResponse
 	string Message = 92;
 	HeroCardInfo HeroCardInfo = 1;
 }
+//ResponseType M2C_UpdateHeroRankResponse
+message C2M_UpdateHeroRankRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+	int64 Account = 1;
+	int64 HeroId = 2;
+}
+message M2C_UpdateHeroRankResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	HeroCardInfo HeroCardInfo = 1;
+}
+
+//ResponseType M2C_UpdateHeroStarResponse
+message C2M_UpdateHeroStarRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+	int64 Account = 1;
+	int64 HeroId = 2;
+}
+message M2C_UpdateHeroStarResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	HeroCardInfo HeroCardInfo = 1;
+}

@@ -69,7 +69,7 @@ namespace ET
             self.FilterColor(self.CurrentChooseTypeIndex).Coroutine();
         }
 
-        public static async void OnLoopListItemRefreshHandler(this DlgAllHeroBagLayer self, Transform tr, int index)
+        public static  void OnLoopListItemRefreshHandler(this DlgAllHeroBagLayer self, Transform tr, int index)
         {
             Scroll_ItemHeroCard itemHeroCard = self.ItemHeroCards[index].BindTrans(tr);
             itemHeroCard.E_ChooseToggle.interactable = true;
@@ -80,9 +80,11 @@ namespace ET
                 itemHeroCard.E_QualityIconImage.gameObject.SetActive(false);
                 itemHeroCard.E_CountText.gameObject.SetActive(false);
                 itemHeroCard.E_ChooseToggle.gameObject.SetActive(false);
-                var commonAtlas = ConstValue.CommonUIAtlasPath;
-                var defaultSprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonAtlas, "bgpic");
-                itemHeroCard.E_HeadImage.sprite = defaultSprite;
+                // var commonAtlas = ConstValue.CommonUIAtlasPath;
+                // var defaultSprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonAtlas, "bgpic");
+                // itemHeroCard.E_HeadImage.sprite = defaultSprite;
+
+                itemHeroCard.E_HeadImage.sprite = self.DefaultHeadSprite;
             }
             else
             {
@@ -90,6 +92,7 @@ namespace ET
                 HeroCardInfo heroCardInfo = self.HeroCardInfos[index];
                 var heroConfig = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
                 itemHeroCard.InitHeroCard(heroCardInfo);
+
                 if (self.UnAbleHeroCardInfo != null && self.UnAbleHeroCardInfo.HeroId.Equals(heroCardInfo.HeroId))
                 {
                     itemHeroCard.E_ChooseToggle.interactable = false;
@@ -155,7 +158,6 @@ namespace ET
                     {
                         itemHeroCard.E_ChooseToggle.interactable = false;
                     }
-                    
                 }
 
                 itemHeroCard.E_ChooseToggle.onValueChanged.AddListener((value) =>
@@ -196,15 +198,17 @@ namespace ET
             self.UnableElementHeroCardInfos = null;
         }
 
-        public static void ShowWindow(this DlgAllHeroBagLayer self, Entity contextData = null)
+        public static async void ShowWindow(this DlgAllHeroBagLayer self, Entity contextData = null)
         {
             // self.FilterColor(self.CurrentChooseTypeIndex).Coroutine();
-
+            self.DefaultHeadSprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.CommonUIAtlasPath, "bgpic");
             //请求背包数据
         }
 
         public static async ETTask InitBagCount(this DlgAllHeroBagLayer self)
         {
+            var commonAtlas = ConstValue.CommonUIAtlasPath;
+            self.DefaultHeadSprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonAtlas, "bgpic");
             //初始化背包个数
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
@@ -298,6 +302,7 @@ namespace ET
                     HeroElementType type = indexs[index];
                     self.HeroCardInfos = self.HeroCardInfos.FindAll(a => { return a.HeroColor == (int) type; });
                 }
+
                 self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefreshCells();
             }
         }

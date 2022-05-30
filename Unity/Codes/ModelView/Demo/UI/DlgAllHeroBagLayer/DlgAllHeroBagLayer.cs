@@ -27,5 +27,6 @@ namespace ET
         public List<HeroCardInfo> UnableNameHeroCardInfos = new List<HeroCardInfo>();   //需要禁用的相同名称的英雄列表
         public int BagCount = 0;
         public int HeroCount = 0;
+        public Sprite DefaultHeadSprite = null;
     }
 }

@@ -472,18 +472,20 @@ namespace ET
                 }
             }
 
+           
+
+            var value = false;
+            if (diamondActionItem.DiamondActions.Count > 0)
+            {
+                diamondActionItems.Add(diamondActionItem);
+                // return true; 
+                value = true;
+            }
             if (specialActionItem.DiamondActions.Count > 0)
             {
                 diamondActionItems.Add(specialActionItem);
             }
-
-            if (diamondActionItem.DiamondActions.Count > 0)
-            {
-                diamondActionItems.Add(diamondActionItem);
-                return true;
-            }
-
-            return false;
+            return value;
         }
 
         public static M2C_SyncDiamondAction ScrollDiamond(this DiamondComponent self, C2M_PlayerScrollScreen message)

@@ -14,6 +14,26 @@ namespace ET
         {
             self.View.E_BackButton.AddListener(self.BackButtonClick);
             self.View.E_ComposeButton.AddListener(self.OnComposeButtonClick);
+            self.View.E_UpRankButton.AddListener(self.OnUpRankButtonClick);
+            self.View.E_UpStarButton.AddListener(self.OnUpStarButtonClick);
+        }
+
+        public static async void OnUpStarButtonClick(this DlgShowHeroInfoLayer self)
+        {
+            //升星系统
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_UpdateHeroStarLayer);
+            UIBaseWindow uiBaseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_UpdateHeroStarLayer);
+            uiBaseWindow.GetComponent<DlgUpdateHeroStarLayer>().SetTargetInfo(self.HeroCardInfo);
+            await ETTask.CompletedTask;
+        }
+
+        public static async  void OnUpRankButtonClick(this DlgShowHeroInfoLayer self)
+        {
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_UpdateHeroRankLayer);
+            UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_UpdateHeroRankLayer);
+            baseWindow.GetComponent<DlgUpdateHeroRankLayer>().SetTargetInfo(self.HeroCardInfo);
         }
 
         public static async void OnComposeButtonClick(this DlgShowHeroInfoLayer self)
@@ -49,17 +69,13 @@ namespace ET
             {
                 self.HeroModeShow = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(heroModeStr);
             }
-
-            HeroCard heroCard = self.AddChildWithId<HeroCard, HeroCardInfo>(heroCardInfo.HeroId, heroCardInfo);
             self.View.E_RankText.text = $"{heroCardInfo.Rank}阶";
-            HeroCardDataComponent heroCardComponent = heroCard.GetComponent<HeroCardDataComponent>();
-            var baseAttack = heroCardComponent.GetHeroBaseAttack();
-            var baseHP = heroCardComponent.GetHeroBaseHP();
-            var baseDefence = heroCardComponent.GetHeroBaseDefence();
+            var baseAttack = HeroHelper.GetHeroBaseAttack(heroCardInfo);
+            var baseHP = HeroHelper.GetHeroBaseHP(heroCardInfo);
+            var baseDefence = HeroHelper.GetHeroBaseDefence(heroCardInfo);
             self.View.E_BaseAttackText.text = $"{baseAttack}";
             self.View.E_HPText.text = $"{baseHP}";
             self.View.E_DefenceText.text = $"{baseDefence}";
-            heroCard.Dispose();
             self.SethetoStar(heroCardInfo);
             self.SetElementInfo(heroCardInfo);
         }

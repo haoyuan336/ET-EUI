@@ -35,7 +35,8 @@ namespace ET
         public const int ERR_MaterialNotEnough = 200016; //材料不足
         public const int ERR_TroopIsFull = 200017; //队伍已经满员了
         public const int ERR_AlOwnWeapon = 200018; //已经拥有此装备。禁止重复购买
-
+        public const int ERR_MAX_Rank = 200019; //已经达到英雄的最大阶数
+        public const int ERR_MAX_Star = 200020; //已经达到英雄的最大星数
         // 200001以上不抛异常
     }
 }

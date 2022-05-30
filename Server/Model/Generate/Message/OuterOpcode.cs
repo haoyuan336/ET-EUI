@@ -124,5 +124,9 @@ namespace ET
 		 public const ushort HeroCardDataComponentInfo = 10121;
 		 public const ushort C2M_GetHeroCardByIdRequest = 10122;
 		 public const ushort M2C_GetHeroCardByIdResponse = 10123;
+		 public const ushort C2M_UpdateHeroRankRequest = 10124;
+		 public const ushort M2C_UpdateHeroRankResponse = 10125;
+		 public const ushort C2M_UpdateHeroStarRequest = 10126;
+		 public const ushort M2C_UpdateHeroStarResponse = 10127;
 	}
 }
