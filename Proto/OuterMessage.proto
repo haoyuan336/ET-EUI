@@ -969,6 +969,7 @@ message C2M_UpdateHeroStarRequest //IActorLocationRequest
 	int RpcId = 90;
 	int64 Account = 1;
 	int64 HeroId = 2;
+	int64 MaterialHeroId = 3;	//材料id
 }
 message M2C_UpdateHeroStarResponse //IActorLocationResponse
 {

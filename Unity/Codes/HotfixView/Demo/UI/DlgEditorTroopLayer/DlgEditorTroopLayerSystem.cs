@@ -16,19 +16,19 @@ namespace ET
         public static void RegisterUIEvent(this DlgEditorTroopLayer self)
         {
             self.View.ESTroopHeroCards.RegisterUIEvent();
+            self.View.E_BackButton.AddListener(self.OnBackButtonClick);
         }
 
-        public static async void ShowBackButton(this DlgEditorTroopLayer self)
+        public static void OnBackButtonClick(this DlgEditorTroopLayer self)
         {
-
-            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_BackButton);
-            UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_BackButton);
-            baseWindow.GetComponent<DlgBackButton>().BackButtonClickAction = () =>
-            {
-                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer);
-                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_EditorTroopLayer);
-                
-            };
+            // await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_BackButton);
+            // UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_BackButton);
+            // baseWindow.GetComponent<DlgBackButton>().BackButtonClickAction = () =>
+            // {
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer);
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_EditorTroopLayer);
+            //     
+            // };
         }
 
         public static async void ShowTroopHeroCardInfo(this DlgEditorTroopLayer self)
@@ -156,7 +156,7 @@ namespace ET
             await allHeroBagLayer.SetShowHeroTypeAsync(HeroBagType.Hero);
             self.View.ESTroopHeroCards.ItemCardClickAction = self.OnTroopHeroCardItemClickAction;
             self.ShowTroopHeroCardInfo();
-            self.ShowBackButton();
+            // self.ShowBackButton();
         }
 
         public static void HideWindow(this DlgEditorTroopLayer self)

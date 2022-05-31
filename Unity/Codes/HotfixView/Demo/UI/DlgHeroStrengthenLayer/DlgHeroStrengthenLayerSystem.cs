@@ -41,6 +41,7 @@ namespace ET
 
                 UIBaseWindow showHeroInfoLayer = uiComponent.GetUIBaseWindow(WindowID.WindowID_ShowHeroInfoLayer);
                 showHeroInfoLayer.GetComponent<DlgShowHeroInfoLayer>().ReferHeroCardView(response.HeroCardInfo);
+                
             }
 
             await ETTask.CompletedTask;

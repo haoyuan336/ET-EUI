@@ -37,6 +37,17 @@ namespace ET
             }
         }
 
+        /// <summary>
+        /// 设置可以选择的相同星数的英雄卡牌
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="heroCardInfo"></param>
+        public static void SetEnableSameStarCountHeroInfo(this DlgAllHeroBagLayer self, HeroCardInfo heroCardInfo)
+        {
+            self.EnabelSameStarCountHeroCardInfo = heroCardInfo;
+            self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefillCells();
+        }
+
         public static void UnAbleHeroItemWhitHeroInfo(this DlgAllHeroBagLayer self, HeroCardInfo heroCardInfo)
         {
             self.UnAbleHeroCardInfo = heroCardInfo;
@@ -69,7 +80,7 @@ namespace ET
             self.FilterColor(self.CurrentChooseTypeIndex).Coroutine();
         }
 
-        public static  void OnLoopListItemRefreshHandler(this DlgAllHeroBagLayer self, Transform tr, int index)
+        public static void OnLoopListItemRefreshHandler(this DlgAllHeroBagLayer self, Transform tr, int index)
         {
             Scroll_ItemHeroCard itemHeroCard = self.ItemHeroCards[index].BindTrans(tr);
             itemHeroCard.E_ChooseToggle.interactable = true;
@@ -83,6 +94,16 @@ namespace ET
                 // var commonAtlas = ConstValue.CommonUIAtlasPath;
                 // var defaultSprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonAtlas, "bgpic");
                 // itemHeroCard.E_HeadImage.sprite = defaultSprite;
+                for (int i = 0; i < 5; i++)
+                {
+                    // var star    
+                    var starStr = $"Star_{i}";
+                    Transform starObj = UIFindHelper.FindDeepChild(itemHeroCard.uiTransform.gameObject, starStr);
+                    if (starObj != null)
+                    {
+                        starObj.gameObject.SetActive(false);
+                    }
+                }
 
                 itemHeroCard.E_HeadImage.sprite = self.DefaultHeadSprite;
             }
@@ -143,6 +164,23 @@ namespace ET
                     }
                 }
 
+                if (self.EnabelSameStarCountHeroCardInfo != null)
+                {
+                    HeroConfig config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
+                    HeroConfig sameConfig = HeroConfigCategory.Instance.Get(self.EnabelSameStarCountHeroCardInfo.ConfigId);
+                    if (heroCardInfo.Star != self.EnabelSameStarCountHeroCardInfo.Star ||
+                        config.HeroName != sameConfig.HeroName)
+                    {
+                        itemHeroCard.E_ChooseToggle.interactable = false;
+                    }
+                    // Log.Debug($"self name {self.EnabelSameStarCountHeroCardInfo.HeroName}");
+                    // // Log.Debug($"hero name {heroCardInfo.HeroName}");
+                    // if (heroCardInfo.Star != self.EnabelSameStarCountHeroCardInfo.Star)
+                    // {
+                    //     itemHeroCard.E_ChooseToggle.interactable = false;
+                    // }
+                }
+
                 if (self.UnableNameHeroCardInfos != null)
                 {
                     if (self.UnableNameHeroCardInfos.Exists(a =>
@@ -177,6 +215,8 @@ namespace ET
                 if (value)
                 {
                     self.CurrentChooseTypeIndex = index;
+
+                    Log.Debug($"self current choose type index {self.CurrentChooseTypeIndex}");
                     // Log.Debug(go.name);
                     self.FilterColor(index).Coroutine();
                     go.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 160);
@@ -196,6 +236,16 @@ namespace ET
             self.AllChooseHeroCardInfos = null;
             // self.UnableElementType = HeroElementType.Invalide;
             self.UnableElementHeroCardInfos = null;
+            self.EnabelSameStarCountHeroCardInfo = null;
+
+            self.UnableNameHeroCardInfos = null;
+
+            // public HeroCardInfo UnAbleHeroCardInfo = null; //单独禁用的信息
+            // public List<HeroCardInfo> UnableElementHeroCardInfos = null; //需要禁用的相同元素的英雄列表
+            // public List<HeroCardInfo> UnableNameHeroCardInfos = null; //需要禁用的相同名称的英雄列表
+            // public List<HeroCardInfo> EnabelHeroCardInfos = null; //不禁用的英雄信息列表
+            // public List<HeroCardInfo> AllChooseHeroCardInfos = null; //当前已经选择的英雄列表
+            // public HeroCardInfo EnabelSameStarCountHeroCardInfo = null; //可用的相同星数目的卡牌信息
         }
 
         public static async void ShowWindow(this DlgAllHeroBagLayer self, Entity contextData = null)
@@ -300,7 +350,16 @@ namespace ET
                         HeroElementType.Fire, HeroElementType.Dark, HeroElementType.Water, HeroElementType.Wind, HeroElementType.Light
                     };
                     HeroElementType type = indexs[index];
-                    self.HeroCardInfos = self.HeroCardInfos.FindAll(a => { return a.HeroColor == (int) type; });
+                    self.HeroCardInfos = self.HeroCardInfos.FindAll(a =>
+                    {
+                        HeroConfig config = HeroConfigCategory.Instance.Get(a.ConfigId);
+                        if (config.HeroColor == (int) type)
+                        {
+                            return true;
+                        }
+
+                        return false;
+                    });
                 }
 
                 self.View.E_LoopScrollListHeroLoopVerticalScrollRect.RefreshCells();

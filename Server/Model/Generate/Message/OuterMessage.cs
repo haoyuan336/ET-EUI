@@ -2118,6 +2118,9 @@ namespace ET
 		[ProtoMember(2)]
 		public long HeroId { get; set; }
 
+		[ProtoMember(3)]
+		public long MaterialHeroId { get; set; }
+
 	}
 
 	[Message(OuterOpcode.M2C_UpdateHeroStarResponse)]

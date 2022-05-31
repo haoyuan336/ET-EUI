@@ -14,6 +14,7 @@ namespace ET
             self.View.E_EditorTroopButton.AddListenerAsync(self.ShowEditorTroopLayer);
             self.View.E_StartGameButton.AddListenerAsync(self.StartGameClickAction);
             self.View.ESTroopHeroCards.RegisterUIEvent();
+            self.View.E_BackButton.AddListener(self.OnBackButtonClick);
         }
 
         // public static async ETTask StartGame(this DlgGameLevelInfoLayer self)
@@ -90,25 +91,25 @@ namespace ET
             {
                 self.ShowTroopHeroCardInfo();
 
-                UIBaseWindow backWindow = self.DomainScene().GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_BackButton);
-                backWindow.uiTransform.GetComponent<RectTransform>().offsetMax = new Vector2(300, -400);
-                DlgBackButton dlgBackButton = backWindow.GetComponent<DlgBackButton>();
-                dlgBackButton.BackButtonClickAction = self.OnBackButtonClick;
+                // UIBaseWindow backWindow = self.DomainScene().GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_BackButton);
+                // backWindow.uiTransform.GetComponent<RectTransform>().offsetMax = new Vector2(300, -400);
+                // DlgBackButton dlgBackButton = backWindow.GetComponent<DlgBackButton>();
+                // dlgBackButton.BackButtonClickAction = self.OnBackButtonClick;
             };
             await ETTask.CompletedTask;
         }
 
         public static async void ShowWindow(this DlgGameLevelInfoLayer self, Entity contextData = null)
         {
-            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_BackButton);
-            UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_BackButton);
-            baseWindow.uiTransform.GetComponent<RectTransform>().offsetMax = new Vector2(300, -400);
-            DlgBackButton dlgBackButton = baseWindow.GetComponent<DlgBackButton>();
-            dlgBackButton.BackButtonClickAction = self.OnBackButtonClick;
+            // await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_BackButton);
+            // UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_BackButton);
+            // baseWindow.uiTransform.GetComponent<RectTransform>().offsetMax = new Vector2(300, -400);
+            // DlgBackButton dlgBackButton = baseWindow.GetComponent<DlgBackButton>();
+            // dlgBackButton.BackButtonClickAction = self.OnBackButtonClick;
             self.ShowTroopHeroCardInfo();
 
             //显示游戏详情页面
-            self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameLevelEnemyInfoLayer).Coroutine();
+            await   self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameLevelEnemyInfoLayer);
         }
 
         public static async void ShowTroopHeroCardInfo(this DlgGameLevelInfoLayer self)

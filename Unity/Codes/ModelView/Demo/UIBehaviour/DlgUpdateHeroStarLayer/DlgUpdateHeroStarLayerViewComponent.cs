@@ -56,7 +56,7 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Image E_HeadImage
+		public UnityEngine.UI.Image E_CurrentHeroCardPosImage
      	{
      		get
      		{
@@ -65,11 +65,11 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_HeadImage == null )
+     			if( this.m_E_CurrentHeroCardPosImage == null )
      			{
-		    		this.m_E_HeadImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Bg/E_Head");
+		    		this.m_E_CurrentHeroCardPosImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Bg/E_CurrentHeroCardPos");
      			}
-     			return this.m_E_HeadImage;
+     			return this.m_E_CurrentHeroCardPosImage;
      		}
      	}
 
@@ -243,6 +243,23 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Text E_AddText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_AddText == null )
+     			{
+		    		this.m_E_AddText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_ChooseImage/E_Add");
+     			}
+     			return this.m_E_AddText;
+     		}
+     	}
+
 		public UnityEngine.UI.Image E_SuccessImageImage
      	{
      		get
@@ -333,7 +350,7 @@ namespace ET
 			this.m_E_BackButton = null;
 			this.m_E_BackImage = null;
 			this.m_E_StarGroupButton = null;
-			this.m_E_HeadImage = null;
+			this.m_E_CurrentHeroCardPosImage = null;
 			this.m_E_BaseInfoButton = null;
 			this.m_E_CurrentHPText = null;
 			this.m_E_NextHPText = null;
@@ -344,6 +361,7 @@ namespace ET
 			this.m_E_MaxText = null;
 			this.m_E_ChooseImageButton = null;
 			this.m_E_ChooseImageImage = null;
+			this.m_E_AddText = null;
 			this.m_E_SuccessImageImage = null;
 			this.m_E_RateText = null;
 			this.m_E_OkButtonButton = null;
@@ -355,7 +373,7 @@ namespace ET
 		private UnityEngine.UI.Button m_E_BackButton = null;
 		private UnityEngine.UI.Image m_E_BackImage = null;
 		private UnityEngine.UI.Button m_E_StarGroupButton = null;
-		private UnityEngine.UI.Image m_E_HeadImage = null;
+		private UnityEngine.UI.Image m_E_CurrentHeroCardPosImage = null;
 		private UnityEngine.UI.Button m_E_BaseInfoButton = null;
 		private UnityEngine.UI.Text m_E_CurrentHPText = null;
 		private UnityEngine.UI.Text m_E_NextHPText = null;
@@ -366,6 +384,7 @@ namespace ET
 		private UnityEngine.UI.Text m_E_MaxText = null;
 		private UnityEngine.UI.Button m_E_ChooseImageButton = null;
 		private UnityEngine.UI.Image m_E_ChooseImageImage = null;
+		private UnityEngine.UI.Text m_E_AddText = null;
 		private UnityEngine.UI.Image m_E_SuccessImageImage = null;
 		private UnityEngine.UI.Text m_E_RateText = null;
 		private UnityEngine.UI.Button m_E_OkButtonButton = null;
