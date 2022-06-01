@@ -71,31 +71,34 @@ namespace ET
         public static int GetHeroBaseHP(this HeroCardDataComponent self)
         {
             //获取英雄的基础血量
-            HeroCard heroCard = self.GetParent<HeroCard>();
-            HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
-            var baseValue = config.HeroHP;
-            var grow = config.HPGrowthCoefficient;
-            return self.GetHeroBaseValue(grow, baseValue);
+            // HeroCard heroCard = self.GetParent<HeroCard>();
+            // HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
+            // var baseValue = config.HeroHP;
+            // var grow = config.HPGrowthCoefficient;
+            // return self.GetHeroBaseValue(grow, baseValue);
+            return HeroHelper.GetHeroBaseHP(self.GetParent<HeroCard>().GetMessageInfo());
         }
 
         public static int GetHeroBaseDefence(this HeroCardDataComponent self)
         {
             //获取英雄的基础防御力
-            HeroCard heroCard = self.GetParent<HeroCard>();
-            HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
-            var baseAttack = config.BaseDefence;
-            var grow = config.DefenceGrowthCoefficient;
-            return self.GetHeroBaseValue(grow, baseAttack);
+            // HeroCard heroCard = self.GetParent<HeroCard>();
+            // HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
+            // var baseAttack = config.BaseDefence;
+            // var grow = config.DefenceGrowthCoefficient;
+            // return self.GetHeroBaseValue(grow, baseAttack);
+            return HeroHelper.GetHeroBaseDefence(self.GetParent<HeroCard>().GetMessageInfo());
         }
 
         public static int GetHeroBaseAttack(this HeroCardDataComponent self)
         {
             //计算英雄的基础伤害
-            HeroCard heroCard = self.GetParent<HeroCard>();
-            HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
-            var baseAttack = config.BaseAttack;
-            var growthCoefficient = config.AttackGrowthCoefficient;
-            return self.GetHeroBaseValue(growthCoefficient, baseAttack);
+            // HeroCard heroCard = self.GetParent<HeroCard>();
+            // HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
+            // var baseAttack = config.BaseAttack;
+            // var growthCoefficient = config.AttackGrowthCoefficient;
+            // return self.GetHeroBaseValue(growthCoefficient, baseAttack);
+            return HeroHelper.GetHeroBaseAttack(self.GetParent<HeroCard>().GetMessageInfo());
         }
 
         public static int GetHeroBaseValue(this HeroCardDataComponent self, int growthCoefficient, int value)

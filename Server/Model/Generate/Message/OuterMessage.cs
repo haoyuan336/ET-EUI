@@ -1246,21 +1246,13 @@ namespace ET
 		[ProtoMember(10)]
 		public float Attack { get; set; }
 
-		[ProtoMember(11)]
-		public float HP { get; set; }
-
+// float HP = 11;			//血量
 		[ProtoMember(12)]
 		public List<SkillInfo> SkillInfos = new List<SkillInfo>();
 
-		[ProtoMember(13)]
-		public float DiamondAttack { get; set; }
-
-		[ProtoMember(14)]
-		public float Angry { get; set; }
-
-		[ProtoMember(15)]
-		public float Defence { get; set; }
-
+// float DiamondAttack = 13;			//宝石攻击力
+// float Angry = 14;			//怒气值
+// float Defence = 15;			//防御值
 		[ProtoMember(16)]
 		public int Level { get; set; }
 
@@ -1278,6 +1270,9 @@ namespace ET
 
 		[ProtoMember(21)]
 		public int Rank { get; set; }
+
+		[ProtoMember(22)]
+		public int CurrentExp { get; set; }
 
 // repeated long SkillIdList = 11;	//技能id
 	}

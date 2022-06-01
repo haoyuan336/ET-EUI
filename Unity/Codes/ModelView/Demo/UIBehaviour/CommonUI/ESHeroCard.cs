@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace ET
 {
-	public  class ESHeroCard : Entity,ET.IAwake<UnityEngine.Transform>,IDestroy 
+	public  class ESHeroCard : Entity,ET.IAwake<UnityEngine.Transform>,IDestroy, IAwake
 	{
 		public UnityEngine.UI.Image E_HeadImage
      	{

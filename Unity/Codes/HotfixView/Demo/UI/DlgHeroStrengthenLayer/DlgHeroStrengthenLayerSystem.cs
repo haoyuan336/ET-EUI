@@ -232,39 +232,5 @@ namespace ET
             uiBaseWindow.GetComponent<DlgAllHeroBagLayer>().OnHeroItemInfoClick = self.OnHeroItemClick;
             uiBaseWindow.GetComponent<DlgAllHeroBagLayer>().UnAbleHeroItemWhitHeroInfo(self.HeroCardInfo);
         }
-
-        public static async void SetHeroHeadImage(this DlgHeroStrengthenLayer self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
-        {
-            var configId = heroCardInfo.ConfigId;
-            var config = HeroConfigCategory.Instance.Get(configId);
-            var spriteAtlas = ConstValue.HeroCardAtlasPath;
-            var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
-            itemHeroCard.E_HeadImage.sprite = headImage;
-        }
-
-        public static async void SetHeroElementImage(this DlgHeroStrengthenLayer self, Scroll_ItemHeroCard itemHeroCard, HeroCardInfo heroCardInfo)
-        {
-            // var c
-            var configId = heroCardInfo.ConfigId;
-            var config = HeroConfigCategory.Instance.Get(configId);
-            var elementConfig = ElementConfigCategory.Instance.Get(config.HeroColor);
-            var elementImageStr = elementConfig.IconImage;
-            var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elementImageStr);
-            itemHeroCard.E_ElementImage.sprite = sprite;
-        }
-
-        public static void SetHeroStar(this DlgHeroStrengthenLayer self, Scroll_ItemHeroCard heroCard, HeroCardInfo cardInfo)
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                // var star    
-                var starStr = $"Star_{i}";
-                Transform starObj = UIFindHelper.FindDeepChild(heroCard.uiTransform.gameObject, starStr);
-                if (starObj != null)
-                {
-                    starObj.gameObject.SetActive(i < cardInfo.Star);
-                }
-            }
-        }
     }
 }

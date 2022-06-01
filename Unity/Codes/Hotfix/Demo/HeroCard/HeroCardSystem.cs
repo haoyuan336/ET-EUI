@@ -216,7 +216,7 @@ namespace ET
             HeroCardInfo heroCardInfo = new HeroCardInfo()
             {
                 HeroId = self.Id,
-                HeroName = self.HeroName,
+                // HeroName = self.HeroName,
                 ConfigId = self.ConfigId,
                 OwnerId = self.OwnerId,
                 TroopId = self.TroopId,
@@ -225,16 +225,17 @@ namespace ET
                 // HeroColor = self.HeroColor,
                 CastSkillId = self.CurrentSkillId,
                 Attack = self.GetAttack(),
-                DiamondAttack = self.GetDiamondAttack(),
-                Angry = self.GetAngry(),
+                // DiamondAttack = self.GetDiamondAttack(),
+                // Angry = self.GetAngry(),
                 // HP = self.HP,
-                Defence = self.GetDefence(),
+                // Defence = self.GetDefence(),
                 Level = self.Level == 0? 1 : self.Level,
                 SkillInfos = skillInfos,
-                TotalHP = self.GetTotalHP(),
+                // TotalHP = self.GetTotalHP(),
                 Star = self.Star,
                 Count = self.Count,
                 Rank = self.Rank,
+                CurrentExp = self.CurrentExp,
                 // HeroCardDataComponentInfo = self.GetComponent<HeroCardDataComponent>().GetInfo()
                 // Star = self.Angry
             };
@@ -253,15 +254,15 @@ namespace ET
             return TotalHP;
         }
 
-        public static float GetDiamondAttack(this HeroCard self)
-        {
-            return self.DiamondAttack;
-        }
-
-        public static float GetAngry(this HeroCard self)
-        {
-            return self.Angry;
-        }
+        // public static float GetDiamondAttack(this HeroCard self)
+        // {
+        //     return self.DiamondAttack;
+        // }
+        //
+        // public static float GetAngry(this HeroCard self)
+        // {
+        //     return self.Angry;
+        // }
 
         public static float GetAttack(this HeroCard self)
         {
@@ -297,34 +298,34 @@ namespace ET
         }
 
         //todo 增加攻击值
-        public static void AddDiamondAttackValue(this HeroCard self, DiamondInfo diamondInfo)
-        {
-            Log.Debug($"add attack value {self.Id}");
-            DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamondInfo.ConfigId);
-            HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
-            var value = float.Parse(heroConfig.AddAttackRate) * float.Parse(config.AddAttack);
-            self.DiamondAttack += value;
-        }
+        // public static void AddDiamondAttackValue(this HeroCard self, DiamondInfo diamondInfo)
+        // {
+        //     Log.Debug($"add attack value {self.Id}");
+        //     DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamondInfo.ConfigId);
+        //     HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
+        //     var value = float.Parse(heroConfig.AddAttackRate) * float.Parse(config.AddAttack);
+        //     self.DiamondAttack += value;
+        // }
 
         //todo 增加怒气值
-        public static void AddDiamondAngryValue(this HeroCard self, DiamondInfo diamondInfo)
-        {
-            DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamondInfo.ConfigId);
-            HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
-            var value = float.Parse(heroConfig.AddAngryRate) * float.Parse(config.AddAngry);
-            self.Angry += value;
-            if (self.Angry > heroConfig.TotalAngry)
-            {
-                self.Angry = heroConfig.TotalAngry;
-            }
-        }
+        // public static void AddDiamondAngryValue(this HeroCard self, DiamondInfo diamondInfo)
+        // {
+        //     DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamondInfo.ConfigId);
+        //     HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
+        //     var value = float.Parse(heroConfig.AddAngryRate) * float.Parse(config.AddAngry);
+        //     self.Angry += value;
+        //     if (self.Angry > heroConfig.TotalAngry)
+        //     {
+        //         self.Angry = heroConfig.TotalAngry;
+        //     }
+        // }
 
-        public static bool CheckAngryIsFull(this HeroCard self)
-        {
-            // Log.Debug($"self angry {self.Angry}");
-            // Log.Debug($"total angry {HeroConfigCategory.Instance.Get(self.ConfigId).TotalAngry}");
-            return self.Angry >= HeroConfigCategory.Instance.Get(self.ConfigId).TotalAngry;
-        }
+        // public static bool CheckAngryIsFull(this HeroCard self)
+        // {
+        //     // Log.Debug($"self angry {self.Angry}");
+        //     // Log.Debug($"total angry {HeroConfigCategory.Instance.Get(self.ConfigId).TotalAngry}");
+        //     return self.Angry >= HeroConfigCategory.Instance.Get(self.ConfigId).TotalAngry;
+        // }
 
         public static bool GetIsDead(this HeroCard self)
         {
@@ -373,30 +374,30 @@ namespace ET
         //     // self.HP -= 1;
         // }
 
-        public static void MakeHeroCardAngrySkill(this HeroCard self)
-        {
-            List<Skill> skills = self.GetChilds<Skill>();
-            //todo 确定英雄是否进行怒气值技能
-            if (self.TotalAngry == 0)
-            {
-                HeroConfig config = HeroConfigCategory.Instance.Get(self.ConfigId);
-                self.TotalAngry = config.TotalAngry;
-            }
-
-            //todo 如果怒气值满了，那么施放的技能为大招            
-            if (self.Angry >= self.TotalAngry)
-            {
-                foreach (var target in skills)
-                {
-                    SkillConfig skillConfig = SkillConfigCategory.Instance.Get(target.ConfigId);
-                    if (skillConfig.SkillType == 4)
-                    {
-                        self.CurrentSkillId = target.Id;
-                        return;
-                    }
-                }
-            }
-        }
+        // public static void MakeHeroCardAngrySkill(this HeroCard self)
+        // {
+        //     List<Skill> skills = self.GetChilds<Skill>();
+        //     //todo 确定英雄是否进行怒气值技能
+        //     if (self.TotalAngry == 0)
+        //     {
+        //         HeroConfig config = HeroConfigCategory.Instance.Get(self.ConfigId);
+        //         self.TotalAngry = config.TotalAngry;
+        //     }
+        //
+        //     //todo 如果怒气值满了，那么施放的技能为大招            
+        //     if (self.Angry >= self.TotalAngry)
+        //     {
+        //         foreach (var target in skills)
+        //         {
+        //             SkillConfig skillConfig = SkillConfigCategory.Instance.Get(target.ConfigId);
+        //             if (skillConfig.SkillType == 4)
+        //             {
+        //                 self.CurrentSkillId = target.Id;
+        //                 return;
+        //             }
+        //         }
+        //     }
+        // }
 
         public static void MakeHeroCardSkill(this HeroCard self, int count)
         {

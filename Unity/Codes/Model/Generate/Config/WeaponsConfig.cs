@@ -75,15 +75,17 @@ namespace ET
 		public int Star { get; set; }
 		[ProtoMember(3)]
 		public string IconResName { get; set; }
-		[ProtoMember(4)]
-		public int Price { get; set; }
 		[ProtoMember(5)]
-		public int MoneyType { get; set; }
+		public int BaseDefence { get; set; }
 		[ProtoMember(6)]
-		public string Name { get; set; }
+		public int Price { get; set; }
 		[ProtoMember(7)]
-		public int WeaponType { get; set; }
+		public int MoneyType { get; set; }
 		[ProtoMember(8)]
+		public string Name { get; set; }
+		[ProtoMember(9)]
+		public int WeaponType { get; set; }
+		[ProtoMember(10)]
 		public int MaterialType { get; set; }
 
 	}

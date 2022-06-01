@@ -37,6 +37,8 @@ namespace ET
         public const int ERR_AlOwnWeapon = 200018; //已经拥有此装备。禁止重复购买
         public const int ERR_MAX_Rank = 200019; //已经达到英雄的最大阶数
         public const int ERR_MAX_Star = 200020; //已经达到英雄的最大星数
+
+        public const int ERR_EXP_Not_Enough = 200021; //经验值不够
         // 200001以上不抛异常
     }
 }

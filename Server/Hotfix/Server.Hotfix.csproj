@@ -77,6 +77,10 @@
       <Link>Module\Message\%(RecursiveDir)%(FileName)%(Extension)</Link>
     </Compile>
 
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Helper\HeroHelper.cs">
+      <Link>Demo\Helper\HeroHelper.cs</Link>
+    </Compile>
+
     <Compile Include="..\..\Unity\Codes\Model\Demo\HeroCard\HeroCardState.cs">
       <Link>Demo\HeroCard\HeroCardState.cs</Link>
     </Compile>

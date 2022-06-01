@@ -40,9 +40,10 @@ namespace ET
         {
             // 点击强化按钮，显示强化页面
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
-            await uiComponent.ShowWindow(WindowID.WindowID_HeroStrengthenLayer);
-            UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_HeroStrengthenLayer];
-            baseWindow.GetComponent<DlgHeroStrengthenLayer>().SetTargetInfo(self.HeroCardInfo);
+            await uiComponent.ShowWindow(WindowID.WindowID_HeroStrengthenPreviewLayer);
+            UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_HeroStrengthenPreviewLayer);
+            baseWindow.GetComponent<DlgHeroStrengthenPreviewLayer>().SetTargetInfo(self.HeroCardInfo);
+
         }
 
         public static async void BackButtonClick(this DlgShowHeroInfoLayer self)

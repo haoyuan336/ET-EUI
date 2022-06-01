@@ -574,17 +574,18 @@ message HeroCardInfo
 	int32 HeroColor = 8;			//颜色属性	
 	int64 CastSkillId = 9;	//技能类型
 	float Attack = 10;	//当前的攻击力
-	float HP = 11;			//血量
+	// float HP = 11;			//血量
 	repeated SkillInfo SkillInfos = 12; //技能列表
-	float DiamondAttack = 13;			//宝石攻击力
-	float Angry = 14;			//怒气值
-	float Defence = 15;			//防御值
+	// float DiamondAttack = 13;			//宝石攻击力
+	// float Angry = 14;			//怒气值
+	// float Defence = 15;			//防御值
 	int32 Level = 16;	//等级
 	float TotalHP = 17;	//总血量
 	int32 Star = 18;	//英雄的星级
 	int32 Count = 19;	//英雄个数
 	HeroCardDataComponentInfo HeroCardDataComponentInfo = 20;	//英雄的基础数据
 	int32 Rank = 21;		//英雄的阶数
+	int32 CurrentExp = 22;	//当前的经验值
 
 	// repeated long SkillIdList = 11;	//技能id
 }

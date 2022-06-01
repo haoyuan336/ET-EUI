@@ -18,6 +18,10 @@ namespace ET
             self.View.E_LoopScrollListHeroLoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopListItemRefreshHandler);
             // self.AddUIScrollItems();
             // self.ItemHeroCards
+            self.View.E_BackButton.AddListener(() =>
+            {
+                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer);
+            });
         }
 
         public static void InitAllToggleEvent(this DlgAllHeroBagLayer self)

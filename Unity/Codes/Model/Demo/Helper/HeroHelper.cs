@@ -5,6 +5,82 @@ namespace ET
     public static class HeroHelper
     {
         /// <summary>
+        /// 获取升级后 剩下多少经验值
+        /// </summary>
+        /// <param name="heroCardInfo"></param>
+        /// <param name="sumExp"></param>
+        /// <returns></returns>
+        public static int GetHeroLevelLastExp(HeroCardInfo heroCardInfo, int sumExp)
+        {
+            HeroCardInfo info = new HeroCardInfo() { Level = heroCardInfo.Level };
+
+            var exp = 0;
+            while (sumExp >= exp)
+            {
+                exp = HeroHelper.GetNextLevelExp(info);
+                sumExp -= exp;
+                info.Level++;
+            }
+
+            return sumExp;
+        }
+
+        /// <summary>
+        /// 
+        /// 获取英雄可以升多少级
+        /// </summary>
+        /// <param name="heroCardInfo"></param>
+        /// <param name="sumExp"></param>
+        /// <returns></returns>
+        public static int GetHeroLevelInfoWithExp(HeroCardInfo heroCardInfo, int sumExp)
+        {
+            HeroCardInfo info = new HeroCardInfo() { Level = heroCardInfo.Level };
+
+            var exp = HeroHelper.GetNextLevelExp(info);
+            ;
+            while (sumExp >= exp)
+            {
+                exp = HeroHelper.GetNextLevelExp(info);
+                sumExp -= exp;
+                info.Level++;
+            }
+
+            return info.Level;
+        }
+
+        /// <summary>
+        /// 获取英雄总共的经验值
+        /// </summary>
+        /// <param name="heroCardInfo"></param>
+        /// <returns></returns>
+        public static int GetHeroAllLevelExp(HeroCardInfo heroCardInfo)
+        {
+            int sumExp = 0;
+            var level = heroCardInfo.Level;
+            for (int i = 0; i < level; i++)
+            {
+                HeroLevelExpConfig config = HeroLevelExpConfigCategory.Instance.Get(i + 1);
+                sumExp += config.EXP;
+            }
+
+            sumExp *= heroCardInfo.Count;
+
+            return sumExp;
+        }
+
+        /// <summary>
+        /// 获取下一级需要的经验值
+        /// </summary>
+        /// <param name="heroCardInfo"></param>
+        /// <returns></returns>
+        public static int GetNextLevelExp(HeroCardInfo heroCardInfo)
+        {
+            //获取下一级需要的经验值
+            HeroLevelExpConfig config = HeroLevelExpConfigCategory.Instance.Get(heroCardInfo.Level + 1);
+            return config.EXP;
+        }
+
+        /// <summary>
         /// 获取基础值
         /// </summary>
         /// <param name="heroCardInfo"></param>
