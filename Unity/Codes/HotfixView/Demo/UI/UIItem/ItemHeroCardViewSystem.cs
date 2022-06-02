@@ -15,7 +15,9 @@ namespace ET
             self.E_ChooseCountText.gameObject.SetActive(false);
             var spriteAtlas = ConstValue.HeroCardAtlasPath;
           
-            self.E_ElementImage.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
+            self.E_ElementImage.gameObject.SetActive(true);
+            // self.E_LevelText.gameObject.SetActive(true);
+            // self.E_ElementImage.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
             self.E_LevelText.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
             self.E_LevelText.text = $"Lv.{heroCardInfo.Level.ToString()}";
 
@@ -28,7 +30,7 @@ namespace ET
             var aualityIcon = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, heroQualityTypeConfig.Icon);
             self.E_QualityIconImage.gameObject.SetActive(true);
             self.E_QualityIconImage.sprite = aualityIcon;
-            self.E_QualityIconImage.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
+            // self.E_QualityIconImage.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
             for (int i = 0; i < 5; i++)
             {
                 // var star    

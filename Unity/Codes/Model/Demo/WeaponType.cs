@@ -9,6 +9,7 @@
 
     public enum WeaponType
     {
+        Invalide = -1,  //无
         Accessory = 4, //饰品
         Equip = 2, //护甲
         Ring = 3, //戒指

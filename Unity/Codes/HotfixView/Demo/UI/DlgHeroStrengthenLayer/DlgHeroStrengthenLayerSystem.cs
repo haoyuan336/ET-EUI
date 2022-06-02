@@ -14,9 +14,12 @@ namespace ET
 
             self.View.ETargetHeroContentLoopHorizontalScrollRect.AddItemRefreshListener(self.OnLoopTargetHeroItem);
             self.View.E_OKButton.AddListenerAsync(self.OnOkButtonClick);
-
+            
             // self.View.uiTransform
+            
         }
+
+      
 
         public static async ETTask OnOkButtonClick(this DlgHeroStrengthenLayer self)
         {

@@ -90,9 +90,7 @@ namespace ET
         /// </summary>
         public static void ShowAllWeapon(this DlgStore self)
         {
-            // self.WeaponConfigs = WeaponsConfigCategory.Instance.GetAll().Values.ToList();
-            // self.AddUIScrollItems(ref self.ItemWeapons, self.WeaponConfigs.Count);
-            // self.View.ELoopScrollListLoopVerticalScrollRect.SetVisible(true, self.WeaponConfigs.Count);
+     
             List<GoodsConfig> configs = GoodsConfigCategory.Instance.GetAll().Values.ToList();
             self.GoodsConfigs.Clear();
             foreach (var config in configs)

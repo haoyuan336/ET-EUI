@@ -39,11 +39,15 @@
         WindowID_AllHeroBagLayer, //所有英雄的背包页面
         WindowID_HeroStrengthenLayer, //强化英雄页面
         WindowID_GameLevelInfoLayer, // 游戏关卡详情页面
-        WindowID_BackButton,    //返回按钮
-        WindowID_GameLevelEnemyInfoLayer,   //游戏关卡敌人信息层
-        WindowID_WeaponInfoLayer,  //装备相信层
-        WindowID_UpdateHeroRankLayer,   //英雄升阶页面
-        WindowID_UpdateHeroStarLayer,   //英雄升星页面
-        WindowID_HeroStrengthenPreviewLayer,    //强化合成预览页面
+        WindowID_BackButton, //返回按钮
+        WindowID_GameLevelEnemyInfoLayer, //游戏关卡敌人信息层
+        WindowID_WeaponInfoLayer, //装备相信层
+        WindowID_UpdateHeroRankLayer, //英雄升阶页面
+        WindowID_UpdateHeroStarLayer, //英雄升星页面
+        WindowID_HeroStrengthenPreviewLayer, //强化合成预览页面
+        WindowID_HeroWeaponPreviewLayer, //英雄武器预览层
+        WindowID_AllWeaponLayer,    //所有装备的层
+        WindowID_ChooseWeaponLayer, //选择武器层
+        
     }
 }

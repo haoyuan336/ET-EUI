@@ -60,7 +60,7 @@ namespace ET
                 }
             }
 
-            var needExp = HeroHelper.GetNextLevelExp(targetHeroCard.GetMessageInfo());
+            // var needExp = HeroHelper.GetNextLevelExp(targetHeroCard.GetMessageInfo());
             var sumExp = targetHeroCard.CurrentExp;
 
             foreach (var materialHeroCard in materialHeroCards)
@@ -68,12 +68,12 @@ namespace ET
                 sumExp += HeroHelper.GetHeroAllLevelExp(materialHeroCard.GetMessageInfo());
             }
 
-            if (sumExp < needExp)
-            {
-                response.Error = ErrorCode.ERR_EXP_Not_Enough;
-                reply();
-                return;
-            }
+            // if (sumExp < needExp)
+            // {
+            //     response.Error = ErrorCode.ERR_EXP_Not_Enough;
+            //     reply();
+            //     return;
+            // }
 
             var endLevel = HeroHelper.GetHeroLevelInfoWithExp(targetHeroCard.GetMessageInfo(), sumExp);
             var lastExp = HeroHelper.GetHeroLevelLastExp(targetHeroCard.GetMessageInfo(), sumExp);

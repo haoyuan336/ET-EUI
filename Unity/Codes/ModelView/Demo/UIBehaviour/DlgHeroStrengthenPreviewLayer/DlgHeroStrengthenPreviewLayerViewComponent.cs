@@ -379,6 +379,57 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Button E_AutoChooseButton
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_AutoChooseButton == null )
+     			{
+		    		this.m_E_AutoChooseButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_AutoChoose");
+     			}
+     			return this.m_E_AutoChooseButton;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_AutoChooseImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_AutoChooseImage == null )
+     			{
+		    		this.m_E_AutoChooseImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_AutoChoose");
+     			}
+     			return this.m_E_AutoChooseImage;
+     		}
+     	}
+
+		public UnityEngine.UI.Text E_NextLevelExpInfoText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_NextLevelExpInfoText == null )
+     			{
+		    		this.m_E_NextLevelExpInfoText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_NextLevelExpInfo");
+     			}
+     			return this.m_E_NextLevelExpInfoText;
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_E_BackButton = null;
@@ -403,6 +454,9 @@ namespace ET
 			this.m_E_OkButtonButton = null;
 			this.m_E_OkButtonImage = null;
 			this.m_E_AddExpText = null;
+			this.m_E_AutoChooseButton = null;
+			this.m_E_AutoChooseImage = null;
+			this.m_E_NextLevelExpInfoText = null;
 			this.uiTransform = null;
 		}
 
@@ -428,6 +482,9 @@ namespace ET
 		private UnityEngine.UI.Button m_E_OkButtonButton = null;
 		private UnityEngine.UI.Image m_E_OkButtonImage = null;
 		private UnityEngine.UI.Text m_E_AddExpText = null;
+		private UnityEngine.UI.Button m_E_AutoChooseButton = null;
+		private UnityEngine.UI.Image m_E_AutoChooseImage = null;
+		private UnityEngine.UI.Text m_E_NextLevelExpInfoText = null;
 		public Transform uiTransform = null;
 	}
 }

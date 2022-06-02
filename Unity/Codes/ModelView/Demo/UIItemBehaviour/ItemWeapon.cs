@@ -209,6 +209,30 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Text E_WeaponTypeText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_WeaponTypeText == null )
+     				{
+		    			this.m_E_WeaponTypeText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_WeaponType");
+     				}
+     				return this.m_E_WeaponTypeText;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_WeaponType");
+     			}
+     		}
+     	}
+
 		public UnityEngine.UI.Toggle E_ChooseToggle
      	{
      		get
@@ -267,6 +291,7 @@ namespace ET
 			this.m_E_CountText = null;
 			this.m_E_ChooseCountText = null;
 			this.m_E_QualityIconImage = null;
+			this.m_E_WeaponTypeText = null;
 			this.m_E_ChooseToggle = null;
 			this.m_E_CheckmarkImage = null;
 			this.uiTransform = null;
@@ -280,6 +305,7 @@ namespace ET
 		private UnityEngine.UI.Text m_E_CountText = null;
 		private UnityEngine.UI.Text m_E_ChooseCountText = null;
 		private UnityEngine.UI.Image m_E_QualityIconImage = null;
+		private UnityEngine.UI.Text m_E_WeaponTypeText = null;
 		private UnityEngine.UI.Toggle m_E_ChooseToggle = null;
 		private UnityEngine.UI.Image m_E_CheckmarkImage = null;
 		public Transform uiTransform = null;

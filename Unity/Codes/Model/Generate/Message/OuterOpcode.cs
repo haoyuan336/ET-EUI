@@ -128,5 +128,9 @@ namespace ET
 		 public const ushort M2C_UpdateHeroRankResponse = 10125;
 		 public const ushort C2M_UpdateHeroStarRequest = 10126;
 		 public const ushort M2C_UpdateHeroStarResponse = 10127;
+		 public const ushort C2M_UpdateOnWeaponRequest = 10128;
+		 public const ushort M2C_UpdateOnWeaponResponse = 10129;
+		 public const ushort C2M_GetOnWeaponsRequest = 10130;
+		 public const ushort M2C_GetOnWeaponsResponse = 10131;
 	}
 }

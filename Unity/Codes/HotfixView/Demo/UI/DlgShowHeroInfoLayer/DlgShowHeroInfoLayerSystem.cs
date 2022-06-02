@@ -16,8 +16,17 @@ namespace ET
             self.View.E_ComposeButton.AddListener(self.OnComposeButtonClick);
             self.View.E_UpRankButton.AddListener(self.OnUpRankButtonClick);
             self.View.E_UpStarButton.AddListener(self.OnUpStarButtonClick);
+            self.View.E_WeaponButton.AddListener(self.OnWeaponButtonClick);
         }
 
+        public static async void OnWeaponButtonClick(this DlgShowHeroInfoLayer self)
+        {
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_HeroWeaponPreviewLayer);
+            UIBaseWindow uiBaseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_HeroWeaponPreviewLayer);
+            uiBaseWindow.GetComponent<DlgHeroWeaponPreviewLayer>().SetTargetInfo(self.HeroCardInfo);
+
+        }
         public static async void OnUpStarButtonClick(this DlgShowHeroInfoLayer self)
         {
             //升星系统

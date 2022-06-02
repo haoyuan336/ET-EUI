@@ -48,13 +48,37 @@ namespace ET
         {
         }
 
+        public static void InitWithItemConfig(this DlgBuyAlert self, ItemConfig config)
+        {
+            self.View.E_IconImage.sprite = null;
+            self.View.E_NameText.text = config.Des;
+        }
+
+        public static async void InitWithWeaponConfig(this DlgBuyAlert self, WeaponsConfig config)
+        {
+            self.View.E_NameText.text = config.Name;
+
+            var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.WeaponAtlasPath, config.IconResName);
+            self.View.E_IconImage.sprite = sprite;
+        }
+
         public static async void SetInfo(this DlgBuyAlert self, GoodsConfig config)
         {
             self.Config = config;
-            
+
+            switch (config.GoodsType)
+            {
+                case (int) GoodsType.Item:
+                    ItemConfig itemConfig = ItemConfigCategory.Instance.Get(config.ConfigId);
+                    self.InitWithItemConfig(itemConfig);
+                    break;
+                case (int) GoodsType.Weapon:
+                    WeaponsConfig weaponsConfig = WeaponsConfigCategory.Instance.Get(config.ConfigId);
+                    self.InitWithWeaponConfig(weaponsConfig);
+                    break;
+            }
+
             // var 
-            ItemConfig itemConfig = ItemConfigCategory.Instance.Get(config.ConfigId);
-            self.View.E_NameText.text = itemConfig.Des;
 
             var moneyType = config.MoneyType;
             var moneyConfig = ItemConfigCategory.Instance.Get(moneyType);

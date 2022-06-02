@@ -19,11 +19,12 @@ namespace ET
 
         public static async void ShowWeaponInfoLayer(this DlgBagLayer self, WeaponInfo weaponInfo)
         {
+            
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             await uiComponent.ShowWindow(WindowID.WindowID_WeaponInfoLayer);
         }
 
-        public static void OnItemWeaponClick(this DlgBagLayer self, WeaponInfo weaponInfo)
+        public static void OnItemWeaponClick(this DlgBagLayer self, WeaponInfo weaponInfo, Scroll_ItemWeapon itemWeapon)
         {
             // UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             // await uiComponent.ShowWindow(WindowID.WindowID_WeaponStrengthenLayer);
@@ -38,6 +39,7 @@ namespace ET
         public static async void ShowWindow(this DlgBagLayer self, Entity contextData = null)
         {
             self.View.ESWeaponBagCommon.ShowWindow();
+            
             await ETTask.CompletedTask;
         }
     }

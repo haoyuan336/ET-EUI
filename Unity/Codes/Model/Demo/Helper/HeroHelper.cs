@@ -14,7 +14,7 @@ namespace ET
         {
             HeroCardInfo info = new HeroCardInfo() { Level = heroCardInfo.Level };
 
-            var exp = 0;
+            var exp = GetNextLevelExp(info);
             while (sumExp >= exp)
             {
                 exp = HeroHelper.GetNextLevelExp(info);

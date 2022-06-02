@@ -39,6 +39,8 @@ namespace ET
         public const int ERR_MAX_Star = 200020; //已经达到英雄的最大星数
 
         public const int ERR_EXP_Not_Enough = 200021; //经验值不够
+
+        public const int ERR_Not_Found_Weapon = 200022; //未找到武器
         // 200001以上不抛异常
     }
 }

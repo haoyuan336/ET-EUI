@@ -979,3 +979,32 @@ message M2C_UpdateHeroStarResponse //IActorLocationResponse
 	string Message = 92;
 	HeroCardInfo HeroCardInfo = 1;
 }
+//ResponseType M2C_UpdateOnWeaponResponse
+message C2M_UpdateOnWeaponRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+	int64 Account = 1;
+	int64 HeroId = 2;
+	int64 WeaponId = 3;	//材料id
+}
+message M2C_UpdateOnWeaponResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	HeroCardInfo HeroCardInfo = 1;
+}
+//ResponseType M2C_GetOnWeaponsResponse
+message C2M_GetOnWeaponsRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+	int64 Account = 1;
+	int64 HeroId = 2;
+}
+message M2C_GetOnWeaponsResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated WeaponInfo WeaponInfos = 1;
+}

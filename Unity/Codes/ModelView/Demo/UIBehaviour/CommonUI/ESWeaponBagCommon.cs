@@ -107,7 +107,7 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Text E_BagCountText
+		public UnityEngine.UI.Text E_BagCountTextText
      	{
      		get
      		{
@@ -116,11 +116,11 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_BagCountText == null )
+     			if( this.m_E_BagCountTextText == null )
      			{
-		    		this.m_E_BagCountText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_BagCount");
+		    		this.m_E_BagCountTextText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_BagCountText");
      			}
-     			return this.m_E_BagCountText;
+     			return this.m_E_BagCountTextText;
      		}
      	}
 
@@ -132,7 +132,7 @@ namespace ET
 			this.m_E_RingToggle = null;
 			this.m_E_ShiPinToggle = null;
 			this.m_E_AllToggle = null;
-			this.m_E_BagCountText = null;
+			this.m_E_BagCountTextText = null;
 			this.uiTransform = null;
 		}
 
@@ -142,7 +142,7 @@ namespace ET
 		private UnityEngine.UI.Toggle m_E_RingToggle = null;
 		private UnityEngine.UI.Toggle m_E_ShiPinToggle = null;
 		private UnityEngine.UI.Toggle m_E_AllToggle = null;
-		private UnityEngine.UI.Text m_E_BagCountText = null;
+		private UnityEngine.UI.Text m_E_BagCountTextText = null;
 		public Transform uiTransform = null;
 	}
 }

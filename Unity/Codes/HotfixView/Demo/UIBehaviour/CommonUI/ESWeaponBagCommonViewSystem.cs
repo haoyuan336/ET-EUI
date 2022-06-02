@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace ET
 {
 	[ObjectSystem]
-	public class ESWeaponBagCommonAwakeSystem : AwakeSystem<ESWeaponBagCommon,Transform> 
+	public partial class ESWeaponBagCommonAwakeSystem : AwakeSystem<ESWeaponBagCommon,Transform> 
 	{
 		public override void Awake(ESWeaponBagCommon self,Transform transform)
 		{

@@ -8,5 +8,6 @@
         public int ConfigId;
         public int Count;
         public int State;
+        public long OnWeaponHeroId; //装备到英雄身上的id
     }
 }

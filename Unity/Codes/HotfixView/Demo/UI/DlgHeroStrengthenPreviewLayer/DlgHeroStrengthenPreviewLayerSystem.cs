@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Vector3 = System.Numerics.Vector3;
 
 namespace ET
 {
@@ -24,6 +26,78 @@ namespace ET
             }
 
             self.View.E_OkButtonButton.AddListenerAsync(self.OnOkButtonClick);
+            self.View.E_AutoChooseButton.AddListenerAsync(self.AutoChooseHeroCard);
+        }
+
+        public static async ETTask AutoChooseHeroCard(this DlgHeroStrengthenPreviewLayer self)
+        {
+            //首先取出玩家的所有英雄
+            var accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            var session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            C2M_GetAllHeroCardListRequest request = new C2M_GetAllHeroCardListRequest() { Account = accountId };
+            M2C_GetAllHeroCardListResponse response = (M2C_GetAllHeroCardListResponse) await session.Call(request);
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                List<HeroCardInfo> heroCardInfos = response.HeroCardInfos;
+                //去掉当前的英雄
+                Log.Debug($"herocard info count {heroCardInfos.Count}");
+                heroCardInfos.RemoveAll(a => a.HeroId.Equals(self.HeroCardInfo.HeroId));
+                Log.Debug($"hero card infos count {heroCardInfos.Count}");
+                heroCardInfos.Sort((a, b) =>
+                {
+                    var configA = HeroConfigCategory.Instance.Get(a.ConfigId);
+                    var configB = HeroConfigCategory.Instance.Get(b.ConfigId);
+                    return configA.HeroQuality - configB.HeroQuality;
+                });
+
+                heroCardInfos.Sort((a, b) =>
+                {
+                    var configA = HeroConfigCategory.Instance.Get(a.ConfigId);
+                    if (configA.MaterialType == (int) HeroBagType.Materail)
+                    {
+                        return -1;
+                    }
+
+                    return 1;
+                });
+
+                var count = 0;
+                var index = 0;
+                self.AlChooseHeroCardInfo.Clear();
+                while (index < 5 && count < 5)
+                {
+                    if (index < heroCardInfos.Count)
+                    {
+                        var heroCard = heroCardInfos[index];
+                        var endCount = count + heroCard.Count;
+                        var add = 1;
+                        if (endCount > 5)
+                        {
+                            add = 5 - count;
+                        }
+                        else
+                        {
+                            add = heroCard.Count;
+                        }
+
+                        count = endCount;
+
+                        self.AlChooseHeroCardInfo.Add(new HeroCardInfo()
+                        {
+                            HeroId = heroCard.HeroId,
+                            Level = heroCard.Level,
+                            Star = heroCard.Star,
+                            Rank = heroCard.Rank,
+                            Count = add,
+                            ConfigId = heroCard.ConfigId
+                        });
+                    }
+
+                    index++;
+                }
+
+                self.ReferChooseHeroCardView();
+            }
         }
 
         public static async ETTask OnOkButtonClick(this DlgHeroStrengthenPreviewLayer self)
@@ -194,6 +268,7 @@ namespace ET
             self.View.E_TotalExpText.text = "累计经验0EXP";
             self.View.E_EndLevelText.text = "LV{-}";
 
+            self.View.E_NextLevelExpInfoText.text = $"{self.HeroCardInfo.CurrentExp}EXP/{HeroHelper.GetNextLevelExp(self.HeroCardInfo)}EXP";
             self.View.E_OkButtonButton.interactable = false;
 
             foreach (var heroCard in self.ESCommonHeroCards)
@@ -361,17 +436,18 @@ namespace ET
 
             int endLevel = HeroHelper.GetHeroLevelInfoWithExp(heroInfo, expSum + self.HeroCardInfo.CurrentExp);
             heroInfo.Level = endLevel;
-            
+
             Log.Debug($"end level {endLevel}");
             Log.Debug($"current hero card level {self.HeroCardInfo.Level}");
-            self.View.E_OkButtonButton.interactable = heroInfo.Level > self.HeroCardInfo.Level;
+            self.View.E_OkButtonButton.interactable = self.AlChooseHeroCardInfo.Count > 0;
+            // self.View.E_OkButtonButton.interactable = heroInfo.Level > self.HeroCardInfo.Level;
             Log.Debug($"end level {heroInfo.Level}");
             // var endLevel = 
             self.View.E_NextLevelText.text = heroInfo.Level > self.HeroCardInfo.Level? $"{heroInfo.Level}" : "-";
             self.View.E_EndLevelText.text = heroInfo.Level > self.HeroCardInfo.Level? $"LV.{heroInfo.Level}" : "LV.-";
             // self.View.E_NextHPText.text = heroInfo.Level> self.HeroCardInfo.Level?$"{heroInfo.}"
             var addExp = HeroHelper.GetHeroLevelLastExp(self.HeroCardInfo, expSum + self.HeroCardInfo.CurrentExp);
-            self.View.E_AddExpText.text = addExp > 0? $"+{addExp}EXP" : "+0EXP";
+            self.View.E_AddExpText.text = heroInfo.Level > self.HeroCardInfo.Level? $"+{addExp}EXP" : "+0EXP";
 
             // self.View.E_NextHPText.text
             self.View.E_NextAttackText.text =
