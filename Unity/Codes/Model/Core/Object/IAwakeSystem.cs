@@ -21,7 +21,12 @@ namespace ET
     public interface IAwake<A, B, C, D>
     {
     }
-    
+
+    public interface IAwakeSystemAsync: ISystemType
+    {
+        ETTask Run(object o);
+    }
+
     public interface IAwakeSystem: ISystemType
     {
         void Run(object o);

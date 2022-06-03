@@ -118,6 +118,10 @@
       <Link>Demo\Weapon\Weapon.cs</Link>
     </Compile>
 
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Weapon\WordBar.cs">
+      <Link>Demo\Weapon\WordBar.cs</Link>
+    </Compile>
+
     <Compile Include="..\..\Unity\Codes\Model\Module\Recast\**\*.cs">
       <Link>Module\Recast\%(RecursiveDir)%(FileName)%(Extension)</Link>
     </Compile>

@@ -341,6 +341,32 @@ namespace ET
             }
         }
 
+        public async ETTask AwakeAsync(Entity component)
+        {
+            List<object> iAwakeSystems = this.typeSystems.GetSystems(component.GetType(), typeof (IAwakeSystemAsync));
+            if (iAwakeSystems == null)
+            {
+                return;
+            }
+
+            foreach (IAwakeSystemAsync aAwakeSystem in iAwakeSystems)
+            {
+                if (aAwakeSystem == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    await aAwakeSystem.Run(component);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }
+        }
+
         public void Awake(Entity component)
         {
             List<object> iAwakeSystems = this.typeSystems.GetSystems(component.GetType(), typeof (IAwakeSystem));

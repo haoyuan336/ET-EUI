@@ -38,10 +38,11 @@ namespace ET
 
             //找到已经装备的英雄
             List<Weapon> onWeapons = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
-                    .Query<Weapon>(a => a.OnWeaponHeroId.Equals(accountId) && a.State == (int) StateType.Active);
+                    .Query<Weapon>(a => a.OnWeaponHeroId.Equals(heroId) && a.State == (int) StateType.Active);
+            // Log.Warning($"已经装备了的装备信息{onWeapons.Count}");
             //取出来，所有已经装备了的装备， 找到与将要装备相同类型的装备
             WeaponsConfig targetConfig = WeaponsConfigCategory.Instance.Get(targetWeapon.ConfigId);
-            Weapon weapon = onWeapons.Find(a =>
+            List<Weapon> oldWeapons = onWeapons.FindAll(a =>
             {
                 var config = WeaponsConfigCategory.Instance.Get(a.ConfigId);
                 if (config.WeaponType == targetConfig.WeaponType && !a.Id.Equals(targetConfig.Id))
@@ -51,12 +52,20 @@ namespace ET
 
                 return false;
             });
-            if (weapon != null)
+            
+            // Log.Warning($"old weapons  {oldWeapons.Count}");
+            if (oldWeapons.Count != 0)
             {
                 //说明原位置已经装备了武器了，需要将此装备移除
-                weapon.OnWeaponHeroId = 0;
-                await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(weapon);
-                weapon.Dispose();
+                List<ETTask> tasks = new List<ETTask>();
+                foreach (var weapon in oldWeapons)
+                {
+                    weapon.OnWeaponHeroId = 0;
+                    tasks.Add(DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(weapon));
+                    weapon.Dispose();
+                }
+
+                await ETTaskHelper.WaitAll(tasks);
             }
 
             //然后储存当前装备
@@ -64,7 +73,7 @@ namespace ET
             await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(targetWeapon);
             targetWeapon.Dispose();
             response.Error = ErrorCode.ERR_Success;
-            
+
             reply();
             await ETTask.CompletedTask;
         }

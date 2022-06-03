@@ -816,6 +816,7 @@ message WeaponInfo
 	int32 ConfigId = 2;
 	int32 Count = 3;
 	int32 Level = 4;
+	int64 OnWeaponHeroId = 5;
 	
 
 }
@@ -957,8 +958,7 @@ message C2M_GetHeroCardByIdRequest //IActorLocationRequest
 {
 	int RpcId = 90;
 	int64 Account = 1;
-	string Token = 3;
-	int32 BagType = 4;
+	int64 HeroId = 2;
 }
 message M2C_GetHeroCardByIdResponse //IActorLocationResponse
 {
@@ -1025,4 +1025,27 @@ message M2C_GetOnWeaponsResponse //IActorLocationResponse
 	int32 Error = 91;
 	string Message = 92;
 	repeated WeaponInfo WeaponInfos = 1;
+}
+//ResponseType M2C_GetWeaponWordBarsResponse
+message C2M_GetWeaponWordBarsRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+	int64 Account = 1;
+	int64 WeaponId = 2;
+}
+message M2C_GetWeaponWordBarsResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated WordBarInfo WordBarInfos = 1;
+}
+message WordBarInfo
+{
+	int64 WordBarId = 1;
+	int64 OnwerId = 2;
+	int64 ConfigId = 3;
+	int64 Value = 4;
+	bool IsMain = 5;	//是否是主词条
+
 }

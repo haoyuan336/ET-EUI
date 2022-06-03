@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ET
@@ -11,9 +12,7 @@ namespace ET
             long accountId = request.AccountId;
             HeroCardInfo targetHeroCardInfo = request.TargetHeroCardInfo;
             List<HeroCardInfo> heroCardInfos = request.ChooseHeroCardInfos;
-
             bool isCon = heroCardInfos.Exists(a => a.HeroId.Equals(targetHeroCardInfo.HeroId));
-
             if (isCon)
             {
                 //材料里面包含英雄，错误
@@ -22,43 +21,69 @@ namespace ET
                 return;
             }
 
-            List<HeroCard> targetHeroCards = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<HeroCard>(a =>
-                    a.OwnerId.Equals(accountId) && a.Id.Equals(targetHeroCardInfo.HeroId) && a.State == (int) HeroCardState.Active);
-            if (targetHeroCards.Count == 0)
+            List<HeroCard> allHeroCard = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
+                    .Query<HeroCard>(a => a.OwnerId.Equals(accountId) && a.State == (int) StateType.Active);
+            HeroCard targetHeroCard = allHeroCard.Find(a => a.Id.Equals(targetHeroCardInfo.HeroId));
+            if (targetHeroCard == null)
             {
                 response.Error = ErrorCode.ERR_NotFoundHero;
                 reply();
                 return;
             }
 
-            HeroCard targetHeroCard = targetHeroCards[0];
-
+            // Dictionary<long, HeroCard> materialHeroCards =  allHeroCard.ToDictionary(hero);
             List<HeroCard> materialHeroCards = new List<HeroCard>();
-            List<ETTask<List<HeroCard>>> taskList = new List<ETTask<List<HeroCard>>>();
+            Dictionary<long, HeroCard> allHeroCardMap = allHeroCard.ToDictionary(a => a.Id, a => a);
+
             foreach (var heroCardInfo in heroCardInfos)
             {
-                List<HeroCard> list = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<HeroCard>(a =>
-                        a.OwnerId.Equals(accountId) && a.Id.Equals(heroCardInfo.HeroId) && a.State == (int) HeroCardState.Active);
-                if (list.Count == 0)
+                HeroCard card = allHeroCardMap[heroCardInfo.HeroId];
+
+                if (heroCardInfo.Count > card.Count)
                 {
-                    response.Error = ErrorCode.ERR_NotFoundHero;
+                    response.Error = ErrorCode.ERR_MaterialNotEnough;
                     reply();
                     return;
                 }
-                else
-                {
-                    HeroCard material = list[0];
-                    var needHeroCardInfo = heroCardInfos.Find(a => a.HeroId.Equals(material.Id) && a.Count <= material.Count);
-                    if (needHeroCardInfo == null)
-                    {
-                        response.Error = ErrorCode.ERR_MaterialNotEnough;
-                        reply();
-                        return;
-                    }
-                    //将所有的材料取出来
-                    materialHeroCards.Add(material);
-                }
+                materialHeroCards.Add(card);
             }
+            
+            
+
+            // List<HeroCard> materialHeroCards = allHeroCard.FindAll(a =>
+            // {
+            //     var materialInfo = heroCardInfos.Find(b => a.Id.Equals(b.HeroId));
+            //
+            //     
+            //     return isCon;
+            // });
+
+            // List<HeroCard>
+            // List<ETTask<List<HeroCard>>> taskList = new List<ETTask<List<HeroCard>>>();
+            // foreach (var heroCardInfo in heroCardInfos)
+            // {
+            //     List<HeroCard> list = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<HeroCard>(a =>
+            //             a.OwnerId.Equals(accountId) && a.Id.Equals(heroCardInfo.HeroId) && a.State == (int) HeroCardState.Active);
+            //     if (list.Count == 0)
+            //     {
+            //         response.Error = ErrorCode.ERR_NotFoundHero;
+            //         reply();
+            //         return;
+            //     }
+            //     else
+            //     {
+            //         HeroCard material = list[0];
+            //         var needHeroCardInfo = heroCardInfos.Find(a => a.HeroId.Equals(material.Id) && a.Count <= material.Count);
+            //         if (needHeroCardInfo == null)
+            //         {
+            //             response.Error = ErrorCode.ERR_MaterialNotEnough;
+            //             reply();
+            //             return;
+            //         }
+            //         //将所有的材料取出来
+            //         materialHeroCards.Add(material);
+            //     }
+            // }
 
             // var needExp = HeroHelper.GetNextLevelExp(targetHeroCard.GetMessageInfo());
             var sumExp = targetHeroCard.CurrentExp;

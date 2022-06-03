@@ -935,6 +935,17 @@ namespace ET
             return component;
         }
 
+        // public async ETTask<T> AddChildWidthIdAsync<T>(long id, bool isFromPool = false) where T: Entity,IAwake, new()
+        // {
+        //     Type type = typeof (T);
+        //     T component = Entity.Create(type, isFromPool) as T;
+        //     component.Id = id;
+        //     component.Parent = this;
+        //     await EventSystem.Instance.AwakeAsync(component);
+        //     // return component;
+        //     // await ETTask.CompletedTask;
+        // }
+
         public T AddChildWithId<T, A>(long id, A a, bool isFromPool = false) where T : Entity, IAwake<A>
         {
             Type type = typeof (T);

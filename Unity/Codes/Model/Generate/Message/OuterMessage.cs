@@ -1776,6 +1776,9 @@ namespace ET
 		[ProtoMember(4)]
 		public int Level { get; set; }
 
+		[ProtoMember(5)]
+		public long OnWeaponHeroId { get; set; }
+
 	}
 
 	[Message(OuterOpcode.GoodsInfo)]
@@ -2076,11 +2079,8 @@ namespace ET
 		[ProtoMember(1)]
 		public long Account { get; set; }
 
-		[ProtoMember(3)]
-		public string Token { get; set; }
-
-		[ProtoMember(4)]
-		public int BagType { get; set; }
+		[ProtoMember(2)]
+		public long HeroId { get; set; }
 
 	}
 
@@ -2241,6 +2241,61 @@ namespace ET
 
 		[ProtoMember(1)]
 		public List<WeaponInfo> WeaponInfos = new List<WeaponInfo>();
+
+	}
+
+	[ResponseType(nameof(M2C_GetWeaponWordBarsResponse))]
+	[Message(OuterOpcode.C2M_GetWeaponWordBarsRequest)]
+	[ProtoContract]
+	public partial class C2M_GetWeaponWordBarsRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long Account { get; set; }
+
+		[ProtoMember(2)]
+		public long WeaponId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetWeaponWordBarsResponse)]
+	[ProtoContract]
+	public partial class M2C_GetWeaponWordBarsResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<WordBarInfo> WordBarInfos = new List<WordBarInfo>();
+
+	}
+
+	[Message(OuterOpcode.WordBarInfo)]
+	[ProtoContract]
+	public partial class WordBarInfo: Object
+	{
+		[ProtoMember(1)]
+		public long WordBarId { get; set; }
+
+		[ProtoMember(2)]
+		public long OnwerId { get; set; }
+
+		[ProtoMember(3)]
+		public long ConfigId { get; set; }
+
+		[ProtoMember(4)]
+		public long Value { get; set; }
+
+		[ProtoMember(5)]
+		public bool IsMain { get; set; }
 
 	}
 

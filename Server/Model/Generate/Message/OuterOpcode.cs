@@ -134,5 +134,8 @@ namespace ET
 		 public const ushort M2C_UpdateOnWeaponResponse = 10131;
 		 public const ushort C2M_GetOnWeaponsRequest = 10132;
 		 public const ushort M2C_GetOnWeaponsResponse = 10133;
+		 public const ushort C2M_GetWeaponWordBarsRequest = 10134;
+		 public const ushort M2C_GetWeaponWordBarsResponse = 10135;
+		 public const ushort WordBarInfo = 10136;
 	}
 }

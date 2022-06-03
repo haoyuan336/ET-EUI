@@ -22,6 +22,9 @@ namespace ET
             
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             await uiComponent.ShowWindow(WindowID.WindowID_WeaponInfoLayer);
+
+            UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_WeaponInfoLayer);
+            baseWindow.GetComponent<DlgWeaponInfoLayer>().SetTargetInfo(weaponInfo);
         }
 
         public static void OnItemWeaponClick(this DlgBagLayer self, WeaponInfo weaponInfo, Scroll_ItemWeapon itemWeapon)

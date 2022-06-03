@@ -42,7 +42,7 @@ namespace ET
                 }
             }
             var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
-            // Log.Debug("Head image load succcess");
+            Log.Debug("Head image load succcess");
             self.E_HeadImage.sprite = headImage;
         }
     }

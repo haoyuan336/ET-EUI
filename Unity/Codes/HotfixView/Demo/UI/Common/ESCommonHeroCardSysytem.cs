@@ -51,6 +51,7 @@ namespace ET
             gameObject.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
             gameObject.GetComponent<RectTransform>().offsetMax = Vector2.zero;
             gameObject.GetComponent<RectTransform>().offsetMin = Vector2.zero;
+            gameObject.GetComponent<RectTransform>().localScale = Vector3.one;
 
             self.GameObject = gameObject;
             self.E_HeadImage = UIFindHelper.FindDeepChild(gameObject, "E_Head").GetComponent<Image>();
