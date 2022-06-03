@@ -119,7 +119,8 @@ namespace ET
             }
             else
             {
-                itemWeapon.E_ChooseCountText.gameObject.SetActive(false);
+                itemWeapon.E_CountText.text = "";
+                itemWeapon.E_ChooseCountText.text = "";
                 itemWeapon.E_ChooseToggle.gameObject.SetActive(false);
                 itemWeapon.E_ChooseToggle.onValueChanged.RemoveAllListeners();
                 itemWeapon.E_QualityIconImage.gameObject.SetActive(false);

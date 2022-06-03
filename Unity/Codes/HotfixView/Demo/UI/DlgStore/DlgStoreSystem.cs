@@ -68,21 +68,42 @@ namespace ET
         {
             Log.Debug("ok buy button click");
             // // Log.Debug($"config id {self.Config.Id}");
+
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             var accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            M2C_BuyGoodsResponse response = (M2C_BuyGoodsResponse) await session.Call(new C2M_BuyGoodsRequest()
-            {
-                Count = 1, ConfigId = config.Id, AccountId = accountId
-            });
-            if (response.Error == ErrorCode.ERR_Success)
-            {
-                Log.Debug("success ");
-                UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_GoldInfoUI);
-                baseWindow.GetComponent<DlgGoldInfoUI>().ReferGoldInfo();
-            }
 
-            //
-            // await ETTask.CompletedTask;
+            switch (config.GoodsType)
+            {
+                case (int) GoodsType.Item:
+                {
+                    M2C_BuyGoodsResponse response = (M2C_BuyGoodsResponse) await session.Call(new C2M_BuyGoodsRequest()
+                    {
+                        Count = 1, ConfigId = config.Id, AccountId = accountId
+                    });
+                    if (response.Error == ErrorCode.ERR_Success)
+                    {
+                        Log.Debug("success ");
+                        UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_GoldInfoUI);
+                        baseWindow.GetComponent<DlgGoldInfoUI>().ReferGoldInfo();
+                    }
+                }
+
+                    break;
+                case (int) GoodsType.Weapon:
+                {
+                    M2C_BuyWeaponsResponse response = (M2C_BuyWeaponsResponse) await session.Call(new C2M_BuyWeaponsRequest()
+                    {
+                        Count = 1, ConfigId = config.Id, AccountId = accountId
+                    });
+                    if (response.Error == ErrorCode.ERR_Success)
+                    {
+                        Log.Debug("buy weapon success ");
+                        UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_GoldInfoUI);
+                        baseWindow.GetComponent<DlgGoldInfoUI>().ReferGoldInfo();
+                    }
+                }
+                    break;
+            }
         }
 
         /// <summary>
@@ -90,7 +111,6 @@ namespace ET
         /// </summary>
         public static void ShowAllWeapon(this DlgStore self)
         {
-     
             List<GoodsConfig> configs = GoodsConfigCategory.Instance.GetAll().Values.ToList();
             self.GoodsConfigs.Clear();
             foreach (var config in configs)

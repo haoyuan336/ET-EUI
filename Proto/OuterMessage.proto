@@ -842,6 +842,24 @@ message M2C_BuyGoodsResponse	//IActorLocationResponse
 	ItemInfo ItemInfo = 2;
 
 }
+
+//ResponseType M2C_BuyWeaponsResponse
+message C2M_BuyWeaponsRequest	// IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int32 Count = 2;
+	int32 ConfigId = 3;
+}
+message M2C_BuyWeaponsResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	WeaponInfo WeaponInfo = 2;
+
+}
+
 //ResponseType M2C_GetAllWeaponsResponse
 message C2M_GetAllWeaponsRequest //IActorLocationRequest
 {
