@@ -81,6 +81,14 @@ namespace ET
 		public int MaxValue { get; set; }
 		[ProtoMember(6)]
 		public string Name { get; set; }
+		[ProtoMember(7)]
+		public int WordBarType { get; set; }
+		[ProtoMember(8)]
+		public int NumberType { get; set; }
+		[ProtoMember(9)]
+		public int WeaponType { get; set; }
+		[ProtoMember(10)]
+		public string QualityIcon { get; set; }
 
 	}
 }

@@ -1044,8 +1044,8 @@ message WordBarInfo
 {
 	int64 WordBarId = 1;
 	int64 OnwerId = 2;
-	int64 ConfigId = 3;
-	int64 Value = 4;
+	int32 ConfigId = 3;
+	int32 Value = 4;
 	bool IsMain = 5;	//是否是主词条
 
 }

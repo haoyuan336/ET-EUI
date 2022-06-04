@@ -2289,10 +2289,10 @@ namespace ET
 		public long OnwerId { get; set; }
 
 		[ProtoMember(3)]
-		public long ConfigId { get; set; }
+		public int ConfigId { get; set; }
 
 		[ProtoMember(4)]
-		public long Value { get; set; }
+		public int Value { get; set; }
 
 		[ProtoMember(5)]
 		public bool IsMain { get; set; }

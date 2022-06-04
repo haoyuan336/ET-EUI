@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ET
 {
@@ -38,6 +39,28 @@ namespace ET
                     response.WeaponInfo = item.GetInfo();
                     response.Error = ErrorCode.ERR_Success;
                     await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(item);
+                    var weaponType = itemConfig.WeaponType;
+                    //从配置里面取出来所有武器类型的词条
+
+                    List<WeaponWordBarsConfig> wordBarsConfigs = WeaponWordBarsConfigCategory.Instance.GetAll().Values.ToList()
+                            .FindAll(a => a.WeaponType == weaponType && a.Star == itemConfig.Star);
+
+                    //从列表里面随机一条数据出来
+                    WeaponWordBarsConfig wordBarsConfig = wordBarsConfigs.RandomArray();
+
+                    var wordBar = new WordBar()
+                    {
+                        Id = IdGenerater.Instance.GenerateId(),
+                        OwnerId = item.Id,
+                        ConfigId = wordBarsConfig.Id,
+                        IsMain = true,
+                        State = (int) StateType.Active,
+                        Value = RandomHelper.RandomNumber(wordBarsConfig.MinValue, wordBarsConfig.MaxValue + 1)
+                    };
+                    //给新创建的装备叠加词条
+                    //
+                    await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(wordBar);
+
                     item.Dispose();
                 }
                 else

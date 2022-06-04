@@ -24,6 +24,14 @@ namespace ET
                 self.CurrentHeroCardItem?.Dispose();
                 self.CurrentHeroCardItem = null;
             }
+
+            foreach (var item in self.WordBarItems)
+            {
+                GameObject.Destroy(item.uiTransform.gameObject);
+                item.Dispose();
+            }
+
+            self.WordBarItems.Clear();
         }
 
         public static async ETTask InitWordBarItems(this DlgWeaponInfoLayer self)
@@ -33,8 +41,11 @@ namespace ET
                 return;
             }
 
+            WeaponsConfig config = WeaponsConfigCategory.Instance.Get(self.WeaponInfo.ConfigId);
+            var wordsCount = config.WordBarCount;
             var prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>("Assets/Bundles/UI/Common/ESCommonWordBar.prefab");
-            for (int i = 0; i < 4; i++)
+
+            for (int i = 0; i < wordsCount + 1; i++)
             {
                 // var gameObject = AddressableComponent.
                 var gameObject = GameObject.Instantiate(prefab);
@@ -135,7 +146,18 @@ namespace ET
                 // wordbars.Add(wordbars);
                 // }
                 List<WordBarInfo> infos = response.WordBarInfos;
-                Log.Debug("获取装备词条成功");
+                Log.Debug($"获取装备词条成功{infos.Count}");
+
+                infos.Sort((a, b) =>
+                {
+                    if (b.IsMain)
+                    {
+                        return 1;
+                    }
+
+                    return -1;
+                });
+
                 //分别设置四个词条的信息
                 for (int i = 0; i < self.WordBarItems.Count; i++)
                 {
