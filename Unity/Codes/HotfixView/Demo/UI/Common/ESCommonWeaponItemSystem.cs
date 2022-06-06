@@ -22,7 +22,6 @@ namespace ET
             typeNames.Add(WeaponType.Ring, "戒指");
             typeNames.Add(WeaponType.Weapon, "武器");
 
-
             self.E_AddText = UIFindHelper.FindDeepChild(b.gameObject, "E_AddText").gameObject;
             self.E_WeaponType = UIFindHelper.FindDeepChild(b.gameObject, "E_WeaponType").gameObject;
             self.E_Level = UIFindHelper.FindDeepChild(b.gameObject, "E_Level").gameObject;
@@ -40,6 +39,7 @@ namespace ET
             {
                 self.ReferInfo();
             }
+
             self.Awake();
         }
     }
@@ -54,13 +54,10 @@ namespace ET
 
         public static void OnWeaponItemClick(this ESCommonWeaponItem self, bool value)
         {
-            if (value)
+            // self.E_Choose.GetComponent<Toggle>().isOn = false;
+            if (self.OnWeaponItemClickAction != null)
             {
-                self.E_Choose.GetComponent<Toggle>().isOn = false;
-                if (self.OnWeaponItemClickAction != null)
-                {
-                    self.OnWeaponItemClickAction(self.CurrentType);
-                }
+                self.OnWeaponItemClickAction(self.CurrentType, self, value);
             }
         }
 
@@ -71,6 +68,7 @@ namespace ET
                 Log.Debug("装备还未初始化");
                 return;
             }
+
             WeaponsConfig config = WeaponsConfigCategory.Instance.Get(self.WeaponInfo.ConfigId);
             Sprite sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.WeaponAtlasPath, config.IconResName);
             self.E_Weapon.GetComponent<Image>().sprite = sprite;

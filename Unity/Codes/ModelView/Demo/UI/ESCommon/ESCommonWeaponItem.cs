@@ -15,7 +15,7 @@ namespace ET
         public GameObject E_Choose;
         public GameObject E_WeaponType;
 
-        public Action<WeaponType> OnWeaponItemClickAction;
+        public Action<WeaponType,ESCommonWeaponItem, bool> OnWeaponItemClickAction;
         public WeaponType CurrentType;
         public WeaponInfo WeaponInfo;
     }

@@ -25,6 +25,11 @@ namespace ET
                 //添加相应的道具
                 WeaponsConfig itemConfig = WeaponsConfigCategory.Instance.Get(goodsConfig.ConfigId);
                 //获取玩家是否拥有此类型的道具
+                
+                // List<Weapon> weapons = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<Weapon>(a=>a.OwnerId.Equals(accountId) && a.State ==(int)StateType.Active)
+                
+                        
+                        
                 if (itemConfig.MaterialType == (int) WeaponBagType.Weapon)
                 {
                     //储存道具
@@ -63,11 +68,12 @@ namespace ET
 
                     item.Dispose();
                 }
-                else
+                else if (itemConfig.MaterialType == (int)WeaponBagType.Materail)
                 {
                     List<Weapon> items = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<Weapon>(a =>
                             a.OwnerId.Equals(accountId) && a.State.Equals(StateType.Active) && a.ConfigId.Equals(itemConfig.Id));
                     //todo 道具属于叠加道具，需要在原有道具基础上增加数目
+                    Log.Warning($"items {items.Count}");
                     if (items.Count > 0)
                     {
                         items[0].Count += count;

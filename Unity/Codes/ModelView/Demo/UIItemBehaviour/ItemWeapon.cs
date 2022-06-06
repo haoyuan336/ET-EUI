@@ -137,30 +137,6 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Text E_CountText
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if (this.isCacheNode)
-     			{
-     				if( this.m_E_CountText == null )
-     				{
-		    			this.m_E_CountText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Count");
-     				}
-     				return this.m_E_CountText;
-     			}
-     			else
-     			{
-		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Count");
-     			}
-     		}
-     	}
-
 		public UnityEngine.UI.Text E_ChooseCountText
      	{
      		get
@@ -181,6 +157,30 @@ namespace ET
      			else
      			{
 		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_ChooseCount");
+     			}
+     		}
+     	}
+
+		public UnityEngine.UI.Text E_CountText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_CountText == null )
+     				{
+		    			this.m_E_CountText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Count");
+     				}
+     				return this.m_E_CountText;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Count");
      			}
      		}
      	}
@@ -288,8 +288,8 @@ namespace ET
 			this.m_E_AddTextText = null;
 			this.m_E_LevelText = null;
 			this.m_E_InTroopMarkImage = null;
-			this.m_E_CountText = null;
 			this.m_E_ChooseCountText = null;
+			this.m_E_CountText = null;
 			this.m_E_QualityIconImage = null;
 			this.m_E_WeaponTypeText = null;
 			this.m_E_ChooseToggle = null;
@@ -302,8 +302,8 @@ namespace ET
 		private UnityEngine.UI.Text m_E_AddTextText = null;
 		private UnityEngine.UI.Text m_E_LevelText = null;
 		private UnityEngine.UI.Image m_E_InTroopMarkImage = null;
-		private UnityEngine.UI.Text m_E_CountText = null;
 		private UnityEngine.UI.Text m_E_ChooseCountText = null;
+		private UnityEngine.UI.Text m_E_CountText = null;
 		private UnityEngine.UI.Image m_E_QualityIconImage = null;
 		private UnityEngine.UI.Text m_E_WeaponTypeText = null;
 		private UnityEngine.UI.Toggle m_E_ChooseToggle = null;

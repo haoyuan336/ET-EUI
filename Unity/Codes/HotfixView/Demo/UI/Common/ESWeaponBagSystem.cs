@@ -93,7 +93,8 @@ namespace ET
 
                 return false;
             });
-            // }
+            // }s
+            Log.Debug($"weapin info {self.WeaponInfos.Count}");
 
             self.E_WeaponLoopVerticalScrollRect.RefreshCells();
         }
@@ -103,19 +104,51 @@ namespace ET
             Scroll_ItemWeapon itemWeapon = self.ItemWeapons[index].BindTrans(transform);
             itemWeapon.E_ChooseToggle.onValueChanged.RemoveAllListeners();
             itemWeapon.E_ChooseToggle.isOn = false;
+            itemWeapon.E_ChooseToggle.interactable = true;
+
             if (index < self.WeaponInfos.Count)
             {
                 WeaponInfo info = self.WeaponInfos[index];
                 itemWeapon.InitWeaponCardView(info);
                 itemWeapon.E_ChooseToggle.gameObject.SetActive(true);
+                itemWeapon.E_ChooseToggle.onValueChanged.RemoveAllListeners();
+
+                itemWeapon.E_ChooseToggle.isOn = false;
+                if (self.AlChooseWeaponInfos != null && self.AlChooseWeaponInfos.Exists(a=>a.WeaponId.Equals(info.WeaponId)))
+                {
+                    WeaponsConfig weaponsConfig = WeaponsConfigCategory.Instance.Get(info.ConfigId);
+                    if (weaponsConfig.MaterialType == (int) WeaponBagType.Weapon)
+                    {
+                        itemWeapon.E_ChooseToggle.isOn = true;
+                        
+                    }else if (weaponsConfig.MaterialType == (int) WeaponBagType.Materail)
+                    {
+                        WeaponInfo weaponInfo = self.AlChooseWeaponInfos.Find(a => a.WeaponId.Equals(info.WeaponId));
+                        itemWeapon.E_ChooseCountText.text = weaponInfo.Count.ToString();
+                        itemWeapon.E_ChooseCountText.gameObject.SetActive(weaponInfo.Count > 0);
+                        
+                    }
+                }
+                
                 itemWeapon.E_ChooseToggle.onValueChanged.AddListener((value) =>
                 {
-                    if (value)
-                    {
-                        itemWeapon.E_ChooseToggle.isOn = false;
-                        self.WeaponItemClickAction(info, itemWeapon);
-                    }
+                    // if (value)
+                    // {
+                    //     itemWeapon.E_ChooseToggle.isOn = false;
+                    self.WeaponItemClickAction(info, itemWeapon, value);
+                    // }
                 });
+
+                if (self.UnableWeaponInfo != null && info.WeaponId.Equals(self.UnableWeaponInfo.WeaponId))
+                {
+                    itemWeapon.E_ChooseToggle.interactable = false;
+                }
+
+                if (self.EnableWeaponInfos != null && !self.EnableWeaponInfos.Exists(a=>a.WeaponId.Equals(info.WeaponId)))
+                {
+                    
+                    itemWeapon.E_ChooseToggle.interactable = false;
+                }
             }
             else
             {
@@ -157,7 +190,6 @@ namespace ET
 
         public static void ShowWindowWidthLockType(this ESWeaponBagCommon self, WeaponType type)
         {
-
             var index = 0;
             for (int i = 0; i < self.WeaponTypes.Length; i++)
             {
@@ -165,9 +197,9 @@ namespace ET
                 {
                     index = i;
                     break;
-                }   
+                }
             }
-            
+
             List<Toggle> toggleButtons = new List<Toggle>()
             {
                 self.E_WeaponToggle,
@@ -181,6 +213,7 @@ namespace ET
             {
                 toggle.interactable = true;
             }
+
             toggleButtons[index].isOn = true;
             self.FiltType(type);
             for (int i = 0; i < toggleButtons.Count; i++)
@@ -207,9 +240,28 @@ namespace ET
             {
                 toggle.interactable = true;
             }
+
             // //todo 首先取出来，玩家拥有的所有装备
             self.FiltType(WeaponType.Invalide);
             self.E_AllToggle.isOn = true;
+        }
+
+        public static void SetUnAbleWeaponInfo(this ESWeaponBagCommon self, WeaponInfo weaponInfo)
+        {
+            self.UnableWeaponInfo = weaponInfo;
+            self.E_WeaponLoopVerticalScrollRect.RefillCells();
+        }
+
+        public static void SetAlChooseWeaponInfos(this ESWeaponBagCommon self, List<WeaponInfo> weaponInfos)
+        {
+            self.AlChooseWeaponInfos = weaponInfos;
+            self.E_WeaponLoopVerticalScrollRect.RefillCells();
+        }
+
+        public static void SetEnableWeaponInfos(this ESWeaponBagCommon self, List<WeaponInfo> weaponInfos)
+        {
+            self.EnableWeaponInfos = weaponInfos;
+            self.E_WeaponLoopVerticalScrollRect.RefillCells();
         }
     }
 }

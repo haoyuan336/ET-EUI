@@ -21,13 +21,17 @@ namespace ET
             self.View.ESWeaponBagCommon.WeaponItemClickAction = self.OnItemWeaponClick;
         }
 
-        public static void OnItemWeaponClick(this DlgChooseWeaponLayer self, WeaponInfo weaponInfo, Scroll_ItemWeapon itemWeapon)
+        public static void OnItemWeaponClick(this DlgChooseWeaponLayer self, WeaponInfo weaponInfo, Scroll_ItemWeapon itemWeapon, bool value)
         {
-            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_ChooseWeaponLayer);
-
-            if (self.OnWeaponItemClickAction != null)
+            if (value)
             {
-                self.OnWeaponItemClickAction(weaponInfo);
+                itemWeapon.E_ChooseToggle.isOn = false;
+                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_ChooseWeaponLayer);
+
+                if (self.OnWeaponItemClickAction != null)
+                {
+                    self.OnWeaponItemClickAction(weaponInfo);
+                }
             }
         }
 
@@ -40,6 +44,18 @@ namespace ET
         {
             // self.View.ESWeaponBagCommon.
             self.View.ESWeaponBagCommon.ShowWindowWidthLockType(type);
+        }
+
+        public static void HideWindow(this DlgChooseWeaponLayer self)
+        {
+            self.AlChooseWeaponInfo = null;
+        }
+
+        public static void SetAlChooseWeaponInfo(this DlgChooseWeaponLayer self, WeaponInfo weaponInfo)
+        {
+            //todo 显示当前装备的武器
+            // self.AlChooseWeaponInfo = weaponInfo;
+            // self.View.ESWeaponBagCommon.SetAlChooseWeaponInfo();
         }
     }
 }

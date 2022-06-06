@@ -1779,6 +1779,9 @@ namespace ET
 		[ProtoMember(5)]
 		public long OnWeaponHeroId { get; set; }
 
+		[ProtoMember(6)]
+		public int CurrentExp { get; set; }
+
 	}
 
 	[Message(OuterOpcode.GoodsInfo)]
@@ -2296,6 +2299,44 @@ namespace ET
 
 		[ProtoMember(5)]
 		public bool IsMain { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_StrengthenWeaponResponse))]
+	[Message(OuterOpcode.C2M_StrengthenWeaponRequest)]
+	[ProtoContract]
+	public partial class C2M_StrengthenWeaponRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public WeaponInfo TargetWeaponInfo { get; set; }
+
+		[ProtoMember(3)]
+		public List<WeaponInfo> ChooseWeaponInfos = new List<WeaponInfo>();
+
+	}
+
+	[Message(OuterOpcode.M2C_StrengthenWeaponResponse)]
+	[ProtoContract]
+	public partial class M2C_StrengthenWeaponResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+// repeated WeaponInfo WeaponInfos = 1;
+		[ProtoMember(1)]
+		public WeaponInfo WeaponInfo { get; set; }
 
 	}
 

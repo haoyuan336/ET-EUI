@@ -817,6 +817,7 @@ message WeaponInfo
 	int32 Count = 3;
 	int32 Level = 4;
 	int64 OnWeaponHeroId = 5;
+	int32 CurrentExp = 6;	//装备当前剩余的经验值
 	
 
 }
@@ -1048,4 +1049,21 @@ message WordBarInfo
 	int32 Value = 4;
 	bool IsMain = 5;	//是否是主词条
 
+}
+
+//ResponseType M2C_StrengthenWeaponResponse
+message C2M_StrengthenWeaponRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	WeaponInfo TargetWeaponInfo = 2;	//目标英雄信息
+	repeated WeaponInfo ChooseWeaponInfos = 3;	//选择的材料的信息
+}
+message M2C_StrengthenWeaponResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	// repeated WeaponInfo WeaponInfos = 1;
+	WeaponInfo WeaponInfo = 1;	//升级完成的英雄信息
 }

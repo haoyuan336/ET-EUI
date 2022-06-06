@@ -11,5 +11,7 @@ namespace ET
 
 		
 		public Action<WeaponInfo> OnWeaponItemClickAction;
+
+		public WeaponInfo AlChooseWeaponInfo;
 	}
 }

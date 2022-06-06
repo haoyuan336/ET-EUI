@@ -27,7 +27,7 @@ namespace ET
             baseWindow.GetComponent<DlgWeaponInfoLayer>().SetTargetInfo(weaponInfo);
         }
 
-        public static void OnItemWeaponClick(this DlgBagLayer self, WeaponInfo weaponInfo, Scroll_ItemWeapon itemWeapon)
+        public static void OnItemWeaponClick(this DlgBagLayer self, WeaponInfo weaponInfo, Scroll_ItemWeapon itemWeapon, bool value)
         {
             // UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             // await uiComponent.ShowWindow(WindowID.WindowID_WeaponStrengthenLayer);
@@ -35,9 +35,25 @@ namespace ET
             // DlgWeaponStrengthenLayer strengthenLayer = baseWindow.GetComponent<DlgWeaponStrengthenLayer>();
             // strengthenLayer.SetInfo(weaponInfo);
             // await ETTask.CompletedTask;
-            self.ShowWeaponInfoLayer(weaponInfo);
+            if (value)
+            {
+                itemWeapon.E_ChooseToggle.isOn = false;
+                WeaponsConfig config = WeaponsConfigCategory.Instance.Get(weaponInfo.ConfigId);
+
+                if (config.MaterialType == (int)WeaponBagType.Weapon)
+                {
+                    self.ShowWeaponInfoLayer(weaponInfo);
+                }
+            }
+
+          
         }
 
+        public static void ReferBagInfo(this DlgBagLayer self)
+        {
+            self.View.ESWeaponBagCommon.ShowWindow();
+
+        }
         //
         public static async void ShowWindow(this DlgBagLayer self, Entity contextData = null)
         {

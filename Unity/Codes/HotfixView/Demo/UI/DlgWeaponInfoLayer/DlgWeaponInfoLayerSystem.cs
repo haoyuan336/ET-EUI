@@ -14,6 +14,16 @@ namespace ET
             {
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_WeaponInfoLayer);
             });
+            self.View.E_WeaponStrengthButton.AddListenerAsync(self.WeaponStrengthButtonClick);
+        }
+
+        public static async ETTask WeaponStrengthButtonClick(this DlgWeaponInfoLayer self)
+        {
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_WeaponStrengthenPreviewLayer);
+            UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_WeaponStrengthenPreviewLayer);
+            baseWindow.GetComponent<DlgWeaponStrengthenPreviewLayer>().SetTargetInfo(self.WeaponInfo);
+            await ETTask.CompletedTask;
         }
 
         public static void HideWindow(this DlgWeaponInfoLayer self)
@@ -90,6 +100,15 @@ namespace ET
                     rectTransform.anchorMin = Vector2.zero;
                     rectTransform.anchorMax = Vector2.one;
                     rectTransform.localScale = Vector3.one;
+                    var toggle =  self.CurrentHeroCardItem.E_ChooseToggle.GetComponent<Toggle>();
+                    toggle.onValueChanged.RemoveAllListeners();
+                    toggle.onValueChanged.AddListener((value) =>
+                    {
+                        if (value)
+                        {
+                            toggle.isOn = false;
+                        }
+                    });
                 }
                 // self.CurrentHeroCardItem.InitHeroCard();
 
@@ -107,12 +126,12 @@ namespace ET
 
         public static async ETTask InitCurrentWeaponItem(this DlgWeaponInfoLayer self, WeaponInfo weaponInfo)
         {
-            if (self.CurerntWeaponItem == null)
+            if (self.CurrentWeaponItem == null)
             {
-                self.CurerntWeaponItem = self.AddChildWithId<Scroll_ItemWeapon>(IdGenerater.Instance.GenerateId());
+                self.CurrentWeaponItem = self.AddChildWithId<Scroll_ItemWeapon>(IdGenerater.Instance.GenerateId());
                 var obj = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath("ItemWeapon");
                 obj.transform.SetParent(self.View.E_CurrentWeaponPosImage.transform);
-                self.CurerntWeaponItem.BindTrans(obj.transform);
+                self.CurrentWeaponItem.BindTrans(obj.transform);
                 RectTransform rectTransform = obj.GetComponent<RectTransform>();
                 rectTransform.offsetMin = Vector2.zero;
                 rectTransform.offsetMax = Vector2.zero;
@@ -121,7 +140,18 @@ namespace ET
                 rectTransform.localScale = Vector3.one;
             }
 
-            self.CurerntWeaponItem.InitWeaponCardView(weaponInfo);
+            self.CurrentWeaponItem.InitWeaponCardView(weaponInfo);
+            // self.CurrentHeroCardItem
+            // self.CurrentWeaponItem.UnAableButtonClick();
+            var toggle = self.CurrentWeaponItem.E_ChooseToggle.GetComponent<Toggle>();
+            toggle.onValueChanged.RemoveAllListeners();
+            toggle.onValueChanged.AddListener((value) =>
+            {
+                if (value)
+                {
+                    toggle.isOn = false;
+                }
+            });
 
             WeaponsConfig config = WeaponsConfigCategory.Instance.Get(weaponInfo.ConfigId);
             self.View.E_WeaponTypeText.text = config.WeaponTypeName;
@@ -164,7 +194,7 @@ namespace ET
                     ESCommonWordBar bar = self.WordBarItems[i];
                     if (i < infos.Count)
                     {
-                        bar.SetInfo(infos[i]);
+                        bar.SetInfo(infos[i], self.WeaponInfo);
                     }
                 }
             }

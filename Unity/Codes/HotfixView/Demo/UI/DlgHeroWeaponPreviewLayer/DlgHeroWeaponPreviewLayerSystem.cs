@@ -34,14 +34,19 @@ namespace ET
             }
         }
 
-        public static async void OnWeaponItemClick(this DlgHeroWeaponPreviewLayer self, WeaponType type)
+        public static async void OnWeaponItemClick(this DlgHeroWeaponPreviewLayer self, WeaponType type,ESCommonWeaponItem weaponItem, bool value)
         {
-            // await ETTask.CompletedTask;
-            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
-            await uiComponent.ShowWindow(WindowID.WindowID_ChooseWeaponLayer);
-            UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_ChooseWeaponLayer);
-            baseWindow.GetComponent<DlgChooseWeaponLayer>().ShowAllWeaponType(type);
-            self.RegisterWeaponClickEvent();
+            if (value)
+            {
+                weaponItem.E_Choose.GetComponent<Toggle>().isOn = false;
+                UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+                await uiComponent.ShowWindow(WindowID.WindowID_ChooseWeaponLayer);
+                UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_ChooseWeaponLayer);
+                baseWindow.GetComponent<DlgChooseWeaponLayer>().ShowAllWeaponType(type);
+                baseWindow.GetComponent<DlgChooseWeaponLayer>().SetAlChooseWeaponInfo(weaponItem.WeaponInfo);
+                self.RegisterWeaponClickEvent();
+            }
+     
         }
 
         public static async void RegisterWeaponClickEvent(this DlgHeroWeaponPreviewLayer self)
@@ -123,5 +128,7 @@ namespace ET
                 }
             }
         }
+        
+        
     }
 }

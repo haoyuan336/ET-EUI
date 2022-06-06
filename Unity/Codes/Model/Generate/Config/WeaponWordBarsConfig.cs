@@ -89,6 +89,8 @@ namespace ET
 		public int WeaponType { get; set; }
 		[ProtoMember(10)]
 		public string QualityIcon { get; set; }
+		[ProtoMember(11)]
+		public int Coefficient { get; set; }
 
 	}
 }
