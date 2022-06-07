@@ -93,8 +93,9 @@ namespace ET
             var value = wordBarInfo.Value + wordBarInfo.Value * 0.1f * level + level * config.Coefficient;
             return (int) value;
         }
+
         //
-        public static int GetWordBarPercentValueWidthLevel(WordBarInfo wordBarInfo ,int level)
+        public static int GetWordBarPercentValueWidthLevel(WordBarInfo wordBarInfo, int level)
         {
             if (!wordBarInfo.IsMain)
             {
@@ -104,12 +105,55 @@ namespace ET
 
             // WeaponWordBarsConfig config = WeaponWordBarsConfigCategory.Instance.Get(wordBarInfo.ConfigId);
 
-            var baseValue = (float)wordBarInfo.Value;
+            var baseValue = (float) wordBarInfo.Value;
             Log.Debug($"base value{baseValue}");
             float value = baseValue + baseValue * 0.1f * level;
             Log.Debug($"value{value}");
             Log.Debug($"level {level}");
-            return (int)value;
+            return (int) value;
+        }
+
+        /// <summary>
+        /// 获得词条的血量
+        /// </summary>
+        /// <param name="weaponInfo"></param>
+        public static int GetWordBarHP(WordBarInfo wordBarInfo, WeaponInfo weaponInfo)
+        {
+            WeaponWordBarsConfig config = WeaponWordBarsConfigCategory.Instance.Get(wordBarInfo.ConfigId);
+            if (config.WordBarType == (int) WordBarType.HP)
+            {
+                return GetWordBarNumberValueWithLevel(wordBarInfo, weaponInfo.Level);
+            }
+
+            return 0;
+            // if (config.)
+            // {
+            // }
+        }
+        // public static 
+
+        public static int GetWordBarValueByType(WordBarInfo wordBarInfo, WeaponInfo weaponInfo, WordBarType type)
+        {
+            WeaponWordBarsConfig config = WeaponWordBarsConfigCategory.Instance.Get(wordBarInfo.ConfigId);
+            Log.Debug($"type {(int)type}word bar type{config.WordBarType}");
+            if (config.WordBarType == (int) type)
+            {
+                // return GetWordBarNumberValueWithLevel(wordBarInfo, weaponInfo.Level);
+                switch (config.NumberType)
+                {
+                    case (int)NumberType.Number:
+                        return GetWordBarNumberValueWithLevel(wordBarInfo, weaponInfo.Level);
+                    case (int)NumberType.Percent:
+                        Log.Debug("获取的数据是备份比");
+                        return GetWordBarPercentValueWidthLevel(wordBarInfo, weaponInfo.Level);
+                }
+            }
+            else
+            {
+                Log.Debug("返回的是0");
+            }
+
+            return 0;
         }
     }
 }

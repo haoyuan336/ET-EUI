@@ -52,7 +52,17 @@ namespace ET
 
                 return false;
             });
-            
+
+            onWeapons.RemoveAll(a =>
+            {
+                var config = WeaponsConfigCategory.Instance.Get(a.ConfigId);
+                if (config.WeaponType == targetConfig.WeaponType)
+                {
+                    return true;
+                }
+
+                return false;
+            });
             // Log.Warning($"old weapons  {oldWeapons.Count}");
             if (oldWeapons.Count != 0)
             {
@@ -64,16 +74,22 @@ namespace ET
                     tasks.Add(DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(weapon));
                     weapon.Dispose();
                 }
-
                 await ETTaskHelper.WaitAll(tasks);
             }
-
             //然后储存当前装备
             targetWeapon.OnWeaponHeroId = heroId;
+            onWeapons.Add(targetWeapon);
+            List<WeaponInfo> weaponInfos = new List<WeaponInfo>();
+            foreach (var weapon in onWeapons)
+            {
+                weaponInfos.Add(weapon.GetInfo());
+                weapon.Dispose();
+            }
+
             await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(targetWeapon);
             targetWeapon.Dispose();
             response.Error = ErrorCode.ERR_Success;
-
+            response.WeaponInfos = weaponInfos;
             reply();
             await ETTask.CompletedTask;
         }

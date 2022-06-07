@@ -15,6 +15,7 @@ namespace ET
         public const int LoginGateLock = 10;
         public const int AccountGetRealmKey = 11;
         public const int AccountGetRate = 12;
+        public const int BuyWeapon = 13;    //购买武器的操作
         public const int Max = 100; // 这个必须最大
     }
 }

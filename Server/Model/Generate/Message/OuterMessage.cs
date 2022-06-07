@@ -2211,6 +2211,9 @@ namespace ET
 		[ProtoMember(1)]
 		public HeroCardInfo HeroCardInfo { get; set; }
 
+		[ProtoMember(2)]
+		public List<WeaponInfo> WeaponInfos = new List<WeaponInfo>();
+
 	}
 
 	[ResponseType(nameof(M2C_GetOnWeaponsResponse))]
@@ -2337,6 +2340,42 @@ namespace ET
 // repeated WeaponInfo WeaponInfos = 1;
 		[ProtoMember(1)]
 		public WeaponInfo WeaponInfo { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_GetWordBarInfosWithWeaponListResponse))]
+	[Message(OuterOpcode.C2M_GetWordBarInfosWithWeaponListRequest)]
+	[ProtoContract]
+	public partial class C2M_GetWordBarInfosWithWeaponListRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public List<long> WeaponInfoIds = new List<long>();
+
+	}
+
+	[Message(OuterOpcode.M2C_GetWordBarInfosWithWeaponListResponse)]
+	[ProtoContract]
+	public partial class M2C_GetWordBarInfosWithWeaponListResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+// repeated WeaponInfo WeaponInfos = 1;
+// WeaponInfo WeaponInfo = 1;	//升级完成的英雄信息
+		[ProtoMember(1)]
+		public List<WordBarInfo> WordBarInfos = new List<WordBarInfo>();
 
 	}
 

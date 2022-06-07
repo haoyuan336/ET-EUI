@@ -28,6 +28,7 @@ namespace ET
 
         public static void HideWindow(this DlgWeaponInfoLayer self)
         {
+            // Log.Debug("dlg weapon info layer hide window");
             if (self.CurrentHeroCardItem != null)
             {
                 GameObject.Destroy(self.CurrentHeroCardItem.uiTransform.gameObject);
@@ -177,6 +178,10 @@ namespace ET
                 // }
                 List<WordBarInfo> infos = response.WordBarInfos;
                 Log.Debug($"获取装备词条成功{infos.Count}");
+                if (infos.Count == 0)
+                {
+                    Log.Debug($"weapon id {self.WeaponInfo.WeaponId}");
+                }
 
                 infos.Sort((a, b) =>
                 {

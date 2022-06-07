@@ -7,14 +7,14 @@ namespace ET
 {
     public class ESCommonWeaponItemAwakeSystem: AwakeSystem<ESCommonWeaponItem, WeaponType, Transform>
     {
-        public override async void Awake(ESCommonWeaponItem self, WeaponType a, Transform b)
+        public override  void Awake(ESCommonWeaponItem self, WeaponType a, Transform b)
         {
             self.CurrentType = a;
-            GameObject gameObject = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath("ItemWeapon");
-            self.GameObject = gameObject;
-            gameObject.transform.SetParent(b);
+            // GameObject gameObject = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath("ItemWeapon");
+            self.GameObject = b.transform.gameObject;
+            // gameObject.transform.SetParent(b);
             // gameObject.GetComponent<RectTransform>()
-            gameObject.GetComponent<RectTransform>().localScale = Vector3.one;
+            // gameObject.GetComponent<RectTransform>().localScale = Vector3.one;
             // string[] typeNames = { "武器", "护甲", "戒指", "饰品" };
             Dictionary<WeaponType, string> typeNames = new Dictionary<WeaponType, string>();
             typeNames.Add(WeaponType.Equip, "护甲");
@@ -74,10 +74,21 @@ namespace ET
             self.E_Weapon.GetComponent<Image>().sprite = sprite;
             self.E_WeaponType.SetActive(false);
             self.E_AddText.SetActive(false);
+            self.E_Level.gameObject.SetActive(true);
+            self.E_Level.GetComponent<Text>().text = $"Lv.{self.WeaponInfo.Level}";
         }
 
-        public static void SetWeaponInfo(this ESCommonWeaponItem self, WeaponInfo weaponInfo)
+        public static async void SetWeaponInfo(this ESCommonWeaponItem self, WeaponInfo weaponInfo)
         {
+            if (weaponInfo == null)
+            {
+                self.E_AddText.SetActive(true);
+                var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.CommonUIAtlasPath, "bgpic");
+                self.E_Weapon.GetComponent<Image>().sprite = sprite;
+                        
+                self.E_Level.gameObject.SetActive(false);
+                return;
+            }
             Log.Debug("设置装备信息");
             self.WeaponInfo = weaponInfo;
             self.ReferInfo();

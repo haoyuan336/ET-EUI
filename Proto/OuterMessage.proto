@@ -1012,6 +1012,7 @@ message M2C_UpdateOnWeaponResponse //IActorLocationResponse
 	int32 Error = 91;
 	string Message = 92;
 	HeroCardInfo HeroCardInfo = 1;
+	repeated WeaponInfo WeaponInfos = 2;	//已经装备了的装备信息
 }
 //ResponseType M2C_GetOnWeaponsResponse
 message C2M_GetOnWeaponsRequest //IActorLocationRequest
@@ -1066,4 +1067,20 @@ message M2C_StrengthenWeaponResponse //IActorLocationResponse
 	string Message = 92;
 	// repeated WeaponInfo WeaponInfos = 1;
 	WeaponInfo WeaponInfo = 1;	//升级完成的英雄信息
+}
+//ResponseType M2C_GetWordBarInfosWithWeaponListResponse
+message C2M_GetWordBarInfosWithWeaponListRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	repeated int64 WeaponInfoIds = 2;	//装备id的列表
+}
+message M2C_GetWordBarInfosWithWeaponListResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	// repeated WeaponInfo WeaponInfos = 1;
+	// WeaponInfo WeaponInfo = 1;	//升级完成的英雄信息
+	repeated WordBarInfo WordBarInfos = 1;	//词条信息
 }

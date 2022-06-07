@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ET
 {
-    public class ESCommonWeaponItem: Entity, IAwake<WeaponType, Transform>
+    public class ESCommonWeaponItem: Entity, IAwake<WeaponType,Transform>
     {
         public GameObject GameObject;
 

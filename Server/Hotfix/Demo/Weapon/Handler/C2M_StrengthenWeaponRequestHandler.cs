@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace ET
 {
@@ -67,7 +68,7 @@ namespace ET
                 tasks.Add(DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(weapon));
                 weapon.Dispose();
             }
-            
+
             // Log.Warning($"add exp {totalExp}");
 
             var endLevel = WeaponHelper.GetEndLevelWithExp(targetweapon.GetInfo(), totalExp);
@@ -75,8 +76,46 @@ namespace ET
 
             targetweapon.Level = endLevel;
             targetweapon.CurrentExp = lastExp;
-            
-            
+
+            // 激活词条 首先获取词条个数
+            List<WordBar> wordBars = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
+                    .Query<WordBar>(a => a.OwnerId.Equals(targetweapon.Id));
+            int[] wordBarCount = { 0, 5, 10, 15, 30 };
+            var count = 0;
+            for (int i = 0; i < wordBarCount.Length - 1; i++)
+            {
+                if (endLevel >= wordBarCount[i] && endLevel < wordBarCount[i + 1])
+                {
+                    count = i;
+                }
+            }
+
+            WeaponsConfig weaponsConfig = WeaponsConfigCategory.Instance.Get(targetweapon.ConfigId);
+            var wordCount = weaponsConfig.WordBarCount;
+            count = Mathf.Min(count, wordCount);
+            //装备的最大词条数量
+
+            //未激活的词条数量
+            var lastCount = count - wordBars.Count + 1;
+            List<WeaponWordBarsConfig> wordBarsConfigs = WeaponWordBarsConfigCategory.Instance.GetAll().Values.ToList();
+            for (int i = 0; i < lastCount; i++)
+            {
+                var config = wordBarsConfigs.RandomArray();
+                WordBar wordBar = new WordBar()
+                {
+                    Id = IdGenerater.Instance.GenerateId(),
+                    ConfigId = config.Id,
+                    IsMain = false,
+                    OwnerId = targetweapon.Id,
+                    State = (int) StateType.Active,
+                    Value = RandomHelper.RandomNumber(config.MinValue, config.MaxValue)
+                };
+                //储存词条
+                await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(wordBar);
+                wordBar.Dispose();
+            }
+            // Log.Warning($"词条数量{count}");
+
             // Log.Warning($"end level {targetweapon.Level}");
             // Log.Warning($"last exp {lastExp}");
             await ETTaskHelper.WaitAll(tasks);

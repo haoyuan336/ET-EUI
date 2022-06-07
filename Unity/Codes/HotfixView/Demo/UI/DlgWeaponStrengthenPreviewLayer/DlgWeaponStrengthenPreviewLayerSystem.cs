@@ -395,23 +395,25 @@ namespace ET
                 List<WeaponInfo> weaponInfos = response.WeaponInfos;
                 //去掉当前的英雄
                 weaponInfos.RemoveAll(a => a.WeaponId.Equals(self.CurrentWeaponInfo.WeaponId));
+            
                 // weaponInfos.Sort((a, b) =>
                 // {
-                //     var configA = WeaponsConfigCategory.Instance.Get(a.ConfigId);
                 //     var configB = WeaponsConfigCategory.Instance.Get(b.ConfigId);
-                //     return configA. - configB.HeroQuality;
-                // });
-
-                // heroCardInfos.Sort((a, b) =>
-                // {
-                //     var configA = HeroConfigCategory.Instance.Get(a.ConfigId);
-                //     if (configA.MaterialType == (int) HeroBagType.Materail)
+                //     if (configB.MaterialType == (int) WeaponBagType.Materail)
                 //     {
-                //         return -1;
+                //         return 1;
                 //     }
                 //
-                //     return 1;
+                //     return -1;
                 // });
+                weaponInfos.Sort((a, b) =>
+                {
+                    var configA = WeaponsConfigCategory.Instance.Get(a.ConfigId);
+                    var configB = WeaponsConfigCategory.Instance.Get(b.ConfigId);
+                    return configA.Star - configB.Star;
+                });
+                weaponInfos.Sort((a, b) => { return a.Level - b.Level; });
+
 
                 var count = 0;
                 var index = 0;
@@ -453,6 +455,7 @@ namespace ET
 
         public static void HideWindow(this DlgWeaponStrengthenPreviewLayer self)
         {
+            Log.Debug("hide window dlgweapon strengthen");
             self.AlChooseWeaponInfos.Clear();
             foreach (var itemWeapon in self.ItemWeapons)
             {
@@ -461,6 +464,14 @@ namespace ET
             }
 
             self.ItemWeapons.Clear();
+
+            foreach (var wordBar in self.CommonWordBars)
+            {
+                GameObject.Destroy(wordBar.uiTransform.gameObject);
+                wordBar.Dispose();
+            }
+
+            self.CommonWordBars.Clear();
         }
 
         public static async ETTask InitWordBarItems(this DlgWeaponStrengthenPreviewLayer self)
@@ -490,10 +501,10 @@ namespace ET
             {
                 Account = account, WeaponId = self.CurrentWeaponInfo.WeaponId
             };
-            M2C_GetWeaponWordBarsResponse response = (M2C_GetWeaponWordBarsResponse)await session.Call(request);
+            M2C_GetWeaponWordBarsResponse response = (M2C_GetWeaponWordBarsResponse) await session.Call(request);
 
             List<WordBarInfo> wordBarInfos = response.WordBarInfos;
-            
+
             wordBarInfos.Sort((a, b) =>
             {
                 if (b.IsMain)
@@ -511,8 +522,6 @@ namespace ET
                     self.CommonWordBars[i].SetInfo(info, self.CurrentWeaponInfo);
                 }
             }
-            
-
 
             await ETTask.CompletedTask;
         }

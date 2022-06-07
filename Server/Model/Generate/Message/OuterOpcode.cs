@@ -139,5 +139,7 @@ namespace ET
 		 public const ushort WordBarInfo = 10136;
 		 public const ushort C2M_StrengthenWeaponRequest = 10137;
 		 public const ushort M2C_StrengthenWeaponResponse = 10138;
+		 public const ushort C2M_GetWordBarInfosWithWeaponListRequest = 10139;
+		 public const ushort M2C_GetWordBarInfosWithWeaponListResponse = 10140;
 	}
 }
