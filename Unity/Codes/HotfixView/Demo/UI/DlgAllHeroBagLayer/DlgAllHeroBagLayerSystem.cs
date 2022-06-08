@@ -252,17 +252,21 @@ namespace ET
             // public HeroCardInfo EnabelSameStarCountHeroCardInfo = null; //可用的相同星数目的卡牌信息
         }
 
-        public static async void ShowWindow(this DlgAllHeroBagLayer self, Entity contextData = null)
+        public static  void ShowWindow(this DlgAllHeroBagLayer self, Entity contextData = null)
         {
             // self.FilterColor(self.CurrentChooseTypeIndex).Coroutine();
-            self.DefaultHeadSprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.CommonUIAtlasPath, "bgpic");
+            // var spritePath = ConstValue.HeroCardAtlasPath;
+            // var bgImage = ConstValue.CommonUIAtlasPath;
+            // self.DefaultHeadSprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spritePath, bgImage);
             //请求背包数据
         }
 
         public static async ETTask InitBagCount(this DlgAllHeroBagLayer self)
         {
             var commonAtlas = ConstValue.CommonUIAtlasPath;
-            self.DefaultHeadSprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonAtlas, "bgpic");
+            // var spritePath = ConstValue.HeroCardAtlasPath;
+            var bgImage = ConstValue.FrameBgPath;
+            self.DefaultHeadSprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonAtlas, bgImage);
             //初始化背包个数
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;

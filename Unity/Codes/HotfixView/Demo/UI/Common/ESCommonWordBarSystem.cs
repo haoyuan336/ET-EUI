@@ -39,6 +39,18 @@ namespace ET
         }
         public static async void SetInfo(this ESCommonWordBar self, WordBarInfo wordBarInfo, WeaponInfo weaponInfo)
         {
+
+            self.WordBarInfo = wordBarInfo;
+            if (wordBarInfo == null)
+            {
+                self.E_LockTextText.text = "未解锁";
+                self.E_WordBarQualityIconImage.gameObject.SetActive(false);
+                self.E_WordBarValueTextText.text = "";
+                self.E_WordBarTypeIconImage.gameObject.SetActive(false);
+                return;
+            }
+            
+            
             Log.Debug($"is main {wordBarInfo.IsMain}");
             self.E_BgImage.gameObject.SetActive(wordBarInfo.IsMain);
             self.E_LockTextText.gameObject.SetActive(false);

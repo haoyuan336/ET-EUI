@@ -83,7 +83,8 @@ namespace ET
             if (weaponInfo == null)
             {
                 self.E_AddText.SetActive(true);
-                var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.CommonUIAtlasPath, "bgpic");
+                var bgPath = ConstValue.FrameBgPath;
+                var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.CommonUIAtlasPath, bgPath);
                 self.E_Weapon.GetComponent<Image>().sprite = sprite;
                         
                 self.E_Level.gameObject.SetActive(false);

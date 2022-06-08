@@ -11,7 +11,8 @@ namespace ET
         public static async void RegisterUIEvent(this ESWeaponBagCommon self)
         {
             var commonAtlas = ConstValue.CommonUIAtlasPath;
-            self.DefaultWeaponBgSprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonAtlas, "bgpic");
+            var bgImage = ConstValue.FrameBgPath;
+            self.DefaultWeaponBgSprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonAtlas, bgImage);
             self.E_WeaponLoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopListItemRefreshHandler);
 
             List<Toggle> toggleButtons = new List<Toggle>()

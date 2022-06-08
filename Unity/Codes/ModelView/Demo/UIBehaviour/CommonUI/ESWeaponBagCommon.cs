@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace ET
 {
-	public partial class ESWeaponBagCommon : Entity,ET.IAwake<UnityEngine.Transform>,IDestroy 
+	public partial  class ESWeaponBagCommon : Entity,ET.IAwake<UnityEngine.Transform>,IDestroy 
 	{
 		public UnityEngine.UI.Toggle E_WeaponToggle
      	{
@@ -33,7 +33,7 @@ namespace ET
      			}
      			if( this.m_E_WeaponLoopVerticalScrollRect == null )
      			{
-		    		this.m_E_WeaponLoopVerticalScrollRect = UIFindHelper.FindDeepChild<UnityEngine.UI.LoopVerticalScrollRect>(this.uiTransform.gameObject,"E_Weapon");
+		    		this.m_E_WeaponLoopVerticalScrollRect = UIFindHelper.FindDeepChild<UnityEngine.UI.LoopVerticalScrollRect>(this.uiTransform.gameObject,"BG/BG/E_Weapon");
      			}
      			return this.m_E_WeaponLoopVerticalScrollRect;
      		}

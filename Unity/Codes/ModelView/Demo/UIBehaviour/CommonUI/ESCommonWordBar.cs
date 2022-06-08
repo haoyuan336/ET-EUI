@@ -123,6 +123,25 @@ namespace ET
             }
         }
 
+        public UnityEngine.UI.Toggle E_ClickLockToggle
+        {
+            get
+            {
+                if (this.uiTransform == null)
+                {
+                    Log.Error("uiTransform is null.");
+                    return null;
+                }
+
+                if (this.m_E_ClickLockToggle == null)
+                {
+                    this.m_E_ClickLockToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject, "E_ClickLock");
+                }
+
+                return this.m_E_ClickLockToggle;
+            }
+        }
+
         public void DestroyWidget()
         {
             this.m_E_BgImage = null;
@@ -131,6 +150,7 @@ namespace ET
             this.m_E_WordBarValueTextText = null;
             this.m_E_WordBarQualityIconImage = null;
             this.m_E_LockTextText = null;
+            this.m_E_ClickLockToggle = null;
             this.uiTransform = null;
         }
 
@@ -140,6 +160,7 @@ namespace ET
         private UnityEngine.UI.Text m_E_WordBarValueTextText = null;
         private UnityEngine.UI.Image m_E_WordBarQualityIconImage = null;
         private UnityEngine.UI.Text m_E_LockTextText = null;
+        private UnityEngine.UI.Toggle m_E_ClickLockToggle = null;
         public Transform uiTransform = null;
     }
 }

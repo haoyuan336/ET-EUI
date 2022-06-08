@@ -29,7 +29,8 @@ namespace ET
         {
             //显示加号的状态
             var weaponAtlas = ConstValue.CommonUIAtlasPath;
-            var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(weaponAtlas, "bgpic");
+            var bgPath = ConstValue.FrameBgPath;
+            var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(weaponAtlas, bgPath);
             self.E_WeaponImage.sprite = sprite;
             self.E_AddTextText.gameObject.SetActive(true);
             self.E_LevelText.gameObject.SetActive(false);

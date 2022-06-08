@@ -15,6 +15,14 @@ namespace ET
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_WeaponInfoLayer);
             });
             self.View.E_WeaponStrengthButton.AddListenerAsync(self.WeaponStrengthButtonClick);
+            // self
+            self.View.E_WeaponClearButton.AddListener(async () =>
+            {
+                UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+                await uiComponent.ShowWindow(WindowID.WindowID_WeaponClearLayer);
+                UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_WeaponClearLayer);
+                baseWindow.GetComponent<DlgWeaponClearLayer>().SetTargetInfo(self.WeaponInfo);
+            });
         }
 
         public static async ETTask WeaponStrengthButtonClick(this DlgWeaponInfoLayer self)
@@ -45,26 +53,39 @@ namespace ET
             self.WordBarItems.Clear();
         }
 
-        public static async ETTask InitWordBarItems(this DlgWeaponInfoLayer self)
+        public static async void SetWordBarInfos(this DlgWeaponInfoLayer self, List<WordBarInfo> wordBarInfos)
         {
-            if (self.WordBarItems.Count != 0)
+            if (self.WordBarItems.Count  == 0)
             {
-                return;
+                WeaponsConfig config = WeaponsConfigCategory.Instance.Get(self.WeaponInfo.ConfigId);
+                var wordsCount = config.WordBarCount;
+                var prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>("Assets/Bundles/UI/Common/ESCommonWordBar.prefab");
+
+                for (int i = 0; i < wordsCount + 1; i++)
+                {
+                    // var gameObject = AddressableComponent.
+                    var gameObject = GameObject.Instantiate(prefab);
+                    gameObject.transform.SetParent(self.View.E_WordBarGroupImage.transform);
+                    gameObject.GetComponent<RectTransform>().localScale = Vector3.one;
+                    var esCommonWordBar = self.AddChildWithId<ESCommonWordBar, Transform>(IdGenerater.Instance.GenerateId(), gameObject.transform);
+                    self.WordBarItems.Add(esCommonWordBar);
+                }
             }
 
-            WeaponsConfig config = WeaponsConfigCategory.Instance.Get(self.WeaponInfo.ConfigId);
-            var wordsCount = config.WordBarCount;
-            var prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>("Assets/Bundles/UI/Common/ESCommonWordBar.prefab");
-
-            for (int i = 0; i < wordsCount + 1; i++)
+            for (int i = 0; i < self.WordBarItems.Count; i++)
             {
-                // var gameObject = AddressableComponent.
-                var gameObject = GameObject.Instantiate(prefab);
-                gameObject.transform.SetParent(self.View.E_WordBarGroupImage.transform);
-                gameObject.GetComponent<RectTransform>().localScale = Vector3.one;
-                var esCommonWordBar = self.AddChildWithId<ESCommonWordBar, Transform>(IdGenerater.Instance.GenerateId(), gameObject.transform);
-                self.WordBarItems.Add(esCommonWordBar);
+                var item = self.WordBarItems[i];
+                if (i < wordBarInfos.Count)
+                {
+                    item.SetInfo(wordBarInfos[i], self.WeaponInfo);
+                }
+                else
+                {
+                    item.SetInfo(null, self.WeaponInfo);
+                }
             }
+            
+            
         }
 
         public static void ShowWindow(this DlgWeaponInfoLayer self, Entity contextData = null)
@@ -75,10 +96,15 @@ namespace ET
         {
             self.WeaponInfo = weaponInfo;
             await self.InitCurrentWeaponItem(weaponInfo);
-            await self.InitWordBarItems();
+            List<WordBarInfo> wordBarInfos = await self.GetWeaponWordsInfoRequest();
+
+            
+            // await self.InitWordBarItems();
+            self.SetWordBarInfos(wordBarInfos);
             await self.InitOnWeaponHeroItem();
-            await self.GetWeaponWordsInfoRequest();
+            // await self.GetWeaponWordsInfoRequest();
         }
+        
 
         public static async ETTask InitOnWeaponHeroItem(this DlgWeaponInfoLayer self)
         {
@@ -101,7 +127,7 @@ namespace ET
                     rectTransform.anchorMin = Vector2.zero;
                     rectTransform.anchorMax = Vector2.one;
                     rectTransform.localScale = Vector3.one;
-                    var toggle =  self.CurrentHeroCardItem.E_ChooseToggle.GetComponent<Toggle>();
+                    var toggle = self.CurrentHeroCardItem.E_ChooseToggle.GetComponent<Toggle>();
                     toggle.onValueChanged.RemoveAllListeners();
                     toggle.onValueChanged.AddListener((value) =>
                     {
@@ -161,7 +187,7 @@ namespace ET
             // self.CurerntWeaponItem.
         }
 
-        public static async ETTask GetWeaponWordsInfoRequest(this DlgWeaponInfoLayer self)
+        public static async ETTask<List<WordBarInfo>> GetWeaponWordsInfoRequest(this DlgWeaponInfoLayer self)
         {
             long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
@@ -194,17 +220,20 @@ namespace ET
                 });
 
                 //分别设置四个词条的信息
-                for (int i = 0; i < self.WordBarItems.Count; i++)
-                {
-                    ESCommonWordBar bar = self.WordBarItems[i];
-                    if (i < infos.Count)
-                    {
-                        bar.SetInfo(infos[i], self.WeaponInfo);
-                    }
-                }
+                // for (int i = 0; i < self.WordBarItems.Count; i++)
+                // {
+                //     ESCommonWordBar bar = self.WordBarItems[i];
+                //     if (i < infos.Count)
+                //     {
+                //         bar.SetInfo(infos[i], self.WeaponInfo);
+                //     }
+                // }
+
+                self.View.E_WeaponClearButton.interactable = infos.Count >= 2;
+                return response.WordBarInfos;
             }
 
-            await ETTask.CompletedTask;
+            return null;
         }
     }
 }

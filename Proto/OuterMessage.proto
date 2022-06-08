@@ -1084,3 +1084,18 @@ message M2C_GetWordBarInfosWithWeaponListResponse //IActorLocationResponse
 	// WeaponInfo WeaponInfo = 1;	//升级完成的英雄信息
 	repeated WordBarInfo WordBarInfos = 1;	//词条信息
 }
+//ResponseType M2C_WeaponWordBarClearNormalResponse
+message C2M_WeaponWordBarClearNormalRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;	//装备 的普通洗练 请求
+	int64 AccountId = 1;
+	repeated int64 WordBarIds = 2;
+	int64 WeaponId = 3;
+}
+message M2C_WeaponWordBarClearNormalResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated WordBarInfo WordBarInfos = 1;
+}

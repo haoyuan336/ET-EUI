@@ -117,7 +117,8 @@ namespace ET
                 self.E_LevelText.gameObject.SetActive(false);
 
                 var spriteAtlas = ConstValue.CommonUIAtlasPath;
-                var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, "bgpic");
+                var bgPath = ConstValue.FrameBgPath;
+                var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, bgPath);
                 self.E_HeadImage.sprite = sprite;
             }
         }

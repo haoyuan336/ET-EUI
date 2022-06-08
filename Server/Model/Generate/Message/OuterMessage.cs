@@ -2379,4 +2379,41 @@ namespace ET
 
 	}
 
+	[ResponseType(nameof(M2C_WeaponWordBarClearNormalResponse))]
+	[Message(OuterOpcode.C2M_WeaponWordBarClearNormalRequest)]
+	[ProtoContract]
+	public partial class C2M_WeaponWordBarClearNormalRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public List<long> WordBarIds = new List<long>();
+
+		[ProtoMember(3)]
+		public long WeaponId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_WeaponWordBarClearNormalResponse)]
+	[ProtoContract]
+	public partial class M2C_WeaponWordBarClearNormalResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<WordBarInfo> WordBarInfos = new List<WordBarInfo>();
+
+	}
+
 }

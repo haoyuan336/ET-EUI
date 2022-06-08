@@ -49,6 +49,7 @@
         WindowID_AllWeaponLayer,    //所有装备的层
         WindowID_ChooseWeaponLayer, //选择武器层
         WindowID_WeaponStrengthenPreviewLayer,  //武器强化预览页面
+        WindowID_WeaponClearLayer,  //装备洗练
         
     }
 }
