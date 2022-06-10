@@ -12,5 +12,6 @@ namespace ET
 		public List<ESCommonWordBar> WordBarItems = new List<ESCommonWordBar>();
 
 		public List<WordBarInfo> ChooseWordBarInfos = new List<WordBarInfo>();
+		public List<WordBarInfo> CurrentWordBarInfos = new List<WordBarInfo>();
 	}
 }

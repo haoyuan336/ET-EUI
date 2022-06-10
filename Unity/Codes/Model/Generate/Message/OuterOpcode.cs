@@ -143,5 +143,7 @@ namespace ET
 		 public const ushort M2C_GetWordBarInfosWithWeaponListResponse = 10140;
 		 public const ushort C2M_WeaponWordBarClearNormalRequest = 10141;
 		 public const ushort M2C_WeaponWordBarClearNormalResponse = 10142;
+		 public const ushort C2M_WeaponWordBarSpeicalClearRequest = 10143;
+		 public const ushort M2C_WeaponWordBarSpeicalClearResponse = 10144;
 	}
 }

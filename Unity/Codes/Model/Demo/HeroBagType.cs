@@ -2,6 +2,7 @@
 {
     public enum HeroBagType
     {
+        Invalide = -1,
         Hero = 1,
         Materail = 2,
         HeroAndMaterial = 3,

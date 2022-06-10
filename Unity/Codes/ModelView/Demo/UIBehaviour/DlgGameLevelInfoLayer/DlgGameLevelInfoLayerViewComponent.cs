@@ -5,6 +5,23 @@ namespace ET
 {
 	public  class DlgGameLevelInfoLayerViewComponent : Entity,IAwake,IDestroy 
 	{
+		public UnityEngine.UI.Image E_TroopHeroCardItemImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_TroopHeroCardItemImage == null )
+     			{
+		    		this.m_E_TroopHeroCardItemImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_TroopHeroCardItem");
+     			}
+     			return this.m_E_TroopHeroCardItemImage;
+     		}
+     	}
+
 		public UnityEngine.UI.Button E_EditorTroopButton
      	{
      		get
@@ -124,24 +141,6 @@ namespace ET
      		}
      	}
 
-		public ESTroopHeroCards ESTroopHeroCards
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_estroopherocards == null )
-     			{
-		    	   Transform subTrans = UIFindHelper.FindDeepChild<Transform>(this.uiTransform.gameObject,"ESTroopHeroCards");
-		    	   this.m_estroopherocards = this.AddChild<ESTroopHeroCards,Transform>(subTrans);
-     			}
-     			return this.m_estroopherocards;
-     		}
-     	}
-
 		public UnityEngine.UI.Button E_BackButton
      	{
      		get
@@ -178,6 +177,7 @@ namespace ET
 
 		public void DestroyWidget()
 		{
+			this.m_E_TroopHeroCardItemImage = null;
 			this.m_E_EditorTroopButton = null;
 			this.m_E_EditorTroopImage = null;
 			this.m_E_EditorSkillButton = null;
@@ -185,13 +185,12 @@ namespace ET
 			this.m_E_LevelText = null;
 			this.m_E_StartGameButton = null;
 			this.m_E_StartGameImage = null;
-			this.m_estroopherocards?.Dispose();
-			this.m_estroopherocards = null;
 			this.m_E_BackButton = null;
 			this.m_E_BackImage = null;
 			this.uiTransform = null;
 		}
 
+		private UnityEngine.UI.Image m_E_TroopHeroCardItemImage = null;
 		private UnityEngine.UI.Button m_E_EditorTroopButton = null;
 		private UnityEngine.UI.Image m_E_EditorTroopImage = null;
 		private UnityEngine.UI.Button m_E_EditorSkillButton = null;
@@ -199,7 +198,6 @@ namespace ET
 		private UnityEngine.UI.Text m_E_LevelText = null;
 		private UnityEngine.UI.Button m_E_StartGameButton = null;
 		private UnityEngine.UI.Image m_E_StartGameImage = null;
-		private ESTroopHeroCards m_estroopherocards = null;
 		private UnityEngine.UI.Button m_E_BackButton = null;
 		private UnityEngine.UI.Image m_E_BackImage = null;
 		public Transform uiTransform = null;

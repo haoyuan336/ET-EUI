@@ -1099,3 +1099,19 @@ message M2C_WeaponWordBarClearNormalResponse //IActorLocationResponse
 	string Message = 92;
 	repeated WordBarInfo WordBarInfos = 1;
 }
+
+//ResponseType M2C_WeaponWordBarSpeicalClearResponse
+message C2M_WeaponWordBarSpeicalClearRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;	//装备 的普通洗练 请求
+	int64 AccountId = 1;
+	repeated int64 WordBarIds = 2;
+	int64 WeaponId = 3;
+}
+message M2C_WeaponWordBarSpeicalClearResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated WordBarInfo WordBarInfos = 1;
+}

@@ -14,6 +14,7 @@ namespace ET
         public WeaponInfo WeaponInfo;
         public Scroll_ItemWeapon CurrentWeaponItem;
         public Scroll_ItemHeroCard CurrentHeroCardItem;
+        public List<WordBarInfo> WordBarInfos = new List<WordBarInfo>();
 
         // public 
     }

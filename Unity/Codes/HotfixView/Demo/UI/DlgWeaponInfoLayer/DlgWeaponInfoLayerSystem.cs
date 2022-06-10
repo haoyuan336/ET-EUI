@@ -21,7 +21,7 @@ namespace ET
                 UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
                 await uiComponent.ShowWindow(WindowID.WindowID_WeaponClearLayer);
                 UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_WeaponClearLayer);
-                baseWindow.GetComponent<DlgWeaponClearLayer>().SetTargetInfo(self.WeaponInfo);
+                baseWindow.GetComponent<DlgWeaponClearLayer>().SetTargetInfo(self.WeaponInfo, self.WordBarInfos);
             });
         }
 
@@ -55,6 +55,7 @@ namespace ET
 
         public static async void SetWordBarInfos(this DlgWeaponInfoLayer self, List<WordBarInfo> wordBarInfos)
         {
+            self.WordBarInfos = wordBarInfos;
             if (self.WordBarItems.Count  == 0)
             {
                 WeaponsConfig config = WeaponsConfigCategory.Instance.Get(self.WeaponInfo.ConfigId);
@@ -98,6 +99,7 @@ namespace ET
             await self.InitCurrentWeaponItem(weaponInfo);
             List<WordBarInfo> wordBarInfos = await self.GetWeaponWordsInfoRequest();
 
+            self.WordBarInfos = wordBarInfos;
             
             // await self.InitWordBarItems();
             self.SetWordBarInfos(wordBarInfos);

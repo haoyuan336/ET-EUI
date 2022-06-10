@@ -2,19 +2,47 @@
 
 namespace ET
 {
+    public class ItemHeroCardAwakeSystem: AwakeSystem<Scroll_ItemHeroCard, Transform>
+    {
+        public override void Awake(Scroll_ItemHeroCard self, Transform a)
+        {
+            self.uiTransform = a;
+        }
+    }
+
     public static class ItemHeroCardViewSystem
     {
+        public static async void SetNullStateView(this Scroll_ItemHeroCard self)
+        {
+            self.E_LevelText.gameObject.SetActive(false);
+            self.E_QualityIconImage.gameObject.SetActive(false);
+            self.E_ElementImage.gameObject.SetActive(false);
+            self.E_AddTextText.gameObject.SetActive(true);
+
+            var commonPath = ConstValue.CommonUIAtlasPath;
+            var framePath = ConstValue.FrameBgPath;
+            self.E_HeadImage.sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonPath, framePath);
+        }
+
         public static async void InitHeroCard(this Scroll_ItemHeroCard self, HeroCardInfo heroCardInfo)
         {
+            self.HeroCardInfo = heroCardInfo;
+            if (heroCardInfo == null)
+            {
+                self.SetNullStateView();
+                return;
+            }
+
+            self.E_AddTextText.gameObject.SetActive(false);
+
             var configId = heroCardInfo.ConfigId;
             var config = HeroConfigCategory.Instance.Get(configId);
             self.E_CountText.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Materail);
             self.E_CountText.text = heroCardInfo.Count.ToString();
-          
 
             self.E_ChooseCountText.gameObject.SetActive(false);
             var spriteAtlas = ConstValue.HeroCardAtlasPath;
-          
+
             self.E_ElementImage.gameObject.SetActive(true);
             // self.E_LevelText.gameObject.SetActive(true);
             // self.E_ElementImage.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
@@ -41,6 +69,7 @@ namespace ET
                     starObj.gameObject.SetActive(i < heroCardInfo.Star);
                 }
             }
+
             var headImage = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, config.HeroIconImage);
             Log.Debug("Head image load succcess");
             self.E_HeadImage.sprite = headImage;

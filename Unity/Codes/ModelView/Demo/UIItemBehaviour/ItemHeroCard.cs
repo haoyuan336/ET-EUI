@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace ET
 {
-	public  class Scroll_ItemHeroCard : Entity,IAwake,IDestroy 
+	public partial class Scroll_ItemHeroCard : Entity,IAwake,IDestroy, IAwake<Transform>
 	{
 		private bool isCacheNode = false;
 		public void SetCacheMode(bool isCache)

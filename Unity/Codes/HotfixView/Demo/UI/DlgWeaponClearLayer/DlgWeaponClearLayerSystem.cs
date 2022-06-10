@@ -16,15 +16,24 @@ namespace ET
             });
 
             self.View.E_OkButtonButton.AddListenerAsync(self.OnOkButtonClick);
+            self.View.E_SpecialClearButton.AddListener(async () =>
+            {
+                UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+                await uiComponent.ShowWindow(WindowID.WindowID_WeaponSpecialClearLayer);
+                uiComponent.HideWindow(WindowID.WindowID_WeaponClearLayer);
+                UIBaseWindow uiBaseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_WeaponSpecialClearLayer);
+                uiBaseWindow.GetComponent<DlgWeaponSpecialClearLayer>().SetTargetInfo(self.WeaponInfo,self.CurrentWordBarInfos);
+            });
         }
 
         public static void ShowWindow(this DlgWeaponClearLayer self, Entity contextData = null)
         {
         }
 
-        public static async void SetTargetInfo(this DlgWeaponClearLayer self, WeaponInfo weaponInfo)
+        public static async void SetTargetInfo(this DlgWeaponClearLayer self, WeaponInfo weaponInfo, List<WordBarInfo> wordBarInfos)
         {
             self.WeaponInfo = weaponInfo;
+            self.CurrentWordBarInfos = wordBarInfos;
             if (self.WordBarItems.Count == 0)
             {
                 WeaponsConfig config = WeaponsConfigCategory.Instance.Get(weaponInfo.ConfigId);
@@ -41,29 +50,21 @@ namespace ET
                 }
             }
 
-            long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
-            //获取装备的词条信息
-            C2M_GetWeaponWordBarsRequest request = new C2M_GetWeaponWordBarsRequest() { Account = account, WeaponId = self.WeaponInfo.WeaponId };
-            M2C_GetWeaponWordBarsResponse response = (M2C_GetWeaponWordBarsResponse) await session.Call(request);
-            if (response.Error == ErrorCode.ERR_Success)
+     
+            self.SetWordBarInfos(wordBarInfos);
+            self.ChooseWordBarInfos.Clear();
+            foreach (var item in self.WordBarItems)
             {
-                List<WordBarInfo> wordBarInfos = response.WordBarInfos;
-
-                self.SetWordBarInfos(wordBarInfos);
-                self.ChooseWordBarInfos.Clear();
-                foreach (var item in self.WordBarItems)
+                if (item.WordBarInfo != null && !item.WordBarInfo.IsMain)
                 {
-                    if (item.WordBarInfo != null && !item.WordBarInfo.IsMain)
-                    {
-                        self.ChooseWordBarInfos.Add(item.WordBarInfo);
-                    }
+                    self.ChooseWordBarInfos.Add(item.WordBarInfo);
                 }
             }
         }
 
         public static void SetWordBarInfos(this DlgWeaponClearLayer self, List<WordBarInfo> wordBarInfos)
         {
+            self.CurrentWordBarInfos = wordBarInfos;
             for (int i = 0; i < self.WordBarItems.Count; i++)
             {
                 var item = self.WordBarItems[i];

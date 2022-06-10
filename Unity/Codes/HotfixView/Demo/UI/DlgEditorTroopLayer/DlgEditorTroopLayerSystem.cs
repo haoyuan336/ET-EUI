@@ -15,7 +15,7 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgEditorTroopLayer self)
         {
-            self.View.ESTroopHeroCards.RegisterUIEvent();
+            // self.View.ESTroopHeroCards.RegisterUIEvent();
             self.View.E_BackButton.AddListener(self.OnBackButtonClick);
         }
 
@@ -103,7 +103,7 @@ namespace ET
 
         public static void UpdateTroopHeroCardInfoAsync(this DlgEditorTroopLayer self, List<HeroCardInfo> heroCardInfos)
         {
-            self.View.ESTroopHeroCards.UpdateHeroCardInfo(heroCardInfos);
+            // self.View.ESTroopHeroCards.UpdateHeroCardInfo(heroCardInfos);
         }
 
         public static async void OnHeroCardItemClickAction(this DlgEditorTroopLayer self, HeroCardInfo info, Scroll_ItemHeroCard heroCard, bool value)
@@ -128,6 +128,12 @@ namespace ET
                 {
                     // Log.Debug($"设置队伍成功{response.HeroCardInfos.Count}");
                     self.TroopHeroCardInfos = response.HeroCardInfos;
+
+                    if (self.EditorHeroCardAction != null)
+                    {
+                        self.EditorHeroCardAction(response.HeroCardInfos);
+                    }
+                    
                     self.UpdateTroopHeroCardInfoAsync(self.TroopHeroCardInfos);
                 }
                 else
@@ -154,7 +160,7 @@ namespace ET
             DlgAllHeroBagLayer allHeroBagLayer = baseWindow.GetComponent<DlgAllHeroBagLayer>();
             allHeroBagLayer.OnHeroItemInfoClick = self.OnHeroCardItemClickAction;
             await allHeroBagLayer.SetShowHeroTypeAsync(HeroBagType.Hero);
-            self.View.ESTroopHeroCards.ItemCardClickAction = self.OnTroopHeroCardItemClickAction;
+            // self.View.ESTroopHeroCards.ItemCardClickAction = self.OnTroopHeroCardItemClickAction;
             self.ShowTroopHeroCardInfo();
             // self.ShowBackButton();
         }

@@ -202,6 +202,8 @@ namespace ET
                     }
                 }
 
+            
+
                 itemHeroCard.E_ChooseToggle.onValueChanged.AddListener((value) =>
                 {
                     if (self.OnHeroItemInfoClick != null)
