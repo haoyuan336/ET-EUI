@@ -8,7 +8,7 @@ namespace ET
     {
         public Dictionary<int, Scroll_ItemWeapon> ItemWeapons = new Dictionary<int, Scroll_ItemWeapon>();
         public List<WeaponInfo> WeaponInfos = new List<WeaponInfo>();
-        public Action<WeaponInfo, Scroll_ItemWeapon, bool> WeaponItemClickAction;
+        public Action<WeaponInfo, Scroll_ItemWeapon> WeaponItemClickAction;
         public int BagCount = 0;
         public int WeaponCount = 0;
         public Sprite DefaultWeaponBgSprite = null;

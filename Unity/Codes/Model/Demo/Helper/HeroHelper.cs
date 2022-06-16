@@ -112,7 +112,9 @@ namespace ET
             HeroConfig config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
             var baseAttack = config.BaseAttack;
             var growthCoefficient = config.AttackGrowthCoefficient;
-            return GetHeroBaseValue(heroCardInfo, growthCoefficient, baseAttack);
+            var baseValue = GetHeroBaseValue(heroCardInfo, growthCoefficient, baseAttack);
+            Log.Warning($"get hero base attack {baseValue}");
+            return baseValue;
         }
 
         /// <summary>

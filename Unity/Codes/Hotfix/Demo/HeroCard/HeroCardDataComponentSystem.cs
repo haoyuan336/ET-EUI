@@ -8,19 +8,15 @@ namespace ET
         public override void Awake(HeroCardDataComponent self)
         {
             // self.HP = 0;
-            self.HP = self.GetHeroBaseHP();
+            self.HP = self.GetHeroTotalHP();
+            self.TotalHP = self.HP;
+            HeroCard parent = self.GetParent<HeroCard>();
+            var configId = parent.ConfigId;
+            HeroConfig config = HeroConfigCategory.Instance.Get(configId);
+            Log.Debug($"config {config.HeroName}");
+            Log.Debug($"total hp {self.HP}");
             self.Angry = 0;
             self.DiamondAttackAddition = 0;
-            self.HeroAttack = self.GetHeroBaseAttack();
-        }
-    }
-
-    public class HeroCardDataComponentAwakeSystem: AwakeSystem<HeroCardDataComponent, HeroCardDataComponentInfo>
-    {
-        public override void Awake(HeroCardDataComponent self, HeroCardDataComponentInfo info)
-        {
-            self.HP = info.HP;
-            self.Angry = 0;
         }
     }
 
@@ -28,20 +24,22 @@ namespace ET
     {
         public static HeroCardDataComponentInfo GetInfo(this HeroCardDataComponent self)
         {
+            Skill skill = null;
+#if SERVER
+            skill = self.GetParent<HeroCard>().GetChild<Skill>(self.CurrentSkillId);
+#endif
             return new HeroCardDataComponentInfo()
             {
                 HeroId = self.GetParent<HeroCard>().Id,
                 HP = self.HP,
-                HeroAttack = self.HeroAttack,
-                // DiamondAttack = self.DiamondAttack,
+                TotalHP = self.TotalHP,
                 DiamondAttackAddition = self.DiamondAttackAddition,
-                WeaponAttack = self.WeaponAttack,
-                SkillAttack = self.SkillAttack,
-                NormalDamage = self.NormalDamage,
-                CriticalDamage = self.CriticalDamage,
+                IsCritical = self.IsCritical,
+                Damage = self.Damage,
                 ConfigId = self.GetParent<HeroCard>().ConfigId,
                 Angry = self.Angry,
-                CurrentSkillId = self.CurrentSkillId
+                CurrentSkillId = self.CurrentSkillId,
+                CurrentSkillInfo = skill?.GetMessageInfo()
             };
         }
 
@@ -64,40 +62,27 @@ namespace ET
         public static int GetAttackBuff(this HeroCardDataComponent self)
         {
             //获取攻击buff
-
             return 0;
         }
 
-        public static int GetHeroBaseHP(this HeroCardDataComponent self)
+        public static int GetHeroTotalHP(this HeroCardDataComponent self)
         {
-            //获取英雄的基础血量
-            // HeroCard heroCard = self.GetParent<HeroCard>();
-            // HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
-            // var baseValue = config.HeroHP;
-            // var grow = config.HPGrowthCoefficient;
-            // return self.GetHeroBaseValue(grow, baseValue);
-            return HeroHelper.GetHeroBaseHP(self.GetParent<HeroCard>().GetMessageInfo());
+            var baseHP = HeroHelper.GetHeroBaseHP(self.GetParent<HeroCard>().GetMessageInfo());
+            HeroCard heroCard = self.GetParent<HeroCard>();
+            var weaponHP = heroCard.GetWeaponBaseValueByType(WordBarType.HP);
+            var weaponHPAddition = heroCard.GetWeaponBaseValueByType(WordBarType.HPAddition);
+            var totalHp = (baseHP + weaponHP) * (1.0f + (float) weaponHPAddition / 10000);
+            return (int) totalHp;
         }
-
         public static int GetHeroBaseDefence(this HeroCardDataComponent self)
         {
             //获取英雄的基础防御力
-            // HeroCard heroCard = self.GetParent<HeroCard>();
-            // HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
-            // var baseAttack = config.BaseDefence;
-            // var grow = config.DefenceGrowthCoefficient;
-            // return self.GetHeroBaseValue(grow, baseAttack);
             return HeroHelper.GetHeroBaseDefence(self.GetParent<HeroCard>().GetMessageInfo());
         }
 
         public static int GetHeroBaseAttack(this HeroCardDataComponent self)
         {
             //计算英雄的基础伤害
-            // HeroCard heroCard = self.GetParent<HeroCard>();
-            // HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
-            // var baseAttack = config.BaseAttack;
-            // var growthCoefficient = config.AttackGrowthCoefficient;
-            // return self.GetHeroBaseValue(growthCoefficient, baseAttack);
             return HeroHelper.GetHeroBaseAttack(self.GetParent<HeroCard>().GetMessageInfo());
         }
 
@@ -108,20 +93,13 @@ namespace ET
             int level = heroCard.Level;
             int star = heroCard.Star;
             int rank = heroCard.Rank;
-            Log.Debug($"level {level}star{star}rank{rank}");
-            Log.Debug($"growthCoefficient{growthCoefficient}");
             // HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
             float baseValue = value;
             baseValue = baseValue * growthCoefficient / 2; //基础值
-            Log.Debug($"component base value {baseValue}");
             baseValue = baseValue + baseValue * (rank) / 10; // 升阶后的成长值
-            Log.Debug($"component update rank {baseValue}");
             var levelValue = baseValue * (0.03f + growthCoefficient / 1000.0f) * (level + 1);
-            Log.Debug($"update level {levelValue}");
             baseValue = baseValue + levelValue; //升级后的成长值
-            Log.Debug($"update level attack {baseValue}");
             var starValue = growthCoefficient * 100 * (star); //升星后的成长值
-            Log.Debug($"update start leve {starValue}");
             return (int) Mathf.Ceil(baseValue + starValue);
         }
 
@@ -158,7 +136,6 @@ namespace ET
         public static void MakeSureSkill(this HeroCardDataComponent self, int firstCrashCount)
         {
             //todo 确定当前技能
-            // var firstCrashCount = crashCommonInfo.FirstCrashCount;
             firstCrashCount -= 3;
             if (firstCrashCount < 0)
             {

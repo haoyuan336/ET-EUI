@@ -77,6 +77,10 @@ namespace ET
 		public int Level { get; set; }
 		[ProtoMember(4)]
 		public int ConfigId { get; set; }
+		[ProtoMember(5)]
+		public int Star { get; set; }
+		[ProtoMember(6)]
+		public int Rank { get; set; }
 
 	}
 }

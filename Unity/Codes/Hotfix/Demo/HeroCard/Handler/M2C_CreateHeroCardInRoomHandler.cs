@@ -11,7 +11,8 @@ namespace ET
             HeroCardComponent heroCardComponent = session.ZoneScene().CurrentScene().AddComponent<HeroCardComponent>();
             
             heroCardComponent.InitHeroCard(message);
-         
+
+            
 
             await ETTask.CompletedTask;
         }

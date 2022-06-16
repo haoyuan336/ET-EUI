@@ -13,6 +13,15 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgMainScene self)
         {
+            self.RegisterNewMailMessage();
+        }
+
+        public static void RegisterNewMailMessage(this DlgMainScene self)
+        {
+            long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            C2M_RegisterNewMailBoxMessage message = new C2M_RegisterNewMailBoxMessage() { AccountId = account };
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            session.Send(message);
         }
 
         public static async ETTask<long> GetTroopIdAsync(this DlgMainScene self)
@@ -96,7 +105,6 @@ namespace ET
                 HeroCardInfo heroCardInfo = await self.GetFirstHeroCardInfoAsync(troopId);
                 if (heroCardInfo != null)
                 {
-                    
                     self.ShowHeroMode(heroCardInfo);
                 }
             }
@@ -112,6 +120,7 @@ namespace ET
                 GameObject.Destroy(self.HeroMode);
                 self.HeroMode = null;
             }
+
             // self.HeroMode = GameObject.Instantiate(prefab);
             self.HeroMode = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(config.HeroMode);
             Transform shadow = UIFindHelper.FindDeepChild(GlobalComponent.Instance.Global.gameObject, "Shadow");

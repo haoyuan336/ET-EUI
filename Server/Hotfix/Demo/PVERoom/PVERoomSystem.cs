@@ -76,7 +76,7 @@ namespace ET
                 if (unit.IsAI)
                 {
                     //todo 首先创建敌人的英雄卡
-                    self.CreateHeroIdListInLevelConfig(i, unit);
+                    self.CreateHeroIdListInLevelConfig(unit);
                 }
             }
         }
@@ -162,13 +162,34 @@ namespace ET
                 }
 
                 List<HeroCard> heroCards = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
-                        .Query<HeroCard>((a) => a.TroopId.Equals(troopId) && a.State == (int)HeroCardState.Active);
+                        .Query<HeroCard>((a) => a.TroopId.Equals(troopId) && a.State == (int) HeroCardState.Active);
 
                 foreach (var heroCard in heroCards)
                 {
+                    unit.AddChild(heroCard);
                     List<Skill> skills = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
                             .Query<Skill>(a => a.OwnerId.Equals(heroCard.Id));
-                    unit.AddChildWithId<HeroCard, HeroCard, List<Skill>>(heroCard.Id, heroCard, skills);
+                    foreach (var skill in skills)
+                    {
+                        heroCard.AddChild(skill);
+                    }
+
+                    List<Weapon> weapons = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
+                            .Query<Weapon>(a => a.OnWeaponHeroId.Equals(heroCard.Id) && a.State == (int) StateType.Active);
+                    foreach (var weapon in weapons)
+                    {
+                        heroCard.AddChild(weapon);
+                        //取出来，装备的词条
+                        List<WordBar> wordBars = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
+                                .Query<WordBar>(a => a.OwnerId.Equals(weapon.Id) && a.State == (int) StateType.Active);
+                        foreach (var wordBar in wordBars)
+                        {
+                            weapon.AddChild(wordBar);
+                        }
+
+                    }
+
+                    heroCard.AddComponent<HeroCardDataComponent>();
                 }
             }
 
@@ -176,17 +197,14 @@ namespace ET
             //todo sync all player info
 
             List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>();
-            // List<HeroCardDataComponentInfo> heroCardDataComponents = new List<HeroCardDataComponentInfo>();
+            List<HeroCardDataComponentInfo> heroCardDataComponentInfos = new List<HeroCardDataComponentInfo>();
             foreach (var unit in self.Units)
             {
                 List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
                 foreach (var heroCard in heroCards)
                 {
-                    // HeroCard heroCard = unit.GetChild<HeroCard>(id);
-                    HeroCardInfo heroCardInfo = heroCard.GetMessageInfo();
-                    heroCardInfo.HeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo();
-                    heroCardInfos.Add(heroCardInfo);
-                    // heroCardDataComponents.Add(heroCard.GetComponent<HeroCardDataComponent>().GetInfo());
+                    heroCardInfos.Add(heroCard.GetMessageInfo());
+                    heroCardDataComponentInfos.Add(heroCard.GetComponent<HeroCardDataComponent>().GetInfo());
                 }
             }
 
@@ -197,15 +215,14 @@ namespace ET
                     continue;
                 }
 
-                
                 MessageHelper.SendToClient(unit,
-                    new M2C_CreateHeroCardInRoom() { HeroCardInfos = heroCardInfos });
+                    new M2C_CreateHeroCardInRoom() { HeroCardInfos = heroCardInfos, HeroCardDataComponentInfos = heroCardDataComponentInfos });
             }
 
             await ETTask.CompletedTask;
         }
 
-        public static List<long> CreateHeroIdListInLevelConfig(this PVERoom self, int CampIndex, Unit unit)
+        public static void CreateHeroIdListInLevelConfig(this PVERoom self, Unit unit)
         {
             List<long> heroCards = new List<long>();
             // List<HeroCard> heroCards = new List<HeroCard>();
@@ -217,16 +234,34 @@ namespace ET
             {
                 int configId = int.Parse(str);
                 EnemyHeroConfig enemyHeroConfig = EnemyHeroConfigCategory.Instance.Get(configId);
-                long id = IdGenerater.Instance.GenerateId();
-                HeroCard heroCard = unit.AddChildWithId<HeroCard, EnemyHeroConfig>(id, enemyHeroConfig);
+                HeroCard heroCard = new HeroCard();
+                heroCard.Id = IdGenerater.Instance.GenerateId();
+                unit.AddChild(heroCard);
+                heroCard.ConfigId = enemyHeroConfig.ConfigId;
+                heroCard.Level = enemyHeroConfig.Level;
+                heroCard.Star = enemyHeroConfig.Star;
+                heroCard.Rank = enemyHeroConfig.Rank;
+
                 heroCard.InTroopIndex = index;
                 index++;
-                // self.enemyHeroCards.Add(heroCard);
-                heroCards.Add(heroCard.Id);
                 heroCard.CampIndex = unit.SeatIndex;
-            }
 
-            return heroCards;
+                HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
+
+                var skillStrs = config.SkillIdList.Split(',');
+                foreach (var skillStr in skillStrs)
+                {
+                    SkillConfig skillConfig = SkillConfigCategory.Instance.Get(int.Parse(skillStr));
+                    Skill skill = new Skill();
+                    skill.Id = IdGenerater.Instance.GenerateId();
+                    skill.ConfigId = skillConfig.Id;
+                    skill.OwnerId = heroCard.Id;
+                    heroCard.AddChild(skill);
+                }
+
+                heroCard.AddComponent<HeroCardDataComponent>();
+                heroCards.Add(heroCard.Id);
+            }
         }
 
         public static List<HeroCard> GetAliveHeroCardWithColorType(this PVERoom self, Unit unit, int colorId)
@@ -419,7 +454,7 @@ namespace ET
             }
         }
 
-         public static void PlayerScrollScreen(this PVERoom self, C2M_PlayerScrollScreen message)
+        public static void PlayerScrollScreen(this PVERoom self, C2M_PlayerScrollScreen message)
         {
             Log.Debug("process scroll screen message");
             M2C_SyncDiamondAction m2CSyncDiamondAction = self.GetComponent<DiamondComponent>().ScrollDiamond(message);
@@ -594,9 +629,11 @@ namespace ET
                     beAttackHeroCard = self.CurrentBeAttackHeroCard;
                 }
 
-                var attackAction = heroCard.AttackTarget(beAttackHeroCard);
-                attackActionItem.AttackActions.Add(attackAction);
-                //初始化
+                if (beAttackHeroCard != null)
+                {
+                    var attackAction = heroCard.AttackTarget(beAttackHeroCard);
+                    attackActionItem.AttackActions.Add(attackAction);
+                }
             }
 
             Log.Debug($"找到被攻击对象，并且进行攻击 {attackActionItem.AttackActions.Count}");

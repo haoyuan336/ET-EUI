@@ -4,14 +4,15 @@ using UnityEngine;
 
 namespace ET
 {
-    public class HeroCard: Entity, IAwake<int>, IAwake<int, HeroCardInfo>, IUpdate, IDestroy, IAwake<HeroCardInfo>, IAwake<EnemyHeroConfig>,
-            IAwake<HeroCardInfo, List<Skill>>, IAwake<int, HeroCardInfo, List<Skill>>, IAwake<HeroCard, List<Skill>>
+    public class  HeroCard: Entity,  IAwake, IUpdate, IDestroy
     {
         public String HeroName; //英雄名称 支持可编辑
         public long OwnerId; //拥有者的id  也就是玩家id
         public int ConfigId; //在配置表里面的id
         public long TroopId; //队伍Id
         public int InTroopIndex; //在队伍里面的index
+
+        public long MailId;  //邮件Id
         // public int HeroColor; //英雄属性
         // public float HP;
         // public float Defence;
@@ -22,7 +23,7 @@ namespace ET
         // public float TotalAngry; //怒气值上线
         public int Level = 1; //当前英雄的等级
 
-        public long CurrentSkillId; //当前需要释放的技能
+        // public long CurrentSkillId; //当前需要释放的技能
 
         public HeroCardInfo HeroCardInfo;
         public int Star = 0; //英雄的星级数量

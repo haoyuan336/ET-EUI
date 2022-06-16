@@ -34,14 +34,17 @@ namespace ET
             {
                 UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
                 UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_BagLayer);
-                baseWindow.GetComponent<DlgBagLayer>().ReferBagInfo();
+                baseWindow?.GetComponent<DlgBagLayer>().ReferBagInfo();
                 // self.AlChooseWeaponInfos.Clear();
                 // self.SetAlChooseWeaponItem();
                 // self.WeaponBagCommon.SetEnableWeaponInfos(null);
                 self.SetTargetInfo(response.WeaponInfo);
 
                 UIBaseWindow weaponInfoLayer = uiComponent.GetUIBaseWindow(WindowID.WindowID_WeaponInfoLayer);
-                weaponInfoLayer.GetComponent<DlgWeaponInfoLayer>().SetTargetInfo(response.WeaponInfo);
+                weaponInfoLayer?.GetComponent<DlgWeaponInfoLayer>().SetTargetInfo(response.WeaponInfo);
+
+                UIBaseWindow heroOnWeaponLayer = uiComponent.GetUIBaseWindow(WindowID.WindowID_HeroWeaponPreviewLayer);
+                heroOnWeaponLayer?.GetComponent<DlgHeroWeaponPreviewLayer>().ReferHeroInfo();
             }
 
             await ETTask.CompletedTask;
@@ -115,7 +118,7 @@ namespace ET
             UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_AddSubPlane);
             DlgAddSubPlane dlgAddSubPlane = baseWindow.GetComponent<DlgAddSubPlane>();
 
-            dlgAddSubPlane.View.E_ContentImage.transform.position = itemWeapon.E_ChooseToggle.transform.position;
+            dlgAddSubPlane.View.E_ContentImage.transform.position = itemWeapon.E_ChooseButton.transform.position;
 
             var targetInfo = self.AlChooseWeaponInfos.Find(a => a.WeaponId.Equals(weaponInfo.WeaponId));
             if (targetInfo != null)
@@ -201,42 +204,31 @@ namespace ET
             baseWindow.GetComponent<DlgAddSubPlane>().EnabelSubButton(value);
         }
 
-        public static void OnBagWeaponItemClick(this DlgWeaponStrengthenPreviewLayer self, WeaponInfo weaponInfo, Scroll_ItemWeapon itemWeapon,
-        bool value)
+        public static void OnBagWeaponItemClick(this DlgWeaponStrengthenPreviewLayer self, WeaponInfo weaponInfo, Scroll_ItemWeapon itemWeapon)
         {
             WeaponsConfig config = WeaponsConfigCategory.Instance.Get(weaponInfo.ConfigId);
             if (config.MaterialType == (int) WeaponBagType.Materail)
             {
-                if (value)
-                {
-                    itemWeapon.E_ChooseToggle.isOn = false;
-                    self.ShowAddSubPlane(itemWeapon, weaponInfo);
-                }
+                self.ShowAddSubPlane(itemWeapon, weaponInfo);
             }
             else
             {
-                if (value)
+                var isFull = self.CheckIsChooseFull();
+                if (!isFull)
                 {
-                    var isFull = self.CheckIsChooseFull();
-                    if (!isFull)
+                    // self.AlChooseWeaponInfos.Add(weaponInfo);
+                    self.AlChooseWeaponInfos.Add(new WeaponInfo()
                     {
-                        // self.AlChooseWeaponInfos.Add(weaponInfo);
-                        self.AlChooseWeaponInfos.Add(new WeaponInfo()
-                        {
-                            WeaponId = weaponInfo.WeaponId,
-                            ConfigId = weaponInfo.ConfigId,
-                            Count = 1,
-                            Level = weaponInfo.Level,
-                            OnWeaponHeroId = weaponInfo.OnWeaponHeroId
-                        });
-                    }
+                        WeaponId = weaponInfo.WeaponId,
+                        ConfigId = weaponInfo.ConfigId,
+                        Count = 1,
+                        Level = weaponInfo.Level,
+                        OnWeaponHeroId = weaponInfo.OnWeaponHeroId
+                    });
+                }
 
-                    // self.DestroyESWeaponBagCommon();
-                }
-                else
-                {
-                    self.AlChooseWeaponInfos.RemoveAll(a => a.WeaponId.Equals(weaponInfo.WeaponId));
-                }
+                // self.DestroyESWeaponBagCommon();
+                self.AlChooseWeaponInfos.RemoveAll(a => a.WeaponId.Equals(weaponInfo.WeaponId));
 
                 if (self.CheckIsChooseFull())
                 {
@@ -331,7 +323,7 @@ namespace ET
         public static void RegisterWeaponItemClick(this DlgWeaponStrengthenPreviewLayer self, Scroll_ItemWeapon itemWeapon)
         {
             itemWeapon.E_AddTextText.gameObject.SetActive(true);
-            var toggle = itemWeapon.E_ChooseToggle.GetComponent<Toggle>();
+            var toggle = itemWeapon.E_ChooseButton.GetComponent<Toggle>();
             toggle.onValueChanged.RemoveAllListeners();
             toggle.onValueChanged.AddListener((value) =>
             {
@@ -395,7 +387,7 @@ namespace ET
                 List<WeaponInfo> weaponInfos = response.WeaponInfos;
                 //去掉当前的英雄
                 weaponInfos.RemoveAll(a => a.WeaponId.Equals(self.CurrentWeaponInfo.WeaponId));
-            
+
                 // weaponInfos.Sort((a, b) =>
                 // {
                 //     var configB = WeaponsConfigCategory.Instance.Get(b.ConfigId);
@@ -413,7 +405,6 @@ namespace ET
                     return configA.Star - configB.Star;
                 });
                 weaponInfos.Sort((a, b) => { return a.Level - b.Level; });
-
 
                 var count = 0;
                 var index = 0;

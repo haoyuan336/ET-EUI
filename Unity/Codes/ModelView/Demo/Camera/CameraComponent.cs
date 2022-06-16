@@ -25,6 +25,10 @@ namespace ET
 		// 战斗摄像机
 		public Camera mainCamera;
 		public Unit Unit;
+
+
+
+		public GameObject CmProcessCamera;
 		public Camera MainCamera
 		{
 			get

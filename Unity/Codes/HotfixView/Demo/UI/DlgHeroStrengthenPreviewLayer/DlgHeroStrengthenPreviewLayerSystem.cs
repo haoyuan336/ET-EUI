@@ -119,7 +119,10 @@ namespace ET
                 // self.View.ETargetHeroContentLoopHorizontalScrollRect.RefreshCells();
                 UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
                 UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer];
-                baseWindow.GetComponent<DlgAllHeroBagLayer>().ReferView();
+                if (baseWindow != null)
+                {
+                    baseWindow.GetComponent<DlgAllHeroBagLayer>().ReferView();
+                }
                 // self.View.E_OKButton.gameObject.SetActive(false);
                 // UIBaseWindow showHeroInfoLayer = uiComponent.GetUIBaseWindow(WindowID.WindowID_ShowHeroInfoLayer);
                 // showHeroInfoLayer.GetComponent<DlgShowHeroInfoLayer>().ReferHeroCardView(response.HeroCardInfo);

@@ -50,26 +50,24 @@ namespace ET
         {
             Scroll_ItemWeapon itemWeapon = self.ItemWeapons[index].BindTrans(tr);
             self.InitWeaponItem(self.WeaponInfos[index], itemWeapon);
-            itemWeapon.E_ChooseToggle.interactable = true;
+            itemWeapon.E_ChooseButton.interactable = true;
             if (self.WeaponInfos[index].WeaponId.Equals(self.TargetWeaponInfos[0].WeaponId))
             {
-                itemWeapon.E_ChooseToggle.interactable = false;
+                itemWeapon.E_ChooseButton.interactable = false;
             }
 
-            itemWeapon.E_ChooseToggle.onValueChanged.RemoveAllListeners();
+            itemWeapon.E_ChooseButton.onClick.RemoveAllListeners();
 
-            itemWeapon.E_ChooseToggle.isOn = false;
-            itemWeapon.E_ChooseToggle.onValueChanged.AddListener((value) =>
+            itemWeapon.E_ChooseButton.onClick.AddListener(() =>
             {
                 WeaponInfo info = self.WeaponInfos[index];
                 WeaponsConfig config = WeaponsConfigCategory.Instance.Get(info.ConfigId);
                 if (config.MaterialType == (int)HeroBagType.Hero)
                 {
-                    if (value)
+                    if (itemWeapon.E_CheckmarkImage.gameObject.activeSelf)
                     {
                         if (self.CheckIsFull())
                         {
-                            itemWeapon.E_ChooseToggle.isOn = false;
                         }
                         else
                         {
@@ -83,7 +81,7 @@ namespace ET
                 }
                 else
                 {
-                    if (value)
+                    if (itemWeapon.E_CheckmarkImage.gameObject.activeSelf)
                     {
                         self.OnWeaponItemClick(info, itemWeapon);
                     }
@@ -96,9 +94,7 @@ namespace ET
 
         public static async void OnWeaponItemClick(this DlgWeaponStrengthenLayer self, WeaponInfo info, Scroll_ItemWeapon itemWeapon)
         {
-            itemWeapon.E_ChooseToggle.isOn = false;
-
-            
+            // itemWeapon.E_ChooseToggle.isOn = false;
             //如果是普通材料。那么需要选择个数
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             await uiComponent.ShowWindow(WindowID.WindowID_AddSubPlane, WindowID.WindowID_Invaild,

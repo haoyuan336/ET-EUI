@@ -7,7 +7,7 @@ namespace ET
 {
     public class ESCommonWeaponItemAwakeSystem: AwakeSystem<ESCommonWeaponItem, WeaponType, Transform>
     {
-        public override  void Awake(ESCommonWeaponItem self, WeaponType a, Transform b)
+        public override void Awake(ESCommonWeaponItem self, WeaponType a, Transform b)
         {
             self.CurrentType = a;
             // GameObject gameObject = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath("ItemWeapon");
@@ -34,6 +34,8 @@ namespace ET
             self.E_WeaponType.SetActive(true);
             self.E_QualityIcon.SetActive(false);
             self.E_WeaponType.GetComponent<Text>().text = typeNames[a];
+
+            self.BgSprite = self.E_Weapon.GetComponent<Image>().sprite;
 
             if (self.WeaponInfo != null)
             {
@@ -78,18 +80,23 @@ namespace ET
             self.E_Level.GetComponent<Text>().text = $"Lv.{self.WeaponInfo.Level}";
         }
 
-        public static async void SetWeaponInfo(this ESCommonWeaponItem self, WeaponInfo weaponInfo)
+        public static void SetWeaponInfo(this ESCommonWeaponItem self, WeaponInfo weaponInfo)
         {
+            self.WeaponInfo = weaponInfo;
             if (weaponInfo == null)
             {
                 self.E_AddText.SetActive(true);
-                var bgPath = ConstValue.FrameBgPath;
-                var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.CommonUIAtlasPath, bgPath);
-                self.E_Weapon.GetComponent<Image>().sprite = sprite;
-                        
+                // var bgPath = ConstValue.FrameBgPath;
+                // var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.CommonUIAtlasPath, bgPath);
+                if (self.BgSprite != null)
+                {
+                    self.E_Weapon.GetComponent<Image>().sprite = self.BgSprite;
+                }
+
                 self.E_Level.gameObject.SetActive(false);
                 return;
             }
+
             Log.Debug("设置装备信息");
             self.WeaponInfo = weaponInfo;
             self.ReferInfo();

@@ -19,7 +19,6 @@ namespace ET
 
         public static async void ShowWeaponInfoLayer(this DlgBagLayer self, WeaponInfo weaponInfo)
         {
-            
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             await uiComponent.ShowWindow(WindowID.WindowID_WeaponInfoLayer);
 
@@ -27,7 +26,7 @@ namespace ET
             baseWindow.GetComponent<DlgWeaponInfoLayer>().SetTargetInfo(weaponInfo);
         }
 
-        public static void OnItemWeaponClick(this DlgBagLayer self, WeaponInfo weaponInfo, Scroll_ItemWeapon itemWeapon, bool value)
+        public static void OnItemWeaponClick(this DlgBagLayer self, WeaponInfo weaponInfo, Scroll_ItemWeapon itemWeapon)
         {
             // UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             // await uiComponent.ShowWindow(WindowID.WindowID_WeaponStrengthenLayer);
@@ -35,30 +34,25 @@ namespace ET
             // DlgWeaponStrengthenLayer strengthenLayer = baseWindow.GetComponent<DlgWeaponStrengthenLayer>();
             // strengthenLayer.SetInfo(weaponInfo);
             // await ETTask.CompletedTask;
-            if (value)
+
+            // itemWeapon.E_ChooseButton.isOn = false;
+            WeaponsConfig config = WeaponsConfigCategory.Instance.Get(weaponInfo.ConfigId);
+            if (config.MaterialType == (int) WeaponBagType.Weapon)
             {
-                itemWeapon.E_ChooseToggle.isOn = false;
-                WeaponsConfig config = WeaponsConfigCategory.Instance.Get(weaponInfo.ConfigId);
-
-                if (config.MaterialType == (int)WeaponBagType.Weapon)
-                {
-                    self.ShowWeaponInfoLayer(weaponInfo);
-                }
+                self.ShowWeaponInfoLayer(weaponInfo);
             }
-
-          
         }
 
         public static void ReferBagInfo(this DlgBagLayer self)
         {
             self.View.ESWeaponBagCommon.ShowWindow();
-
         }
+
         //
         public static async void ShowWindow(this DlgBagLayer self, Entity contextData = null)
         {
             self.View.ESWeaponBagCommon.ShowWindow();
-            
+
             await ETTask.CompletedTask;
         }
     }

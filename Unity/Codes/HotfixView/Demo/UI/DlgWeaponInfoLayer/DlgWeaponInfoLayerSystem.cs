@@ -23,6 +23,38 @@ namespace ET
                 UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_WeaponClearLayer);
                 baseWindow.GetComponent<DlgWeaponClearLayer>().SetTargetInfo(self.WeaponInfo, self.WordBarInfos);
             });
+
+            self.View.E_OffWeaponButton.AddListenerAsync(self.OffWeaponRequest);
+        }
+
+        public static async ETTask OffWeaponRequest(this DlgWeaponInfoLayer self)
+        {
+            long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            C2M_OffWeaponRequest request = new C2M_OffWeaponRequest()
+            {
+                Account = account, WeaponId = self.WeaponInfo.WeaponId, HeroId = self.WeaponInfo.OnWeaponHeroId
+            };
+
+            M2C_OffWeaponResponse response = (M2C_OffWeaponResponse) await session.Call(request);
+
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                self.View.E_OffWeaponButton.gameObject.SetActive(false);
+                GameObject.Destroy(self.CurrentHeroCardItem.uiTransform.gameObject);
+                self.CurrentHeroCardItem?.Dispose();
+                self.CurrentHeroCardItem = null;
+
+                UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+                UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_ShowHeroInfoLayer);
+                if (baseWindow != null)
+                {
+                    baseWindow.GetComponent<DlgShowHeroInfoLayer>().RemoveWeaponInfo(self.WeaponInfo);
+                    
+                }
+            }
+
+            await ETTask.CompletedTask;
         }
 
         public static async ETTask WeaponStrengthButtonClick(this DlgWeaponInfoLayer self)
@@ -56,7 +88,7 @@ namespace ET
         public static async void SetWordBarInfos(this DlgWeaponInfoLayer self, List<WordBarInfo> wordBarInfos)
         {
             self.WordBarInfos = wordBarInfos;
-            if (self.WordBarItems.Count  == 0)
+            if (self.WordBarItems.Count == 0)
             {
                 WeaponsConfig config = WeaponsConfigCategory.Instance.Get(self.WeaponInfo.ConfigId);
                 var wordsCount = config.WordBarCount;
@@ -85,8 +117,6 @@ namespace ET
                     item.SetInfo(null, self.WeaponInfo);
                 }
             }
-            
-            
         }
 
         public static void ShowWindow(this DlgWeaponInfoLayer self, Entity contextData = null)
@@ -100,13 +130,12 @@ namespace ET
             List<WordBarInfo> wordBarInfos = await self.GetWeaponWordsInfoRequest();
 
             self.WordBarInfos = wordBarInfos;
-            
+
             // await self.InitWordBarItems();
             self.SetWordBarInfos(wordBarInfos);
             await self.InitOnWeaponHeroItem();
             // await self.GetWeaponWordsInfoRequest();
         }
-        
 
         public static async ETTask InitOnWeaponHeroItem(this DlgWeaponInfoLayer self)
         {
@@ -115,6 +144,8 @@ namespace ET
             //获取此英雄信息
             Log.Debug($"hero id {heroId}");
             Log.Debug($"weapon id {self.WeaponInfo.WeaponId}");
+            self.View.E_OffWeaponButton.gameObject.SetActive(heroId != 0);
+
             if (heroId != 0)
             {
                 if (self.CurrentHeroCardItem == null)
@@ -172,15 +203,7 @@ namespace ET
             self.CurrentWeaponItem.InitWeaponCardView(weaponInfo);
             // self.CurrentHeroCardItem
             // self.CurrentWeaponItem.UnAableButtonClick();
-            var toggle = self.CurrentWeaponItem.E_ChooseToggle.GetComponent<Toggle>();
-            toggle.onValueChanged.RemoveAllListeners();
-            toggle.onValueChanged.AddListener((value) =>
-            {
-                if (value)
-                {
-                    toggle.isOn = false;
-                }
-            });
+        
 
             WeaponsConfig config = WeaponsConfigCategory.Instance.Get(weaponInfo.ConfigId);
             self.View.E_WeaponTypeText.text = config.WeaponTypeName;

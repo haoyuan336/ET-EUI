@@ -103,60 +103,58 @@ namespace ET
         public static void OnLoopListItemRefreshHandler(this ESWeaponBagCommon self, Transform transform, int index)
         {
             Scroll_ItemWeapon itemWeapon = self.ItemWeapons[index].BindTrans(transform);
-            itemWeapon.E_ChooseToggle.onValueChanged.RemoveAllListeners();
-            itemWeapon.E_ChooseToggle.isOn = false;
-            itemWeapon.E_ChooseToggle.interactable = true;
+            itemWeapon.E_ChooseButton.onClick.RemoveAllListeners();
+            // itemWeapon.E_ChooseToggle.isOn = false;
+            itemWeapon.E_ChooseButton.interactable = true;
 
             if (index < self.WeaponInfos.Count)
             {
                 WeaponInfo info = self.WeaponInfos[index];
                 itemWeapon.InitWeaponCardView(info);
-                itemWeapon.E_ChooseToggle.gameObject.SetActive(true);
-                itemWeapon.E_ChooseToggle.onValueChanged.RemoveAllListeners();
+                itemWeapon.E_ChooseButton.gameObject.SetActive(true);
+                itemWeapon.E_ChooseButton.onClick.RemoveAllListeners();
 
-                itemWeapon.E_ChooseToggle.isOn = false;
-                if (self.AlChooseWeaponInfos != null && self.AlChooseWeaponInfos.Exists(a=>a.WeaponId.Equals(info.WeaponId)))
+                // itemWeapon.E_ChooseToggle.isOn = false;
+                if (self.AlChooseWeaponInfos != null && self.AlChooseWeaponInfos.Exists(a => a.WeaponId.Equals(info.WeaponId)))
                 {
                     WeaponsConfig weaponsConfig = WeaponsConfigCategory.Instance.Get(info.ConfigId);
                     if (weaponsConfig.MaterialType == (int) WeaponBagType.Weapon)
                     {
-                        itemWeapon.E_ChooseToggle.isOn = true;
-                        
-                    }else if (weaponsConfig.MaterialType == (int) WeaponBagType.Materail)
+                        // itemWeapon.E_ChooseToggle.isOn = true;
+                    }
+                    else if (weaponsConfig.MaterialType == (int) WeaponBagType.Materail)
                     {
                         WeaponInfo weaponInfo = self.AlChooseWeaponInfos.Find(a => a.WeaponId.Equals(info.WeaponId));
                         itemWeapon.E_ChooseCountText.text = weaponInfo.Count.ToString();
                         itemWeapon.E_ChooseCountText.gameObject.SetActive(weaponInfo.Count > 0);
-                        
                     }
                 }
-                
-                itemWeapon.E_ChooseToggle.onValueChanged.AddListener((value) =>
+
+                itemWeapon.E_ChooseButton.onClick.AddListener(() =>
                 {
                     // if (value)
                     // {
                     //     itemWeapon.E_ChooseToggle.isOn = false;
-                    self.WeaponItemClickAction(info, itemWeapon, value);
+                    self.WeaponItemClickAction(info, itemWeapon);
                     // }
                 });
 
                 if (self.UnableWeaponInfo != null && info.WeaponId.Equals(self.UnableWeaponInfo.WeaponId))
                 {
-                    itemWeapon.E_ChooseToggle.interactable = false;
+                    itemWeapon.E_ChooseButton.interactable = false;
                 }
 
-                if (self.EnableWeaponInfos != null && !self.EnableWeaponInfos.Exists(a=>a.WeaponId.Equals(info.WeaponId)))
+                if (self.EnableWeaponInfos != null && !self.EnableWeaponInfos.Exists(a => a.WeaponId.Equals(info.WeaponId)))
                 {
-                    
-                    itemWeapon.E_ChooseToggle.interactable = false;
+                    itemWeapon.E_ChooseButton.interactable = false;
                 }
             }
             else
             {
                 itemWeapon.E_CountText.text = "";
                 itemWeapon.E_ChooseCountText.text = "";
-                itemWeapon.E_ChooseToggle.gameObject.SetActive(false);
-                itemWeapon.E_ChooseToggle.onValueChanged.RemoveAllListeners();
+                itemWeapon.E_ChooseButton.gameObject.SetActive(false);
+                itemWeapon.E_ChooseButton.onClick.RemoveAllListeners();
                 itemWeapon.E_QualityIconImage.gameObject.SetActive(false);
                 itemWeapon.E_LevelText.gameObject.SetActive(false);
                 // var commonAtlas = ConstValue.CommonUIAtlasPath;

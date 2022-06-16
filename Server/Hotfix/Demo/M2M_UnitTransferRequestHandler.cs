@@ -20,10 +20,6 @@ namespace ET
 				unit.AddComponent(entity);
 			}
 			
-			// unit.AddComponent<MoveComponent>();
-			// unit.AddComponent<PathfindingComponent, string>(scene.Name);
-			// unit.Position = new Vector3(-10, 0, -10);
-			
 			unit.AddComponent<MailBoxComponent>();
 			
 			// 通知客户端创建My Unit

@@ -33,7 +33,7 @@ namespace ET
      			}
      			if( this.m_E_SettingButton == null )
      			{
-		    		this.m_E_SettingButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"MaskNode/E_Setting");
+		    		this.m_E_SettingButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_BG/MaskNode/E_Setting");
      			}
      			return this.m_E_SettingButton;
      		}
@@ -50,7 +50,7 @@ namespace ET
      			}
      			if( this.m_E_SettingImage == null )
      			{
-		    		this.m_E_SettingImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"MaskNode/E_Setting");
+		    		this.m_E_SettingImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_BG/MaskNode/E_Setting");
      			}
      			return this.m_E_SettingImage;
      		}
@@ -67,7 +67,7 @@ namespace ET
      			}
      			if( this.m_E_MailButton == null )
      			{
-		    		this.m_E_MailButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"MaskNode/E_Mail");
+		    		this.m_E_MailButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_BG/MaskNode/E_Mail");
      			}
      			return this.m_E_MailButton;
      		}
@@ -84,9 +84,26 @@ namespace ET
      			}
      			if( this.m_E_MailImage == null )
      			{
-		    		this.m_E_MailImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"MaskNode/E_Mail");
+		    		this.m_E_MailImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_BG/MaskNode/E_Mail");
      			}
      			return this.m_E_MailImage;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_RedDotImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_RedDotImage == null )
+     			{
+		    		this.m_E_RedDotImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_BG/MaskNode/E_Mail/E_RedDot");
+     			}
+     			return this.m_E_RedDotImage;
      		}
      	}
 
@@ -101,7 +118,7 @@ namespace ET
      			}
      			if( this.m_E_FriendButton == null )
      			{
-		    		this.m_E_FriendButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"MaskNode/E_Friend");
+		    		this.m_E_FriendButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_BG/MaskNode/E_Friend");
      			}
      			return this.m_E_FriendButton;
      		}
@@ -118,7 +135,7 @@ namespace ET
      			}
      			if( this.m_E_FriendImage == null )
      			{
-		    		this.m_E_FriendImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"MaskNode/E_Friend");
+		    		this.m_E_FriendImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_BG/MaskNode/E_Friend");
      			}
      			return this.m_E_FriendImage;
      		}
@@ -135,7 +152,7 @@ namespace ET
      			}
      			if( this.m_E_BackGroundButton == null )
      			{
-		    		this.m_E_BackGroundButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"MaskNode/E_BackGround");
+		    		this.m_E_BackGroundButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_BG/MaskNode/E_BackGround");
      			}
      			return this.m_E_BackGroundButton;
      		}
@@ -152,7 +169,7 @@ namespace ET
      			}
      			if( this.m_E_BackGroundImage == null )
      			{
-		    		this.m_E_BackGroundImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"MaskNode/E_BackGround");
+		    		this.m_E_BackGroundImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_BG/MaskNode/E_BackGround");
      			}
      			return this.m_E_BackGroundImage;
      		}
@@ -199,6 +216,7 @@ namespace ET
 			this.m_E_SettingImage = null;
 			this.m_E_MailButton = null;
 			this.m_E_MailImage = null;
+			this.m_E_RedDotImage = null;
 			this.m_E_FriendButton = null;
 			this.m_E_FriendImage = null;
 			this.m_E_BackGroundButton = null;
@@ -213,6 +231,7 @@ namespace ET
 		private UnityEngine.UI.Image m_E_SettingImage = null;
 		private UnityEngine.UI.Button m_E_MailButton = null;
 		private UnityEngine.UI.Image m_E_MailImage = null;
+		private UnityEngine.UI.Image m_E_RedDotImage = null;
 		private UnityEngine.UI.Button m_E_FriendButton = null;
 		private UnityEngine.UI.Image m_E_FriendImage = null;
 		private UnityEngine.UI.Button m_E_BackGroundButton = null;

@@ -1240,25 +1240,17 @@ namespace ET
 		[ProtoMember(8)]
 		public int HeroColor { get; set; }
 
-		[ProtoMember(9)]
-		public long CastSkillId { get; set; }
-
-		[ProtoMember(10)]
-		public float Attack { get; set; }
-
+// int64 CastSkillId = 9;	//技能类型
+// float Attack = 10;	//当前的攻击力
 // float HP = 11;			//血量
-		[ProtoMember(12)]
-		public List<SkillInfo> SkillInfos = new List<SkillInfo>();
-
+// repeated SkillInfo SkillInfos = 12; //技能列表
 // float DiamondAttack = 13;			//宝石攻击力
 // float Angry = 14;			//怒气值
 // float Defence = 15;			//防御值
 		[ProtoMember(16)]
 		public int Level { get; set; }
 
-		[ProtoMember(17)]
-		public float TotalHP { get; set; }
-
+// float TotalHP = 17;	//总血量
 		[ProtoMember(18)]
 		public int Star { get; set; }
 
@@ -1577,7 +1569,7 @@ namespace ET
 		public List<HeroCardInfo> HeroCardInfos = new List<HeroCardInfo>();
 
 		[ProtoMember(2)]
-		public List<HeroCardDataComponentInfo> HeroCardDataComponentInfo = new List<HeroCardDataComponentInfo>();
+		public List<HeroCardDataComponentInfo> HeroCardDataComponentInfos = new List<HeroCardDataComponentInfo>();
 
 		[ProtoMember(3)]
 		public List<SkillInfo> SkillInfos = new List<SkillInfo>();
@@ -2032,21 +2024,13 @@ namespace ET
 		[ProtoMember(2)]
 		public int HP { get; set; }
 
-		[ProtoMember(3)]
-		public int HeroAttack { get; set; }
-
-		[ProtoMember(4)]
-		public int WeaponAttack { get; set; }
-
-		[ProtoMember(5)]
-		public int SkillAttack { get; set; }
-
+// int32 HeroAttack = 3 ;	//英雄伤害
+// int32 WeaponAttack = 4;	//装备伤害
+// int32 SkillAttack = 5;	//技能伤害
 		[ProtoMember(6)]
-		public int NormalDamage { get; set; }
+		public int Damage { get; set; }
 
-		[ProtoMember(7)]
-		public int CriticalDamage { get; set; }
-
+// int32 CriticalDamage = 7;//暴击伤害
 		[ProtoMember(8)]
 		public int ConfigId { get; set; }
 
@@ -2061,6 +2045,12 @@ namespace ET
 
 		[ProtoMember(12)]
 		public long CurrentSkillId { get; set; }
+
+		[ProtoMember(13)]
+		public SkillInfo CurrentSkillInfo { get; set; }
+
+		[ProtoMember(14)]
+		public bool IsCritical { get; set; }
 
 // public int HP;  //当前的血量
 // public int DiamondAttack;
@@ -2139,6 +2129,40 @@ namespace ET
 
 	}
 
+	[ResponseType(nameof(M2C_UpdateHeroLevelResponse))]
+	[Message(OuterOpcode.C2M_UpdateHeroLevelRequest)]
+	[ProtoContract]
+	public partial class C2M_UpdateHeroLevelRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long Account { get; set; }
+
+		[ProtoMember(2)]
+		public long HeroId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_UpdateHeroLevelResponse)]
+	[ProtoContract]
+	public partial class M2C_UpdateHeroLevelResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public HeroCardInfo HeroCardInfo { get; set; }
+
+	}
+
 	[ResponseType(nameof(M2C_UpdateHeroStarResponse))]
 	[Message(OuterOpcode.C2M_UpdateHeroStarRequest)]
 	[ProtoContract]
@@ -2198,6 +2222,46 @@ namespace ET
 	[Message(OuterOpcode.M2C_UpdateOnWeaponResponse)]
 	[ProtoContract]
 	public partial class M2C_UpdateOnWeaponResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public HeroCardInfo HeroCardInfo { get; set; }
+
+		[ProtoMember(2)]
+		public List<WeaponInfo> WeaponInfos = new List<WeaponInfo>();
+
+	}
+
+	[ResponseType(nameof(M2C_OffWeaponResponse))]
+	[Message(OuterOpcode.C2M_OffWeaponRequest)]
+	[ProtoContract]
+	public partial class C2M_OffWeaponRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long Account { get; set; }
+
+		[ProtoMember(2)]
+		public long HeroId { get; set; }
+
+		[ProtoMember(3)]
+		public long WeaponId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_OffWeaponResponse)]
+	[ProtoContract]
+	public partial class M2C_OffWeaponResponse: Object, IActorLocationResponse
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -2450,6 +2514,205 @@ namespace ET
 
 		[ProtoMember(1)]
 		public List<WordBarInfo> WordBarInfos = new List<WordBarInfo>();
+
+	}
+
+	[Message(OuterOpcode.MailInfo)]
+	[ProtoContract]
+	public partial class MailInfo: Object
+	{
+// public long ReceiveId; //发送者id
+// public long SendId; //收者id
+// public string SendTime; //发送时间
+// public bool IsRead = false; //是否已读
+// public bool IsGet = false; //是否已经领取
+// public string SendName; //发送者名字
+		[ProtoMember(1)]
+		public long MailId { get; set; }
+
+		[ProtoMember(2)]
+		public long ReceiveId { get; set; }
+
+		[ProtoMember(3)]
+		public long SendId { get; set; }
+
+		[ProtoMember(4)]
+		public string SendName { get; set; }
+
+		[ProtoMember(5)]
+		public string SendTime { get; set; }
+
+		[ProtoMember(6)]
+		public bool IsRead { get; set; }
+
+		[ProtoMember(7)]
+		public bool IsGet { get; set; }
+
+		[ProtoMember(8)]
+		public string Title { get; set; }
+
+		[ProtoMember(9)]
+		public string Content { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_GetAllMailResponse))]
+	[Message(OuterOpcode.C2M_GetAllMailRequest)]
+	[ProtoContract]
+	public partial class C2M_GetAllMailRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetAllMailResponse)]
+	[ProtoContract]
+	public partial class M2C_GetAllMailResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<MailInfo> MailInfos = new List<MailInfo>();
+
+	}
+
+	[Message(OuterOpcode.C2M_RegisterNewMailBoxMessage)]
+	[ProtoContract]
+	public partial class C2M_RegisterNewMailBoxMessage: Object, IActorLocationMessage
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_SendMails)]
+	[ProtoContract]
+	public partial class M2C_SendMails: Object, IActorMessage
+	{
+		[ProtoMember(1)]
+		public List<MailInfo> MailInfos = new List<MailInfo>();
+
+	}
+
+	[ResponseType(nameof(M2C_ReadMailsResponse))]
+	[Message(OuterOpcode.C2M_ReadMailsRequest)]
+	[ProtoContract]
+	public partial class C2M_ReadMailsRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public List<long> MailIds = new List<long>();
+
+	}
+
+	[Message(OuterOpcode.M2C_ReadMailsResponse)]
+	[ProtoContract]
+	public partial class M2C_ReadMailsResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<MailInfo> MailInfos = new List<MailInfo>();
+
+	}
+
+	[ResponseType(nameof(M2C_GetAllAwardInfoResponse))]
+	[Message(OuterOpcode.C2M_GetAllAwardInfoRequest)]
+	[ProtoContract]
+	public partial class C2M_GetAllAwardInfoRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public long OwnerId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetAllAwardInfoResponse)]
+	[ProtoContract]
+	public partial class M2C_GetAllAwardInfoResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<HeroCardInfo> HeroCardInfos = new List<HeroCardInfo>();
+
+		[ProtoMember(2)]
+		public List<WeaponInfo> WeaponInfos = new List<WeaponInfo>();
+
+		[ProtoMember(3)]
+		public List<ItemInfo> ItemInfos = new List<ItemInfo>();
+
+	}
+
+	[ResponseType(nameof(M2C_ReceiveAllAwardResponse))]
+	[Message(OuterOpcode.C2M_ReceiveAllAwardRequest)]
+	[ProtoContract]
+	public partial class C2M_ReceiveAllAwardRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public long OwnerId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_ReceiveAllAwardResponse)]
+	[ProtoContract]
+	public partial class M2C_ReceiveAllAwardResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public MailInfo MailInfo { get; set; }
 
 	}
 

@@ -14,7 +14,7 @@ namespace ET
 
             List<HeroCard> heroCards = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<HeroCard>(a =>
                     a.OwnerId.Equals(account) &&
-                    a.TroopId.Equals(troopId));
+                    a.TroopId.Equals(troopId) && a.State == (int)StateType.Active);
 
             HeroCard card = heroCards.Find(a => a.Id.Equals(heroId));
             if (card == null)

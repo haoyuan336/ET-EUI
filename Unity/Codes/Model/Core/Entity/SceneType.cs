@@ -13,6 +13,7 @@
         LoginCenter = 9, //中心服服务器
         MainScene = 10, //主页面cene
         PVEGameScene = 11,
+        MailScene = 12, //邮箱服务器
         
         // 客户端Model层
         Client = 30,

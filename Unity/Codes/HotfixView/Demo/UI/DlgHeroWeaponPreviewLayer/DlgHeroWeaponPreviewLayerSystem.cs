@@ -17,45 +17,81 @@ namespace ET
             // self.View.E_RingButton.AddListenerAsync(self.ShowAllRingLayer);
             // self.View.E_AccessoryButton.AddListenerAsync(self.ShowAllAccessory);
         }
+        
 
         public static async void OnWeaponItemClick(this DlgHeroWeaponPreviewLayer self, WeaponType type, ESCommonWeaponItem weaponItem, bool value)
         {
             if (value)
             {
                 weaponItem.E_Choose.GetComponent<Toggle>().isOn = false;
-                UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
-                await uiComponent.ShowWindow(WindowID.WindowID_ChooseWeaponLayer);
-                UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_ChooseWeaponLayer);
-                baseWindow.GetComponent<DlgChooseWeaponLayer>().ShowAllWeaponType(type);
-                baseWindow.GetComponent<DlgChooseWeaponLayer>().SetAlChooseWeaponInfo(weaponItem.WeaponInfo);
-                self.RegisterWeaponClickEvent();
+
+                if (weaponItem.WeaponInfo == null)
+                {
+                    UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+                    await uiComponent.ShowWindow(WindowID.WindowID_ChooseWeaponLayer);
+                    UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_ChooseWeaponLayer);
+                    baseWindow.GetComponent<DlgChooseWeaponLayer>().ShowAllWeaponType(type);
+                    baseWindow.GetComponent<DlgChooseWeaponLayer>().SetAlChooseWeaponInfo(weaponItem.WeaponInfo);
+                    self.RegisterWeaponClickEvent();
+                }
+                else
+                {
+                    self.ShowWeaponInfoLayer(weaponItem.WeaponInfo);
+                }
             }
+        }
+
+        /// <summary>
+        /// 显示武器的详细信息
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="weaponInfo"></param>
+        public static async void ShowWeaponInfoLayer(this DlgHeroWeaponPreviewLayer self, WeaponInfo weaponInfo)
+        {
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_WeaponInfoLayer);
+            UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_WeaponInfoLayer);
+            baseWindow.GetComponent<DlgWeaponInfoLayer>().SetTargetInfo(weaponInfo);
         }
 
         public static async void RegisterWeaponClickEvent(this DlgHeroWeaponPreviewLayer self)
         {
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_ChooseWeaponLayer);
-            // baseWindow.GetComponent<DlgChooseWeaponLayer>().OnItemWeaponClick();
             baseWindow.GetComponent<DlgChooseWeaponLayer>().OnWeaponItemClickAction = null;
-
             baseWindow.GetComponent<DlgChooseWeaponLayer>().OnWeaponItemClickAction = self.OnChooseOneWeaponItem;
-
             await ETTask.CompletedTask;
         }
 
         public static async void OnChooseOneWeaponItem(this DlgHeroWeaponPreviewLayer self, WeaponInfo weaponInfo)
         {
-            WeaponsConfig config = WeaponsConfigCategory.Instance.Get(weaponInfo.ConfigId);
-            ESCommonWeaponItem item = self.WeaponItems.Find(a => (int) a.CurrentType == config.WeaponType);
-            if (item != null)
+            // WeaponsConfig config = WeaponsConfigCategory.Instance.Get(weaponInfo.ConfigId);
+            // ESCommonWeaponItem item = self.WeaponItems.Find(a => (int) a.CurrentType == config.WeaponType);
+            // if (item != null)
+            // {
+            List<WeaponInfo> weaponInfos = await self.SetWeaponOnHeroRequest(weaponInfo);
+            // item.SetWeaponInfo(weaponInfo);
+            if (weaponInfo == null)
             {
-                await self.SetWeaponOnHeroRequest(weaponInfo);
-                item.SetWeaponInfo(weaponInfo);
+                return;
             }
+            Dictionary<int, ESCommonWeaponItem> weaponItemDicts = new Dictionary<int, ESCommonWeaponItem>();
+            foreach (var weaponItem in self.WeaponItems)
+            {
+                weaponItem.SetWeaponInfo(null);
+                weaponItemDicts.Add((int) weaponItem.CurrentType, weaponItem);
+            }
+
+            foreach (var info in weaponInfos)
+            {
+                Log.Debug($"weapon info id {info.WeaponId}");
+                WeaponsConfig weaponsConfig = WeaponsConfigCategory.Instance.Get(info.ConfigId);
+                weaponItemDicts[weaponsConfig.WeaponType].SetWeaponInfo(info);
+            }
+            // }
         }
 
-        public static async ETTask SetWeaponOnHeroRequest(this DlgHeroWeaponPreviewLayer self, WeaponInfo weaponInfo)
+        public static async ETTask<List<WeaponInfo>> SetWeaponOnHeroRequest(this DlgHeroWeaponPreviewLayer self, WeaponInfo weaponInfo)
         {
             //将道具装备到英雄身上
 
@@ -73,9 +109,10 @@ namespace ET
                 Log.Debug("设置装备成功");
                 List<WeaponInfo> weaponInfos = response.WeaponInfos;
                 self.InitWeaponInfoView(weaponInfos);
+                return weaponInfos;
             }
 
-            await ETTask.CompletedTask;
+            return null;
         }
 
         public static void BackButtonClick(this DlgHeroWeaponPreviewLayer self)
@@ -87,6 +124,15 @@ namespace ET
         {
         }
 
+
+
+        public static void ReferHeroInfo(this DlgHeroWeaponPreviewLayer self)
+        {
+            if (self.HeroCardInfo != null)
+            {
+                self.SetTargetInfo(self.HeroCardInfo);
+            }
+        }
         public static async void SetTargetInfo(this DlgHeroWeaponPreviewLayer self, HeroCardInfo heroCardInfo)
         {
             await self.InitWeapinItems();
@@ -172,15 +218,15 @@ namespace ET
 
             self.View.E_CurrentHPText.text = $"{hp}";
             self.View.E_CurrentAttackText.text = $"{attack}";
-            self.View.E_CurrentHPAdditionText.text = $"{(float)hpAddition / 100}%";
-            self.View.E_CurrentAttackAdditionText.text = $"{(float)attackAddition / 100}%";
-            self.View.E_CurrentDefenceAdditionText.text = $"{(float)defenceAddition / 100}%";
+            self.View.E_CurrentHPAdditionText.text = $"{(float) hpAddition / 100}%";
+            self.View.E_CurrentAttackAdditionText.text = $"{(float) attackAddition / 100}%";
+            self.View.E_CurrentDefenceAdditionText.text = $"{(float) defenceAddition / 100}%";
             self.View.E_CurrentDefenceText.text = $"{defence}";
-            self.View.E_CriticalHitText.text = $"{(float)criticalHit / 100}%";
-            self.View.E_CriticalHitDamageText.text = $"{(float)CriticalHitDamage / 100}%";
-            self.View.E_ToughnessText.text = $"{(float)Toughness / 100}%";
-            self.View.E_DamageAdditionText.text = $"{(float)DamageAddition / 100}%";
-            self.View.E_DamageReductionText.text = $"{(float)DamageReduction / 100}%";
+            self.View.E_CriticalHitText.text = $"{(float) criticalHit / 100}%";
+            self.View.E_CriticalHitDamageText.text = $"{(float) CriticalHitDamage / 100}%";
+            self.View.E_ToughnessText.text = $"{(float) Toughness / 100}%";
+            self.View.E_DamageAdditionText.text = $"{(float) DamageAddition / 100}%";
+            self.View.E_DamageReductionText.text = $"{(float) DamageReduction / 100}%";
 
             // var hp = 0;
             // foreach (var wordBarInfo in wordBarInfos)

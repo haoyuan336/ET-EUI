@@ -21,17 +21,12 @@ namespace ET
             self.View.ESWeaponBagCommon.WeaponItemClickAction = self.OnItemWeaponClick;
         }
 
-        public static void OnItemWeaponClick(this DlgChooseWeaponLayer self, WeaponInfo weaponInfo, Scroll_ItemWeapon itemWeapon, bool value)
+        public static void OnItemWeaponClick(this DlgChooseWeaponLayer self, WeaponInfo weaponInfo, Scroll_ItemWeapon itemWeapon)
         {
-            if (value)
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_ChooseWeaponLayer);
+            if (self.OnWeaponItemClickAction != null)
             {
-                itemWeapon.E_ChooseToggle.isOn = false;
-                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_ChooseWeaponLayer);
-
-                if (self.OnWeaponItemClickAction != null)
-                {
-                    self.OnWeaponItemClickAction(weaponInfo);
-                }
+                self.OnWeaponItemClickAction(weaponInfo);
             }
         }
 

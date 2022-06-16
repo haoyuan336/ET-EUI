@@ -150,7 +150,7 @@ namespace ET
             }
             else
             {
-                Log.Debug("返回的是0");
+                // Log.Debug("返回的是0");
             }
 
             return 0;

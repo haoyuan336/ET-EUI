@@ -9,9 +9,11 @@ namespace ET
         public struct ShowAttackMark
         {
             public HeroCard HeroCard;
+
             //显示攻击标记
             public bool IsShow;
         }
+
         public struct ShowHeroInfo
         {
             public HeroCardInfo HeroCardInfo;
@@ -191,6 +193,7 @@ namespace ET
         {
             public HeroCard HeroCard;
             public HeroCardInfo HeroCardInfo;
+            public HeroCardDataComponentInfo HeroCardDataComponentInfo;
         }
 
         public struct CreateOneHeroModeView
@@ -292,6 +295,7 @@ namespace ET
 
         public struct ChangeFightCameraLook
         {
+            public Scene ZoneScene;
             public bool Value;
         }
 
@@ -303,6 +307,12 @@ namespace ET
         public struct DestroyHeroCard
         {
             public HeroCard HeroCard; //销毁卡牌
+        }
+
+        public struct SetNewMails
+        {
+            public Scene Scene;
+            public List<MailInfo> MailInfos; //邮件列表
         }
     }
 }

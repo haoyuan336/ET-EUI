@@ -15,8 +15,11 @@ namespace ET
         public const int LoginGateLock = 10;
         public const int AccountGetRealmKey = 11;
         public const int AccountGetRate = 12;
-        public const int BuyWeapon = 13;    //购买武器的操作
+        public const int BuyWeapon = 13; //购买武器的操作
         public const int ClearWordBar = 14; //洗练词条
+        public const int ReadMail = 15; //读取邮箱
+        public const int ReceiveAward = 16; //收取奖励
+        public const int UpdateHeroLevel = 17;  //升级英雄等级
 
         public const int Max = 100; // 这个必须最大
     }

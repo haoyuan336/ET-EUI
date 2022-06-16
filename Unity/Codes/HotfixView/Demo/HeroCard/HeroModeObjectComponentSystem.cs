@@ -148,13 +148,15 @@ namespace ET
             //     GameObject.Destroy(self.ChooseMark);
             // }
             HeroCard beAttackHeroCards = message.BeAttackHeroCard;
-            HeroCard heroCard = message.AttackHeroCard;
-
-            long skillId = message.AttackHeroCardDataComponentInfo.CurrentSkillId;
-            Log.Debug($"skill id {skillId}");
-            Skill skill = heroCard.GetChild<Skill>(skillId);
+            // HeroCard heroCard = message.AttackHeroCard;
+            // long skillId = message.AttackHeroCardDataComponentInfo.CurrentSkillId;
+            // Log.Debug($"skill id {skillId}");
+            // Skill skill = heroCard.GetChild<Skill>(skillId);
             // skill.ConfigId = 1000009;
-            SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
+
+            SkillInfo skill = message.AttackHeroCardDataComponentInfo.CurrentSkillInfo;
+            
+            SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.SkillConfigId);
             await self.MoveToEnemyTarget(beAttackHeroCards, skillConfig);
             await self.PlayAttackAnim(message, skillConfig);
             await self.BackMoveToInitPos(skillConfig);
@@ -214,6 +216,7 @@ namespace ET
 
             GameObject effect = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(skillConfig.BeAttackEffect);
             effect.transform.SetParent(self.HeroMode.transform);
+            Log.Debug($"be attack bone name {skillConfig.BeAttackBoneName}");
             if (skillConfig.BeAttackBoneName == "")
             {
                 effect.transform.localPosition = Vector3.one * 0.1f;
@@ -221,16 +224,18 @@ namespace ET
             }
             else
             {
-                Transform bone = UIFindHelper.FindDeepChild(self.HeroMode, skillConfig.BeAttackBoneName);
+                // Transform bone = UIFindHelper.FindDeepChild(self.HeroMode, skillConfig.BeAttackBoneName);
+                GameObject bone = GameObject.Find($"{self.HeroMode.name}/{skillConfig.BeAttackBoneName}");
                 if (bone != null)
                 {
                     Log.Debug("找到了 被攻击的骨骼位置");
-                    effect.transform.position = bone.transform.position;
+                    effect.transform.localPosition = bone.transform.localPosition;
                 }
                 else
                 {
+                    effect.transform.localPosition = Vector3.one * 0.1f;
                     // effect.transform.position = Vector3.one * 0.1f;
-                    // Log.Debug("未找到被攻击骨骼");
+                    Log.Debug("未找到被攻击骨骼");
                 }
             }
 
@@ -298,7 +303,6 @@ namespace ET
                 Vector3 pos = Vector3.Lerp(startPos, endPos, time * 2);
                 effect.transform.position = pos;
                 time += Time.deltaTime;
-                Log.Debug($"time {time}");
                 await TimerComponent.Instance.WaitFrameAsync();
             }
 

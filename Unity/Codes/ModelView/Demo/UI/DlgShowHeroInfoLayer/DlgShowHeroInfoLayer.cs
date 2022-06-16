@@ -1,19 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ET
 {
-	public  class DlgShowHeroInfoLayer :Entity,IAwake
-	{
+    public class DlgShowHeroInfoLayer: Entity, IAwake
+    {
+        public DlgShowHeroInfoLayerViewComponent View
+        {
+            get => this.Parent.GetComponent<DlgShowHeroInfoLayerViewComponent>();
+        }
 
-		public DlgShowHeroInfoLayerViewComponent View { get => this.Parent.GetComponent<DlgShowHeroInfoLayerViewComponent>();}
+        public GameObject HeroModeShow;
 
+        public HeroCardInfo HeroCardInfo;
 
-		public GameObject HeroModeShow;
+        public Dictionary<int, Scroll_ItemWeapon> WeaponDicts = new Dictionary<int, Scroll_ItemWeapon>();
 
-		public HeroCardInfo HeroCardInfo;
-
-
-
-	}
+        public List<WeaponInfo> WeaponInfos;
+    }
 }

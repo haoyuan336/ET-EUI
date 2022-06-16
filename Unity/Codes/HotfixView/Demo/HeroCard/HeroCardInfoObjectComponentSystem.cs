@@ -1,50 +1,29 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace ET
 {
-    // public class HeroCardInfoObjectComponentDestroySystem: DestroySystem<HeroCardInfoObjectComponent>
-    // {
-    //     
-    // }
-    public class HeroCardInfoObjectComponentAwakeSystem: AwakeSystem<HeroCardInfoObjectComponent, int>
+    public class HeroCardInfoObjectComponentAwakeSystem: AwakeSystem<HeroCardInfoObjectComponent, HeroCardInfo, HeroCardDataComponentInfo>
     {
-        public override async void Awake(HeroCardInfoObjectComponent self, int configId)
+        public override async void Awake(HeroCardInfoObjectComponent self, HeroCardInfo heroCardInfo,
+        HeroCardDataComponentInfo heroCardDataComponentInfo)
         {
             GameObject prefab =
                     await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>("Assets/Bundles/UI/CustomUI/HeroCardInfoUI.prefab");
-            self.GameObject = GameObject.Instantiate(prefab, GlobalComponent.Instance.NormalRoot.transform);
-            // self.HeroMode = self.GetParent<HeroCard>().GetComponent<HeroModeObjectCompoent>().HeroMode;
+            self.GameObject = UnityEngine.Object.Instantiate(prefab, GlobalComponent.Instance.NormalRoot.transform);
             if (self.IsDisposed)
             {
-                GameObject.Destroy(self.GameObject);
+                UnityEngine.Object.Destroy(self.GameObject);
                 return;
             }
 
-            // self.GameObject.name = self.Id.ToString();
-            self.AngryBarImage = UIFindHelper.FindDeepChild(self.GameObject, "AngryBar").gameObject;
-            self.HeroElementIcon = UIFindHelper.FindDeepChild(self.GameObject, "HeroElementIcon").gameObject;
-            self.HpBarImage = UIFindHelper.FindDeepChild(self.GameObject, "HpBar").gameObject;
-            self.AttackBarImage = UIFindHelper.FindDeepChild(self.GameObject, "AttackBar").gameObject;
-            self.CommonText = UIFindHelper.FindDeepChild(self.GameObject, "CommonText").gameObject;
-            // HeroCard heroCard = self.GetParent<HeroModeObjectCompoent>().GetParent<HeroCard>();
-            // var configId = heroCard.ConfigId;
+            self.HeroConfig = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
+            self.ESHeroCardInfoUI = self.AddChildWithId<ESHeroCardInfoUI, Transform>(IdGenerater.Instance.GenerateId(), self.GameObject.transform);
+            self.ESHeroCardInfoUI.SetInfo(heroCardInfo, heroCardDataComponentInfo);
 
-            var config = HeroConfigCategory.Instance.Get(configId);
-            self.HeroConfig = config;
-            var elemengConfig = ElementConfigCategory.Instance.Get(config.HeroColor);
-            var elemengImageStr = elemengConfig.IconImage;
-            var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elemengImageStr);
-            self.HeroElementIcon.GetComponent<Image>().sprite = sprite;
-
-            self.UpdateHPView(self.Parent.GetComponent<HeroCardDataComponent>().GetInfo());
-            // self.UpdateAngryView();
-
-            // self.HpBarImage.GetComponent<Image>().fillAmount = 1;
-            self.AngryBarImage.GetComponent<Image>().fillAmount = 0;
-            self.AttackBarImage.GetComponent<Image>().fillAmount = 0;
-            self.CommonText.GetComponent<Text>().text = "";
-            self.HeroHeight = 0;
+            self.ESHeroCardInfoUI.E_AttackBarImage.fillAmount = heroCardDataComponentInfo.DiamondAttackAddition;
+            await self.UpdateAngryView(heroCardDataComponentInfo);
         }
     }
 
@@ -82,64 +61,59 @@ namespace ET
     {
         public static async void ShowDamageViewAnim(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo component)
         {
+            Log.Debug($"damage {component.Damage}");
             var gameObject = new GameObject();
             Text text = gameObject.AddComponent<Text>();
-            // GlobalComponent.Instance.NormalRoot
             text.transform.SetParent(GlobalComponent.Instance.NormalRoot);
-
             Font obj = AddressableComponent.Instance.LoadAssetByPath<Font>("Assets/Res/font/SVM-font/SVN-Aaron Script.otf");
             text.font = obj;
-            text.text = $"{component.NormalDamage}";
-            text.fontSize = 50;
+            text.text = $"{component.Damage}";
+            text.fontSize = component.IsCritical? 50 : 40;
             text.fontStyle = FontStyle.Bold;
             Vector2 startPos = self.GameObject.transform.position;
-            // text.GetComponent<RectTransform>().anchoredPosition = self.GameObject.GetComponent<RectTransform>().anchoredPosition;
-            text.color = Color.red;
+            text.color = component.IsCritical? Color.red : Color.green;
             float time = 0;
             while (time < 1)
             {
-                var vec = Vector2.Lerp(startPos, startPos + new Vector2(0,100), time);
+                var vec = Vector2.Lerp(startPos, startPos + new Vector2(0, 100), time);
                 text.transform.position = vec;
+                text.transform.localScale = Vector3.one + Vector3.one * Mathf.Sin(Mathf.PI * (time + 0.01f));
                 time += Time.deltaTime;
                 await TimerComponent.Instance.WaitFrameAsync();
             }
+
             GameObject.Destroy(text);
         }
 
-        public static async void UpdateHPView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo component)
+        public static async void UpdateHPView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo componentInfo)
         {
-            var totalHp = self.GetParent<HeroCard>().GetComponent<HeroCardDataComponent>().GetHeroBaseHP();
-            // var totalHp
-            Log.Debug($"damage component {component.NormalDamage}");
-            Log.Debug($"total hp {totalHp}");
-            Log.Debug($"hp {component.HP}");
-            float percent = (float) component.HP / totalHp;
-            Log.Debug($"percent {percent}");
-            self.HpBarImage.GetComponent<Image>().fillAmount = percent;
+            Log.Debug($"update hp view {componentInfo.HP}");
+            Log.Debug($"total hp {componentInfo.TotalHP}");
+            float percent = (float) componentInfo.HP / componentInfo.TotalHP;
+            self.ESHeroCardInfoUI.E_HpBarImage.GetComponent<Image>().fillAmount = percent;
             await ETTask.CompletedTask;
         }
 
         public static async ETTask UpdateAngryView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo info)
         {
-            self.AngryBarImage.GetComponent<Image>().fillAmount = (float) info.Angry / self.HeroConfig.TotalAngry;
+            self.ESHeroCardInfoUI.E_AngryBarImage.GetComponent<Image>().fillAmount = (float) info.Angry / self.HeroConfig.TotalAngry;
             await ETTask.CompletedTask;
         }
 
         public static async ETTask InitAttackAdditionView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo info)
         {
-            self.CommonText.GetComponent<Text>().text = "";
-            self.AttackBarImage.GetComponent<Image>().fillAmount = (float) info.DiamondAttackAddition / 200;
+            self.ESHeroCardInfoUI.E_CommonText.GetComponent<Text>().text = "";
+            self.ESHeroCardInfoUI.E_AttackBarImage.GetComponent<Image>().fillAmount = (float) info.DiamondAttackAddition / 200;
             await ETTask.CompletedTask;
         }
 
         //todo 更新显示增加的攻击力加成
         public static async ETTask UpdateAttackAdditionView(this HeroCardInfoObjectComponent self, AddItemAction addItemAction)
         {
-            // HeroConfig heroConfig = HeroConfigCategory.Instance.Get(addItemAction.HeroCardDataComponentInfo.ConfigId);
             var addition = addItemAction.HeroCardDataComponentInfo.DiamondAttackAddition;
             var common = addItemAction.CrashCommonInfo;
-            self.CommonText.GetComponent<Text>().text = $"CommonX{common.CommonCount}";
-            self.AttackBarImage.GetComponent<Image>().fillAmount = (float) addition / 200;
+            self.ESHeroCardInfoUI.E_CommonText.GetComponent<Text>().text = $"CommonX{common.CommonCount}";
+            self.ESHeroCardInfoUI.E_AttackBarImage.GetComponent<Image>().fillAmount = (float) addition / 200;
             await ETTask.CompletedTask;
         }
     }

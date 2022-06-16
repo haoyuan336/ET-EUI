@@ -9,6 +9,8 @@ namespace ET.MainScene
     {
         protected override async ETTask Run(Unit unit, C2M_GetGoldInfoRequest request, M2C_GetGoldInfoResponse response, Action reply)
         {
+            var sceneType = unit.DomainScene().SceneType;
+            Log.Warning($"current scene type {sceneType}");
             long AccountId = request.AccountId;
             Log.Debug($"get gold info {AccountId}");
 

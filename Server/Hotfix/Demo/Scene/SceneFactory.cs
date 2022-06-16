@@ -16,6 +16,7 @@ namespace ET
             Scene scene = EntitySceneFactory.CreateScene(id, instanceId, zone, sceneType, name, parent);
 
             scene.AddComponent<MailBoxComponent, MailboxType>(MailboxType.UnOrderMessageDispatcher);
+            // Log.Warning($"创建scene scene{scene.SceneType}");
             switch (scene.SceneType)
             {
                 case SceneType.Realm:
@@ -38,7 +39,6 @@ namespace ET
                     // scene.AddComponent<PVERoomComponent>();
                     break;
                 case SceneType.PVEGameScene:
-                    Log.Debug($"创建pve scene {scene.SceneType}" );
                     scene.AddComponent<UnitComponent>();
                     scene.AddComponent<AOIManagerComponent>();
                     // scene.AddComponent<DiamondComponent>();
@@ -47,6 +47,7 @@ namespace ET
                 case SceneType.MainScene:
                     scene.AddComponent<UnitComponent>();
                     scene.AddComponent<AOIManagerComponent>();
+                    scene.AddComponent<MailComponent>();
                     
                     break;
                 case SceneType.Location:
@@ -60,6 +61,8 @@ namespace ET
                     break;
                 case SceneType.LoginCenter:
                     scene.AddComponent<LoginInfoRecordComponent>();
+                    break;
+                case SceneType.MailScene:
                     break;
             }
 

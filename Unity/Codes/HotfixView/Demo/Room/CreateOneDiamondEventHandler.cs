@@ -7,7 +7,6 @@ namespace ET
     {
         protected override async ETTask Run(CreateOneDiamondView a)
         {
-
             // await TimerComponent.Instance.WaitAsync(1000);
             PvPLevelConfig pvPLevelConfig = PvPLevelConfigCategory.Instance.Get(1);
             int hangCount = pvPLevelConfig.HangCount;
@@ -35,16 +34,17 @@ namespace ET
             go.transform.position = new Vector3((a.Diamond.LieIndex - liecount * 0.5f + 0.5f) * distance, 0,
                 (a.Diamond.HangIndex - hangCount * 0.5f + 0.5f) * distance);
             go.transform.forward = Vector3.back;
-            Vector3 endScale = go.transform.localScale;
+            Vector3 endScale = new Vector3(0.06f, 0.06f, 0.06f);
             // go.transform.localScale = Vector3.zero;
             float time = 0;
             while (time < 0.2f)
             {
-                go.transform.localScale = Vector3.Lerp(Vector3.zero, endScale, time * 1/0.2f);
+                go.transform.localScale = Vector3.Lerp(Vector3.zero, endScale, time * 1 / 0.2f);
                 time += Time.deltaTime;
                 await TimerComponent.Instance.WaitFrameAsync();
-
             }
+
+            go.transform.localScale = endScale;
             await ETTask.CompletedTask;
         }
     }

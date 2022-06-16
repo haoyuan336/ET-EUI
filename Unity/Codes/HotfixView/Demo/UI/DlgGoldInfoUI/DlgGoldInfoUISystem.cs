@@ -14,6 +14,24 @@ namespace ET
             self.View.E_AddPowerButton.AddListenerAsync(self.RequestAddPowerAsync);
             self.View.E_AddGoldButton.AddListenerAsync(self.RequestAddGoldAsync);
             self.View.E_AddDiamondButton.AddListenerAsync(self.RequestAddDiamondAsync);
+            self.View.E_AddExpButton.AddListenerAsync(self.RequestAddExpAsync);
+        }
+
+        public static async ETTask RequestAddExpAsync(this DlgGoldInfoUI self)
+        {
+            long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            M2C_AddItemResponse response =
+                    (M2C_AddItemResponse) await session.Call(new C2M_AddItemRequest() { AccountId = AccountId, Count = 10, ConfigId = 1008 });
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                // Log.Debug("增加体力值成功");
+                self.View.E_ExpText.text = $"{response.ItemInfo.Count}";
+                if (self.DataChangeAction != null)
+                {
+                    self.DataChangeAction();
+                }
+            }
         }
 
         public static async ETTask RequestAddDiamondAsync(this DlgGoldInfoUI self)
@@ -84,6 +102,12 @@ namespace ET
                 if (diamondItem != null)
                 {
                     self.View.E_DiamondText.text = diamondItem.Count.ToString();
+                }
+
+                var exp = response.ItemInfos.Find(a => a.ConfigId == 1008);
+                if (exp != null)
+                {
+                    self.View.E_ExpText.text = exp.Count.ToString();
                 }
             }
         }

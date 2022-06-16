@@ -73,6 +73,40 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Button E_OffWeaponButton
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_OffWeaponButton == null )
+     			{
+		    		this.m_E_OffWeaponButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Bg/E_CurrentHeroPos/E_OffWeapon");
+     			}
+     			return this.m_E_OffWeaponButton;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_OffWeaponImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_OffWeaponImage == null )
+     			{
+		    		this.m_E_OffWeaponImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Bg/E_CurrentHeroPos/E_OffWeapon");
+     			}
+     			return this.m_E_OffWeaponImage;
+     		}
+     	}
+
 		public UnityEngine.UI.Text E_DesText
      	{
      		get
@@ -215,6 +249,8 @@ namespace ET
 			this.m_E_CurrentWeaponPosImage = null;
 			this.m_E_WeaponTypeText = null;
 			this.m_E_CurrentHeroPosImage = null;
+			this.m_E_OffWeaponButton = null;
+			this.m_E_OffWeaponImage = null;
 			this.m_E_DesText = null;
 			this.m_E_WordBarGroupImage = null;
 			this.m_E_WeaponStrengthButton = null;
@@ -230,6 +266,8 @@ namespace ET
 		private UnityEngine.UI.Image m_E_CurrentWeaponPosImage = null;
 		private UnityEngine.UI.Text m_E_WeaponTypeText = null;
 		private UnityEngine.UI.Image m_E_CurrentHeroPosImage = null;
+		private UnityEngine.UI.Button m_E_OffWeaponButton = null;
+		private UnityEngine.UI.Image m_E_OffWeaponImage = null;
 		private UnityEngine.UI.Text m_E_DesText = null;
 		private UnityEngine.UI.Image m_E_WordBarGroupImage = null;
 		private UnityEngine.UI.Button m_E_WeaponStrengthButton = null;

@@ -7,6 +7,7 @@ namespace ET
     {
         public static async void InitWeaponCardView(this Scroll_ItemWeapon self, WeaponInfo weaponInfo)
         {
+            self.WeaponInfo = weaponInfo;
             Log.Debug("init weapon card view");
             WeaponsConfig config = WeaponsConfigCategory.Instance.Get(weaponInfo.ConfigId);
             var weaponAtlas = ConstValue.WeaponAtlasPath;
@@ -20,22 +21,27 @@ namespace ET
             self.E_LevelText.text = $"Lv.{weaponInfo.Level}";
         }
 
-        public static  void UnAableButtonClick(this  Scroll_ItemWeapon self)
+        public static void UnAableButtonClick(this Scroll_ItemWeapon self)
         {
-            self.E_ChooseToggle.GetComponent<Toggle>().interactable = false;
+            self.E_ChooseButton.GetComponent<Toggle>().interactable = false;
         }
 
-        public static  async void ShowAddButtonState(this Scroll_ItemWeapon self)
+        public static void ShowAddButtonState(this Scroll_ItemWeapon self)
         {
+            self.WeaponInfo = null;
             //显示加号的状态
-            var weaponAtlas = ConstValue.CommonUIAtlasPath;
-            var bgPath = ConstValue.FrameBgPath;
-            var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(weaponAtlas, bgPath);
-            self.E_WeaponImage.sprite = sprite;
+            // var weaponAtlas = ConstValue.CommonUIAtlasPath;
+            // var bgPath = ConstValue.FrameBgPath;
+            // var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(weaponAtlas, bgPath);
+            if (self.BgSprite == null)
+            {
+                self.BgSprite = self.E_WeaponImage.sprite;
+            }
+
+            self.E_WeaponImage.sprite = self.BgSprite;
             self.E_AddTextText.gameObject.SetActive(true);
             self.E_LevelText.gameObject.SetActive(false);
             self.E_CountText.gameObject.SetActive(false);
-            
         }
     }
 }

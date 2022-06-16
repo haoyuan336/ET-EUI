@@ -1,4 +1,6 @@
-﻿namespace ET
+﻿using System.Collections.Generic;
+
+namespace ET
 {
     public class WeponSystemAwake: AwakeSystem<Weapon>
     {
@@ -20,6 +22,19 @@
                 OnWeaponHeroId = self.OnWeaponHeroId,
                 CurrentExp = self.CurrentExp
             };
+        }
+
+        public static int GetWeaponWordBarValueByType(this Weapon self, WordBarType wordBarType)
+        {
+            //获取装备的暴击值
+            List<WordBar> wordBars = self.GetChilds<WordBar>();
+            var rate = 0;
+            foreach (var wordBar in wordBars)
+            {
+                rate += WeaponHelper.GetWordBarValueByType(wordBar.GetInfo(), self.GetInfo(), wordBarType);
+            }
+
+            return rate;
         }
     }
 }

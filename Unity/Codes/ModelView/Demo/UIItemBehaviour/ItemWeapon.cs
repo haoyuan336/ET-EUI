@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace ET
 {
-	public  class Scroll_ItemWeapon : Entity,IAwake,IDestroy 
+	public partial  class Scroll_ItemWeapon : Entity,IAwake,IDestroy 
 	{
 		private bool isCacheNode = false;
 		public void SetCacheMode(bool isCache)
@@ -233,7 +233,7 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Toggle E_ChooseToggle
+		public UnityEngine.UI.Button E_ChooseButton
      	{
      		get
      		{
@@ -244,15 +244,15 @@ namespace ET
      			}
      			if (this.isCacheNode)
      			{
-     				if( this.m_E_ChooseToggle == null )
+     				if( this.m_E_ChooseButton == null )
      				{
-		    			this.m_E_ChooseToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"E_Choose");
+		    			this.m_E_ChooseButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Choose");
      				}
-     				return this.m_E_ChooseToggle;
+     				return this.m_E_ChooseButton;
      			}
      			else
      			{
-		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"E_Choose");
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Choose");
      			}
      		}
      	}
@@ -270,13 +270,13 @@ namespace ET
      			{
      				if( this.m_E_CheckmarkImage == null )
      				{
-		    			this.m_E_CheckmarkImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Choose/Background/E_Checkmark");
+		    			this.m_E_CheckmarkImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Choose/E_Checkmark");
      				}
      				return this.m_E_CheckmarkImage;
      			}
      			else
      			{
-		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Choose/Background/E_Checkmark");
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Choose/E_Checkmark");
      			}
      		}
      	}
@@ -292,7 +292,7 @@ namespace ET
 			this.m_E_CountText = null;
 			this.m_E_QualityIconImage = null;
 			this.m_E_WeaponTypeText = null;
-			this.m_E_ChooseToggle = null;
+			this.m_E_ChooseButton = null;
 			this.m_E_CheckmarkImage = null;
 			this.uiTransform = null;
 		}
@@ -306,7 +306,7 @@ namespace ET
 		private UnityEngine.UI.Text m_E_CountText = null;
 		private UnityEngine.UI.Image m_E_QualityIconImage = null;
 		private UnityEngine.UI.Text m_E_WeaponTypeText = null;
-		private UnityEngine.UI.Toggle m_E_ChooseToggle = null;
+		private UnityEngine.UI.Button m_E_ChooseButton = null;
 		private UnityEngine.UI.Image m_E_CheckmarkImage = null;
 		public Transform uiTransform = null;
 	}

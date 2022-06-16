@@ -13,7 +13,7 @@ namespace ET
             // Log.Debug($" create hero card {a.HeroCardInfo.Attack}");
             //第一步加载卡牌资源 
             HeroCard heroCard = a.HeroCard;
-            heroCard.AddComponent<HeroCardInfoObjectComponent, int>(heroCard.ConfigId);
+            heroCard.AddComponent<HeroCardInfoObjectComponent, HeroCardInfo, HeroCardDataComponentInfo>(a.HeroCardInfo, a.HeroCardDataComponentInfo);
             heroCard.AddComponent<HeroModeObjectCompoent, HeroCard>(heroCard);
             await ETTask.CompletedTask;
         }

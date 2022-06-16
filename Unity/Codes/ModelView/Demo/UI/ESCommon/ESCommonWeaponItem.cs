@@ -18,5 +18,6 @@ namespace ET
         public Action<WeaponType,ESCommonWeaponItem, bool> OnWeaponItemClickAction;
         public WeaponType CurrentType;
         public WeaponInfo WeaponInfo;
+        public Sprite BgSprite;
     }
 }

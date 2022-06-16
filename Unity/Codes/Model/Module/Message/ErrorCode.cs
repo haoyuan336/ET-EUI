@@ -41,6 +41,9 @@ namespace ET
         public const int ERR_EXP_Not_Enough = 200021; //经验值不够
 
         public const int ERR_Not_Found_Weapon = 200022; //未找到武器
+        public const int ERR_Not_Found_Mail = 200023; //我找到此邮件
+        public const int ERR_Award_AlReceive = 200024; //奖励已经领取了
+
         // 200001以上不抛异常
     }
 }
