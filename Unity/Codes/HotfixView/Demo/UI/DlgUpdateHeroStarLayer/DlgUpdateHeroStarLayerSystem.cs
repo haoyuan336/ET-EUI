@@ -26,6 +26,7 @@ namespace ET
                     self.AddChildWithId<ESCommonHeroCard, Transform>(IdGenerater.Instance.GenerateId(), self.View.E_SuccessImageImage.transform);
             self.ChooseCommonHeroCard.OnButtonClick = self.OnChooseHeroButtonClick;
         }
+
         public static async ETTask<GameObject> CreateOneHeroCard(this DlgUpdateHeroStarLayer self, Transform parent)
         {
             GameObject gameObject =
@@ -79,10 +80,10 @@ namespace ET
 
         public static void HideWindow(this DlgUpdateHeroStarLayer self)
         {
+            self.View.E_OkButtonButton.interactable = false;
             self.ChooseCardInfo = null;
             self.ChooseCommonHeroCard.SetHeroCardInfo(null);
             self.NextStarCommonHeroCard.SetHeroCardInfo(null);
-          
         }
 
         public static void PlayerChooseOneHeroCard(this DlgUpdateHeroStarLayer self, HeroCardInfo cardInfo)
@@ -98,14 +99,18 @@ namespace ET
                 Level = self.HeroCardInfo.Level
             };
             self.NextStarCommonHeroCard.SetHeroCardInfo(heroCarInfo);
+
+            self.View.E_OkButtonButton.interactable = true;
         }
 
         public static async ETTask OkButtonClick(this DlgUpdateHeroStarLayer self)
         {
+            Log.Debug($"升星按钮{self.ChooseCardInfo}");
             if (self.ChooseCardInfo == null)
             {
                 return;
             }
+
             long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             C2M_UpdateHeroStarRequest request = new C2M_UpdateHeroStarRequest()

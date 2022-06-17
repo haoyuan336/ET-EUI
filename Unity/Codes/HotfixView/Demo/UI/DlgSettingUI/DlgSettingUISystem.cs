@@ -14,8 +14,14 @@ namespace ET
         {
             self.View.E_ShowMenuToggle.GetComponent<Toggle>().onValueChanged.AddListener((value) => { self.ShowMenu(value).Coroutine(); });
             self.View.E_MailButton.AddListenerAsync(self.MailButtonClick);
+            self.View.E_FriendButton.AddListener(self.OnFriendButtonClick);
         }
 
+        public static async void OnFriendButtonClick(this DlgSettingUI self)
+        {
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_FriendLayer);
+        }
         public static async void RequestNewMail(this DlgSettingUI self)
         {
             long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;

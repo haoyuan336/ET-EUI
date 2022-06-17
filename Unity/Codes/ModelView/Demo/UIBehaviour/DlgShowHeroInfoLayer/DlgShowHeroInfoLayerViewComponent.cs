@@ -107,6 +107,23 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Text E_RankText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_RankText == null )
+     			{
+		    		this.m_E_RankText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"LevelInfo/Level/E_Rank");
+     			}
+     			return this.m_E_RankText;
+     		}
+     	}
+
 		public UnityEngine.UI.Button E_UpdateLevelButton
      	{
      		get
@@ -138,6 +155,23 @@ namespace ET
 		    		this.m_E_UpdateLevelImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"LevelInfo/E_UpdateLevel");
      			}
      			return this.m_E_UpdateLevelImage;
+     		}
+     	}
+
+		public UnityEngine.UI.Text E_UpdateText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_UpdateText == null )
+     			{
+		    		this.m_E_UpdateText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"LevelInfo/E_UpdateLevel/E_Update");
+     			}
+     			return this.m_E_UpdateText;
      		}
      	}
 
@@ -285,8 +319,10 @@ namespace ET
 			this.m_E_LevelText = null;
 			this.m_E_ExpBarImage = null;
 			this.m_E_ExpText = null;
+			this.m_E_RankText = null;
 			this.m_E_UpdateLevelButton = null;
 			this.m_E_UpdateLevelImage = null;
+			this.m_E_UpdateText = null;
 			this.m_E_UpdateStarButton = null;
 			this.m_E_UpdateStarImage = null;
 			this.m_E_BaseAttackText = null;
@@ -304,8 +340,10 @@ namespace ET
 		private UnityEngine.UI.Text m_E_LevelText = null;
 		private UnityEngine.UI.Image m_E_ExpBarImage = null;
 		private UnityEngine.UI.Text m_E_ExpText = null;
+		private UnityEngine.UI.Text m_E_RankText = null;
 		private UnityEngine.UI.Button m_E_UpdateLevelButton = null;
 		private UnityEngine.UI.Image m_E_UpdateLevelImage = null;
+		private UnityEngine.UI.Text m_E_UpdateText = null;
 		private UnityEngine.UI.Button m_E_UpdateStarButton = null;
 		private UnityEngine.UI.Image m_E_UpdateStarImage = null;
 		private UnityEngine.UI.Text m_E_BaseAttackText = null;

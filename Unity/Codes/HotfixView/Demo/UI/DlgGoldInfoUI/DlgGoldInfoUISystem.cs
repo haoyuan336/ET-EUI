@@ -22,7 +22,7 @@ namespace ET
             long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             M2C_AddItemResponse response =
-                    (M2C_AddItemResponse) await session.Call(new C2M_AddItemRequest() { AccountId = AccountId, Count = 10, ConfigId = 1008 });
+                    (M2C_AddItemResponse) await session.Call(new C2M_AddItemRequest() { AccountId = AccountId, Count = 10000, ConfigId = 1008 });
             if (response.Error == ErrorCode.ERR_Success)
             {
                 // Log.Debug("增加体力值成功");

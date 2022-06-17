@@ -73,6 +73,8 @@ namespace ET
 		public int Id { get; set; }
 		[ProtoMember(2)]
 		public int EXP { get; set; }
+		[ProtoMember(3)]
+		public int NeedRank { get; set; }
 
 	}
 }

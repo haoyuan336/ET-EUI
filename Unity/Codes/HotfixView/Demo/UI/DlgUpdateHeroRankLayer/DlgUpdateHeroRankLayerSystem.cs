@@ -35,11 +35,18 @@ namespace ET
             {
                 self.HeroCardInfo = response.HeroCardInfo;
 
-                self.SetTargetInfo(self.HeroCardInfo);
+                if (self.UpdateHeroRankSuccessAction != null)
+                {
+                    self.UpdateHeroRankSuccessAction(response.HeroCardInfo);
+                }
 
                 UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
-                UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_ShowHeroInfoLayer);
-                baseWindow.GetComponent<DlgShowHeroInfoLayer>().SetHeroInfo(self.HeroCardInfo);
+                uiComponent.HideWindow(WindowID.WindowID_UpdateHeroRankLayer);
+
+                // self.SetTargetInfo(self.HeroCardInfo);
+                // UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+                // UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_ShowHeroInfoLayer);
+                // baseWindow.GetComponent<DlgShowHeroInfoLayer>().SetHeroInfo(self.HeroCardInfo);
             }
 
             await ETTask.CompletedTask;

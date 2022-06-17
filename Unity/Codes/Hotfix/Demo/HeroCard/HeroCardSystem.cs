@@ -269,16 +269,16 @@ namespace ET
             self.CurrentExp = heroCardInfo.CurrentExp;
         }
 
-        public static float GetTotalHP(this HeroCard self)
-        {
-            if (self.Level == 0)
-            {
-                self.Level = 1;
-            }
-
-            var TotalHP = HeroConfigCategory.Instance.Get(self.ConfigId).HeroHP + HeroUpdateLevelConfigCategory.Instance.Get(self.Level).BaseHP;
-            return TotalHP;
-        }
+        // public static float GetTotalHP(this HeroCard self)
+        // {
+        //     if (self.Level == 0)
+        //     {
+        //         self.Level = 1;
+        //     }
+        //
+        //     var TotalHP = HeroConfigCategory.Instance.Get(self.ConfigId).HeroHP + HeroUpdateLevelConfigCategory.Instance.Get(self.Level).BaseHP;
+        //     return TotalHP;
+        // }
 
         public static bool GetIsDead(this HeroCard self)
         {

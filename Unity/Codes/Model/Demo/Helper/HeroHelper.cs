@@ -1,9 +1,60 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace ET
 {
     public static class HeroHelper
     {
+        public static bool CheckIsMaxLevel(HeroCardInfo heroCardInfo)
+        {
+            //检查是否满级了
+
+            List<HeroLevelExpConfig> configs = HeroLevelExpConfigCategory.Instance.GetAll().Values.ToList();
+            if (heroCardInfo.Level >= configs[configs.Count - 1].Id)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 获得当前阶的最大等级
+        /// </summary>
+        /// <param name="heroCardInfo"></param>
+        /// <returns></returns>
+        public static int GetCurrentRankMaxLevel(HeroCardInfo heroCardInfo)
+        {
+            List<HeroLevelExpConfig> configs = HeroLevelExpConfigCategory.Instance.GetAll().Values.ToList();
+            configs = configs.FindAll(a => a.NeedRank.Equals(heroCardInfo.Rank));
+            return configs[configs.Count - 1].Id;
+        }
+
+        /// <summary>
+        /// 查询是狗需要升阶
+        /// </summary>
+        /// <param name="heroCardInfo"></param>
+        /// <returns></returns>
+        public static bool CheckIsNeedUpdateRank(HeroCardInfo heroCardInfo)
+        {
+            //检查是否需要升阶了
+            var index = heroCardInfo.Level + 1;
+            if (index >= HeroLevelExpConfigCategory.Instance.GetAll().Values.Count)
+            {
+                return false;
+            }
+
+            HeroLevelExpConfig config = HeroLevelExpConfigCategory.Instance.Get(heroCardInfo.Level + 1);
+            if (heroCardInfo.Rank < config.NeedRank)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// 获取升级后 剩下多少经验值
         /// </summary>
@@ -76,7 +127,7 @@ namespace ET
         public static int GetNextLevelExp(HeroCardInfo heroCardInfo)
         {
             //获取下一级需要的经验值
-            HeroLevelExpConfig config = HeroLevelExpConfigCategory.Instance.Get(heroCardInfo.Level + 1);
+            HeroLevelExpConfig config = HeroLevelExpConfigCategory.Instance.Get(heroCardInfo.Level);
             return config.EXP;
         }
 

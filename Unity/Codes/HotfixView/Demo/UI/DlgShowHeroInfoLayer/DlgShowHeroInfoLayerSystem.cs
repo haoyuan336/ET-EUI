@@ -23,8 +23,38 @@ namespace ET
             }
         }
 
+        public static void OnUpdateHeroRankSuccessAction(this DlgShowHeroInfoLayer self, HeroCardInfo heroCardInfo)
+        {
+            self.SetHeroInfo(heroCardInfo);
+        }
+
+        /// <summary>
+        /// 升级按钮点击回调
+        /// </summary>
+        /// <param name="self"></param>
         public static async ETTask OnUpdateHeroLevelButtonClick(this DlgShowHeroInfoLayer self)
         {
+            if (HeroHelper.CheckIsMaxLevel(self.HeroCardInfo))
+            {
+                return;
+            }
+
+            if (HeroHelper.CheckIsNeedUpdateRank(self.HeroCardInfo))
+            {
+                //需要升阶了，显示升阶页面
+
+                UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+                await uiComponent.ShowWindow(WindowID.WindowID_UpdateHeroRankLayer);
+                UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_UpdateHeroRankLayer);
+                if (baseWindow != null)
+                {
+                    baseWindow.GetComponent<DlgUpdateHeroRankLayer>().SetTargetInfo(self.HeroCardInfo);
+                    baseWindow.GetComponent<DlgUpdateHeroRankLayer>().UpdateHeroRankSuccessAction = self.OnUpdateHeroRankSuccessAction;
+                }
+
+                return;
+            }
+
             long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             C2M_UpdateHeroLevelRequest request = new C2M_UpdateHeroLevelRequest() { Account = account, HeroId = self.HeroCardInfo.HeroId };
@@ -269,10 +299,22 @@ namespace ET
             // self.View.E_ExpText.text = expCount.ToString();
             //
             var needExp = HeroHelper.GetNextLevelExp(self.HeroCardInfo);
-            self.View.E_ExpText.text = $"{expCount}/{needExp}";
+            // self.View.E_ExpText.text = $"{expCount}/{needExp}";
+            self.View.E_ExpText.text = needExp != 0? $"{needExp}" : "  ";
+
             var rate = (float) expCount / needExp;
             self.View.E_ExpBarImage.fillAmount = rate;
             self.View.E_UpdateLevelButton.interactable = expCount >= needExp;
+            //判断是否可以升级
+            // HeroLevelExpConfig config = HeroLevelExpConfigCategory.Instance.Get()
+            var updateRank = HeroHelper.CheckIsNeedUpdateRank(self.HeroCardInfo);
+            var isMaxLevel = HeroHelper.CheckIsMaxLevel(self.HeroCardInfo);
+            self.View.E_UpdateText.text = isMaxLevel? "MAX" : updateRank? "升阶" : "升级";
+
+            var maxLevel = HeroHelper.GetCurrentRankMaxLevel(self.HeroCardInfo);
+
+            self.View.E_LevelText.text = isMaxLevel? $"Lv.{self.HeroCardInfo.Level}" : $"Lv.{self.HeroCardInfo.Level}/Lv.{maxLevel}";
+            self.View.E_RankText.text = $"Rank{self.HeroCardInfo.Rank}";
         }
 
         public static async void RequestCurrentExp(this DlgShowHeroInfoLayer self)

@@ -1,4 +1,6 @@
-﻿namespace ET
+﻿using System;
+
+namespace ET
 {
     public class DlgUpdateHeroRankLayer: Entity, IAwake
     {
@@ -8,5 +10,7 @@
         }
 
         public HeroCardInfo HeroCardInfo;
+
+        public Action<HeroCardInfo> UpdateHeroRankSuccessAction;
     }
 }
