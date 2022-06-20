@@ -10,6 +10,7 @@ namespace ET
 
     public class Account: Entity, IAwake
     {
+        public string NickName; //昵称
         public string AccountName;
         public string Password;
         public long CreateTime;
@@ -25,5 +26,6 @@ namespace ET
         public int Exp; //经验值
         public int State = (int) StateType.Active;
         public bool IsRegisterMailBox = false; //是否注册了邮箱
+        public long LastLogonTime = 0;
     }
 }

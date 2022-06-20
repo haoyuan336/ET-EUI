@@ -54,5 +54,6 @@
         WindowID_MailLayer, //邮箱层
         WindowID_MailInfoLayer, //邮箱详细信息层
         WindowID_FriendLayer,   //好友列表层
+        WindowID_SearchUserLayer,//好友搜索层
     }
 }

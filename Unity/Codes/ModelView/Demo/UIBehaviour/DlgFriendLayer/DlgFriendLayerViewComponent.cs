@@ -39,6 +39,40 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Button E_SearchButton
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_SearchButton == null )
+     			{
+		    		this.m_E_SearchButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Bg/bg/E_Search");
+     			}
+     			return this.m_E_SearchButton;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_SearchImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_SearchImage == null )
+     			{
+		    		this.m_E_SearchImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Bg/bg/E_Search");
+     			}
+     			return this.m_E_SearchImage;
+     		}
+     	}
+
 		public UnityEngine.UI.LoopVerticalScrollRect ELoopFriendListLoopVerticalScrollRect
      	{
      		get
@@ -60,12 +94,16 @@ namespace ET
 		{
 			this.m_E_BackButton = null;
 			this.m_E_BackImage = null;
+			this.m_E_SearchButton = null;
+			this.m_E_SearchImage = null;
 			this.m_ELoopFriendListLoopVerticalScrollRect = null;
 			this.uiTransform = null;
 		}
 
 		private UnityEngine.UI.Button m_E_BackButton = null;
 		private UnityEngine.UI.Image m_E_BackImage = null;
+		private UnityEngine.UI.Button m_E_SearchButton = null;
+		private UnityEngine.UI.Image m_E_SearchImage = null;
 		private UnityEngine.UI.LoopVerticalScrollRect m_ELoopFriendListLoopVerticalScrollRect = null;
 		public Transform uiTransform = null;
 	}

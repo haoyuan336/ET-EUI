@@ -11,6 +11,14 @@ namespace ET
         public static void RegisterUIEvent(this DlgFriendLayer self)
         {
             self.View.E_BackButton.AddListener(self.OnBackButtonClick);
+            self.View.E_SearchButton.AddListenerAsync(self.OnSearchButtonClick);
+        }
+
+        public static async ETTask OnSearchButtonClick(this  DlgFriendLayer self)
+        {
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_SearchUserLayer);
+            
         }
 
         public static void OnBackButtonClick(this DlgFriendLayer self)

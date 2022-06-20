@@ -21,7 +21,8 @@
                 IsGet = self.IsGet,
                 IsRead = self.IsRead,
                 Title = self.MailTitle,
-                Content = self.MailContent
+                Content = self.MailContent,
+                MailType = (int)self.MailType
             };
         }
     }

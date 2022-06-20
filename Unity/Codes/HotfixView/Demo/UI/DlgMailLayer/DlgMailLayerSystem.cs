@@ -29,7 +29,7 @@ namespace ET
         public static void InitMailItemInfo(this DlgMailLayer self, Scroll_ItemMail itemMail, MailInfo info)
         {
             itemMail.E_IsReadText.text = info.IsRead? "已读" : "未读";
-            itemMail.E_timeText.text = info.SendTime;
+            itemMail.E_timeText.text = info.SendTime.ToString();
             itemMail.E_TitleText.text = info.Title;
             itemMail.E_FromText.text = $"来自:{info.SendName}";
             itemMail.E_IsGetText.text = info.IsGet? "已领取" : "未领取";

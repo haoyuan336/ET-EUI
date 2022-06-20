@@ -76,6 +76,9 @@ namespace ET
 		[ProtoMember(1)]
 		public int RpcId { get; set; }
 
+		[ProtoMember(2)]
+		public long Account { get; set; }
+
 	}
 
 	[Message(OuterOpcode.G2C_EnterMap)]
@@ -2540,7 +2543,7 @@ namespace ET
 		public string SendName { get; set; }
 
 		[ProtoMember(5)]
-		public string SendTime { get; set; }
+		public long SendTime { get; set; }
 
 		[ProtoMember(6)]
 		public bool IsRead { get; set; }
@@ -2553,6 +2556,9 @@ namespace ET
 
 		[ProtoMember(9)]
 		public string Content { get; set; }
+
+		[ProtoMember(10)]
+		public int MailType { get; set; }
 
 	}
 
@@ -2713,6 +2719,89 @@ namespace ET
 
 		[ProtoMember(1)]
 		public MailInfo MailInfo { get; set; }
+
+	}
+
+	[Message(OuterOpcode.AccountInfo)]
+	[ProtoContract]
+	public partial class AccountInfo: Object
+	{
+		[ProtoMember(1)]
+		public long Account { get; set; }
+
+		[ProtoMember(2)]
+		public string Name { get; set; }
+
+		[ProtoMember(3)]
+		public string NickName { get; set; }
+
+		[ProtoMember(4)]
+		public long LastLogonTime { get; set; }
+
+		[ProtoMember(5)]
+		public long CreateTime { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_GetFriendRecommendListResponse))]
+	[Message(OuterOpcode.C2M_GetFriendRecommendListRequest)]
+	[ProtoContract]
+	public partial class C2M_GetFriendRecommendListRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetFriendRecommendListResponse)]
+	[ProtoContract]
+	public partial class M2C_GetFriendRecommendListResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<AccountInfo> AccountInfos = new List<AccountInfo>();
+
+	}
+
+	[ResponseType(nameof(M2C_AddFriendResponse))]
+	[Message(OuterOpcode.C2M_AddFriendRequest)]
+	[ProtoContract]
+	public partial class C2M_AddFriendRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long Account { get; set; }
+
+		[ProtoMember(2)]
+		public AccountInfo TargetInfo { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_AddFriendResponse)]
+	[ProtoContract]
+	public partial class M2C_AddFriendResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
 
 	}
 

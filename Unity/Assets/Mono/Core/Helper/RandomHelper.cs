@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Random = System.Random;
 
 namespace ET
@@ -18,10 +19,10 @@ namespace ET
         {
             return random.Next();
         }
-        
+
         public static uint RandUInt32(this Random random)
         {
-            return (uint)random.Next();
+            return (uint) random.Next();
         }
 
         public static long RandInt64(this Random random)
@@ -31,11 +32,11 @@ namespace ET
             return BitConverter.ToInt64(byte8, 0);
         }
     }
-    
+
     public static class RandomHelper
     {
         public static Random random = new Random(Guid.NewGuid().GetHashCode());
-        
+
         public static ulong RandUInt64()
         {
             byte[] byte8 = new byte[8];
@@ -47,10 +48,10 @@ namespace ET
         {
             return random.Next();
         }
-        
+
         public static uint RandUInt32()
         {
-            return (uint)random.Next();
+            return (uint) random.Next();
         }
 
         public static long RandInt64()
@@ -72,13 +73,13 @@ namespace ET
             return value;
         }
 
-        public static long NextLong(long minValue,long maxValue)
+        public static long NextLong(long minValue, long maxValue)
         {
             if (minValue > maxValue)
             {
                 throw new ArgumentException("minValue is great than maxValue", "minValue");
             }
-            
+
             long num = maxValue - minValue;
             return minValue + (long) (random.NextDouble() * num);
         }
@@ -101,6 +102,12 @@ namespace ET
         public static T RandomArray<T>(this List<T> array)
         {
             return array[RandomNumber(0, array.Count)];
+        }
+
+        public static char RandomChar(this string self)
+        {
+            // return self.ToList().RandomArray();
+            return self[RandomNumber(0, self.Length)];
         }
 
         /// <summary>
@@ -131,7 +138,8 @@ namespace ET
             //表示键和值对的集合。
             Hashtable hashtable = new Hashtable();
             Random rm = random;
-            while (hashtable.Count < sum) {
+            while (hashtable.Count < sum)
+            {
                 //返回一个min到max之间的随机数
                 int nValue = rm.Next(min, max);
                 // 是否包含特定值
@@ -146,7 +154,7 @@ namespace ET
 
             return arr;
         }
-        
+
         /// <summary>
         /// 随机从数组中取若干个不重复的元素，
         /// 为了降低算法复杂度，所以是伪随机，对随机要求不是非常高的逻辑可以用
@@ -161,7 +169,7 @@ namespace ET
             {
                 return false;
             }
-            
+
             destList.Clear();
 
             if (randCount >= sourceList.Count)
@@ -170,7 +178,7 @@ namespace ET
                 {
                     destList.Add(val);
                 }
-                
+
                 return true;
             }
 
@@ -178,6 +186,7 @@ namespace ET
             {
                 return true;
             }
+
             int beginIndex = random.Next(0, sourceList.Count - 1);
             for (int i = beginIndex; i < beginIndex + randCount; i++)
             {
@@ -261,7 +270,7 @@ namespace ET
 
             return -1;
         }
-        
+
         public static int RandomByWeight(List<int> weights, int weightRandomMinVal)
         {
             if (weights.Count == 0)
@@ -295,7 +304,7 @@ namespace ET
 
             return -1;
         }
-        
+
         public static int RandomByWeight(List<long> weights)
         {
             if (weights.Count == 0)
@@ -313,7 +322,7 @@ namespace ET
             {
                 sum += weights[i];
             }
-            
+
             long number_rand = NextLong(1, sum + 1);
 
             long sum_temp = 0;

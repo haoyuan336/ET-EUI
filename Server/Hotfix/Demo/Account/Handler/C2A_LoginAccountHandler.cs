@@ -19,7 +19,7 @@ namespace ET
 
             //移除5s自动掉线的监听组件
             session.RemoveComponent<SessionAcceptTimeoutComponent>();
-            
+
             //增加连击访问限制
             if (session.GetComponent<SessionLockComponent>() != null)
             {
@@ -84,11 +84,14 @@ namespace ET
                     }
                     else
                     {
+                        // string str = "qwertyuiopasdfghjklzxcvbnm";
                         account = session.AddChild<Account>();
                         account.AccountName = request.AccountName;
                         account.Password = request.Password;
                         account.CreateTime = TimeHelper.ServerNow();
                         account.AccountType = (int) AccountType.General;
+                        account.NickName = request.AccountName;
+                        // account.NickName = $"{str.RandomChar()}{str.RandomChar()}{str.RandomChar()}";
                         //储存用户道具信息
                         KeyValuePair<int, ItemConfig>[] itemConfigs = ItemConfigCategory.Instance.GetAll().ToArray();
                         foreach (var itemConfig in itemConfigs)
@@ -100,13 +103,13 @@ namespace ET
                                 Count = itemConfig.Value.DefaultValue,
                                 OwnerId = account.Id
                             };
-                           
+
                             await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save(item);
                             item.Dispose();
                         }
-
-                        await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save<Account>(account);
                     }
+                    account.LastLogonTime = TimeHelper.ServerNow();
+                    await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save<Account>(account);
 
                     StartSceneConfig startSceneConfig = StartSceneConfigCategory.Instance.GetBySceneName(session.DomainZone(), "LoginCenter");
                     long loginCenterInstanceId = startSceneConfig.InstanceId;

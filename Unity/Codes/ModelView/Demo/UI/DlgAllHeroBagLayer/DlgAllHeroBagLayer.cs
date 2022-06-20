@@ -32,5 +32,10 @@ namespace ET
         public int BagCount = 0;
         public int HeroCount = 0;
         public Sprite DefaultHeadSprite = null;
+
+        public HeroElementType[] ElementTypesList =
+        {
+            HeroElementType.Fire, HeroElementType.Dark, HeroElementType.Water, HeroElementType.Wind, HeroElementType.Light
+        };
     }
 }

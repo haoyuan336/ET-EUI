@@ -13,6 +13,7 @@ namespace ET.Handler
             Scene scene = session.ZoneScene();
 
             Game.EventSystem.Publish(new EventType.SetNewMails() { Scene = scene, MailInfos = mailInfos });
+            
 
             await ETTask.CompletedTask;
         }

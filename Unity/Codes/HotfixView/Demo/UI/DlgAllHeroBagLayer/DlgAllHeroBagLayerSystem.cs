@@ -26,13 +26,17 @@ namespace ET
 
         public static void InitAllToggleEvent(this DlgAllHeroBagLayer self)
         {
+            // HeroElementType[] indexs =
+            // {
+            //     HeroElementType.Fire, HeroElementType.Dark, HeroElementType.Water, HeroElementType.Wind, HeroElementType.Light
+            // };
             List<GameObject> list = new List<GameObject>();
-            list.Add(self.View.E_RedImage.gameObject);
-            list.Add(self.View.E_YellowImage.gameObject);
-            list.Add(self.View.E_GreenImage.gameObject);
-            list.Add(self.View.E_BlueImage.gameObject);
-            list.Add(self.View.E_PurpleImage.gameObject);
-            list.Add(self.View.E_AllImage.gameObject);
+            list.Add(self.View.E_FireToggle.gameObject);
+            list.Add(self.View.E_DarkToggle.gameObject);
+            list.Add(self.View.E_WaterToggle.gameObject);
+            list.Add(self.View.E_WindToggle.gameObject);
+            list.Add(self.View.E_LightToggle.gameObject);
+            list.Add(self.View.E_AllToggle.gameObject);
             var index = 0;
             foreach (var go in list)
             {
@@ -225,11 +229,11 @@ namespace ET
                     Log.Debug($"self current choose type index {self.CurrentChooseTypeIndex}");
                     // Log.Debug(go.name);
                     self.FilterColor(index).Coroutine();
-                    go.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 160);
+                    // go.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 160);
                 }
                 else
                 {
-                    go.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 140);
+                    // go.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 140);
                 }
             });
         }

@@ -5,7 +5,7 @@ namespace ET
 {
 	public  class DlgAllHeroBagLayerViewComponent : Entity,IAwake,IDestroy 
 	{
-		public UnityEngine.UI.Toggle E_RedToggle
+		public UnityEngine.UI.Toggle E_FireToggle
      	{
      		get
      		{
@@ -14,15 +14,15 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_RedToggle == null )
+     			if( this.m_E_FireToggle == null )
      			{
-		    		this.m_E_RedToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ColorContent/E_Red");
+		    		this.m_E_FireToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ColorContent/E_Fire");
      			}
-     			return this.m_E_RedToggle;
+     			return this.m_E_FireToggle;
      		}
      	}
 
-		public UnityEngine.UI.Image E_RedImage
+		public UnityEngine.UI.Toggle E_DarkToggle
      	{
      		get
      		{
@@ -31,15 +31,15 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_RedImage == null )
+     			if( this.m_E_DarkToggle == null )
      			{
-		    		this.m_E_RedImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"ColorContent/E_Red");
+		    		this.m_E_DarkToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ColorContent/E_Dark");
      			}
-     			return this.m_E_RedImage;
+     			return this.m_E_DarkToggle;
      		}
      	}
 
-		public UnityEngine.UI.Toggle E_YellowToggle
+		public UnityEngine.UI.Toggle E_WaterToggle
      	{
      		get
      		{
@@ -48,15 +48,15 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_YellowToggle == null )
+     			if( this.m_E_WaterToggle == null )
      			{
-		    		this.m_E_YellowToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ColorContent/E_Yellow");
+		    		this.m_E_WaterToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ColorContent/E_Water");
      			}
-     			return this.m_E_YellowToggle;
+     			return this.m_E_WaterToggle;
      		}
      	}
 
-		public UnityEngine.UI.Image E_YellowImage
+		public UnityEngine.UI.Toggle E_WindToggle
      	{
      		get
      		{
@@ -65,15 +65,15 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_YellowImage == null )
+     			if( this.m_E_WindToggle == null )
      			{
-		    		this.m_E_YellowImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"ColorContent/E_Yellow");
+		    		this.m_E_WindToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ColorContent/E_Wind");
      			}
-     			return this.m_E_YellowImage;
+     			return this.m_E_WindToggle;
      		}
      	}
 
-		public UnityEngine.UI.Toggle E_GreenToggle
+		public UnityEngine.UI.Toggle E_LightToggle
      	{
      		get
      		{
@@ -82,96 +82,11 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_GreenToggle == null )
+     			if( this.m_E_LightToggle == null )
      			{
-		    		this.m_E_GreenToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ColorContent/E_Green");
+		    		this.m_E_LightToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ColorContent/E_Light");
      			}
-     			return this.m_E_GreenToggle;
-     		}
-     	}
-
-		public UnityEngine.UI.Image E_GreenImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_GreenImage == null )
-     			{
-		    		this.m_E_GreenImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"ColorContent/E_Green");
-     			}
-     			return this.m_E_GreenImage;
-     		}
-     	}
-
-		public UnityEngine.UI.Toggle E_BlueToggle
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_BlueToggle == null )
-     			{
-		    		this.m_E_BlueToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ColorContent/E_Blue");
-     			}
-     			return this.m_E_BlueToggle;
-     		}
-     	}
-
-		public UnityEngine.UI.Image E_BlueImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_BlueImage == null )
-     			{
-		    		this.m_E_BlueImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"ColorContent/E_Blue");
-     			}
-     			return this.m_E_BlueImage;
-     		}
-     	}
-
-		public UnityEngine.UI.Toggle E_PurpleToggle
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_PurpleToggle == null )
-     			{
-		    		this.m_E_PurpleToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"ColorContent/E_Purple");
-     			}
-     			return this.m_E_PurpleToggle;
-     		}
-     	}
-
-		public UnityEngine.UI.Image E_PurpleImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_PurpleImage == null )
-     			{
-		    		this.m_E_PurpleImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"ColorContent/E_Purple");
-     			}
-     			return this.m_E_PurpleImage;
+     			return this.m_E_LightToggle;
      		}
      	}
 
@@ -192,23 +107,6 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Image E_AllImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_AllImage == null )
-     			{
-		    		this.m_E_AllImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"ColorContent/E_All");
-     			}
-     			return this.m_E_AllImage;
-     		}
-     	}
-
 		public UnityEngine.UI.LoopVerticalScrollRect E_LoopScrollListHeroLoopVerticalScrollRect
      	{
      		get
@@ -220,7 +118,7 @@ namespace ET
      			}
      			if( this.m_E_LoopScrollListHeroLoopVerticalScrollRect == null )
      			{
-		    		this.m_E_LoopScrollListHeroLoopVerticalScrollRect = UIFindHelper.FindDeepChild<UnityEngine.UI.LoopVerticalScrollRect>(this.uiTransform.gameObject,"E_LoopScrollListHero");
+		    		this.m_E_LoopScrollListHeroLoopVerticalScrollRect = UIFindHelper.FindDeepChild<UnityEngine.UI.LoopVerticalScrollRect>(this.uiTransform.gameObject,"Bg/Image (1)/E_LoopScrollListHero");
      			}
      			return this.m_E_LoopScrollListHeroLoopVerticalScrollRect;
      		}
@@ -237,7 +135,7 @@ namespace ET
      			}
      			if( this.m_E_ContentToggleGroup == null )
      			{
-		    		this.m_E_ContentToggleGroup = UIFindHelper.FindDeepChild<UnityEngine.UI.ToggleGroup>(this.uiTransform.gameObject,"E_LoopScrollListHero/E_Content");
+		    		this.m_E_ContentToggleGroup = UIFindHelper.FindDeepChild<UnityEngine.UI.ToggleGroup>(this.uiTransform.gameObject,"Bg/Image (1)/E_LoopScrollListHero/E_Content");
      			}
      			return this.m_E_ContentToggleGroup;
      		}
@@ -296,18 +194,12 @@ namespace ET
 
 		public void DestroyWidget()
 		{
-			this.m_E_RedToggle = null;
-			this.m_E_RedImage = null;
-			this.m_E_YellowToggle = null;
-			this.m_E_YellowImage = null;
-			this.m_E_GreenToggle = null;
-			this.m_E_GreenImage = null;
-			this.m_E_BlueToggle = null;
-			this.m_E_BlueImage = null;
-			this.m_E_PurpleToggle = null;
-			this.m_E_PurpleImage = null;
+			this.m_E_FireToggle = null;
+			this.m_E_DarkToggle = null;
+			this.m_E_WaterToggle = null;
+			this.m_E_WindToggle = null;
+			this.m_E_LightToggle = null;
 			this.m_E_AllToggle = null;
-			this.m_E_AllImage = null;
 			this.m_E_LoopScrollListHeroLoopVerticalScrollRect = null;
 			this.m_E_ContentToggleGroup = null;
 			this.m_E_BagCountText = null;
@@ -316,18 +208,12 @@ namespace ET
 			this.uiTransform = null;
 		}
 
-		private UnityEngine.UI.Toggle m_E_RedToggle = null;
-		private UnityEngine.UI.Image m_E_RedImage = null;
-		private UnityEngine.UI.Toggle m_E_YellowToggle = null;
-		private UnityEngine.UI.Image m_E_YellowImage = null;
-		private UnityEngine.UI.Toggle m_E_GreenToggle = null;
-		private UnityEngine.UI.Image m_E_GreenImage = null;
-		private UnityEngine.UI.Toggle m_E_BlueToggle = null;
-		private UnityEngine.UI.Image m_E_BlueImage = null;
-		private UnityEngine.UI.Toggle m_E_PurpleToggle = null;
-		private UnityEngine.UI.Image m_E_PurpleImage = null;
+		private UnityEngine.UI.Toggle m_E_FireToggle = null;
+		private UnityEngine.UI.Toggle m_E_DarkToggle = null;
+		private UnityEngine.UI.Toggle m_E_WaterToggle = null;
+		private UnityEngine.UI.Toggle m_E_WindToggle = null;
+		private UnityEngine.UI.Toggle m_E_LightToggle = null;
 		private UnityEngine.UI.Toggle m_E_AllToggle = null;
-		private UnityEngine.UI.Image m_E_AllImage = null;
 		private UnityEngine.UI.LoopVerticalScrollRect m_E_LoopScrollListHeroLoopVerticalScrollRect = null;
 		private UnityEngine.UI.ToggleGroup m_E_ContentToggleGroup = null;
 		private UnityEngine.UI.Text m_E_BagCountText = null;

@@ -31,7 +31,7 @@ namespace ET
                     Id = IdGenerater.Instance.GenerateId(),
                     ReceiveId = accountId,
                     SendName = "系统",
-                    SendTime = TimeHelper.ServerNow().ToString(),
+                    SendTime = TimeHelper.ServerNow(),
                     MailTitle = "欢迎来到cog",
                     MailContent = "欢迎来到cog，邮件内容",
                 };

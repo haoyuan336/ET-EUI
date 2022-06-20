@@ -36,6 +36,7 @@ message Actor_TransferResponse // IActorLocationResponse
 message C2G_EnterMap // IRequest
 {
 	int32 RpcId = 1;
+	int64 Account = 2;
 }
 
 message G2C_EnterMap // IResponse
@@ -1162,11 +1163,12 @@ message MailInfo
 	int64 ReceiveId = 2;
 	int64 SendId = 3;
 	string SendName = 4;	//邮件来源
-	string SendTime = 5;	//邮件的发送时间
+	int64 SendTime = 5;	//邮件的发送时间
 	bool IsRead = 6;		//是否已读
 	bool IsGet = 7;	//是否领取
 	string Title = 8;	//邮件标题
 	string Content = 9;	//邮件内容
+	int32 MailType = 10;	//邮件类型
 }
 
 //ResponseType M2C_GetAllMailResponse
@@ -1236,4 +1238,40 @@ message M2C_ReceiveAllAwardResponse	//IActorLocationResponse
 	int32 Error = 91;
 	string Message = 92;
 	MailInfo MailInfo = 1;
+}
+message AccountInfo
+{
+	int64 Account = 1;
+	string Name = 2;
+	string NickName = 3;
+	int64 LastLogonTime = 4;	//最近登录时间
+	int64 CreateTime = 5;	//创建时间
+
+}
+//ResponseType M2C_GetFriendRecommendListResponse
+message C2M_GetFriendRecommendListRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+
+message M2C_GetFriendRecommendListResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated AccountInfo AccountInfos = 1;
+}
+//ResponseType M2C_AddFriendResponse
+message C2M_AddFriendRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+	AccountInfo TargetInfo = 2;
+}
+message M2C_AddFriendResponse 	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
 }

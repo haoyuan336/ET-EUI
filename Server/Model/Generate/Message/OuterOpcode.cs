@@ -160,5 +160,10 @@ namespace ET
 		 public const ushort M2C_GetAllAwardInfoResponse = 10157;
 		 public const ushort C2M_ReceiveAllAwardRequest = 10158;
 		 public const ushort M2C_ReceiveAllAwardResponse = 10159;
+		 public const ushort AccountInfo = 10160;
+		 public const ushort C2M_GetFriendRecommendListRequest = 10161;
+		 public const ushort M2C_GetFriendRecommendListResponse = 10162;
+		 public const ushort C2M_AddFriendRequest = 10163;
+		 public const ushort M2C_AddFriendResponse = 10164;
 	}
 }
