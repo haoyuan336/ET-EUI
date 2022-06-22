@@ -284,13 +284,13 @@ namespace ET
                 List<ItemInfo> itemInfos = response.ItemInfos;
                 //todo 1006 为英雄背包格子扩展包
                 itemInfos = itemInfos.FindAll(a => a.ConfigId.Equals(1004) || a.ConfigId.Equals(1006));
-                Log.Debug($"item info {itemInfos.Count}");
+                // Log.Debug($"item info {itemInfos.Count}");
                 if (itemInfos.Count > 0)
                 {
                     var bagCount = 0;
                     foreach (var itemInfo in itemInfos)
                     {
-                        Log.Debug($"item infos {itemInfo.Count} + {itemInfo.ConfigId}");
+                        // Log.Debug($"item infos {itemInfo.Count} + {itemInfo.ConfigId}");
                         ItemConfig config = ItemConfigCategory.Instance.Get(itemInfo.ConfigId);
                         bagCount += config.DefaultValue;
                     }

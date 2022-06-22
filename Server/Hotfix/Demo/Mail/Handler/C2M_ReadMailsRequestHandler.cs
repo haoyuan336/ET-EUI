@@ -15,17 +15,6 @@ namespace ET.Handler
             {
                 List<Mail> mails = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
                         .Query<Mail>(a => a.ReceiveId.Equals(account) && a.State == (int) StateType.Active);
-
-                foreach (var id in mailIds)
-                {
-                    Log.Warning($"mail id {id}");
-                }
-
-                foreach (var mail in mails)
-                {
-                    Log.Warning($"mail id {mail.Id}");
-                }
-
                 List<Mail> processMails = mails.FindAll(a => { return mailIds.Exists(b => { return b.Equals(a.Id); }); });
                 List<ETTask> tasks = new List<ETTask>();
                 foreach (var mail in processMails)

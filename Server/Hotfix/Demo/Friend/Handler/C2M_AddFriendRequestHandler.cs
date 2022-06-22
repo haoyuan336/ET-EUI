@@ -10,9 +10,9 @@ namespace ET
     {
         protected override async ETTask Run(Unit unit, C2M_AddFriendRequest request, M2C_AddFriendResponse response, Action reply)
         {
-            long Account = request.Account;
+            long accountId = request.Account;
             AccountInfo targetInfo = request.TargetInfo;
-            List<Account> accounts = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<Account>(a => a.Id.Equals(Account));
+            List<Account> accounts = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<Account>(a => a.Id.Equals(accountId));
             if (accounts.Count == 0)
             {
                 response.Error = ErrorCode.ERR_NotFoundPlayer;
@@ -25,14 +25,15 @@ namespace ET
 
             //获取目标用户的所有邮件
             List<Mail> mails = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
-                    .Query<Mail>(a => a.ReceiveId.Equals(targetInfo.Account) && a.SendId.Equals(account) && a.MailType == MailType.AddFriendRequest);
+                    .Query<Mail>(a => a.ReceiveId.Equals(targetInfo.Account) && a.SendId.Equals(accountId) && a.MailType == MailType.AddFriendRequest);
             Mail mail;
             if (mails.Count == 0)
             {
                 mail = new Mail()
                 {
+                    Id = IdGenerater.Instance.GenerateId(),
                     ReceiveId = targetInfo.Account,
-                    SendId = Account,
+                    SendId = accountId,
                     MailType = MailType.AddFriendRequest,
                     MailContent = $"{account.NickName}请求添加你为好友",
                     MailTitle = "好友申请",
@@ -72,7 +73,7 @@ namespace ET
                     MessageHelper.SendToClient(target, new M2C_SendMails() { MailInfos = mailInfos });
                 }
 
-                unit.Dispose();
+                // unit.Dispose();
             }
 
             // MessageHelper.SendToClient();

@@ -67,13 +67,16 @@ namespace ET
 
         public static int GetHeroTotalHP(this HeroCardDataComponent self)
         {
-            var baseHP = HeroHelper.GetHeroBaseHP(self.GetParent<HeroCard>().GetMessageInfo());
             HeroCard heroCard = self.GetParent<HeroCard>();
+            Log.Debug($"GetHeroTotalHP hero card ");
+            var baseHP = HeroHelper.GetHeroBaseHP(heroCard.GetMessageInfo());
             var weaponHP = heroCard.GetWeaponBaseValueByType(WordBarType.HP);
             var weaponHPAddition = heroCard.GetWeaponBaseValueByType(WordBarType.HPAddition);
             var totalHp = (baseHP + weaponHP) * (1.0f + (float) weaponHPAddition / 10000);
             return (int) totalHp;
+            // return 0;
         }
+
         public static int GetHeroBaseDefence(this HeroCardDataComponent self)
         {
             //获取英雄的基础防御力
@@ -148,6 +151,7 @@ namespace ET
             }
 
             List<Skill> skills = self.Parent.GetChilds<Skill>();
+            
             Skill skill = skills.Find(a =>
             {
                 SkillConfig config = SkillConfigCategory.Instance.Get(a.ConfigId);

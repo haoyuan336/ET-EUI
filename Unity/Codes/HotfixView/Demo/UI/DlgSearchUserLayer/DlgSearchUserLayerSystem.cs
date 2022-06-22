@@ -13,6 +13,7 @@ namespace ET
             self.View.E_RecommendToggle.onValueChanged.AddListener(self.OnRecommendToggleClick);
             self.View.E_ApplyToggle.onValueChanged.AddListener(self.OnApplyToggleClick);
             self.View.ELoopRecommendLoopVerticalScrollRect.AddItemRefreshListener(self.OnRecommendLoop);
+            self.View.ELoopApplyLoopVerticalScrollRect.AddItemRefreshListener(self.OnApplyLoop);
             self.View.E_BackButton.AddListener(self.BackButtonClick);
         }
 
@@ -22,48 +23,82 @@ namespace ET
             uiComponent.HideWindow(WindowID.WindowID_SearchUserLayer);
         }
 
-        public static void OnRecommendLoop(this DlgSearchUserLayer self, Transform transform, int index)
+        public static void OnApplyLoop(this DlgSearchUserLayer self, Transform transform, int index)
         {
-            Scroll_ItemRecommend itemRecommend = self.ItemRecommends[index].BindTrans(transform);
-            AccountInfo accountInfo = self.RecommendAccountInfos[index];
-            if (accountInfo != null)
+            Scroll_ItemAddFriendApply itemAddFriendApply = self.ItemAddFriendApplies[index].BindTrans(transform);
+            if (index < self.ApplyAccountInfos.Count)
             {
-                itemRecommend.E_AddButton.AddListener(() => { self.OnAddFriendButtonClick(accountInfo); });
-                itemRecommend.E_NameText.text = accountInfo.NickName;
-                var disTime = TimeHelper.ServerNow() - accountInfo.LastLogonTime;
-                var year = disTime / 1000 / (60 * 60 * 24 * 365);
-                var day = disTime / 1000 / (60 * 60 * 24);
-                var hour = disTime / 1000 / (60 * 60);
-                var min = disTime / 1000 / 60;
-                var second = disTime / 1000;
-                if (year != 0)
-                {
-                    itemRecommend.E_TimeText.text = $"{year}年前";
-                }
-                else if (day != 0)
-                {
-                    itemRecommend.E_TimeText.text = $"{day}天前";
-                }
-                else if (hour != 0)
-                {
-                    itemRecommend.E_TimeText.text = $"{hour}小时前";
-                }
-                else if (min != 0)
-                {
-                    itemRecommend.E_TimeText.text = $"{min}分钟前";
-                }
-                else if (second != 0)
-                {
-                    itemRecommend.E_TimeText.text = $"{second}秒前";
-                }
+                var mailInfo = self.ApplyMailInfos[index];
+                var info = self.ApplyAccountInfos[index];
+                var lastTime = TimeHelper.ServerNow() - mailInfo.SendTime;
+                var str = CustomHelper.GetLastTimeByMSecond(lastTime);
+                itemAddFriendApply.E_TimeText.text = str;
+                itemAddFriendApply.E_NameText.text = info.NickName;
+
+                itemAddFriendApply.E_AcceptButton.AddListener(() => { self.OnAcceptButtonClick(info, true); });
+                itemAddFriendApply.E_RefuseButton.AddListener(() => { self.OnAcceptButtonClick(info, false); });
             }
         }
 
-        public static void OnApplyToggleClick(this DlgSearchUserLayer self, bool value)
+        public static async void OnAcceptButtonClick(this DlgSearchUserLayer self, AccountInfo accountInfo, bool procss)
+        {
+            //接受拒绝按钮回调
+            long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            C2M_ProcessFriendApplyRequest request = new C2M_ProcessFriendApplyRequest()
+            {
+                AccountId = accountId,
+                AccountInfo = accountInfo,
+                ApplyProcessType = procss? (int) ApplyProcessType.Accept : (int) ApplyProcessType.Refuse
+            };
+            var response = await session.Call(request) as M2C_ProcessFriendApplyResponse;
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                self.ApplyAccountInfos.Remove(accountInfo);
+                self.View.ELoopApplyLoopVerticalScrollRect.SetVisible(true, self.ApplyAccountInfos.Count);
+
+                UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+                UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_FriendLayer);
+                baseWindow.GetComponent<DlgFriendLayer>().ReferInfo();
+            }
+        }
+
+        public static void OnRecommendLoop(this DlgSearchUserLayer self, Transform transform, int index)
+        {
+            Scroll_ItemRecommend itemRecommend = self.ItemRecommends[index].BindTrans(transform);
+            if (index < self.RecommendAccountInfos.Count)
+            {
+                AccountInfo accountInfo = self.RecommendAccountInfos[index];
+                itemRecommend.E_AddButton.AddListener(() => { self.OnAddFriendButtonClick(accountInfo); });
+                itemRecommend.E_NameText.text = accountInfo.NickName;
+                var disTime = TimeHelper.ServerNow() - accountInfo.LastLogonTime;
+                var str = CustomHelper.GetLastTimeByMSecond(disTime);
+                itemRecommend.E_TimeText.text = str;
+            }
+        }
+
+        public static async void OnApplyToggleClick(this DlgSearchUserLayer self, bool value)
         {
             if (value)
             {
                 Log.Debug("好友申请列表");
+                self.View.ELoopApplyLoopVerticalScrollRect.gameObject.SetActive(true);
+                //获取玩家的所有邮件
+                long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+                Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+                C2M_GetFriendApplyListRequest request = new C2M_GetFriendApplyListRequest() { AccountId = account };
+                M2C_GetFriendApplyListResponse response = await session.Call(request) as M2C_GetFriendApplyListResponse;
+                if (response.Error == ErrorCode.ERR_Success)
+                {
+                    self.ApplyAccountInfos = response.AccountInfo;
+                    self.ApplyMailInfos = response.MailInfo;
+                    self.AddUIScrollItems(ref self.ItemAddFriendApplies, self.ApplyAccountInfos.Count);
+                    self.View.ELoopApplyLoopVerticalScrollRect.SetVisible(true, self.ApplyAccountInfos.Count);
+                }
+            }
+            else
+            {
+                self.View.ELoopApplyLoopVerticalScrollRect.gameObject.SetActive(false);
             }
         }
 
@@ -71,6 +106,7 @@ namespace ET
         {
             if (value)
             {
+                self.View.ELoopRecommendLoopVerticalScrollRect.gameObject.SetActive(true);
                 long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
                 Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
                 Log.Debug("显示推荐列表");
@@ -86,6 +122,10 @@ namespace ET
                     self.View.ELoopRecommendLoopVerticalScrollRect.SetVisible(true, self.RecommendAccountInfos.Count);
                 }
             }
+            else
+            {
+                self.View.ELoopRecommendLoopVerticalScrollRect.gameObject.SetActive(false);
+            }
 
             await ETTask.CompletedTask;
         }
@@ -99,6 +139,9 @@ namespace ET
 
             M2C_AddFriendResponse response = await session.Call(request) as M2C_AddFriendResponse;
 
+            self.RecommendAccountInfos.Remove(accountInfo);
+            self.AddUIScrollItems(ref self.ItemRecommends, self.RecommendAccountInfos.Count);
+            self.View.ELoopRecommendLoopVerticalScrollRect.SetVisible(true, self.RecommendAccountInfos.Count);
             if (response.Error == ErrorCode.ERR_Success)
             {
                 Log.Debug("添加好友请求发送成功");
@@ -108,6 +151,7 @@ namespace ET
         public static void ShowWindow(this DlgSearchUserLayer self, Entity contextData = null)
         {
             self.OnRecommendToggleClick(true);
+            self.View.E_RecommendToggle.isOn = true;
         }
 
         public static void ReceiveAddFriendMessage(this DlgSearchUserLayer self, List<MailInfo> mailInfos)

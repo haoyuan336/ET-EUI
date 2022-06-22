@@ -85,7 +85,13 @@ namespace ET
 
         public static int GetWeaponBaseValueByType(this HeroCard self, WordBarType type)
         {
+            Log.Warning($"GetWeaponBaseValueByType{self} ");
             List<Weapon> weapons = self.GetChilds<Weapon>();
+            if (weapons == null)
+            {
+                return 0;
+            }
+            Log.Warning($"weapon s {weapons.Count}");
             var baseValue = 0;
             foreach (var weapon in weapons)
             {
@@ -210,7 +216,7 @@ namespace ET
         public static async ETTask Call(this HeroCard self, int zone, long ownerId)
         {
             self.OwnerId = ownerId;
-            self.CallTime = TimeHelper.DateTimeNow().ToString();
+            self.CallTime = TimeHelper.ServerNow();
             //todo 先创建继承数据
             await self.CallSkill(zone);
 #if SERVER
@@ -226,7 +232,10 @@ namespace ET
             List<ETTask> tasks = new List<ETTask>();
             foreach (var skillId in skillStr)
             {
-                Skill skill = self.AddChild<Skill, int>(int.Parse(skillId));
+                // Skill skill = self.AddChild<Skill, int>(int.Parse(skillId));
+                Skill skill = new Skill();
+                skill.Id = IdGenerater.Instance.GenerateId();
+                skill.ConfigId = int.Parse(skillId);
                 tasks.Add(skill.Call(zone, self.Id));
             }
 

@@ -124,6 +124,23 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.LoopVerticalScrollRect ELoopApplyLoopVerticalScrollRect
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_ELoopApplyLoopVerticalScrollRect == null )
+     			{
+		    		this.m_ELoopApplyLoopVerticalScrollRect = UIFindHelper.FindDeepChild<UnityEngine.UI.LoopVerticalScrollRect>(this.uiTransform.gameObject,"bg/ELoopApply");
+     			}
+     			return this.m_ELoopApplyLoopVerticalScrollRect;
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_E_BackButton = null;
@@ -133,6 +150,7 @@ namespace ET
 			this.m_E_RecommendToggle = null;
 			this.m_E_ApplyToggle = null;
 			this.m_ELoopRecommendLoopVerticalScrollRect = null;
+			this.m_ELoopApplyLoopVerticalScrollRect = null;
 			this.uiTransform = null;
 		}
 
@@ -143,6 +161,7 @@ namespace ET
 		private UnityEngine.UI.Toggle m_E_RecommendToggle = null;
 		private UnityEngine.UI.Toggle m_E_ApplyToggle = null;
 		private UnityEngine.UI.LoopVerticalScrollRect m_ELoopRecommendLoopVerticalScrollRect = null;
+		private UnityEngine.UI.LoopVerticalScrollRect m_ELoopApplyLoopVerticalScrollRect = null;
 		public Transform uiTransform = null;
 	}
 }

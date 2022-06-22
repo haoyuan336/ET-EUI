@@ -43,6 +43,7 @@ namespace ET
         public const int ERR_Not_Found_Weapon = 200022; //未找到武器
         public const int ERR_Not_Found_Mail = 200023; //我找到此邮件
         public const int ERR_Award_AlReceive = 200024; //奖励已经领取了
+        public const int ERR_Not_Friend = 200025; //不是好友
 
         // 200001以上不抛异常
     }

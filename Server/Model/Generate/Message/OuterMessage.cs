@@ -2805,4 +2805,164 @@ namespace ET
 
 	}
 
+	[ResponseType(nameof(M2C_GetFriendApplyListResponse))]
+	[Message(OuterOpcode.C2M_GetFriendApplyListRequest)]
+	[ProtoContract]
+	public partial class C2M_GetFriendApplyListRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetFriendApplyListResponse)]
+	[ProtoContract]
+	public partial class M2C_GetFriendApplyListResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<AccountInfo> AccountInfo = new List<AccountInfo>();
+
+		[ProtoMember(2)]
+		public List<MailInfo> MailInfo = new List<MailInfo>();
+
+	}
+
+	[ResponseType(nameof(M2C_ProcessFriendApplyResponse))]
+	[Message(OuterOpcode.C2M_ProcessFriendApplyRequest)]
+	[ProtoContract]
+	public partial class C2M_ProcessFriendApplyRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public AccountInfo AccountInfo { get; set; }
+
+		[ProtoMember(3)]
+		public int ApplyProcessType { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_ProcessFriendApplyResponse)]
+	[ProtoContract]
+	public partial class M2C_ProcessFriendApplyResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_GetAllFriendsResponse))]
+	[Message(OuterOpcode.C2M_GetAllFriendsRequest)]
+	[ProtoContract]
+	public partial class C2M_GetAllFriendsRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetAllFriendsResponse)]
+	[ProtoContract]
+	public partial class M2C_GetAllFriendsResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<FriendInfo> FriendInfos = new List<FriendInfo>();
+
+		[ProtoMember(2)]
+		public List<AccountInfo> AccountInfos = new List<AccountInfo>();
+
+	}
+
+	[Message(OuterOpcode.FriendInfo)]
+	[ProtoContract]
+	public partial class FriendInfo: Object
+	{
+		[ProtoMember(1)]
+		public long FriendsId { get; set; }
+
+		[ProtoMember(2)]
+		public long OwnerId { get; set; }
+
+		[ProtoMember(3)]
+		public long FriendId { get; set; }
+
+		[ProtoMember(4)]
+		public long CreateTime { get; set; }
+
+		[ProtoMember(5)]
+		public bool IsGift { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_GiveGiftToFriendListResponse))]
+	[Message(OuterOpcode.C2M_GiveGiftToFriendListRequest)]
+	[ProtoContract]
+	public partial class C2M_GiveGiftToFriendListRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long Account { get; set; }
+
+		[ProtoMember(2)]
+		public AccountInfo AccountInfo { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GiveGiftToFriendListResponse)]
+	[ProtoContract]
+	public partial class M2C_GiveGiftToFriendListResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(3)]
+		public List<AccountInfo> AccountInfos = new List<AccountInfo>();
+
+		[ProtoMember(4)]
+		public List<FriendInfo> FriendInfos = new List<FriendInfo>();
+
+	}
+
 }

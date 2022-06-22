@@ -64,11 +64,17 @@ namespace ET
 
             foreach (var heroConfigId in heroList)
             {
+                // HeroCard heroCard = new HeroCard();
+                // heroCard.Id = IdGenerater.Instance.GenerateId();
+                // heroCard.ConfigId = int.Parse(heroConfigId);
+                // heroCard.MailId = mailId;
+                // tasks.Add(DBManagerComponent.Instance.GetZoneDB(self.DomainZone()).Save(heroCard));
                 HeroCard heroCard = new HeroCard();
                 heroCard.Id = IdGenerater.Instance.GenerateId();
                 heroCard.ConfigId = int.Parse(heroConfigId);
                 heroCard.MailId = mailId;
-                tasks.Add(DBManagerComponent.Instance.GetZoneDB(self.DomainZone()).Save(heroCard));
+                // self.AddChild(heroCard);
+                tasks.Add(heroCard.Call(self.DomainZone(), mailId));
             }
 
             await ETTaskHelper.WaitAll(tasks);
@@ -84,7 +90,7 @@ namespace ET
                 weapon.ConfigId = int.Parse(weaponConfigId);
                 weapon.Id = IdGenerater.Instance.GenerateId();
                 weapon.MailId = mailId;
-                
+
                 tasks.Add(DBManagerComponent.Instance.GetZoneDB(self.DomainZone()).Save(weapon));
             }
 

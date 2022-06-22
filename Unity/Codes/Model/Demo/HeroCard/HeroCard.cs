@@ -29,9 +29,9 @@ namespace ET
         public int Star = 0; //英雄的星级数量
         public int Rank = 0; //英雄的阶数
         public int Count = 1; //材料数量
-        public int State = 1; //英雄的状态 
+        public int State = (int)StateType.Active; //英雄的状态 
         public int CurrentExp = 0;  //当前的经验值
-        public string CallTime; //召唤时间戳
+        public long CallTime = TimeHelper.ServerNow(); //召唤时间戳
         
     }
 }

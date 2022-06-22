@@ -169,6 +169,7 @@ namespace ET
                     unit.AddChild(heroCard);
                     List<Skill> skills = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
                             .Query<Skill>(a => a.OwnerId.Equals(heroCard.Id));
+                    // Log.Warning($"InitPlayerHeroCards skills {skills.Count}");
                     foreach (var skill in skills)
                     {
                         heroCard.AddChild(skill);
@@ -189,6 +190,7 @@ namespace ET
 
                     }
 
+                    Log.Debug("创建玩家的英雄实力");
                     heroCard.AddComponent<HeroCardDataComponent>();
                 }
             }
@@ -224,7 +226,7 @@ namespace ET
 
         public static void CreateHeroIdListInLevelConfig(this PVERoom self, Unit unit)
         {
-            List<long> heroCards = new List<long>();
+            // List<long> heroCards = new List<long>();
             // List<HeroCard> heroCards = new List<HeroCard>();
             string heroIdsstr = self.LevelConfig.HeroId;
             string[] strList = heroIdsstr.Split(',').ToArray();
@@ -235,6 +237,7 @@ namespace ET
                 int configId = int.Parse(str);
                 EnemyHeroConfig enemyHeroConfig = EnemyHeroConfigCategory.Instance.Get(configId);
                 HeroCard heroCard = new HeroCard();
+                Log.Debug("创建ai玩家的英雄");
                 heroCard.Id = IdGenerater.Instance.GenerateId();
                 unit.AddChild(heroCard);
                 heroCard.ConfigId = enemyHeroConfig.ConfigId;
@@ -260,7 +263,7 @@ namespace ET
                 }
 
                 heroCard.AddComponent<HeroCardDataComponent>();
-                heroCards.Add(heroCard.Id);
+                // heroCards.Add(heroCard.Id);
             }
         }
 

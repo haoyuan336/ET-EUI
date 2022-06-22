@@ -165,5 +165,14 @@ namespace ET
 		 public const ushort M2C_GetFriendRecommendListResponse = 10162;
 		 public const ushort C2M_AddFriendRequest = 10163;
 		 public const ushort M2C_AddFriendResponse = 10164;
+		 public const ushort C2M_GetFriendApplyListRequest = 10165;
+		 public const ushort M2C_GetFriendApplyListResponse = 10166;
+		 public const ushort C2M_ProcessFriendApplyRequest = 10167;
+		 public const ushort M2C_ProcessFriendApplyResponse = 10168;
+		 public const ushort C2M_GetAllFriendsRequest = 10169;
+		 public const ushort M2C_GetAllFriendsResponse = 10170;
+		 public const ushort FriendInfo = 10171;
+		 public const ushort C2M_GiveGiftToFriendListRequest = 10172;
+		 public const ushort M2C_GiveGiftToFriendListResponse = 10173;
 	}
 }

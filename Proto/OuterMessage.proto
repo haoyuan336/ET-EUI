@@ -1275,3 +1275,70 @@ message M2C_AddFriendResponse 	//IActorLocationResponse
 	int32 Error = 91;
 	string Message = 92;
 }
+//ResponseType M2C_GetFriendApplyListResponse
+message C2M_GetFriendApplyListRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message M2C_GetFriendApplyListResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated AccountInfo AccountInfo = 1;
+	repeated MailInfo MailInfo = 2;
+} 
+//ResponseType M2C_ProcessFriendApplyResponse
+message C2M_ProcessFriendApplyRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	AccountInfo AccountInfo = 2;
+	int32 ApplyProcessType = 3;	//处理类型
+}
+message M2C_ProcessFriendApplyResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+//ResponseType M2C_GetAllFriendsResponse
+message C2M_GetAllFriendsRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message M2C_GetAllFriendsResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated FriendInfo FriendInfos = 1;
+	repeated AccountInfo AccountInfos = 2;
+}
+message FriendInfo
+{
+	int64 FriendsId = 1;
+	int64 OwnerId = 2;
+	int64 FriendId = 3;
+	int64 CreateTime = 4;
+	bool IsGift = 5;
+}
+
+//ResponseType M2C_GiveGiftToFriendListResponse
+message C2M_GiveGiftToFriendListRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+	AccountInfo AccountInfo = 2;
+}
+message M2C_GiveGiftToFriendListResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated AccountInfo AccountInfos = 3;
+	repeated FriendInfo FriendInfos = 4;
+
+}
