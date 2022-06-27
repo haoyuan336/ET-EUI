@@ -85,13 +85,13 @@ namespace ET
 
         public static int GetWeaponBaseValueByType(this HeroCard self, WordBarType type)
         {
-            Log.Warning($"GetWeaponBaseValueByType{self} ");
+            Log.Debug($"GetWeaponBaseValueByType{self} ");
             List<Weapon> weapons = self.GetChilds<Weapon>();
             if (weapons == null)
             {
                 return 0;
             }
-            Log.Warning($"weapon s {weapons.Count}");
+            Log.Debug($"weapon s {weapons.Count}");
             var baseValue = 0;
             foreach (var weapon in weapons)
             {

@@ -90,6 +90,40 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Button E_QuickGetButton
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_QuickGetButton == null )
+     			{
+		    		this.m_E_QuickGetButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Bg/E_QuickGet");
+     			}
+     			return this.m_E_QuickGetButton;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_QuickGetImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_QuickGetImage == null )
+     			{
+		    		this.m_E_QuickGetImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Bg/E_QuickGet");
+     			}
+     			return this.m_E_QuickGetImage;
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_E_BackButton = null;
@@ -97,6 +131,8 @@ namespace ET
 			this.m_E_SearchButton = null;
 			this.m_E_SearchImage = null;
 			this.m_ELoopFriendListLoopVerticalScrollRect = null;
+			this.m_E_QuickGetButton = null;
+			this.m_E_QuickGetImage = null;
 			this.uiTransform = null;
 		}
 
@@ -105,6 +141,8 @@ namespace ET
 		private UnityEngine.UI.Button m_E_SearchButton = null;
 		private UnityEngine.UI.Image m_E_SearchImage = null;
 		private UnityEngine.UI.LoopVerticalScrollRect m_ELoopFriendListLoopVerticalScrollRect = null;
+		private UnityEngine.UI.Button m_E_QuickGetButton = null;
+		private UnityEngine.UI.Image m_E_QuickGetImage = null;
 		public Transform uiTransform = null;
 	}
 }

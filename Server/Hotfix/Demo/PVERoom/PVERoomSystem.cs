@@ -187,7 +187,6 @@ namespace ET
                         {
                             weapon.AddChild(wordBar);
                         }
-
                     }
 
                     Log.Debug("创建玩家的英雄实力");
@@ -514,6 +513,27 @@ namespace ET
         {
             Log.Debug($"attack action items {m2CSyncDiamondAction.AttackActionItems[0].AttackActions.Count}");
             //todo 处理反击逻辑
+            //产看动作队列里面是否存在消除动作
+            bool isHaveCreash = false;
+            foreach (var diamondActionItem in m2CSyncDiamondAction.DiamondActionItems)
+            {
+                var diamondActions = diamondActionItem.DiamondActions;
+                foreach (var diamondAction in diamondActions)
+                {
+                    if (diamondAction.ActionType == (int) DiamondActionType.Destory)
+                    {
+                        isHaveCreash = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!isHaveCreash)
+            {
+                //没有消除宝石，那么也没有攻击逻辑
+                return;
+            }
+
             Unit attackUnit = self.GetBeAttackUnit(self.Units[self.CurrentTurnIndex]); //todo 首先找到发起攻击的玩家
             Unit beAttacUnit = self.GetBeAttackUnit(attackUnit);
             HeroCard attackHero = self.GetTurnAttackHero(attackUnit); //todo 找到发起攻击的英雄

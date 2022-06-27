@@ -22,7 +22,7 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Text E_NameText
+		public UnityEngine.UI.Button E_NameButton
      	{
      		get
      		{
@@ -31,23 +31,61 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_NameText == null )
+     			if( this.m_E_NameButton == null )
      			{
-		    		this.m_E_NameText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"Name/E_Name");
+		    		this.m_E_NameButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Name");
      			}
-     			return this.m_E_NameText;
+     			return this.m_E_NameButton;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_NameImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_NameImage == null )
+     			{
+		    		this.m_E_NameImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Name");
+     			}
+     			return this.m_E_NameImage;
+     		}
+     	}
+
+		public UnityEngine.UI.Text E_IDText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_IDText == null )
+     			{
+		    		this.m_E_IDText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Name/E_ID");
+     			}
+     			return this.m_E_IDText;
      		}
      	}
 
 		public void DestroyWidget()
 		{
 			this.m_E_AccountText = null;
-			this.m_E_NameText = null;
+			this.m_E_NameButton = null;
+			this.m_E_NameImage = null;
+			this.m_E_IDText = null;
 			this.uiTransform = null;
 		}
 
 		private UnityEngine.UI.Text m_E_AccountText = null;
-		private UnityEngine.UI.Text m_E_NameText = null;
+		private UnityEngine.UI.Button m_E_NameButton = null;
+		private UnityEngine.UI.Image m_E_NameImage = null;
+		private UnityEngine.UI.Text m_E_IDText = null;
 		public Transform uiTransform = null;
 	}
 }

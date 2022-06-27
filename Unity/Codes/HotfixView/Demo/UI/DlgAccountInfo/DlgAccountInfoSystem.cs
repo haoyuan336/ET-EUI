@@ -11,6 +11,19 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgAccountInfo self)
         {
+            // self
+            self.View.E_NameButton.AddListenerAsync(self.OnNameButtonClick);
+        }
+
+        public static async ETTask OnNameButtonClick(this DlgAccountInfo self)
+        {
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_UserInfoLayer);
+            UIBaseWindow uiBaseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_UserInfoLayer);
+            if (uiBaseWindow != null)
+            {
+                uiBaseWindow.GetComponent<DlgUserInfoLayer>().SetUserInfo(self.AccountInfo);
+            }
         }
 
         public static async ETTask ShowWindow(this DlgAccountInfo self, Entity contextData = null)
@@ -25,8 +38,19 @@ namespace ET
                 int level = m2CGetUserExpInfoResponse.UserLevel;
                 // int exp = m2CGetUserExpInfoResponse.Exp;
                 // int nextExp = UserUpdateLevelConfigCategory.Instance.Get(level).NeedExp;
-                self.View.E_AccountText.text = $"ID:{AccountId}";
-                self.View.E_NameText.text = m2CGetUserExpInfoResponse.UserName;
+                self.View.E_IDText.text = $"ID:{m2CGetUserExpInfoResponse.UserName}";
+                // self.View.E_IDText.text = m2CGetUserExpInfoResponse.UserName;
+            }
+
+
+            var request = new C2M_GetAccountInfoWithAccountIdRequest() { AccountId = AccountId };
+            var response = await session.Call(request) as M2C_GetAccountInfoWidthAccointIdResponse;
+
+
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                self.AccountInfo = response.AccountInfo;
+
             }
 
             await ETTask.CompletedTask;

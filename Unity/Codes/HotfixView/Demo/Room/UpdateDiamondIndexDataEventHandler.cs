@@ -10,12 +10,14 @@ namespace ET
             Diamond diamond = a.Diamond;
             GameObject go = diamond.GetComponent<GameObjectComponent>().GameObject;
 
-            int LieCount = ConstValue.LieCount;
-            int HangCount = ConstValue.HangCount;
-            var distance = ConstValue.Distance;
+            // int LieCount = ConstValue.LieCount;
+            // int HangCount = ConstValue.HangCount;
+            // var distance = ConstValue.Distance;
 
-            Vector3 endPos = new Vector3((a.Diamond.LieIndex - LieCount * 0.5f + 0.5f) * distance, 0,
-                (a.Diamond.HangIndex - HangCount * 0.5f + 0.5f) * distance);
+            // Vector3 endPos = new Vector3((a.Diamond.LieIndex - LieCount * 0.5f + 0.5f) * distance, 0,
+            //     (a.Diamond.HangIndex - HangCount * 0.5f + 0.5f) * distance);
+            Vector3 endPos = CustomHelper.GetDiamondPos(ConstValue.LieCount, ConstValue.HangCount, diamond.LieIndex, diamond.HangIndex,
+                ConstValue.Distance, ConstValue.DiamondOffsetZ);
             float time = 0;
             Vector3 startPos = go.transform.position;
             while (time < Mathf.PI * 0.5f)

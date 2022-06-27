@@ -16,6 +16,12 @@
     public enum ItemType
     {
         Normal = 1, //普通道具
-        Gift = 2, //礼物道具
+        PreDayPowerGift = 2, //每日礼物道具
+    }
+
+    public enum HeadImageType
+    {
+        Head = 1, //头像
+        HeadFrame = 2, //头像框
     }
 }

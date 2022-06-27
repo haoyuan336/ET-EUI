@@ -437,7 +437,7 @@ namespace ET
             Debug.Log("<color=magenta>### current Navigation window </color>" + baseWindow.WindowID.ToString());
         }
 
-        private static bool CheckDirectlyHide(this UIComponent self, WindowID id)
+        public static bool CheckDirectlyHide(this UIComponent self, WindowID id)
         {
             if (!self.VisibleWindowsDic.ContainsKey((int) id))
             {

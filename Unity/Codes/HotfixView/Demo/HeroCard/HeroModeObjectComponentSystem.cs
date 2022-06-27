@@ -32,9 +32,9 @@ namespace ET
                 return;
             }
 
-            Vector3 pos = new Vector3(-1.5f + heroCard.InTroopIndex * 1.5f, 0, -4 * (heroCard.CampIndex == 0? 1 : -1));
+            Vector3 pos = new Vector3(-1.5f + heroCard.InTroopIndex * 1.5f, 0, -2.2f * (heroCard.CampIndex == 0? -1 : 1) + 1);
             self.HeroMode.transform.position = pos;
-            self.HeroMode.transform.forward = heroCard.CampIndex == 0? Vector3.forward : Vector3.back;
+            self.HeroMode.transform.forward = heroCard.CampIndex == 0? Vector3.back : Vector3.forward;
             self.HeroModeInitPos = new Vector3(pos.x, pos.y, pos.z);
 
             // heroCard.AddComponent<HeroCardInfoObjectComponent>();
@@ -155,7 +155,7 @@ namespace ET
             // skill.ConfigId = 1000009;
 
             SkillInfo skill = message.AttackHeroCardDataComponentInfo.CurrentSkillInfo;
-            
+
             SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.SkillConfigId);
             await self.MoveToEnemyTarget(beAttackHeroCards, skillConfig);
             await self.PlayAttackAnim(message, skillConfig);
@@ -182,8 +182,8 @@ namespace ET
             }
 
             HeroModeObjectCompoent beAttackHeroModeCom = beAttackHeroCard.GetComponent<HeroModeObjectCompoent>();
-            Vector3 offsetPos = self.GetParent<HeroCard>().CampIndex == 0? Vector3.back
-                    : Vector3.forward;
+            Vector3 offsetPos = self.GetParent<HeroCard>().CampIndex == 0? Vector3.forward
+                    : Vector3.back;
 
             var endPos = beAttackHeroModeCom.HeroMode.transform.position + offsetPos;
             switch (skillConfig.TargetPosType)
@@ -220,7 +220,6 @@ namespace ET
             if (skillConfig.BeAttackBoneName == "")
             {
                 effect.transform.localPosition = Vector3.one * 0.1f;
-
             }
             else
             {
@@ -268,6 +267,7 @@ namespace ET
             {
                 self.AttackMark.SetActive(false);
             }
+
             HeroCard beAttackCard = message.BeAttackHeroCard;
             self.PlaySkillEffect(skillConfig);
             self.PlayFlyEffect(skillConfig, beAttackCard);
@@ -369,7 +369,6 @@ namespace ET
                     self.AttackMark.SetActive(false);
                 }
             }
-            
 
             await ETTask.CompletedTask;
         }

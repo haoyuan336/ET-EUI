@@ -141,6 +141,23 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Image E_NewChatMarkImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_NewChatMarkImage == null )
+     			{
+		    		this.m_E_NewChatMarkImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_BG/MaskNode/E_Friend/E_NewChatMark");
+     			}
+     			return this.m_E_NewChatMarkImage;
+     		}
+     	}
+
 		public UnityEngine.UI.Button E_BackGroundButton
      	{
      		get
@@ -219,6 +236,7 @@ namespace ET
 			this.m_E_RedDotImage = null;
 			this.m_E_FriendButton = null;
 			this.m_E_FriendImage = null;
+			this.m_E_NewChatMarkImage = null;
 			this.m_E_BackGroundButton = null;
 			this.m_E_BackGroundImage = null;
 			this.m_E_ShowMenuToggle = null;
@@ -234,6 +252,7 @@ namespace ET
 		private UnityEngine.UI.Image m_E_RedDotImage = null;
 		private UnityEngine.UI.Button m_E_FriendButton = null;
 		private UnityEngine.UI.Image m_E_FriendImage = null;
+		private UnityEngine.UI.Image m_E_NewChatMarkImage = null;
 		private UnityEngine.UI.Button m_E_BackGroundButton = null;
 		private UnityEngine.UI.Image m_E_BackGroundImage = null;
 		private UnityEngine.UI.Toggle m_E_ShowMenuToggle = null;

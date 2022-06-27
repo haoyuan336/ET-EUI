@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7014966711180832422}
   - component: {fileID: 2036244630595303349}
   m_Layer: 5
-  m_Name: Button
+  m_Name: E_QuickGet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -283, y: 148}
+  m_AnchoredPosition: {x: -207.45, y: -84}
   m_SizeDelta: {x: 414.898, y: 147.115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6299153971054189698
@@ -313,8 +313,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 2.1918945, y: -87.41882}
-  m_SizeDelta: {x: -73.6162, y: -554.7505}
+  m_AnchoredPosition: {x: 2.1918945, y: -57.968}
+  m_SizeDelta: {x: -73.616, y: -613.652}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2330167885085805973
 CanvasRenderer:
@@ -490,7 +490,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.7137255}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.7294118}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

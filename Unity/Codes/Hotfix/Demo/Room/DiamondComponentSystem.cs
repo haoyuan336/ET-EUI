@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace ET
 {
@@ -31,14 +32,7 @@ namespace ET
             List<DiamondInfo> diamondInfos = new List<DiamondInfo>();
             int[] map =
             {
-                1, 2, 3, 4, 5, 4, 1, 1, 
-                2, 3, 4, 5, 5, 1, 2, 3, 
-                3, 2, 5, 4, 3, 2, 3, 2,
-                4, 1, 3, 3, 2, 5, 2, 1, 
-                5, 5, 1, 2, 1, 1, 5, 5, 
-                4, 5, 2, 1, 4, 2, 4, 5,
-                1, 4, 3, 4, 5, 1, 1, 4, 
-                2, 3, 4, 5, 5, 1, 2, 3
+                1, 2, 3, 4, 5, 4, 1, 2, 3, 4, 5, 5, 1, 2, 3, 2, 5, 4, 3, 2, 3, 4, 1, 3, 3, 2, 5, 2, 5, 5, 1, 2, 1, 1, 5, 4, 5, 2, 1, 4, 2, 4,
             };
             for (var i = 0; i < ConstValue.HangCount; i++)
             {
@@ -152,12 +146,22 @@ namespace ET
             // return self.Diamonds[LieIndex, HangIndex];
             // return self.Diamonds[HangIndex].Diamonds[LieIndex];
             var index = ConstValue.LieCount * HangIndex + LieIndex;
+            Log.Debug($"get diamond index{index}");
             if (index >= self.Diamonds.Length)
             {
                 return null;
             }
 
-            return self.Diamonds[index];
+            Diamond diamond = self.Diamonds[index];
+            if (diamond != null)
+            {
+                Log.Debug($"diamond xy, {diamond.LieIndex}, {diamond.HangIndex}");
+            }
+
+
+            return diamond;
+
+            // return self.Diamonds[index];
         }
 
         public static Diamond GetDiamondWithDir(this DiamondComponent self, Diamond diamond, int type)
@@ -166,23 +170,13 @@ namespace ET
             {
                 return null;
             }
+
             int lieIndex = diamond.LieIndex;
             int hangIndex = diamond.HangIndex;
-            switch (type)
-            {
-                case (int) ScrollDirType.Down:
-                    hangIndex -= 1;
-                    break;
-                case (int) ScrollDirType.Left:
-                    lieIndex -= 1;
-                    break;
-                case (int) ScrollDirType.Right:
-                    lieIndex += 1;
-                    break;
-                case (int) ScrollDirType.Up:
-                    hangIndex += 1;
-                    break;
-            }
+            Vector2 indexVector = CustomHelper.GetIndexVectorWidthDit(new Vector2(lieIndex, hangIndex), (ScrollDirType) type);
+
+            lieIndex = (int) indexVector.x;
+            hangIndex = (int) indexVector.y;
 
             // if (hangIndex < 0 || hangIndex >= self.LevelConfig.HangCount || lieIndex < 0 || lieIndex >= self.LevelConfig.LieCount)
             // {
@@ -202,6 +196,8 @@ namespace ET
 
             int LieIndex2 = diamond2.LieIndex;
             int HangIndex2 = diamond2.HangIndex;
+            Log.Debug($"diamond 1 {LieIndex1},{HangIndex2}");
+            Log.Debug($"diamond 2 {LieIndex2},{HangIndex2}");
             // self.Diamonds[LieIndex1, HangIndex1] = diamond2;
             self.SetDiamondToList(LieIndex1, HangIndex1, diamond2);
             diamond2.SetIndex(LieIndex1, HangIndex1);
@@ -472,8 +468,6 @@ namespace ET
                 }
             }
 
-           
-
             var value = false;
             if (diamondActionItem.DiamondActions.Count > 0)
             {
@@ -481,10 +475,12 @@ namespace ET
                 // return true; 
                 value = true;
             }
+
             if (specialActionItem.DiamondActions.Count > 0)
             {
                 diamondActionItems.Add(specialActionItem);
             }
+
             return value;
         }
 
@@ -494,7 +490,7 @@ namespace ET
             Log.Debug("screen diamond");
             int LieIndex = message.StartX;
             int HangIndex = message.StartY;
-            Log.Debug("process scroll screen message");
+            Log.Debug($"process scroll screen message{LieIndex},{HangIndex}");
             // self.DomainScene().GetComponent<DiamondComponent>().ScrollDiamond(message);
             M2C_SyncDiamondAction m2CSyncDiamondAction = new M2C_SyncDiamondAction();
             Diamond diamond = self.GetDiamond(LieIndex, HangIndex);

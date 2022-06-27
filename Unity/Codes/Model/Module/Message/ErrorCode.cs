@@ -44,6 +44,8 @@ namespace ET
         public const int ERR_Not_Found_Mail = 200023; //我找到此邮件
         public const int ERR_Award_AlReceive = 200024; //奖励已经领取了
         public const int ERR_Not_Friend = 200025; //不是好友
+        public const int Gift_Not_Enough = 200026; //礼物不够了
+        public const int Gift_Gived = 200027; //礼物已经赠送了
 
         // 200001以上不抛异常
     }

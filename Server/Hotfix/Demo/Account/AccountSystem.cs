@@ -10,7 +10,10 @@
                 Name = self.AccountName,
                 NickName = self.NickName,
                 CreateTime = self.CreateTime,
-                LastLogonTime = self.LastLogonTime
+                LastLogonTime = self.LastLogonTime,
+                PvELevelNumber = self.PVELevelNumber,
+                HeadImageConfigId = self.HeadImageConfigId,
+                HeadFrameImageConfigId = self.HeadFrameImageConfigId
             };
         }
     }

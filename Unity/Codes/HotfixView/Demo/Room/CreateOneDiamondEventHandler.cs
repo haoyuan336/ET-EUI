@@ -1,4 +1,5 @@
-﻿using ET.EventType;
+﻿using System;
+using ET.EventType;
 using UnityEngine;
 
 namespace ET
@@ -8,12 +9,12 @@ namespace ET
         protected override async ETTask Run(CreateOneDiamondView a)
         {
             // await TimerComponent.Instance.WaitAsync(1000);
-            PvPLevelConfig pvPLevelConfig = PvPLevelConfigCategory.Instance.Get(1);
-            int hangCount = pvPLevelConfig.HangCount;
-            int liecount = pvPLevelConfig.LieCount;
+            // PvPLevelConfig pvPLevelConfig = PvPLevelConfigCategory.Instance.Get(1);
+            // int hangCount = ConstValue.HangCount;
+            // int liecount = ConstValue.LieCount;
             // float distance = float.Parse(pvPLevelConfig.Distance);
 
-            float distance = ConstValue.Distance;
+            // float distance = ConstValue.Distance;
             var diamondInfo = a.DiamondInfo;
             DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamondInfo.ConfigId);
 
@@ -27,13 +28,22 @@ namespace ET
                 Log.Error("diamond al disposed");
             }
 
+            go.name = $"diamond {a.Diamond.LieIndex}{a.Diamond.HangIndex}";
             a.Diamond.AddComponent<GameObjectComponent>().GameObject = go;
             MeshRenderer meshRenderer = go.GetComponent<MeshRenderer>();
             meshRenderer.material.SetTexture("_BaseMap", texture);
+            //
+            // go.transform.position = new Vector3((a.Diamond.LieIndex - liecount * 0.5f + 0.5f) * distance, 0,
+            //     (a.Diamond.HangIndex - hangCount * 0.5f + 0.5f) * distance );
 
-            go.transform.position = new Vector3((a.Diamond.LieIndex - liecount * 0.5f + 0.5f) * distance, 0,
-                (a.Diamond.HangIndex - hangCount * 0.5f + 0.5f) * distance);
-            go.transform.forward = Vector3.back;
+            // (liecount * 0.5f - a.Diamond.LieIndex - 1) * distance
+            // hangCount * 0.5f - 0.5f - a.Diamond.HangIndex + 0.5f
+            // go.transform.position = new Vector3((liecount * 0.5f - a.Diamond.LieIndex - 1) * distance, 0,
+            //     (hangCount * 0.5f - 0.5f - a.Diamond.HangIndex + 0.5f) * distance);
+
+            go.transform.position = CustomHelper.GetDiamondPos(ConstValue.LieCount, ConstValue.HangCount, a.Diamond.LieIndex, a.Diamond.HangIndex,
+                ConstValue.Distance, ConstValue.DiamondOffsetZ);
+            // go.transform.forward = Vector3.back;
             Vector3 endScale = new Vector3(0.06f, 0.06f, 0.06f);
             // go.transform.localScale = Vector3.zero;
             float time = 0;

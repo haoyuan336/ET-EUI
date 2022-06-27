@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using System.Diagnostics.Eventing.Reader;
+using System.Linq;
 using System.Xml.Schema;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,10 +18,41 @@ namespace ET
             self.View.E_FriendButton.AddListener(self.OnFriendButtonClick);
         }
 
+        public static void SetChatInfos(this DlgSettingUI self, Dictionary<long, ChatInfo> chatInfos)
+        {
+            self.ChatInfosMap = chatInfos;
+            self.ShowNewChatMark(self.ChatInfosMap.Count != 0);
+        }
+
+        public static void ReceiveChatInfo(this DlgSettingUI self, ChatInfo chatInfo)
+        {
+            if (self.ChatInfosMap.Keys.Contains(chatInfo.AccountInfo.Account))
+            {
+                self.ChatInfosMap.Remove(chatInfo.AccountInfo.Account);
+            }
+
+            self.ChatInfosMap.Add(chatInfo.AccountInfo.Account, chatInfo);
+            
+            self.ShowNewChatMark(true);
+
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            var baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_FriendLayer);
+            baseWindow.GetComponent<DlgFriendLayer>().SetChatInfoMap(self.ChatInfosMap);
+
+            // self.View.ELoopFriendListLoopVerticalScrollRect.RefreshCells();
+        }
+        
+        
         public static async void OnFriendButtonClick(this DlgSettingUI self)
         {
+            self.ShowNewChatMark(false);
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             await uiComponent.ShowWindow(WindowID.WindowID_FriendLayer);
+            UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_FriendLayer);
+            if (baseWindow != null)
+            {
+                baseWindow.GetComponent<DlgFriendLayer>().SetChatInfoMap(self.ChatInfosMap);
+            }
         }
         public static async void RequestNewMail(this DlgSettingUI self)
         {
@@ -46,6 +78,11 @@ namespace ET
         public static void ShowRedDot(this DlgSettingUI self, bool value)
         {
             self.View.E_RedDotImage.gameObject.SetActive(value);
+        }
+
+        public static void ShowNewChatMark(this DlgSettingUI self, bool value)
+        {
+            self.View.E_NewChatMarkImage.gameObject.SetActive(value);
         }
 
         public static async ETTask MailButtonClick(this DlgSettingUI self)

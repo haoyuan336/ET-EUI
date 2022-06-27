@@ -172,7 +172,19 @@ namespace ET
 		 public const ushort C2M_GetAllFriendsRequest = 10169;
 		 public const ushort M2C_GetAllFriendsResponse = 10170;
 		 public const ushort FriendInfo = 10171;
-		 public const ushort C2M_GiveGiftToFriendListRequest = 10172;
-		 public const ushort M2C_GiveGiftToFriendListResponse = 10173;
+		 public const ushort C2M_GiveGiftToFriendRequest = 10172;
+		 public const ushort M2C_GiveGiftToFriendResponse = 10173;
+		 public const ushort C2M_OneKeyGiveAndGetRequest = 10174;
+		 public const ushort M2C_OneKeyGiveAndGetResponse = 10175;
+		 public const ushort ChatInfo = 10176;
+		 public const ushort C2M_ChatToFriendRequest = 10177;
+		 public const ushort M2C_ChatToFriendResponse = 10178;
+		 public const ushort M2C_ReceiveChatFromFriend = 10179;
+		 public const ushort C2M_GetAccountInfoWithAccountIdRequest = 10180;
+		 public const ushort M2C_GetAccountInfoWidthAccointIdResponse = 10181;
+		 public const ushort C2M_GetPlayerOwnHeroTypeCountRequest = 10182;
+		 public const ushort M2C_GetPlayerOwnHeroTypeCountResponse = 10183;
+		 public const ushort C2M_ChangePlayerHeadOrFrameRequest = 10184;
+		 public const ushort M2C_ChangePlayerHeadOrFrameResponse = 10185;
 	}
 }

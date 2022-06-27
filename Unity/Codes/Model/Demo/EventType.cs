@@ -314,5 +314,11 @@ namespace ET
             public Scene Scene;
             public List<MailInfo> MailInfos; //邮件列表
         }
+
+        public struct ReceiveChat
+        {
+            public ChatInfo ChatInfo;
+            public Scene Scene;
+        }
     }
 }

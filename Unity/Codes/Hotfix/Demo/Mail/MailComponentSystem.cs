@@ -92,6 +92,31 @@ namespace ET
                 weapon.MailId = mailId;
 
                 tasks.Add(DBManagerComponent.Instance.GetZoneDB(self.DomainZone()).Save(weapon));
+
+                WeaponsConfig weaponsConfig = WeaponsConfigCategory.Instance.Get(weapon.ConfigId);
+
+                var weaponType = weaponsConfig.WeaponType;
+                //从配置里面取出来所有武器类型的词条
+                // Log.Debug("装备保存成功");
+                List<WeaponWordBarsConfig> wordBarsConfigs = WeaponWordBarsConfigCategory.Instance.GetAll().Values.ToList()
+                        .FindAll(a => a.WeaponType == weaponType && a.Star == weaponsConfig.Star);
+                // Log.Debug($"取出词条配置成功 {wordBarsConfigs.Count}");
+                //从列表里面随机一条数据出来
+                WeaponWordBarsConfig wordBarsConfig = wordBarsConfigs.RandomArray();
+                // Log.Debug($"随机获取配置成功{wordBarsConfig.Id}");
+                var wordBar = new WordBar()
+                {
+                    Id = IdGenerater.Instance.GenerateId(),
+                    OwnerId = weapon.Id,
+                    ConfigId = wordBarsConfig.Id,
+                    IsMain = true,
+                    State = (int) StateType.Active,
+                    Value = RandomHelper.RandomNumber(wordBarsConfig.MinValue, wordBarsConfig.MaxValue)
+                };
+                // Log.Debug($"创建词条{item.Id}");
+                //给新创建的装备叠加词条
+                //
+                await DBManagerComponent.Instance.GetZoneDB(self.DomainZone()).Save(wordBar);
             }
 
             await ETTaskHelper.WaitAll(tasks);

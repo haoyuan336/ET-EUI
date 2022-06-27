@@ -27,5 +27,7 @@ namespace ET
         public int State = (int) StateType.Active;
         public bool IsRegisterMailBox = false; //是否注册了邮箱
         public long LastLogonTime = 0;
+        public int HeadImageConfigId = 1;
+        public int HeadFrameImageConfigId = 7;
     }
 }

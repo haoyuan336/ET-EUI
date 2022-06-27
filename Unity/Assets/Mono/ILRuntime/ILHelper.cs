@@ -139,6 +139,9 @@ namespace ET
                 return new UnityEngine.Events.UnityAction(() => { ((Action) act)(); });
             });
 
+            appdomain.DelegateManager.RegisterFunctionDelegate<ILRuntime.Runtime.Intepreter.ILTypeInstance, System.Int64>();
+            appdomain.DelegateManager.RegisterFunctionDelegate<ILRuntime.Runtime.Intepreter.ILTypeInstance, ILRuntime.Runtime.Intepreter.ILTypeInstance>();
+
             // 注册适配器
             RegisterAdaptor(appdomain);
 

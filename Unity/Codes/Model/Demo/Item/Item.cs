@@ -8,6 +8,6 @@
         public int State = (int) StateType.Active; //当前状态 1， 可用状态 -1，不可用状态
         public long MailId;
         public long CreateTime = TimeHelper.ServerNow();
-        public long ItemType = 
+        public int Type = (int) ItemType.Normal;
     }
 }

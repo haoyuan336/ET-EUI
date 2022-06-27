@@ -1246,6 +1246,9 @@ message AccountInfo
 	string NickName = 3;
 	int64 LastLogonTime = 4;	//最近登录时间
 	int64 CreateTime = 5;	//创建时间
+	int32 PvELevelNumber = 6;
+	int32 HeadImageConfigId = 7;	//头像图片的配置Id
+	int32 HeadFrameImageConfigId = 8;	//头像框的配置id
 
 }
 //ResponseType M2C_GetFriendRecommendListResponse
@@ -1326,19 +1329,103 @@ message FriendInfo
 	bool IsGift = 5;
 }
 
-//ResponseType M2C_GiveGiftToFriendListResponse
-message C2M_GiveGiftToFriendListRequest	//IActorLocationRequest
+//ResponseType M2C_GiveGiftToFriendResponse
+message C2M_GiveGiftToFriendRequest	//IActorLocationRequest
 {
 	int32 RpcId = 90;
 	int64 Account = 1;
 	AccountInfo AccountInfo = 2;
 }
-message M2C_GiveGiftToFriendListResponse //IActorLocationResponse
+message M2C_GiveGiftToFriendResponse //IActorLocationResponse
 {
 	int32 RpcId = 90;
 	int32 Error = 91;
 	string Message = 92;
-	repeated AccountInfo AccountInfos = 3;
-	repeated FriendInfo FriendInfos = 4;
+	FriendInfo FriendInfo = 4;
 
+}
+
+//ResponseType M2C_OneKeyGiveAndGetResponse
+message C2M_OneKeyGiveAndGetRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+}
+message M2C_OneKeyGiveAndGetResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated FriendInfo FriendInfos = 4;
+	ItemInfo PowerItemInfo = 5;	//体力道具信息
+}
+
+message ChatInfo
+{
+
+	AccountInfo AccountInfo = 1;	//发送者个人信息
+	string ChatText = 2;
+}
+
+//ResponseType M2C_ChatToFriendResponse
+message C2M_ChatToFriendRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;	//自己的id
+	AccountInfo AccountInfo = 2;	//好友的信息
+	string ChatText = 3;	//
+}
+message M2C_ChatToFriendResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	ChatInfo ChatInfo = 1;	//聊天的内容
+}
+message M2C_ReceiveChatFromFriend	//IActorMessage
+{
+	ChatInfo ChatInfo = 1;
+}
+//ResponseType M2C_GetAccountInfoWidthAccointIdResponse
+message C2M_GetAccountInfoWithAccountIdRequest //IActorLocationRequest 
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;	
+}
+message M2C_GetAccountInfoWidthAccointIdResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	AccountInfo AccountInfo = 1;
+}
+
+//ResponseType M2C_GetPlayerOwnHeroTypeCountResponse
+message C2M_GetPlayerOwnHeroTypeCountRequest // IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;	
+}
+message M2C_GetPlayerOwnHeroTypeCountResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	int32 Count = 1;
+}
+
+//ResponseType M2C_ChangePlayerHeadOrFrameResponse
+message C2M_ChangePlayerHeadOrFrameRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;	
+	int32 HeadType = 2;
+	int32 ConfigId = 3; 
+}
+message M2C_ChangePlayerHeadOrFrameResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	AccountInfo AccountInfo = 1;
 }

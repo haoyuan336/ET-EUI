@@ -17,6 +17,8 @@ namespace ET
             List<AttackActionItem> attackActionItems = message.AttackActionItems;
             GameLoseResultAction gameLoseResultAction = message.GameLoseResultAction;
 
+            bool isContainsCrash = false;
+
             foreach (var diamondActionItem in diamondActionItems)
             {
                 List<ETTask> tasks = new List<ETTask>();
@@ -65,6 +67,7 @@ namespace ET
                             break;
                         case (int) DiamondActionType.Destory:
                             tasks.Add(diamondComponent.RemoveChild(diamond));
+                            isContainsCrash = true;
                             break;
                         case (int) DiamondActionType.Create:
                             tasks.Add(diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo));
@@ -76,8 +79,13 @@ namespace ET
             }
 
             List<ETTask> animTasks = new List<ETTask>();
-            animTasks.Add(Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook() { ZoneScene = session.ZoneScene(), Value = true }));
-            animTasks.Add(Game.EventSystem.PublishAsync(new EventType.PlayDiamondContentAnim() { Value = false }));
+
+            if (isContainsCrash)
+            {
+                animTasks.Add(Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook() { ZoneScene = session.ZoneScene(), Value = true }));
+                animTasks.Add(Game.EventSystem.PublishAsync(new EventType.PlayDiamondContentAnim() { Value = false }));
+            }
+
             await ETTaskHelper.WaitAll(animTasks);
             foreach (var attackActionItem in attackActionItems)
             {
@@ -93,12 +101,15 @@ namespace ET
             }
 
             List<ETTask> animTaskList = new List<ETTask>();
-            animTaskList.Add(Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook()
+
+            if (isContainsCrash)
             {
-                ZoneScene = session.ZoneScene(),
-                Value = false
-            }));
-            animTaskList.Add(Game.EventSystem.PublishAsync(new EventType.PlayDiamondContentAnim() { Value = true }));
+                animTaskList.Add(Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook()
+                {
+                    ZoneScene = session.ZoneScene(), Value = false
+                }));
+                animTaskList.Add(Game.EventSystem.PublishAsync(new EventType.PlayDiamondContentAnim() { Value = true }));
+            }
 
             // await Game.EventSystem.PublishAsync(new EventType.PlayDiamondContentAnim() { Value = true });
             // await Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook() { Value = false });

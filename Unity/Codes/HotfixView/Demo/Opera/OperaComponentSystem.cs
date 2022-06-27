@@ -72,9 +72,9 @@ namespace ET
                     PlayerComponent playerComponent = self.ZoneScene().GetComponent<PlayerComponent>();
                     // int mySeatIndex = playerComponent.MySeatIndex;
                     // int turnIndex = playerComponent.CurrentTurnIndex;
-                    int hangCount = ConstValue.HangCount;
-                    int lieCount = ConstValue.LieCount;
-                    float distance = ConstValue.Distance;
+                    // int hangCount = ConstValue.HangCount;
+                    // int lieCount = ConstValue.LieCount;
+                    // float distance = ConstValue.Distance;
 
                     // if (mySeatIndex == turnIndex)
                     // {
@@ -82,24 +82,33 @@ namespace ET
                     Ray ray = Camera.main.ScreenPointToRay(self.ClickPoint);
 
                     RaycastHit raycastHit;
-                    var maskCode = LayerMask.GetMask("Default");
+                    var maskCode = LayerMask.GetMask("DIamond");
+                    Log.Debug($"mask code {maskCode}");
                     bool isHited = Physics.Raycast(ray, out raycastHit, Mathf.Infinity, maskCode);
                     if (isHited)
                     {
-                        Log.Debug("hited" + raycastHit.transform.name);
+                        Log.Debug($"raycast hit {raycastHit.transform.name}");
                         UnityEngine.Vector3 pos = raycastHit.transform.position;
                         float x = pos.x;
                         float y = pos.z;
-                        // a.Diamond.LieIndex - liecount * 0.5f + 0.5f) * distance,
-                        float lieIndex = x / distance + lieCount * 0.5f - 0.5f;
-                        float hangIndex = y / distance + hangCount * 0.5f - 0.5f;
+
+                        Vector2 indexV = CustomHelper.GetDiamondIndexWidthPos(new Vector2(x, y), ConstValue.LieCount, ConstValue.HangCount,
+                            ConstValue.Distance, ConstValue.DiamondOffsetZ);
+                        Log.Debug("hited" + raycastHit.transform.name + $",{indexV.x},{indexV.y} ");
+
+                        float lieIndex = indexV.x;
+                        float hangIndex = indexV.y;
+
                         C2M_PlayerScrollScreen c2MPlayerScrollScreen = new C2M_PlayerScrollScreen();
-                        c2MPlayerScrollScreen.StartX = (int) lieIndex;
-                        c2MPlayerScrollScreen.StartY = (int) hangIndex;
+                        c2MPlayerScrollScreen.StartX = Mathf.RoundToInt(lieIndex);
+                        c2MPlayerScrollScreen.StartY = Mathf.RoundToInt(hangIndex);
+
+                        Log.Debug($"start x,y {c2MPlayerScrollScreen.StartX},{c2MPlayerScrollScreen.StartY}");
+
                         c2MPlayerScrollScreen.DirType = (int) dir;
                         c2MPlayerScrollScreen.RoomId = playerComponent.RoomId;
                         // c2MPlayerScrollScreen.RoomId = playerComponent.
-                        
+
                         if (self.TouchLock)
                         {
                             Log.Warning($"touch lock {self.TouchLock}");
@@ -107,9 +116,8 @@ namespace ET
                         }
 
                         self.TouchLock = true;
-                        
+
                         self.ZoneScene().GetComponent<SessionComponent>().Session.Send(c2MPlayerScrollScreen);
-                        
                     }
                 }
             }

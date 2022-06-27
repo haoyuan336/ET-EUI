@@ -53,7 +53,11 @@
         WindowID_WeaponSpecialClearLayer, //特殊洗练
         WindowID_MailLayer, //邮箱层
         WindowID_MailInfoLayer, //邮箱详细信息层
-        WindowID_FriendLayer,   //好友列表层
-        WindowID_SearchUserLayer,//好友搜索层
+        WindowID_FriendLayer, //好友列表层
+        WindowID_SearchUserLayer, //好友搜索层
+        WindowID_AlertLayer, //提示层
+        WindowID_FriendChatLayer, //好友聊天层
+        WindowID_UserInfoLayer, //用户详细信息层
+        WindowID_ChooseHeadImageLayer //选择头像层
     }
 }

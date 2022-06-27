@@ -2741,6 +2741,15 @@ namespace ET
 		[ProtoMember(5)]
 		public long CreateTime { get; set; }
 
+		[ProtoMember(6)]
+		public int PvELevelNumber { get; set; }
+
+		[ProtoMember(7)]
+		public int HeadImageConfigId { get; set; }
+
+		[ProtoMember(8)]
+		public int HeadFrameImageConfigId { get; set; }
+
 	}
 
 	[ResponseType(nameof(M2C_GetFriendRecommendListResponse))]
@@ -2928,10 +2937,10 @@ namespace ET
 
 	}
 
-	[ResponseType(nameof(M2C_GiveGiftToFriendListResponse))]
-	[Message(OuterOpcode.C2M_GiveGiftToFriendListRequest)]
+	[ResponseType(nameof(M2C_GiveGiftToFriendResponse))]
+	[Message(OuterOpcode.C2M_GiveGiftToFriendRequest)]
 	[ProtoContract]
-	public partial class C2M_GiveGiftToFriendListRequest: Object, IActorLocationRequest
+	public partial class C2M_GiveGiftToFriendRequest: Object, IActorLocationRequest
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -2944,9 +2953,9 @@ namespace ET
 
 	}
 
-	[Message(OuterOpcode.M2C_GiveGiftToFriendListResponse)]
+	[Message(OuterOpcode.M2C_GiveGiftToFriendResponse)]
 	[ProtoContract]
-	public partial class M2C_GiveGiftToFriendListResponse: Object, IActorLocationResponse
+	public partial class M2C_GiveGiftToFriendResponse: Object, IActorLocationResponse
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -2957,11 +2966,199 @@ namespace ET
 		[ProtoMember(92)]
 		public string Message { get; set; }
 
-		[ProtoMember(3)]
-		public List<AccountInfo> AccountInfos = new List<AccountInfo>();
+		[ProtoMember(4)]
+		public FriendInfo FriendInfo { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_OneKeyGiveAndGetResponse))]
+	[Message(OuterOpcode.C2M_OneKeyGiveAndGetRequest)]
+	[ProtoContract]
+	public partial class C2M_OneKeyGiveAndGetRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long Account { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_OneKeyGiveAndGetResponse)]
+	[ProtoContract]
+	public partial class M2C_OneKeyGiveAndGetResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
 
 		[ProtoMember(4)]
 		public List<FriendInfo> FriendInfos = new List<FriendInfo>();
+
+		[ProtoMember(5)]
+		public ItemInfo PowerItemInfo { get; set; }
+
+	}
+
+	[Message(OuterOpcode.ChatInfo)]
+	[ProtoContract]
+	public partial class ChatInfo: Object
+	{
+		[ProtoMember(1)]
+		public AccountInfo AccountInfo { get; set; }
+
+		[ProtoMember(2)]
+		public string ChatText { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_ChatToFriendResponse))]
+	[Message(OuterOpcode.C2M_ChatToFriendRequest)]
+	[ProtoContract]
+	public partial class C2M_ChatToFriendRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public AccountInfo AccountInfo { get; set; }
+
+		[ProtoMember(3)]
+		public string ChatText { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_ChatToFriendResponse)]
+	[ProtoContract]
+	public partial class M2C_ChatToFriendResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public ChatInfo ChatInfo { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_ReceiveChatFromFriend)]
+	[ProtoContract]
+	public partial class M2C_ReceiveChatFromFriend: Object, IActorMessage
+	{
+		[ProtoMember(1)]
+		public ChatInfo ChatInfo { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_GetAccountInfoWidthAccointIdResponse))]
+	[Message(OuterOpcode.C2M_GetAccountInfoWithAccountIdRequest)]
+	[ProtoContract]
+	public partial class C2M_GetAccountInfoWithAccountIdRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetAccountInfoWidthAccointIdResponse)]
+	[ProtoContract]
+	public partial class M2C_GetAccountInfoWidthAccointIdResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public AccountInfo AccountInfo { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_GetPlayerOwnHeroTypeCountResponse))]
+	[Message(OuterOpcode.C2M_GetPlayerOwnHeroTypeCountRequest)]
+	[ProtoContract]
+	public partial class C2M_GetPlayerOwnHeroTypeCountRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetPlayerOwnHeroTypeCountResponse)]
+	[ProtoContract]
+	public partial class M2C_GetPlayerOwnHeroTypeCountResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public int Count { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_ChangePlayerHeadOrFrameResponse))]
+	[Message(OuterOpcode.C2M_ChangePlayerHeadOrFrameRequest)]
+	[ProtoContract]
+	public partial class C2M_ChangePlayerHeadOrFrameRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public int HeadType { get; set; }
+
+		[ProtoMember(3)]
+		public int ConfigId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_ChangePlayerHeadOrFrameResponse)]
+	[ProtoContract]
+	public partial class M2C_ChangePlayerHeadOrFrameResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public AccountInfo AccountInfo { get; set; }
 
 	}
 
