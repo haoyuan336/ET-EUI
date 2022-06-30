@@ -15,6 +15,28 @@ namespace ET
             self.View.ELoopRecommendLoopVerticalScrollRect.AddItemRefreshListener(self.OnRecommendLoop);
             self.View.ELoopApplyLoopVerticalScrollRect.AddItemRefreshListener(self.OnApplyLoop);
             self.View.E_BackButton.AddListener(self.BackButtonClick);
+            self.View.E_SearchButton.AddListenerAsync(self.OnSearchButtonClick);
+        }
+
+        public static async ETTask OnSearchButtonClick(this DlgSearchUserLayer self)
+        {
+            if (string.IsNullOrEmpty(self.View.E_SearchContentText.text))
+            {
+                return;
+            }
+
+            long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            var request = new C2M_SearchAccountWithNameRequest() { Name = self.View.E_SearchContentText.text, AccountId = accountId };
+            var response = await session.Call(request) as M2C_SearchAccountWithNameResponse;
+
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                // self.RecommendAccountInfos = response.AccountInfos;
+                // self.View.ELoopRecommendLoopVerticalScrollRect.RefreshCells();
+            }
+
+            await ETTask.CompletedTask;
         }
 
         public static void BackButtonClick(this DlgSearchUserLayer self)
@@ -23,7 +45,7 @@ namespace ET
             uiComponent.HideWindow(WindowID.WindowID_SearchUserLayer);
         }
 
-        public static void OnApplyLoop(this DlgSearchUserLayer self, Transform transform, int index)
+        public static async void OnApplyLoop(this DlgSearchUserLayer self, Transform transform, int index)
         {
             Scroll_ItemAddFriendApply itemAddFriendApply = self.ItemAddFriendApplies[index].BindTrans(transform);
             if (index < self.ApplyAccountInfos.Count)
@@ -37,6 +59,24 @@ namespace ET
 
                 itemAddFriendApply.E_AcceptButton.AddListener(() => { self.OnAcceptButtonClick(info, true); });
                 itemAddFriendApply.E_RefuseButton.AddListener(() => { self.OnAcceptButtonClick(info, false); });
+                var headImageConfig = PlayerHeadImageResConfigCategory.Instance.Get(info.HeadImageConfigId);
+                var headImageFrameConfig = PlayerHeadImageResConfigCategory.Instance.Get(info.HeadFrameImageConfigId);
+
+                itemAddFriendApply.E_HeadImage.sprite =
+                        await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headImageConfig.SpriteAtlasRes, headImageConfig.ImageRes);
+
+                itemAddFriendApply.E_HeadFrameImage.sprite =
+                        await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headImageFrameConfig.SpriteAtlasRes,
+                            headImageFrameConfig.ImageRes);
+
+                itemAddFriendApply.E_HeadFrameButton.onClick.RemoveAllListeners();
+                itemAddFriendApply.E_HeadFrameButton.AddListener(async () =>
+                {
+                    UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+                    await uiComponent.ShowWindow(WindowID.WindowID_UserInfoLayer);
+                    UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_UserInfoLayer);
+                    baseWindow.GetComponent<DlgUserInfoLayer>().SetUserInfo(info);
+                });
             }
         }
 
@@ -63,7 +103,7 @@ namespace ET
             }
         }
 
-        public static void OnRecommendLoop(this DlgSearchUserLayer self, Transform transform, int index)
+        public static async void OnRecommendLoop(this DlgSearchUserLayer self, Transform transform, int index)
         {
             Scroll_ItemRecommend itemRecommend = self.ItemRecommends[index].BindTrans(transform);
             if (index < self.RecommendAccountInfos.Count)
@@ -74,6 +114,24 @@ namespace ET
                 var disTime = TimeHelper.ServerNow() - accountInfo.LastLogonTime;
                 var str = CustomHelper.GetLastTimeByMSecond(disTime);
                 itemRecommend.E_TimeText.text = str;
+                var headImageConfig = PlayerHeadImageResConfigCategory.Instance.Get(accountInfo.HeadImageConfigId);
+                var headImageFrameConfig = PlayerHeadImageResConfigCategory.Instance.Get(accountInfo.HeadFrameImageConfigId);
+
+                itemRecommend.E_HeadImage.sprite =
+                        await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headImageConfig.SpriteAtlasRes, headImageConfig.ImageRes);
+
+                itemRecommend.E_HeadFrameImage.sprite =
+                        await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headImageFrameConfig.SpriteAtlasRes,
+                            headImageFrameConfig.ImageRes);
+
+                itemRecommend.E_HeadFrameButton.onClick.RemoveAllListeners();
+                itemRecommend.E_HeadFrameButton.AddListener(async () =>
+                {
+                    UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+                    await uiComponent.ShowWindow(WindowID.WindowID_UserInfoLayer);
+                    UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_UserInfoLayer);
+                    baseWindow.GetComponent<DlgUserInfoLayer>().SetUserInfo(accountInfo);
+                });
             }
         }
 

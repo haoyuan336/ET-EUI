@@ -186,5 +186,9 @@ namespace ET
 		 public const ushort M2C_GetPlayerOwnHeroTypeCountResponse = 10183;
 		 public const ushort C2M_ChangePlayerHeadOrFrameRequest = 10184;
 		 public const ushort M2C_ChangePlayerHeadOrFrameResponse = 10185;
+		 public const ushort C2M_SearchAccountWithNameRequest = 10186;
+		 public const ushort M2C_SearchAccountWithNameResponse = 10187;
+		 public const ushort C2M_DelAllReadMailRequest = 10188;
+		 public const ushort M2C_DelAllReadMailResponse = 10189;
 	}
 }

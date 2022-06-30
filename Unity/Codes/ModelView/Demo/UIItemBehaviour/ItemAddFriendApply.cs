@@ -17,6 +17,78 @@ namespace ET
 			return this;
 		}
 
+		public UnityEngine.UI.Image E_HeadImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_HeadImage == null )
+     				{
+		    			this.m_E_HeadImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Head");
+     				}
+     				return this.m_E_HeadImage;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Head");
+     			}
+     		}
+     	}
+
+		public UnityEngine.UI.Button E_HeadFrameButton
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_HeadFrameButton == null )
+     				{
+		    			this.m_E_HeadFrameButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_HeadFrame");
+     				}
+     				return this.m_E_HeadFrameButton;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_HeadFrame");
+     			}
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_HeadFrameImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_HeadFrameImage == null )
+     				{
+		    			this.m_E_HeadFrameImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_HeadFrame");
+     				}
+     				return this.m_E_HeadFrameImage;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_HeadFrame");
+     			}
+     		}
+     	}
+
 		public UnityEngine.UI.Text E_NameText
      	{
      		get
@@ -163,6 +235,9 @@ namespace ET
 
 		public void DestroyWidget()
 		{
+			this.m_E_HeadImage = null;
+			this.m_E_HeadFrameButton = null;
+			this.m_E_HeadFrameImage = null;
 			this.m_E_NameText = null;
 			this.m_E_TimeText = null;
 			this.m_E_AcceptButton = null;
@@ -172,6 +247,9 @@ namespace ET
 			this.uiTransform = null;
 		}
 
+		private UnityEngine.UI.Image m_E_HeadImage = null;
+		private UnityEngine.UI.Button m_E_HeadFrameButton = null;
+		private UnityEngine.UI.Image m_E_HeadFrameImage = null;
 		private UnityEngine.UI.Text m_E_NameText = null;
 		private UnityEngine.UI.Text m_E_TimeText = null;
 		private UnityEngine.UI.Button m_E_AcceptButton = null;

@@ -58,6 +58,7 @@
         WindowID_AlertLayer, //提示层
         WindowID_FriendChatLayer, //好友聊天层
         WindowID_UserInfoLayer, //用户详细信息层
-        WindowID_ChooseHeadImageLayer //选择头像层
+        WindowID_ChooseHeadImageLayer, //选择头像层
+        WindowID_TaskLayer,//任务层
     }
 }

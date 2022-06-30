@@ -73,6 +73,23 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Text E_SearchContentText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_SearchContentText == null )
+     			{
+		    		this.m_E_SearchContentText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"bg/InputField/E_SearchContent");
+     			}
+     			return this.m_E_SearchContentText;
+     		}
+     	}
+
 		public UnityEngine.UI.Toggle E_RecommendToggle
      	{
      		get
@@ -147,6 +164,7 @@ namespace ET
 			this.m_E_BackImage = null;
 			this.m_E_SearchButton = null;
 			this.m_E_SearchImage = null;
+			this.m_E_SearchContentText = null;
 			this.m_E_RecommendToggle = null;
 			this.m_E_ApplyToggle = null;
 			this.m_ELoopRecommendLoopVerticalScrollRect = null;
@@ -158,6 +176,7 @@ namespace ET
 		private UnityEngine.UI.Image m_E_BackImage = null;
 		private UnityEngine.UI.Button m_E_SearchButton = null;
 		private UnityEngine.UI.Image m_E_SearchImage = null;
+		private UnityEngine.UI.Text m_E_SearchContentText = null;
 		private UnityEngine.UI.Toggle m_E_RecommendToggle = null;
 		private UnityEngine.UI.Toggle m_E_ApplyToggle = null;
 		private UnityEngine.UI.LoopVerticalScrollRect m_ELoopRecommendLoopVerticalScrollRect = null;

@@ -14,6 +14,13 @@ namespace ET
         {
             self.View.E_BackButton.AddListener(self.OnBackButtonClick);
             self.View.E_HeadButton.AddListenerAsync(self.OnHeadButtonClick);
+            self.View.E_CopyButton.AddListener(self.OnCopyButtonClick);
+        }
+
+        public static void OnCopyButtonClick(this DlgUserInfoLayer self)
+        {
+            UnityEngine.GUIUtility.systemCopyBuffer = self.AccountInfo.Name;
+            
         }
 
         public static async ETTask OnHeadButtonClick(this DlgUserInfoLayer self)

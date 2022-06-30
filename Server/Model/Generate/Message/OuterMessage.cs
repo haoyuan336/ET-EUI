@@ -3162,4 +3162,69 @@ namespace ET
 
 	}
 
+	[ResponseType(nameof(M2C_SearchAccountWithNameResponse))]
+	[Message(OuterOpcode.C2M_SearchAccountWithNameRequest)]
+	[ProtoContract]
+	public partial class C2M_SearchAccountWithNameRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public string Name { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_SearchAccountWithNameResponse)]
+	[ProtoContract]
+	public partial class M2C_SearchAccountWithNameResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<AccountInfo> AccountInfos = new List<AccountInfo>();
+
+	}
+
+	[ResponseType(nameof(M2C_DelAllReadMailResponse))]
+	[Message(OuterOpcode.C2M_DelAllReadMailRequest)]
+	[ProtoContract]
+	public partial class C2M_DelAllReadMailRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_DelAllReadMailResponse)]
+	[ProtoContract]
+	public partial class M2C_DelAllReadMailResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<MailInfo> MailInfos = new List<MailInfo>();
+
+	}
+
 }

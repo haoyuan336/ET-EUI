@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,30 @@ namespace ET
             self.AddUIScrollItems(ref self.ItemMails, 10);
             // self.View.ELoopScrollList_LoopVerticalScrollRect.SetVisible(true, 10);
             self.View.ELoopScrollList_LoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopEventListener);
+            self.View.E_DelAllReadButton.AddListenerAsync(self.DelAllReadButtonClick);
+        }
+
+        public static async ETTask DelAllReadButtonClick(this DlgMailLayer self)
+        {
+            long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            //取出来所有已读的邮件
+            List<long> mailIDs = self.MailInfos.FindAll(a => a.IsRead).ToDictionary(a => a.MailId, b => b).Keys.ToList();
+            if (mailIDs.Count == 0)
+            {
+                return;
+            }
+
+            var request = new C2M_DelAllReadMailRequest() { AccountId = accountId };
+            var response = await session.Call(request) as M2C_DelAllReadMailResponse;
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                self.MailInfos = response.MailInfos;
+                self.AddUIScrollItems(ref self.ItemMails, self.MailInfos.Count);
+                self.View.ELoopScrollList_LoopVerticalScrollRect.SetVisible(true, self.MailInfos.Count);
+            }
+
+            await ETTask.CompletedTask;
         }
 
         public static async void OnLoopEventListener(this DlgMailLayer self, Transform tr, int index)

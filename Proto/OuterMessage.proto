@@ -1429,3 +1429,32 @@ message M2C_ChangePlayerHeadOrFrameResponse //IActorLocationResponse
 	string Message = 92;
 	AccountInfo AccountInfo = 1;
 }
+
+//ResponseType M2C_SearchAccountWithNameResponse
+message C2M_SearchAccountWithNameRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	string Name = 2;
+
+}
+message M2C_SearchAccountWithNameResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated AccountInfo AccountInfos = 1;
+}
+//ResponseType M2C_DelAllReadMailResponse
+message C2M_DelAllReadMailRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message M2C_DelAllReadMailResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated MailInfo MailInfos = 1;
+}
