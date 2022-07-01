@@ -56,7 +56,7 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Text E_IDText
+		public UnityEngine.UI.Text E_NameContentText
      	{
      		get
      		{
@@ -65,11 +65,11 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_IDText == null )
+     			if( this.m_E_NameContentText == null )
      			{
-		    		this.m_E_IDText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Name/E_ID");
+		    		this.m_E_NameContentText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Name/E_NameContent");
      			}
-     			return this.m_E_IDText;
+     			return this.m_E_NameContentText;
      		}
      	}
 
@@ -78,14 +78,14 @@ namespace ET
 			this.m_E_AccountText = null;
 			this.m_E_NameButton = null;
 			this.m_E_NameImage = null;
-			this.m_E_IDText = null;
+			this.m_E_NameContentText = null;
 			this.uiTransform = null;
 		}
 
 		private UnityEngine.UI.Text m_E_AccountText = null;
 		private UnityEngine.UI.Button m_E_NameButton = null;
 		private UnityEngine.UI.Image m_E_NameImage = null;
-		private UnityEngine.UI.Text m_E_IDText = null;
+		private UnityEngine.UI.Text m_E_NameContentText = null;
 		public Transform uiTransform = null;
 	}
 }

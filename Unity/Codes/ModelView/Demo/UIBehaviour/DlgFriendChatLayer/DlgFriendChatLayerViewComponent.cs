@@ -22,23 +22,6 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Image E_FriendHeadImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_FriendHeadImage == null )
-     			{
-		    		this.m_E_FriendHeadImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Bg/Image/ELoopScrollList/Content/Item/E_FriendHead");
-     			}
-     			return this.m_E_FriendHeadImage;
-     		}
-     	}
-
 		public UnityEngine.UI.Text E_NameText
      	{
      		get
@@ -161,7 +144,6 @@ namespace ET
 		public void DestroyWidget()
 		{
 			this.m_ELoopScrollListLoopVerticalScrollRect = null;
-			this.m_E_FriendHeadImage = null;
 			this.m_E_NameText = null;
 			this.m_E_BackButton = null;
 			this.m_E_BackImage = null;
@@ -173,7 +155,6 @@ namespace ET
 		}
 
 		private UnityEngine.UI.LoopVerticalScrollRect m_ELoopScrollListLoopVerticalScrollRect = null;
-		private UnityEngine.UI.Image m_E_FriendHeadImage = null;
 		private UnityEngine.UI.Text m_E_NameText = null;
 		private UnityEngine.UI.Button m_E_BackButton = null;
 		private UnityEngine.UI.Image m_E_BackImage = null;

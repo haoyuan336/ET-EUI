@@ -22,7 +22,7 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Button E_DelAllReadButton
+		public UnityEngine.UI.Button E_DelAllButton
      	{
      		get
      		{
@@ -31,15 +31,15 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_DelAllReadButton == null )
+     			if( this.m_E_DelAllButton == null )
      			{
-		    		this.m_E_DelAllReadButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"BgNode/E_DelAllRead");
+		    		this.m_E_DelAllButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"BgNode/E_DelAll");
      			}
-     			return this.m_E_DelAllReadButton;
+     			return this.m_E_DelAllButton;
      		}
      	}
 
-		public UnityEngine.UI.Image E_DelAllReadImage
+		public UnityEngine.UI.Image E_DelAllImage
      	{
      		get
      		{
@@ -48,11 +48,11 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_DelAllReadImage == null )
+     			if( this.m_E_DelAllImage == null )
      			{
-		    		this.m_E_DelAllReadImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"BgNode/E_DelAllRead");
+		    		this.m_E_DelAllImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"BgNode/E_DelAll");
      			}
-     			return this.m_E_DelAllReadImage;
+     			return this.m_E_DelAllImage;
      		}
      	}
 
@@ -127,8 +127,8 @@ namespace ET
 		public void DestroyWidget()
 		{
 			this.m_ELoopScrollList_LoopVerticalScrollRect = null;
-			this.m_E_DelAllReadButton = null;
-			this.m_E_DelAllReadImage = null;
+			this.m_E_DelAllButton = null;
+			this.m_E_DelAllImage = null;
 			this.m_E_GetAllButton = null;
 			this.m_E_GetAllImage = null;
 			this.m_E_BackButton = null;
@@ -137,8 +137,8 @@ namespace ET
 		}
 
 		private UnityEngine.UI.LoopVerticalScrollRect m_ELoopScrollList_LoopVerticalScrollRect = null;
-		private UnityEngine.UI.Button m_E_DelAllReadButton = null;
-		private UnityEngine.UI.Image m_E_DelAllReadImage = null;
+		private UnityEngine.UI.Button m_E_DelAllButton = null;
+		private UnityEngine.UI.Image m_E_DelAllImage = null;
 		private UnityEngine.UI.Button m_E_GetAllButton = null;
 		private UnityEngine.UI.Image m_E_GetAllImage = null;
 		private UnityEngine.UI.Button m_E_BackButton = null;

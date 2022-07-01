@@ -35,11 +35,12 @@ namespace ET
                     (M2C_GetUserExpInfoResponse) await session.Call(new C2M_GetUserExpInfoRequest() { AccountId = AccountId });
             if (m2CGetUserExpInfoResponse.Error == ErrorCode.ERR_Success)
             {
-                int level = m2CGetUserExpInfoResponse.UserLevel;
+                // int level = m2CGetUserExpInfoResponse.UserLevel;
                 // int exp = m2CGetUserExpInfoResponse.Exp;
                 // int nextExp = UserUpdateLevelConfigCategory.Instance.Get(level).NeedExp;
-                self.View.E_IDText.text = $"ID:{m2CGetUserExpInfoResponse.UserName}";
+                // self.View.E_IDText.text = $"ID:{m2CGetUserExpInfoResponse.UserName}";
                 // self.View.E_IDText.text = m2CGetUserExpInfoResponse.UserName;
+                self.View.E_NameContentText.text = m2CGetUserExpInfoResponse.UserName;
             }
 
 

@@ -15,7 +15,7 @@ namespace ET
             self.AddUIScrollItems(ref self.ItemMails, 10);
             // self.View.ELoopScrollList_LoopVerticalScrollRect.SetVisible(true, 10);
             self.View.ELoopScrollList_LoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopEventListener);
-            self.View.E_DelAllReadButton.AddListenerAsync(self.DelAllReadButtonClick);
+            self.View.E_DelAllButton.AddListenerAsync(self.DelAllReadButtonClick);
         }
 
         public static async ETTask DelAllReadButtonClick(this DlgMailLayer self)
