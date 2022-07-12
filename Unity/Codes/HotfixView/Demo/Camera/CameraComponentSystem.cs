@@ -14,15 +14,15 @@ namespace ET.Demo.Camera
     {
         public static void ChangeFightCameraLook(this CameraComponent self, bool value)
         {
-            if (self.CmProcessCamera == null)
-            {
-                self.CmProcessCamera = GameObject.Find("CM_Process");
-            }
-
-            if (self.CmProcessCamera != null)
-            {
-                self.CmProcessCamera.SetActive(!value);
-            }
+            // if (self.CmProcessCamera == null)
+            // {
+            //     self.CmProcessCamera = GameObject.Find("CM_Process");
+            // }
+            //
+            // if (self.CmProcessCamera != null)
+            // {
+            //     self.CmProcessCamera.SetActive(!value);
+            // }
         }
     }
 }

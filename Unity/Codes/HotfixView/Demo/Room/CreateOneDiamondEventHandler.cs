@@ -8,21 +8,11 @@ namespace ET
     {
         protected override async ETTask Run(CreateOneDiamondView a)
         {
-            // await TimerComponent.Instance.WaitAsync(1000);
-            // PvPLevelConfig pvPLevelConfig = PvPLevelConfigCategory.Instance.Get(1);
-            // int hangCount = ConstValue.HangCount;
-            // int liecount = ConstValue.LieCount;
-            // float distance = float.Parse(pvPLevelConfig.Distance);
-
-            // float distance = ConstValue.Distance;
             var diamondInfo = a.DiamondInfo;
             DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamondInfo.ConfigId);
-
-            var imageStr = $"Assets/Res/Texture/Diamond/{config.TextureName}.png";
-            Texture texture = await AddressableComponent.Instance.LoadAssetByPathAsync<Texture>(imageStr);
-            var str = "Assets/Bundles/Unit/DiamondPrefabs/DiamondPrefab.prefab";
-            GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(str);
-            GameObject go = GameObject.Instantiate(prefab, GlobalComponent.Instance.DiamondContent);
+            var str = config.PrefabRes;
+            GameObject go = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(str);
+            go.transform.SetParent(GlobalComponent.Instance.DiamondContent);
             if (a.Diamond.IsDisposed)
             {
                 Log.Error("diamond al disposed");
@@ -30,30 +20,17 @@ namespace ET
 
             go.name = $"diamond {a.Diamond.LieIndex}{a.Diamond.HangIndex}";
             a.Diamond.AddComponent<GameObjectComponent>().GameObject = go;
-            MeshRenderer meshRenderer = go.GetComponent<MeshRenderer>();
-            meshRenderer.material.SetTexture("_BaseMap", texture);
-            //
-            // go.transform.position = new Vector3((a.Diamond.LieIndex - liecount * 0.5f + 0.5f) * distance, 0,
-            //     (a.Diamond.HangIndex - hangCount * 0.5f + 0.5f) * distance );
-
-            // (liecount * 0.5f - a.Diamond.LieIndex - 1) * distance
-            // hangCount * 0.5f - 0.5f - a.Diamond.HangIndex + 0.5f
-            // go.transform.position = new Vector3((liecount * 0.5f - a.Diamond.LieIndex - 1) * distance, 0,
-            //     (hangCount * 0.5f - 0.5f - a.Diamond.HangIndex + 0.5f) * distance);
-
             go.transform.position = CustomHelper.GetDiamondPos(ConstValue.LieCount, ConstValue.HangCount, a.Diamond.LieIndex, a.Diamond.HangIndex,
                 ConstValue.Distance, ConstValue.DiamondOffsetZ);
-            // go.transform.forward = Vector3.back;
-            Vector3 endScale = new Vector3(0.06f, 0.06f, 0.06f);
-            // go.transform.localScale = Vector3.zero;
+            Vector3 endScale = new Vector3(1f, 1f, 1f);
             float time = 0;
+            TimerComponent.Instance.WaitAsync(1000);
             while (time < 0.2f)
             {
                 go.transform.localScale = Vector3.Lerp(Vector3.zero, endScale, time * 1 / 0.2f);
                 time += Time.deltaTime;
                 await TimerComponent.Instance.WaitFrameAsync();
             }
-
             go.transform.localScale = endScale;
             await ETTask.CompletedTask;
         }

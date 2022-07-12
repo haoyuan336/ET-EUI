@@ -6,12 +6,14 @@ using UnityEngine;
 
 namespace ET.Demo.Effect
 {
-    public class AddAttackEffectAwakeSystem: AwakeSystem<AddAttackEffect, List<Vector3>, Vector3>
+    public class AddAttackEffectAwakeSystem: AwakeSystem<AddAttackEffect, List<Vector3>, Vector3, DiamondInfo>
     {
-        public override async void Awake(AddAttackEffect self, List<Vector3> a, Vector3 b)
+        public override async void Awake(AddAttackEffect self, List<Vector3> a, Vector3 b, DiamondInfo diamondInfo)
         {
             Log.Warning($"增加了 add attack effect component {a.Count} ");
-            GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>("Assets/Bundles/Effect/AddAttackParticle.prefab");
+            DiamondTypeConfig diamondTypeConfig = DiamondTypeConfigCategory.Instance.Get(diamondInfo.ConfigId);
+            var str = diamondTypeConfig.FlyEffectAttackRes;
+            GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(str);
             foreach (var startPos in a)
             {
                 GameObject obj = GameObject.Instantiate(prefab);
@@ -32,7 +34,7 @@ namespace ET.Demo.Effect
         {
             if (self.EffectMap.Count > 0)
             {
-                self.Time += Time.deltaTime * 3;
+                self.Time += Time.deltaTime * ConstValue.FlyEffectFlySpeed;
 
                 if (self.Time < Mathf.PI * 0.5f)
                 {

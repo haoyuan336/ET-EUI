@@ -143,10 +143,10 @@ namespace ET
             return false;
         }
 
-        public static async ETTask Destroy(this Diamond self)
+        public static async ETTask Destroy(this Diamond self, int index)
         {
 #if !SERVER
-            await Game.EventSystem.PublishAsync(new EventType.DestoryDiamondView() { Diamond = self });
+            await Game.EventSystem.PublishAsync(new EventType.DestoryDiamondView() { Diamond = self , Index = index});
 #endif
             self.Dispose();
             await ETTask.CompletedTask;

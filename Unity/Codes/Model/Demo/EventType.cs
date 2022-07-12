@@ -167,6 +167,7 @@ namespace ET
         public struct DestoryDiamondView
         {
             public Diamond Diamond;
+            public int Index;
         }
 
         public struct InitDiamondAndMoveDown

@@ -32,7 +32,12 @@ namespace ET
             List<DiamondInfo> diamondInfos = new List<DiamondInfo>();
             int[] map =
             {
-                1, 2, 3, 4, 5, 4, 1, 2, 3, 4, 5, 5, 1, 2, 3, 2, 5, 4, 3, 2, 3, 4, 1, 3, 3, 2, 5, 2, 5, 5, 1, 2, 1, 1, 5, 4, 5, 2, 1, 4, 2, 4,
+                1, 2, 3, 4, 5, 4, 1, 
+                4, 3, 4, 5, 5, 1, 2, 
+                4, 2, 5, 4, 3, 2, 3, 
+                2, 4, 3, 3, 2, 5, 2, 
+                4, 5, 1, 2, 1, 1, 5, 
+                4, 5, 2, 1, 4, 2, 4,
             };
             for (var i = 0; i < ConstValue.HangCount; i++)
             {
@@ -63,9 +68,9 @@ namespace ET
             self.Diamonds[index] = diamond;
         }
 
-        public static async ETTask RemoveChild(this DiamondComponent self, Diamond diamond)
+        public static async ETTask RemoveChild(this DiamondComponent self, Diamond diamond, int destoryIndex)
         {
-            await diamond.Destroy();
+            await diamond.Destroy(destoryIndex);
         }
 
         // public static void RemoveAllChild(this DiamondComponent self)
@@ -157,7 +162,6 @@ namespace ET
             {
                 Log.Debug($"diamond xy, {diamond.LieIndex}, {diamond.HangIndex}");
             }
-
 
             return diamond;
 

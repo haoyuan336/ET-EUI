@@ -7,6 +7,7 @@ namespace ET
     {
         protected override async ETTask Run(PlayDiamondContentAnim a)
         {
+            // Log.Debug($"移动宝石位置{a.Value}");
             var value = a.Value;
             Transform diamondContent = GlobalComponent.Instance.DiamondContent;
             float time = 0;
@@ -16,11 +17,11 @@ namespace ET
             if (!value)
             {
                 startPos = Vector3.zero;
-                endPos = Vector3.down * 0.5f;
+                endPos = Vector3.down * 1f;
             }
             else
             {
-                startPos = Vector3.down * 0.5f;
+                startPos = Vector3.down * 1f;
                 endPos = Vector3.zero;
             }
 
@@ -31,6 +32,8 @@ namespace ET
                 diamondContent.position = prePos;
                 await TimerComponent.Instance.WaitFrameAsync();
             }
+
+            diamondContent.position = endPos;
         }
     }
 }

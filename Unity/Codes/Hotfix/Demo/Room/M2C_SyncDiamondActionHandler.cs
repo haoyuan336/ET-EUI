@@ -52,6 +52,7 @@ namespace ET
                     }));
                 }
 
+                var destoryIndex = 0;
                 foreach (var diamondAction in diamondActionItem.DiamondActions)
                 {
                     DiamondInfo diamondInfo = diamondAction.DiamondInfo;
@@ -66,7 +67,9 @@ namespace ET
                             tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex() { Diamond = diamond }));
                             break;
                         case (int) DiamondActionType.Destory:
-                            tasks.Add(diamondComponent.RemoveChild(diamond));
+                            tasks.Add(diamondComponent.RemoveChild(diamond, destoryIndex));
+                            destoryIndex++;
+
                             isContainsCrash = true;
                             break;
                         case (int) DiamondActionType.Create:

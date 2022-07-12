@@ -75,6 +75,8 @@ namespace ET
 		public int ColorId { get; set; }
 		[ProtoMember(3)]
 		public string ColorValue { get; set; }
+		[ProtoMember(4)]
+		public string DestoryEffectRes { get; set; }
 		[ProtoMember(6)]
 		public string AddAttack { get; set; }
 		[ProtoMember(7)]
@@ -83,6 +85,14 @@ namespace ET
 		public string TextureName { get; set; }
 		[ProtoMember(10)]
 		public int BoomType { get; set; }
+		[ProtoMember(12)]
+		public string PrefabRes { get; set; }
+		[ProtoMember(13)]
+		public string ElementDes { get; set; }
+		[ProtoMember(14)]
+		public string FlyEffectAttackRes { get; set; }
+		[ProtoMember(15)]
+		public string FlyEffectAngryRes { get; set; }
 
 	}
 }
