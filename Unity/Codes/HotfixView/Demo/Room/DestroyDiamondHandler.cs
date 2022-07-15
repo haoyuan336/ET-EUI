@@ -1,4 +1,5 @@
-﻿using ET.EventType;
+﻿using System;
+using ET.EventType;
 using UnityEngine;
 
 namespace ET
@@ -30,19 +31,27 @@ namespace ET
             // }
 
             var effectPos = go.transform.position;
-            await TimerComponent.Instance.WaitAsync(100 * index);
-            GameObject.Destroy(go);
             var boomEffectRes = config.DestoryEffectRes;
+            int waitTime = 100;
+            if (config.BoomType != (int) BoomType.Invalide)
+            {
+                Log.Debug($"boom effect pos {config.BoomType}");
+                waitTime = 0;
+            }
+
+            await TimerComponent.Instance.WaitAsync(waitTime * index);
+            GameObject.Destroy(go);
             Log.Debug($"boom effect res{boomEffectRes}");
             if (!string.IsNullOrEmpty(boomEffectRes))
             {
                 GameObject effect = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(boomEffectRes);
                 effect.transform.SetParent(GlobalComponent.Instance.DiamondContent);
-                
+
                 effect.transform.position = effectPos;
-                await TimerComponent.Instance.WaitAsync(500);
+                await TimerComponent.Instance.WaitAsync(600);
                 GameObject.Destroy(effect);
             }
+
             //加载爆炸特效
             diamond.Dispose();
             await ETTask.CompletedTask;

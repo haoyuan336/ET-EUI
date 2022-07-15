@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ET.Demo.Effect;
 using ET.Effect;
 using ET.EventType;
@@ -13,13 +14,18 @@ namespace ET
             DiamondComponent diamondComponent = a.Scene.GetComponent<DiamondComponent>();
             HeroCardComponent heroCardComponent = a.Scene.GetComponent<HeroCardComponent>();
 
+            // var count = 0;
             List<ETTask> list = new List<ETTask>();
             foreach (var addItemAction in a.AddItemActions)
             {
                 List<DiamondInfo> diamondInfos = addItemAction.DiamondInfos;
+                Log.Debug($"add angry view anim {addItemAction.HeroCardInfo.HeroId}");
                 HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(addItemAction.HeroCardInfo.HeroId);
                 Vector3 endPos = heroCard.GetComponent<HeroModeObjectCompoent>().HeroMode.transform.position + Vector3.up;
                 // List<Diamond> diamonds = new List<Diamond>();
+                // await TimerComponent.Instance.WaitAsync(100 * count);
+                // count++;
+
                 List<Vector3> startPosList = new List<Vector3>();
                 foreach (var info in diamondInfos)
                 {
@@ -30,8 +36,7 @@ namespace ET
                 }
                 
                 Log.Warning($"找到了 消除的几个宝石{startPosList.Count}");
-                
-                AddAttackEffect effect = heroCard.AddChild<AddAttackEffect, List<Vector3>, Vector3, DiamondInfo>(startPosList, endPos, diamondInfos[0]);
+                AddAngryEffect effect = heroCard.AddChild<AddAngryEffect, List<Vector3>, Vector3, DiamondInfo, int>(startPosList, endPos, diamondInfos[0],0);
                 list.Add(effect.PlayAnim());
                 list.Add(heroCard.GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(addItemAction.HeroCardDataComponentInfo));
             }
@@ -52,7 +57,7 @@ namespace ET
             HeroCardComponent heroCardComponent = a.Scene.GetComponent<HeroCardComponent>();
 
             List<ETTask> tasks = new List<ETTask>();
-
+            // var count = 0;
             foreach (var addItemAction in a.AddItemActions)
             {
                 Log.Debug($"hero id {addItemAction.HeroCardInfo.HeroId}");
@@ -61,6 +66,12 @@ namespace ET
                 Vector3 endPos = heroCard.GetComponent<HeroModeObjectCompoent>().HeroMode.transform.position + Vector3.up;
                 // List<Diamond> diamonds = new List<Diamond>();
                 List<Vector3> startPosList = new List<Vector3>();
+                // await TimerComponent.Instance.WaitAsync(100 * count);
+                Log.Debug($"diomondinfo {diamondInfos.Count}");
+                if (diamondInfos.Count == 0)
+                {
+                    continue;
+                }
                 foreach (var info in diamondInfos)
                 {
                     Diamond diamond = diamondComponent.GetChild<Diamond>(info.Id);
@@ -68,10 +79,11 @@ namespace ET
                     GameObject diamondObj = diamond.GetComponent<GameObjectComponent>().GameObject;
                     startPosList.Add(diamondObj.transform.position + Vector3.up * 0.5f);
                 }
-
-                AddAngryEffect effect = heroCard.AddChild<AddAngryEffect, List<Vector3>, Vector3, DiamondInfo>(startPosList, endPos, diamondInfos[0]);
+                AddAttackEffect effect = heroCard.AddChild<AddAttackEffect, List<Vector3>, Vector3, DiamondInfo>(startPosList, endPos, diamondInfos[0]);
                 tasks.Add(effect.PlayAnim());
                 tasks.Add(heroCard.GetComponent<HeroCardInfoObjectComponent>().UpdateAttackAdditionView(addItemAction));
+                // count++;
+
             }
 
             await ETTaskHelper.WaitAll(tasks);

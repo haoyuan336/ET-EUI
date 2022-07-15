@@ -371,11 +371,14 @@ namespace ET
                 HeroConfig heroConfig = HeroConfigCategory.Instance.Get(a.ConfigId);
                 if (heroConfig.HeroColor == diamondActions[0].DiamondInfo.DiamondType)
                 {
+                    Log.Debug($"hero config hero color{heroConfig.HeroColor}");
+                    Log.Debug($"diamondtyoe {diamondActions[0].DiamondInfo.DiamondType}");
                     return true;
                 }
 
                 return false;
             });
+            Log.Debug($"add angry hero card count{heroCards.Count}");
             //找到了
             List<DiamondInfo> diamondInfos = new List<DiamondInfo>();
             foreach (var diamondaction in diamondActions)
@@ -442,7 +445,13 @@ namespace ET
                     List<DiamondInfo> infos = new List<DiamondInfo>();
                     foreach (var diamondAction in item.DiamondActions)
                     {
-                        infos.Add(diamondAction.DiamondInfo);
+
+                        if (diamondAction.DiamondInfo.DiamondType == crashCommonInfo.FirstCrashColor)
+                        {
+                            infos.Add(diamondAction.DiamondInfo);
+                            
+                        }
+
                     }
 
                     attackAction.DiamondInfos = infos;
@@ -451,6 +460,7 @@ namespace ET
                     attackAction.CrashCommonInfo = new CrashCommonInfo() { CommonCount = crashCommonInfo.CommonCount };
                     addItemActions.Add(attackAction);
                 }
+                Log.Debug($"add item actions {addItemActions.Count}");
 
                 item.AddAttackItemActions = addItemActions;
             }

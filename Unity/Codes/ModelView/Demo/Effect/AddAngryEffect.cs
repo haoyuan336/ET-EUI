@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ET.Effect
 {
-    public class AddAngryEffect: Entity, IUpdate, IAwake<List<Vector3>, Vector3, DiamondInfo>
+    public class AddAngryEffect: Entity, IUpdate, IAwake<List<Vector3>, Vector3, DiamondInfo, int>
     {
         public Dictionary<GameObject, Vector3> EffectMap = new Dictionary<GameObject, Vector3>();
         public float Time = 0;

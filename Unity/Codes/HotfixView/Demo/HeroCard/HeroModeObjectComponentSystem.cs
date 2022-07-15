@@ -122,6 +122,7 @@ namespace ET
 
         public static async ETTask PlayMoveToAnim(this HeroModeObjectCompoent self, Vector3 startPos, Vector3 targetPos)
         {
+            await self.TurnTargetAnim(targetPos);
             float time = 0;
             // float distance = Vector3.Distance(targetPos, self.HeroModeInitPos);
             self.HeroMode.GetComponent<Animator>().SetBool("Run", true);
@@ -137,6 +138,22 @@ namespace ET
 
             self.HeroMode.GetComponent<Animator>().SetBool("Run", false);
 
+            await ETTask.CompletedTask;
+        }
+
+        public static async ETTask TurnTargetAnim(this HeroModeObjectCompoent self, Vector3 targetPos)
+        {
+            var targetVector = targetPos - self.HeroMode.transform.position;
+            Quaternion targetQuaternion = Quaternion.LookRotation(targetVector);
+            float time = 0;
+            while (time < 0.4f)
+            {
+                time += Time.deltaTime * 2;
+                self.HeroMode.transform.rotation = Quaternion.Lerp(self.HeroMode.transform.rotation, targetQuaternion, time);
+                await TimerComponent.Instance.WaitFrameAsync();
+            }
+
+            //转身到目标角度
             await ETTask.CompletedTask;
         }
 
@@ -160,6 +177,9 @@ namespace ET
             await self.MoveToEnemyTarget(beAttackHeroCards, skillConfig);
             await self.PlayAttackAnim(message, skillConfig);
             await self.BackMoveToInitPos(skillConfig);
+
+            int campIndex = message.AttackHeroCard.CampIndex;
+            await self.TurnTargetAnim((campIndex == 0? Vector3.back : Vector3.forward) + self.HeroMode.transform.position);
             // await self.PlayMoveToAnim(self.HeroMode.transform.position, self.HeroModeInitPos);
             await ETTask.CompletedTask;
         }
@@ -172,6 +192,8 @@ namespace ET
             }
 
             await self.PlayMoveToAnim(self.HeroMode.transform.position, self.HeroModeInitPos);
+
+            // await self.TurnTargetAnim();
         }
 
         public static async ETTask MoveToEnemyTarget(this HeroModeObjectCompoent self, HeroCard beAttackHeroCard, SkillConfig skillConfig)
