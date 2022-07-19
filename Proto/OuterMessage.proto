@@ -497,6 +497,8 @@ message DiamondAction
 	int32 PpcId = 90;
 	int32 ActionType = 1;
 	DiamondInfo DiamondInfo = 2;
+	repeated AddItemAction AddAttackActions = 3;
+	repeated AddItemAction AddAngryActions = 4;
 }
 message MakeSureAttackHeroAction
 {

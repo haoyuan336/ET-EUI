@@ -28,8 +28,8 @@ namespace ET
 
                     // Transform cm1 = UIFindHelper.FindDeepChild(GlobalComponent.Instance.Global.gameObject, "CM vcam1");
                     // cm1.gameObject.SetActive(true);
-                    Transform cm2 = UIFindHelper.FindDeepChild(GlobalComponent.Instance.Global.gameObject, "CM vcam2");
-                    cm2.gameObject.SetActive(true);
+                    // Transform cm2 = UIFindHelper.FindDeepChild(GlobalComponent.Instance.Global.gameObject, "CM vcam2");
+                    // cm2.gameObject.SetActive(true);
                     //隐藏战斗摄像头
                     // GameObject cm2 = GameObject.Find("CM vcam2");
                     // cm2.gameObject.SetActive(false);

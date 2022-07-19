@@ -384,21 +384,34 @@ namespace ET
             foreach (var diamondaction in diamondActions)
             {
                 diamondInfos.Add(diamondaction.DiamondInfo);
+
+                List<AddItemAction> addAngryActions = new List<AddItemAction>();
+                foreach (var heroCard in heroCards)
+                {
+                    heroCard.GetComponent<HeroCardDataComponent>().Angry += diamondActions.Count;
+                    AddItemAction addItemAction = new AddItemAction()
+                    {
+                        HeroCardInfo = heroCard.GetMessageInfo(),
+                        HeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo()
+                    };
+                    addAngryActions.Add(addItemAction);
+                }
+
+                diamondaction.AddAngryActions = addAngryActions;
             }
 
-            List<AddItemAction> addItemActions = new List<AddItemAction>();
-            foreach (var heroCard in heroCards)
-            {
-                AddItemAction addItemAction = new AddItemAction();
-                addItemAction.DiamondInfos = diamondInfos;
-                heroCard.GetComponent<HeroCardDataComponent>().Angry += diamondActions.Count;
-                addItemAction.HeroCardInfo = heroCard.GetMessageInfo();
-                addItemAction.HeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo();
-                // item.AddAngryItemAction = addItemAction;
-                addItemActions.Add(addItemAction);
-            }
-
-            item.AddAngryItemActions = addItemActions;
+            // List<AddItemAction> addItemActions = new List<AddItemAction>();
+            // foreach (var heroCard in heroCards)
+            // {
+            //     AddItemAction addItemAction = new AddItemAction();
+            //     // addItemAction.DiamondInfos = diamondInfos;
+            //     heroCard.GetComponent<HeroCardDataComponent>().Angry += diamondActions.Count;
+            //     addItemAction.HeroCardInfo = heroCard.GetMessageInfo();
+            //     addItemAction.HeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo();
+            //     // item.AddAngryItemAction = addItemAction;
+            //     addItemActions.Add(addItemAction);
+            // }
+            // item.AddAngryItemActions = addItemActions;
         }
 
         public static void ProcessAddHeroCardAttackAdditionLogic(this PVERoom self, CrashCommonInfo crashCommonInfo, DiamondActionItem item)
@@ -445,13 +458,10 @@ namespace ET
                     List<DiamondInfo> infos = new List<DiamondInfo>();
                     foreach (var diamondAction in item.DiamondActions)
                     {
-
                         if (diamondAction.DiamondInfo.DiamondType == crashCommonInfo.FirstCrashColor)
                         {
                             infos.Add(diamondAction.DiamondInfo);
-                            
                         }
-
                     }
 
                     attackAction.DiamondInfos = infos;
@@ -460,6 +470,7 @@ namespace ET
                     attackAction.CrashCommonInfo = new CrashCommonInfo() { CommonCount = crashCommonInfo.CommonCount };
                     addItemActions.Add(attackAction);
                 }
+
                 Log.Debug($"add item actions {addItemActions.Count}");
 
                 item.AddAttackItemActions = addItemActions;
@@ -625,21 +636,36 @@ namespace ET
                     heroCards.Add(heroCard);
                 }
 
-                List<AddItemAction> angryActions = diamondActionItem.AddAngryItemActions;
-                foreach (var action in angryActions)
+                // List<AddItemAction> angryActions = diamondActionItem.AddAngryItemActions;
+                // foreach (var action in angryActions)
+                // {
+                //     HeroCard heroCard = unit.GetChild<HeroCard>(action.HeroCardInfo.HeroId);
+                //     if (heroCard.GetComponent<HeroCardDataComponent>().IsAngryFull())
+                //     {
+                //         // attackHeroMap.Add(heroCard);
+                //         if (!heroCards.Contains(heroCard))
+                //         {
+                //             heroCards.Add(heroCard);
+                //         }
+                //     }
+                // }
+
+               
+            }
+
+            List<HeroCard> unitHeroCards = unit.GetChilds<HeroCard>();
+            foreach (var heroCard in unitHeroCards)
+            {
+                if (heroCard.GetComponent<HeroCardDataComponent>().IsAngryFull())
                 {
-                    HeroCard heroCard = unit.GetChild<HeroCard>(action.HeroCardInfo.HeroId);
-                    if (heroCard.GetComponent<HeroCardDataComponent>().IsAngryFull())
+                    if (!heroCards.Contains(heroCard))
                     {
-                        // attackHeroMap.Add(heroCard);
-                        if (!heroCards.Contains(heroCard))
-                        {
-                            heroCards.Add(heroCard);
-                        }
+                        heroCards.Add(heroCard);
                     }
                 }
             }
-
+            
+            
             Log.Debug($"找到需要发动攻击的英雄{heroCards.Count}");
 
             foreach (var heroCard in heroCards)

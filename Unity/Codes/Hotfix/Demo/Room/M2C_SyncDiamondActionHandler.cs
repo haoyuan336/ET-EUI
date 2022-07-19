@@ -45,11 +45,11 @@ namespace ET
 
                 if (diamondActionItem.AddAngryItemActions.Count != 0)
                 {
-                    Log.Warning($"存在增加怒气值的数据{diamondActionItem.AddAngryItemActions.Count}");
-                    tasks.Add(Game.EventSystem.PublishAsync(new EventType.PlayAddAngryViewAnim()
-                    {
-                        AddItemActions = diamondActionItem.AddAngryItemActions, Scene = session.ZoneScene().CurrentScene()
-                    }));
+                    // Log.Warning($"存在增加怒气值的数据{diamondActionItem.AddAngryItemActions.Count}");
+                    // tasks.Add(Game.EventSystem.PublishAsync(new EventType.PlayAddAngryViewAnim()
+                    // {
+                    //     AddItemActions = diamondActionItem.AddAngryItemActions, Scene = session.ZoneScene().CurrentScene()
+                    // }));
                 }
 
                 var destoryIndex = 0;
@@ -57,7 +57,7 @@ namespace ET
                 {
                     DiamondInfo diamondInfo = diamondAction.DiamondInfo;
                     Diamond diamond = diamondComponent.GetChild<Diamond>(diamondInfo.Id);
-
+                   
                     switch (diamondAction.ActionType)
                     {
                         case (int) DiamondActionType.Move:
@@ -67,9 +67,8 @@ namespace ET
                             tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex() { Diamond = diamond }));
                             break;
                         case (int) DiamondActionType.Destory:
-                            tasks.Add(diamondComponent.RemoveChild(diamond, destoryIndex));
+                            tasks.Add(diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction));
                             destoryIndex++;
-
                             isContainsCrash = true;
                             break;
                         case (int) DiamondActionType.Create:

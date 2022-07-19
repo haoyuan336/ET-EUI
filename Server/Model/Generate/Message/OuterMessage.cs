@@ -1079,6 +1079,12 @@ namespace ET
 		[ProtoMember(2)]
 		public DiamondInfo DiamondInfo { get; set; }
 
+		[ProtoMember(3)]
+		public List<AddItemAction> AddAttackActions = new List<AddItemAction>();
+
+		[ProtoMember(4)]
+		public List<AddItemAction> AddAngryActions = new List<AddItemAction>();
+
 	}
 
 	[Message(OuterOpcode.MakeSureAttackHeroAction)]

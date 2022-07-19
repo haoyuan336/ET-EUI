@@ -18,17 +18,25 @@ namespace ET.Demo.Effect
             foreach (var startPos in a)
             {
                 GameObject obj = GameObject.Instantiate(prefab);
-                // self.effects.Add(obj);
-                // obj.SetActive(false);
                 self.EffectMap.Add(obj, startPos);
                 obj.transform.position = startPos;
             }
-            
-            
-            
-            
 
             self.EndPos = b;
+        }
+    }
+
+    public class AddAngryEffectAwakeSystem2: AwakeSystem<AddAngryEffect, Vector3, DiamondInfo, Vector3>
+    {
+        public override async void Awake(AddAngryEffect self, Vector3 startPos, DiamondInfo b, Vector3 endPos)
+        {
+            DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(b.ConfigId);
+            var str = config.FlyEffectAngryRes;
+            self.EffectGameObject = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(str);
+            self.EffectGameObject.transform.position = startPos;
+            self.EndPos = endPos;
+            self.StartPos = startPos;
+            await ETTask.CompletedTask;
         }
     }
 
@@ -36,6 +44,24 @@ namespace ET.Demo.Effect
     {
         public override void Update(AddAngryEffect self)
         {
+            if (self.EffectGameObject)
+            {
+                self.Time += Time.deltaTime * ConstValue.FlyEffectFlySpeed;
+
+                if (self.Time < Mathf.PI * 0.5f)
+                {
+                    var prePos = Vector3.Lerp(self.StartPos, self.EndPos, Mathf.Sin(self.Time));
+                    self.EffectGameObject.transform.position = prePos;
+                }
+                else
+                {
+                    GameObject.Destroy(self.EffectGameObject);
+                    self.Task.SetResult();
+                    self.EffectMap.Clear();
+                    self.Dispose();
+                }
+            }
+
             if (self.EffectMap.Count > 0)
             {
                 self.Time += Time.deltaTime * ConstValue.FlyEffectFlySpeed;
@@ -52,10 +78,11 @@ namespace ET.Demo.Effect
                 }
                 else
                 {
-                    foreach (var effect  in self.EffectMap.Keys)
+                    foreach (var effect in self.EffectMap.Keys)
                     {
                         GameObject.Destroy(effect);
                     }
+
                     self.Task.SetResult();
                     self.EffectMap.Clear();
                     self.Dispose();

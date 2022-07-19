@@ -168,6 +168,8 @@ namespace ET
         {
             public Diamond Diamond;
             public int Index;
+            public DiamondAction DiamondAction;
+            public Scene Scene;
         }
 
         public struct InitDiamondAndMoveDown
@@ -237,6 +239,10 @@ namespace ET
             public List<AddItemAction> AddItemActions;
 
             public Scene Scene;
+
+            public HeroCard HeroCard;
+            public Diamond Diamond;
+            public AddItemAction AddItemAction;
             // public HeroCard HeroCard;
             // public HeroCardInfo HeroCardInfo;
             // public Vector3 StartPos;
@@ -252,6 +258,12 @@ namespace ET
             public List<AddItemAction> AddItemActions;
 
             public Scene Scene;
+            
+            public HeroCard HeroCard;
+            // public Diamond Diamond;
+            public Vector3 StartPos;
+            public DiamondInfo DiamondInfo;
+            public AddItemAction AddItemAction;
             // public HeroCard HeroCard;
             //
             // // public Vector3 StartPos;

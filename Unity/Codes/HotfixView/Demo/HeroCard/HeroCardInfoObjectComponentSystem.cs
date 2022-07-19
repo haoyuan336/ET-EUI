@@ -111,8 +111,8 @@ namespace ET
         public static async ETTask UpdateAttackAdditionView(this HeroCardInfoObjectComponent self, AddItemAction addItemAction)
         {
             var addition = addItemAction.HeroCardDataComponentInfo.DiamondAttackAddition;
-            var common = addItemAction.CrashCommonInfo;
-            self.ESHeroCardInfoUI.E_CommonText.GetComponent<Text>().text = $"CommonX{common.CommonCount}";
+            // var common = addItemAction.CrashCommonInfo;
+            // self.ESHeroCardInfoUI.E_CommonText.GetComponent<Text>().text = $"CommonX{common.CommonCount}";
             self.ESHeroCardInfoUI.E_AttackBarImage.GetComponent<Image>().fillAmount = (float) addition / 200;
             await ETTask.CompletedTask;
         }

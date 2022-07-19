@@ -12,8 +12,8 @@ namespace ET
             
             heroCardComponent.InitHeroCard(message);
 
-            
 
+            // Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook() { ZoneScene = session.ZoneScene(), Value = false });
             await ETTask.CompletedTask;
         }
     }
