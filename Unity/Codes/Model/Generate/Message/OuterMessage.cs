@@ -3285,4 +3285,75 @@ namespace ET
 
 	}
 
+	[ResponseType(nameof(M2C_GetActivePointValueByConfigIdResponse))]
+	[Message(OuterOpcode.C2M_GetActivePointValueByConfigIdRequest)]
+	[ProtoContract]
+	public partial class C2M_GetActivePointValueByConfigIdRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public int ConfigId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetActivePointValueByConfigIdResponse)]
+	[ProtoContract]
+	public partial class M2C_GetActivePointValueByConfigIdResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public int Value { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_GetGameTaskAwardResponse))]
+	[Message(OuterOpcode.C2M_GetGameTaskAwardRequest)]
+	[ProtoContract]
+	public partial class C2M_GetGameTaskAwardRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public long TaskId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetGameTaskAwardResponse)]
+	[ProtoContract]
+	public partial class M2C_GetGameTaskAwardResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<ItemInfo> ItemInfos = new List<ItemInfo>();
+
+		[ProtoMember(2)]
+		public GameTaskInfo GameTaskInfo { get; set; }
+
+	}
+
 }

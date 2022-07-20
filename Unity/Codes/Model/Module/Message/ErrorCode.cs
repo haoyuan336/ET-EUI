@@ -47,6 +47,10 @@ namespace ET
         public const int Gift_Not_Enough = 200026; //礼物不够了
         public const int Gift_Gived = 200027; //礼物已经赠送了
 
+        public const int ERR_Not_Fount_GameTask = 200028; //未找到任务
+        public const int ERR_GameTask_Award_AlGet = 200029; //任务奖励已经领取
+        public const int ERR_GameTask_UnComplete = 200030; //任务还未完成
+
         // 200001以上不抛异常
     }
 }

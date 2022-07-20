@@ -76,7 +76,7 @@ namespace ET
 		[ProtoMember(3)]
 		public string Des { get; set; }
 		[ProtoMember(4)]
-		public string AwarditemConfigId { get; set; }
+		public int AwarditemConfigId { get; set; }
 		[ProtoMember(5)]
 		public int AwardCount { get; set; }
 		[ProtoMember(6)]
@@ -85,6 +85,12 @@ namespace ET
 		public int ActiveValue { get; set; }
 		[ProtoMember(8)]
 		public string AwardDes { get; set; }
+		[ProtoMember(9)]
+		public int ActiveValueConfigId { get; set; }
+		[ProtoMember(10)]
+		public int ActionConfigId { get; set; }
+		[ProtoMember(11)]
+		public int NeedActionCount { get; set; }
 
 	}
 }

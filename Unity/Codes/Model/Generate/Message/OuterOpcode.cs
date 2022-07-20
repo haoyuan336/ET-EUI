@@ -193,5 +193,9 @@ namespace ET
 		 public const ushort GameTaskInfo = 10190;
 		 public const ushort C2M_GetTaskInfoWithConfigIdReqeust = 10191;
 		 public const ushort M2C_GetTaskInfoWithConfigIdResponse = 10192;
+		 public const ushort C2M_GetActivePointValueByConfigIdRequest = 10193;
+		 public const ushort M2C_GetActivePointValueByConfigIdResponse = 10194;
+		 public const ushort C2M_GetGameTaskAwardRequest = 10195;
+		 public const ushort M2C_GetGameTaskAwardResponse = 10196;
 	}
 }

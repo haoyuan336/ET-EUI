@@ -27,7 +27,7 @@ namespace ET
 
                     break;
                 case (int) TaskType.WeekTask:
-                    currentTime = CustomHelper.GetCurrentDayTime(); //当前周开始的时间
+                    currentTime = CustomHelper.GetCurrentWeekTime(); //当前周开始的时间
                     break;
                 case (int) TaskType.GrowUpTask:
                     //从0 开始
@@ -49,13 +49,14 @@ namespace ET
             }
             else
             {
-                gameTask = new GameTask() { OwnerId = accountId, ConfigId = configId, CreateTime = TimeHelper.ServerNow() };
-            }
+                gameTask = new GameTask() { Id = IdGenerater.Instance.GenerateId(), OwnerId = accountId, ConfigId = configId };
+                //如果是登录任务，那么默认完成
+                if (gameTask.ConfigId == 2001)
+                {
+                    gameTask.TaskState = (int) TaskStateType.Completed;
+                }
 
-            //如果是登录任务，那么默认完成
-            if (gameTask.ConfigId == 2001)
-            {
-                gameTask.TaskState = (int) TaskStateType.Completed;
+                await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(gameTask);
             }
 
             response.GameTaskInfo = gameTask.GetInfo();

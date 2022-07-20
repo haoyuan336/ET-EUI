@@ -1482,3 +1482,32 @@ message M2C_GetTaskInfoWithConfigIdResponse	//IActorLocationResponse
 	string Message = 92;
 	GameTaskInfo GameTaskInfo = 1;
 }
+//ResponseType M2C_GetActivePointValueByConfigIdResponse
+message C2M_GetActivePointValueByConfigIdRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int32 ConfigId = 2;
+}
+message M2C_GetActivePointValueByConfigIdResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	int32 Value = 1;
+}
+//ResponseType M2C_GetGameTaskAwardResponse
+message C2M_GetGameTaskAwardRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int64 TaskId = 2;
+}
+message M2C_GetGameTaskAwardResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated ItemInfo ItemInfos = 1;	//获得的任务奖励列表
+	GameTaskInfo GameTaskInfo = 2;	//任务信息
+}

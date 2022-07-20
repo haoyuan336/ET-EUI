@@ -59,7 +59,8 @@
         WindowID_FriendChatLayer, //好友聊天层
         WindowID_UserInfoLayer, //用户详细信息层
         WindowID_ChooseHeadImageLayer, //选择头像层
-        WindowID_TaskLabelLayer,    //任务标签层按钮
-        WindowID_DayTaskLayer,  //每日任务
+        WindowID_TaskLabelLayer, //任务标签层按钮
+        WindowID_DayTaskLayer, //每日任务
+        WindowID_OwnAwardTipsLayer, // //获得的奖励提示层
     }
 }
