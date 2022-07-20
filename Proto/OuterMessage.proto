@@ -1460,3 +1460,25 @@ message M2C_DelAllReadMailResponse //IActorLocationResponse
 	string Message = 92;
 	repeated MailInfo MailInfos = 1;
 }
+message GameTaskInfo
+{
+	int64 TaskId = 1;
+	int32 TaskState = 2;	//任务状态
+	int32 ConfigId = 3;	//配置id
+	int64 CreateTime = 4;	//创建时间
+}
+
+//ResponseType M2C_GetTaskInfoWithConfigIdResponse
+message C2M_GetTaskInfoWithConfigIdReqeust //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int32 ConfigId = 2;
+}
+message M2C_GetTaskInfoWithConfigIdResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	GameTaskInfo GameTaskInfo = 1;
+}

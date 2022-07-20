@@ -71,6 +71,11 @@ namespace ET
             return (int) (TimeHelper.ServerNow() / TimeHelper.OneDay) * TimeHelper.OneDay;
         }
 
+        public static long GetCurrentWeekTime()
+        {
+            return (int) (TimeHelper.ServerNow() / (TimeHelper.OneDay * 7)) * (TimeHelper.OneDay * 7);
+        }
+
         public static Vector3 GetDiamondPos(float lieCount, float hangCount, float lieIndex, float hangIndex, float distance, float offsetZ)
         {
             // go.transform.position = new Vector3((liecount * 0.5f - a.Diamond.LieIndex - 1) * distance, 0,

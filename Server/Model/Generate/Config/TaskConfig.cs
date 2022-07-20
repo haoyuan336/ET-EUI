@@ -79,6 +79,12 @@ namespace ET
 		public string AwarditemConfigId { get; set; }
 		[ProtoMember(5)]
 		public int AwardCount { get; set; }
+		[ProtoMember(6)]
+		public string EnglishDes { get; set; }
+		[ProtoMember(7)]
+		public int ActiveValue { get; set; }
+		[ProtoMember(8)]
+		public string AwardDes { get; set; }
 
 	}
 }

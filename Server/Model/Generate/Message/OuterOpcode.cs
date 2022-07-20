@@ -190,5 +190,8 @@ namespace ET
 		 public const ushort M2C_SearchAccountWithNameResponse = 10187;
 		 public const ushort C2M_DelAllReadMailRequest = 10188;
 		 public const ushort M2C_DelAllReadMailResponse = 10189;
+		 public const ushort GameTaskInfo = 10190;
+		 public const ushort C2M_GetTaskInfoWithConfigIdReqeust = 10191;
+		 public const ushort M2C_GetTaskInfoWithConfigIdResponse = 10192;
 	}
 }

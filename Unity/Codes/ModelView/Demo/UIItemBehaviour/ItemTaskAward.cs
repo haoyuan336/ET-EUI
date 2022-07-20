@@ -41,7 +41,7 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Text E_TaskNameText
+		public UnityEngine.UI.Text E_TaskDesText
      	{
      		get
      		{
@@ -52,15 +52,15 @@ namespace ET
      			}
      			if (this.isCacheNode)
      			{
-     				if( this.m_E_TaskNameText == null )
+     				if( this.m_E_TaskDesText == null )
      				{
-		    			this.m_E_TaskNameText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_TaskName");
+		    			this.m_E_TaskDesText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_TaskDes");
      				}
-     				return this.m_E_TaskNameText;
+     				return this.m_E_TaskDesText;
      			}
      			else
      			{
-		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_TaskName");
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_TaskDes");
      			}
      		}
      	}
@@ -137,7 +137,7 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Text E_DesText
+		public UnityEngine.UI.Text E_AwardDesText
      	{
      		get
      		{
@@ -148,15 +148,39 @@ namespace ET
      			}
      			if (this.isCacheNode)
      			{
-     				if( this.m_E_DesText == null )
+     				if( this.m_E_AwardDesText == null )
      				{
-		    			this.m_E_DesText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Des");
+		    			this.m_E_AwardDesText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_AwardDes");
      				}
-     				return this.m_E_DesText;
+     				return this.m_E_AwardDesText;
      			}
      			else
      			{
-		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Des");
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_AwardDes");
+     			}
+     		}
+     	}
+
+		public UnityEngine.UI.Text E_ActiveValueDesText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_ActiveValueDesText == null )
+     				{
+		    			this.m_E_ActiveValueDesText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_ActiveValueDes");
+     				}
+     				return this.m_E_ActiveValueDesText;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_ActiveValueDes");
      			}
      		}
      	}
@@ -164,20 +188,22 @@ namespace ET
 		public void DestroyWidget()
 		{
 			this.m_E_AwardImage = null;
-			this.m_E_TaskNameText = null;
+			this.m_E_TaskDesText = null;
 			this.m_E_GetButton = null;
 			this.m_E_GetImage = null;
 			this.m_E_GetTipText = null;
-			this.m_E_DesText = null;
+			this.m_E_AwardDesText = null;
+			this.m_E_ActiveValueDesText = null;
 			this.uiTransform = null;
 		}
 
 		private UnityEngine.UI.Image m_E_AwardImage = null;
-		private UnityEngine.UI.Text m_E_TaskNameText = null;
+		private UnityEngine.UI.Text m_E_TaskDesText = null;
 		private UnityEngine.UI.Button m_E_GetButton = null;
 		private UnityEngine.UI.Image m_E_GetImage = null;
 		private UnityEngine.UI.Text m_E_GetTipText = null;
-		private UnityEngine.UI.Text m_E_DesText = null;
+		private UnityEngine.UI.Text m_E_AwardDesText = null;
+		private UnityEngine.UI.Text m_E_ActiveValueDesText = null;
 		public Transform uiTransform = null;
 	}
 }

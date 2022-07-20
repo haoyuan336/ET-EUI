@@ -18,7 +18,7 @@ namespace ET
         {
             Log.Debug("任务按钮点击");
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
-            await uiComponent.ShowWindow(WindowID.WindowID_TaskLayer);
+            await uiComponent.ShowWindow(WindowID.WindowID_TaskLabelLayer);
 
             await ETTask.CompletedTask;
         }

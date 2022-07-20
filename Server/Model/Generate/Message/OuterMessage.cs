@@ -3233,4 +3233,56 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.GameTaskInfo)]
+	[ProtoContract]
+	public partial class GameTaskInfo: Object
+	{
+		[ProtoMember(1)]
+		public long TaskId { get; set; }
+
+		[ProtoMember(2)]
+		public int TaskState { get; set; }
+
+		[ProtoMember(3)]
+		public int ConfigId { get; set; }
+
+		[ProtoMember(4)]
+		public long CreateTime { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_GetTaskInfoWithConfigIdResponse))]
+	[Message(OuterOpcode.C2M_GetTaskInfoWithConfigIdReqeust)]
+	[ProtoContract]
+	public partial class C2M_GetTaskInfoWithConfigIdReqeust: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public int ConfigId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetTaskInfoWithConfigIdResponse)]
+	[ProtoContract]
+	public partial class M2C_GetTaskInfoWithConfigIdResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public GameTaskInfo GameTaskInfo { get; set; }
+
+	}
+
 }
