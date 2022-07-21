@@ -32,12 +32,13 @@ namespace ET
 
             if (response.Error == ErrorCode.ERR_Success)
             {
-                List<FriendInfo> friendInfos = response.FriendInfos;
+                List<long> accountIds = response.AccountIds;
 
-                foreach (var friendInfo in friendInfos)
+                foreach (var accountId in accountIds)
                 {
-                    self.FriendInfos.Remove(friendInfo.FriendId);
-                    self.FriendInfos.Add(friendInfo.FriendId, friendInfo);
+                    // self.FriendInfos.Remove(friendInfo.FriendId);
+                    // self.FriendInfos.Add(friendInfo.FriendId, friendInfo);
+                    self.FriendInfos[accountId].IsGift = true;
                 }
 
                 self.View.ELoopFriendListLoopVerticalScrollRect.RefreshCells();
@@ -55,7 +56,7 @@ namespace ET
                 // }
             }
 
-            if (response.Error == ErrorCode.Gift_Not_Enough)
+            if (response.Error == ErrorCode.ERR_Gift_Not_Enough)
             {
                 self.ShowAlertText("今日赠送额度已经用完");
             }
@@ -79,20 +80,17 @@ namespace ET
             var response = await session.Call(request) as M2C_GiveGiftToFriendResponse;
             if (response.Error == ErrorCode.ERR_Success)
             {
-                FriendInfo friendInfo = response.FriendInfo;
-                self.FriendInfos.Remove(friendInfo.FriendId);
-                self.FriendInfos.Add(friendInfo.FriendId, friendInfo);
-                // self.FriendInfos
+                self.FriendInfos[accountInfo.Account].IsGift = true;
                 self.View.ELoopFriendListLoopVerticalScrollRect.RefreshCells();
             }
 
-            if (response.Error == ErrorCode.Gift_Gived)
+            if (response.Error == ErrorCode.ERR_Gift_Gived)
             {
                 Log.Debug("礼物已经赠送过了");
                 self.ShowAlertText("已经赠送过了");
             }
 
-            if (response.Error == ErrorCode.Gift_Not_Enough)
+            if (response.Error == ErrorCode.ERR_Gift_Not_Enough)
             {
                 Log.Debug("赠送额度已经用完");
                 self.ShowAlertText("今日赠送额度已经用完");
@@ -125,10 +123,7 @@ namespace ET
                 itemFriend.E_ChatButton.AddListener(() => { self.OnChatButtonClick(accountInfo, itemFriend); });
                 itemFriend.E_NewChatMarkImage.gameObject.SetActive(false);
                 itemFriend.E_HeadFrameButton.onClick.RemoveAllListeners();
-                itemFriend.E_HeadFrameButton.AddListener(() =>
-                {
-                    self.OnHeadButtonClick(accountInfo);
-                });
+                itemFriend.E_HeadFrameButton.AddListener(() => { self.OnHeadButtonClick(accountInfo); });
                 var headImageConfig = PlayerHeadImageResConfigCategory.Instance.Get(accountInfo.HeadImageConfigId);
                 var headFrameImageConfig = PlayerHeadImageResConfigCategory.Instance.Get(accountInfo.HeadFrameImageConfigId);
                 itemFriend.E_HeadImage.sprite =
@@ -136,7 +131,6 @@ namespace ET
                 itemFriend.E_HeadFrameImage.sprite =
                         await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headFrameImageConfig.SpriteAtlasRes,
                             headImageConfig.ImageRes);
-
 
                 if (self.ChatInfosMap.Keys.Contains(accountInfo.Account))
                 {

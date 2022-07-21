@@ -10,6 +10,8 @@ namespace ET
             self.E_TaskDesText.text = taskConfig.EnglishDes;
             self.E_AwardDesText.text = taskConfig.AwardDes;
             self.E_ActiveValueDesText.text = $"活跃度+{taskConfig.ActiveValue}";
+            self.TaskConfig = taskConfig;
+
             self.RequestTaskInfo(taskConfig.Id);
 
             self.E_GetButton.onClick.RemoveAllListeners();
@@ -93,6 +95,10 @@ namespace ET
 
             self.E_GetImage.sprite =
                     await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.CommonUIAtlasPath, buttonImageName);
+
+            var count = gameTaskInfo.ActionCount;
+            var needCount = self.TaskConfig.NeedActionCount;
+            self.E_CountText.text = $"{count}/{needCount}";
         }
 
         //请求任务信息

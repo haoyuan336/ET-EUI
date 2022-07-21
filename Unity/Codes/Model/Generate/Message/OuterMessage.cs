@@ -3009,6 +3009,9 @@ namespace ET
 		[ProtoMember(5)]
 		public ItemInfo PowerItemInfo { get; set; }
 
+		[ProtoMember(6)]
+		public List<long> AccountIds = new List<long>();
+
 	}
 
 	[Message(OuterOpcode.ChatInfo)]
@@ -3248,6 +3251,9 @@ namespace ET
 
 		[ProtoMember(4)]
 		public long CreateTime { get; set; }
+
+		[ProtoMember(5)]
+		public int ActionCount { get; set; }
 
 	}
 

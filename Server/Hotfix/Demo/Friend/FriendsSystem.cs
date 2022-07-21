@@ -11,8 +11,8 @@ namespace ET
                 FriendsId = self.Id,
                 OwnerId = self.OwnerId,
                 FriendId = self.FriendId,
-                CreateTime = self.CreateTime,
-                IsGift = self.IsGift
+                CreateTime = self.CreateTime
+                // IsGift = self.IsGift
             };
         }
     }

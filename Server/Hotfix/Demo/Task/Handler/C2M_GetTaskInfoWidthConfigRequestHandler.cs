@@ -39,12 +39,28 @@ namespace ET
             List<GameTask> gameTasks = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<GameTask>(a =>
                     a.OwnerId.Equals(accountId) && a.ConfigId.Equals(configId) && a.State == (int) StateType.Active && a.CreateTime >= currentTime);
             GameTask gameTask;
+
+            int actionsCount = 0; //动作完成的次数
+
+            // 检查一下是否完成
+            // 首先取出来配置 
+            var actionConfigId = taskConfig.ActionConfigId;
+            //从数据库里面取出来
+            List<GameAction> gameActions = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<GameAction>(a =>
+                    a.OwnerId.Equals(accountId) && a.CreateTime >= currentTime && a.State == (int) StateType.Active &&
+                    a.ConfigId.Equals(actionConfigId));
+            actionsCount = gameActions.Count;
+
             if (gameTasks.Count > 0)
             {
                 gameTask = gameTasks[0];
                 if (gameTask.TaskState == (int) TaskStateType.UnComplete)
                 {
-                    //检查一下是否完成
+                    if (actionsCount >= taskConfig.NeedActionCount)
+                    {
+                        gameTask.TaskState = (int) TaskStateType.Completed;
+                        await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(gameTask);
+                    }
                 }
             }
             else
@@ -60,6 +76,7 @@ namespace ET
             }
 
             response.GameTaskInfo = gameTask.GetInfo();
+            response.GameTaskInfo.ActionCount = actionsCount;
             response.Error = ErrorCode.ERR_Success;
             reply();
             // gameTask.Dispose();

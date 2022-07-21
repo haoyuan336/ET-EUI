@@ -1360,6 +1360,7 @@ message M2C_OneKeyGiveAndGetResponse //IActorLocationResponse
 	string Message = 92;
 	repeated FriendInfo FriendInfos = 4;
 	ItemInfo PowerItemInfo = 5;	//体力道具信息
+	repeated int64 AccountIds = 6;	//赠送成功的玩家的id列表
 }
 
 message ChatInfo
@@ -1466,6 +1467,8 @@ message GameTaskInfo
 	int32 TaskState = 2;	//任务状态
 	int32 ConfigId = 3;	//配置id
 	int64 CreateTime = 4;	//创建时间
+	int32 ActionCount = 5;	//动作完成的次数
+
 }
 
 //ResponseType M2C_GetTaskInfoWithConfigIdResponse

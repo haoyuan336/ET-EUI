@@ -7,5 +7,7 @@ namespace ET
         public GameTaskInfo GameTaskInfo;
 
         public Action GetTaskAwardAction;
+
+        public TaskConfig TaskConfig;
     }
 }
