@@ -19,6 +19,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Actions\GameActionSystem.cs">
+      <Link>Demo\Actions\GameActionSystem.cs</Link>
+    </Compile>
     <Compile Include="..\..\Unity\Codes\Hotfix\Demo\ConstValue.cs">
       <Link>Demo\ConstValue.cs</Link>
     </Compile>

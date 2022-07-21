@@ -492,6 +492,22 @@ namespace ET
             if (loseUnit != null)
             {
                 m2CSyncDiamondAction.GameLoseResultAction = new GameLoseResultAction() { LoseAccountId = loseUnit.AccountId };
+
+
+                foreach (var unit in self.Units)
+                {
+                    //todo -----------储存游戏结果---------------
+                    var action = new GameAction()
+                    {
+                        Id = IdGenerater.Instance.GenerateId(),
+                        OwnerId = unit.AccountId,
+                        ConfigId = 10002,
+                        Win = !loseUnit.AccountId.Equals(unit.AccountId)
+                    };
+                    DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(action).Coroutine();
+                    action.Dispose();
+                }
+              
             }
 
             foreach (var unit in self.Units)
@@ -502,7 +518,10 @@ namespace ET
                 }
 
                 MessageHelper.SendToClient(unit, m2CSyncDiamondAction);
+
+              
             }
+            //储存游戏胜利action
         }
 
         public static Unit CheckGameEndResult(this PVERoom self)
@@ -649,8 +668,6 @@ namespace ET
                 //         }
                 //     }
                 // }
-
-               
             }
 
             List<HeroCard> unitHeroCards = unit.GetChilds<HeroCard>();
@@ -664,8 +681,7 @@ namespace ET
                     }
                 }
             }
-            
-            
+
             Log.Debug($"找到需要发动攻击的英雄{heroCards.Count}");
 
             foreach (var heroCard in heroCards)

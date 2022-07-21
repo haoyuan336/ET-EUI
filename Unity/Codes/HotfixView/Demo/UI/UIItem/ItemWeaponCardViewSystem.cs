@@ -19,6 +19,8 @@ namespace ET
             self.E_CountText.text = weaponInfo.Count.ToString();
             self.E_LevelText.gameObject.SetActive(config.MaterialType != (int) WeaponBagType.Materail);
             self.E_LevelText.text = $"Lv.{weaponInfo.Level}";
+
+            await ETTask.CompletedTask;
         }
 
         public static void UnAableButtonClick(this Scroll_ItemWeapon self)

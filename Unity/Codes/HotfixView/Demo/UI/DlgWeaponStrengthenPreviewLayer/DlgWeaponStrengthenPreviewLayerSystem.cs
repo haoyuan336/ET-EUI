@@ -67,7 +67,8 @@ namespace ET
                     obj.transform.SetParent(self.View.E_WeaponItemGroupImage.transform);
                     RectTransform rectTransform = obj.GetComponent<RectTransform>();
                     rectTransform.localScale = UnityEngine.Vector2.one;
-                    item.uiTransform = obj.transform;
+                    // item.uiTransform = obj.transform;
+                    item.BindTrans(obj.transform);
                     self.RegisterWeaponItemClick(item);
                 }
             }
@@ -323,16 +324,17 @@ namespace ET
         public static void RegisterWeaponItemClick(this DlgWeaponStrengthenPreviewLayer self, Scroll_ItemWeapon itemWeapon)
         {
             itemWeapon.E_AddTextText.gameObject.SetActive(true);
-            var toggle = itemWeapon.E_ChooseButton.GetComponent<Toggle>();
-            toggle.onValueChanged.RemoveAllListeners();
-            toggle.onValueChanged.AddListener((value) =>
-            {
-                if (value)
-                {
-                    toggle.isOn = false;
-                    self.OnWeaponItemClick();
-                }
-            });
+            // var toggle = itemWeapon.E_ChooseButton.GetComponent<Toggle>();
+            // toggle.onValueChanged.RemoveAllListeners();
+            // toggle.onValueChanged.AddListener((value) =>
+            // {
+            //     if (value)
+            //     {
+            //         toggle.isOn = false;
+            //         self.OnWeaponItemClick();
+            //     }
+            // });
+            itemWeapon.E_ChooseButton.AddListener(self.OnWeaponItemClick);
         }
 
         public static void BackButtonClick(this DlgWeaponStrengthenPreviewLayer self)
@@ -359,6 +361,8 @@ namespace ET
             await self.InitWeaponItems();
             await self.InitWordBarItems();
             self.SetAlChooseWeaponItem();
+
+            await ETTask.CompletedTask;
         }
 
         public static void InitTargetWeaponInfoView(this DlgWeaponStrengthenPreviewLayer self)

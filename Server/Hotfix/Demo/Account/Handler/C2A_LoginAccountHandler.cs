@@ -108,6 +108,7 @@ namespace ET
                             item.Dispose();
                         }
                     }
+
                     account.LastLogonTime = TimeHelper.ServerNow();
                     await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save<Account>(account);
 
@@ -133,6 +134,21 @@ namespace ET
 
                     reply();
                     account?.Dispose();
+
+                    //储存当前的玩家登录动作
+
+                    //找出来今天是否登录了
+                    var currentTime = CustomHelper.GetCurrentDayTime();
+
+                    List<GameAction> gameActions = await DBManagerComponent.Instance.GetZoneDB(session.DomainZone())
+                            .Query<GameAction>(a => a.OwnerId.Equals(account.Id) && a.CreateTime >= currentTime && a.State == (int) StateType.Active);
+
+                    if (gameActions.Count == 0)
+                    {
+                        var gameAction = new GameAction() { Id = IdGenerater.Instance.GenerateId(), OwnerId = account.Id, ConfigId = 10001 };
+                        await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save(gameAction);
+                        gameAction.Dispose();
+                    }
                 }
             }
 

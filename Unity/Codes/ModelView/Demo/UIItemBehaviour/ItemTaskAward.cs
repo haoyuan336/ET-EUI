@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace ET
 {
-	public partial  class Scroll_ItemTaskAward : Entity,IAwake,IDestroy 
+	public partial class Scroll_ItemTaskAward : Entity,IAwake,IDestroy 
 	{
 		private bool isCacheNode = false;
 		public void SetCacheMode(bool isCache)
@@ -185,6 +185,30 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Text E_CountText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_CountText == null )
+     				{
+		    			this.m_E_CountText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Count");
+     				}
+     				return this.m_E_CountText;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Count");
+     			}
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_E_AwardImage = null;
@@ -194,6 +218,7 @@ namespace ET
 			this.m_E_GetTipText = null;
 			this.m_E_AwardDesText = null;
 			this.m_E_ActiveValueDesText = null;
+			this.m_E_CountText = null;
 			this.uiTransform = null;
 		}
 
@@ -204,6 +229,7 @@ namespace ET
 		private UnityEngine.UI.Text m_E_GetTipText = null;
 		private UnityEngine.UI.Text m_E_AwardDesText = null;
 		private UnityEngine.UI.Text m_E_ActiveValueDesText = null;
+		private UnityEngine.UI.Text m_E_CountText = null;
 		public Transform uiTransform = null;
 	}
 }

@@ -32,6 +32,7 @@ namespace ET
             if (items.Count > 0)
             {
                 response.Value = items[0].Count;
+                items[0]?.Dispose();
             }
             else
             {
@@ -40,7 +41,7 @@ namespace ET
 
             response.Error = ErrorCode.ERR_Success;
             reply();
-            items[0]?.Dispose();
+           
 
             await ETTask.CompletedTask;
         }

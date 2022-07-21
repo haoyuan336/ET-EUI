@@ -69,6 +69,13 @@ namespace ET
                 item.Count--;
                 await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(item);
 
+                //todo --------------------储存赠送礼物的动作---------------
+                DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(new GameAction()
+                {
+                    Id = IdGenerater.Instance.GenerateId(), OwnerId = request.Account, ConfigId = 10004
+                }).Coroutine();
+                //todo --------------------储存赠送礼物的动作---------------
+
                 item.Dispose();
 
                 friends.IsGift = true;
