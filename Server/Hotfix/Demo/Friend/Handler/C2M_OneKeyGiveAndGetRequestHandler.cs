@@ -12,9 +12,38 @@ namespace ET.Demo.Friend.Handler
         {
             long accountId = request.Account;
             await ETTask.CompletedTask;
+            var currentTime = CustomHelper.GetCurrentDayTime();
+
+            //todo--------------------------------首先领取好友赠送的礼物---------------------------------------------------------------------------
+            List<GameAction> beGiftedActions =
+                    await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
+                            .Query<GameAction>(a =>
+                                    a.FriendId.Equals(accountId) && a.State == (int) StateType.Active &&
+                                    !a.IsReceived && a.ConfigId == 10004);
+            //取出玩家的体力道具
+            List<Item> powerItems = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
+                    .Query<Item>(a => a.OwnerId.Equals(accountId) && a.State == (int) StateType.Active && a.ConfigId == 1003);
+
+            if (powerItems.Count > 0)
+            {
+                foreach (var giftedAction in beGiftedActions)
+                {
+                    powerItems[0].Count += giftedAction.Value;
+                    giftedAction.Value = 0;
+                    giftedAction.IsReceived = true;
+                    //然后储存一下
+                    await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(giftedAction);
+                    giftedAction.Dispose();
+                }
+
+                //然后储存体力道具
+                await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(powerItems[0]);
+                powerItems[0].Dispose();
+            }
+
+            //todo--------------------------------首先领取好友赠送的礼物---------------------------------------------------------------------------
 
             //todo ----------------------------------取出来，当天玩家剩余的赠送礼物的次数-------------------------------------------------------------
-            var currentTime = CustomHelper.GetCurrentDayTime();
             List<Item> giftItems = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<Item>(a =>
                     a.OwnerId.Equals(accountId) && a.ConfigId.Equals(1013) && a.CreateTime >= currentTime && a.State == (int) StateType.Active);
             Item giftItem;
