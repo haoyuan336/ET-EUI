@@ -29,11 +29,51 @@ namespace ET
                     break;
                 case (int) TaskStateType.UnComplete:
                     Log.Debug("去完成游戏");
-
+                    self.OnUnCompleteButtonClick();
                     break;
             }
 
             await ETTask.CompletedTask;
+        }
+
+        public static async void OnUnCompleteButtonClick(this Scroll_ItemTaskAward self)
+        {
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            var configId = self.TaskConfig.ActionConfigId;
+            uiComponent.HideWindow(WindowID.WindowID_TaskLabelLayer);
+
+
+            switch (configId)
+            {
+                case 10002:
+                    //进入pve 战前准备页面
+                    uiComponent.HideWindow(WindowID.WindowID_MainScene);
+                    uiComponent.HideWindow(WindowID.WindowID_MainSceneBg);
+                    uiComponent.HideWindow(WindowID.WindowID_AccountInfo);
+                    uiComponent.HideWindow(WindowID.WindowID_MessageTaskActiveInfo);
+                    uiComponent.HideWindow(WindowID.WindowID_SettingUI);
+                    uiComponent.HideWindow(WindowID.WindowID_FormationUI);
+                    uiComponent.HideWindow(WindowID.WindowID_MainSceneMenu);
+                    await uiComponent.ShowWindow(WindowID.WindowID_GameLevelInfoLayer);
+
+                    uiComponent.ShowWindow(WindowID.WindowID_GoldInfoUI).Coroutine();
+                    break;
+                
+                case 10004:
+                    await uiComponent.ShowWindow(WindowID.WindowID_FriendLayer);
+                    
+                    break;
+                case 10005:
+                    uiComponent.HideWindow(WindowID.WindowID_MainScene);
+                    uiComponent.HideWindow(WindowID.WindowID_MainSceneBg);
+                    uiComponent.HideWindow(WindowID.WindowID_AccountInfo);
+                    uiComponent.HideWindow(WindowID.WindowID_MessageTaskActiveInfo);
+                    uiComponent.HideWindow(WindowID.WindowID_SettingUI);
+                    uiComponent.HideWindow(WindowID.WindowID_FormationUI);
+                    uiComponent.HideWindow(WindowID.WindowID_MainSceneMenu);
+                    await uiComponent.ShowWindow(WindowID.WindowID_GameLevelInfoLayer);
+                    break;
+            }
         }
 
         public static async ETTask GetTaskAward(this Scroll_ItemTaskAward self)
@@ -52,6 +92,7 @@ namespace ET
 
                 self.ShowOwnAwardTipsLayer(response.ItemInfos);
                 Log.Debug("领取任务奖励成功");
+                response.GameTaskInfo.ActionCount = self.GameTaskInfo.ActionCount;
                 self.SetGameTaskInfo(response.GameTaskInfo);
             }
 
@@ -93,6 +134,7 @@ namespace ET
                     break;
             }
 
+            // await CoroutineLockComponent.Instance.Wait(CoroutineLockType.ClearWordBar, self.uiTransform.GetHashCode());
             self.E_GetImage.sprite =
                     await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.CommonUIAtlasPath, buttonImageName);
 

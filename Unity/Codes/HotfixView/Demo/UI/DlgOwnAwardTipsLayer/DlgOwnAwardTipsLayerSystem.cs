@@ -34,6 +34,7 @@ namespace ET
                 itemOwner.BindTrans(go.transform);
                 self.InitItemInfo(itemOwner, itemInfo);
                 go.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+                self.ItemOwnAwards.Add(itemOwner);
             }
         }
 
@@ -42,6 +43,15 @@ namespace ET
             itemOwnAward.E_CountText.text = $"X{itemInfo.Count}";
             var config = ItemConfigCategory.Instance.Get(itemInfo.ConfigId);
             itemOwnAward.E_NameText.text = config.Name;
+        }
+
+        public static void HideWindow(this DlgOwnAwardTipsLayer self)
+        {
+            foreach (var itemOwnAward in self.ItemOwnAwards)
+            {
+                GameObject.Destroy(itemOwnAward.uiTransform.gameObject);
+                itemOwnAward.Dispose();
+            }
         }
     }
 }

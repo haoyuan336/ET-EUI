@@ -51,13 +51,16 @@ namespace ET
                     a.ConfigId.Equals(actionConfigId));
             actionsCount = gameActions.Count;
 
+            Log.Debug($"action acount {actionsCount}");
             if (gameTasks.Count > 0)
             {
                 gameTask = gameTasks[0];
                 if (gameTask.TaskState == (int) TaskStateType.UnComplete)
                 {
+                    Log.Debug($"need action count {taskConfig.NeedActionCount}");
                     if (actionsCount >= taskConfig.NeedActionCount)
                     {
+                        //任务完成了，并且保存一下
                         gameTask.TaskState = (int) TaskStateType.Completed;
                         await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(gameTask);
                     }

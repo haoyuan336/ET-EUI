@@ -56,6 +56,7 @@ namespace ET
         public static void ShowWindow(this DlgDayTaskLayer self, Entity contextData = null)
         {
             self.ReferActivePointValueRequest();
+            self.View.E_AwardListLoopVerticalScrollRect.RefreshCells();
         }
     }
 }

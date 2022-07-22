@@ -21,6 +21,7 @@ namespace ET
         public const int ReceiveAward = 16; //收取奖励
         public const int UpdateHeroLevel = 17; //升级英雄等级
         public const int GiveGiftToFriend = 18; //赠送礼物给好友
+        public const int LoadSprite = 19;   //加载精灵
 
         public const int Max = 100; // 这个必须最大
     }
