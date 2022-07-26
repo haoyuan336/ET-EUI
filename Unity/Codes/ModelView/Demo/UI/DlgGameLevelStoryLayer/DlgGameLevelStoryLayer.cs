@@ -15,6 +15,9 @@ namespace ET
 
         public Queue<string> ContentQuene = new Queue<string>();
 
+
+        public ETCancellationToken EtCancellationToken;
+
         public bool IsAutoPlay = false; //	是否在自动播放
     }
 }

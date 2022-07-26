@@ -23,18 +23,32 @@ namespace ET
             List<DiamondInfo> diamondInfos = new List<DiamondInfo>();
             List<string> map = self.LevelConfig.InitBoardData.Split(',').ToList();
 
-            // int[] map =
+            // int[] mapInt =
             // {
-            // 1, 2, 3, 4, 5, 4, 1, 5, 3, 4, 5, 5, 1, 2, 5, 2, 5, 4, 3, 2, 3, 2, 5, 4, 3, 2, 5, 2, 5, 2, 1, 2, 1, 1, 5, 4, 5, 2, 1, 4, 2, 4
+            //     1, 1, 1, 1, 5, 4, 1, 
+            //     5, 3, 4, 5, 5, 1, 2, 
+            //     5, 2, 5, 4, 3, 2, 3, 
+            //     2, 5, 4, 3, 2, 5, 2, 
+            //     5, 2, 1, 2, 1, 1, 5, 
+            //     5, 5, 2, 1, 4, 2, 4
             // };
+            // List<string> map = new List<string>();
+            // foreach (var num in mapInt)
+            // {
+            // map.Add(num.ToString());
+            // }
+
             for (var i = 0; i < ConstValue.HangCount; i++)
             {
                 for (var j = 0; j < ConstValue.LieCount; j++)
                 {
-                    int colorType = int.Parse(map[i * ConstValue.LieCount + j]);
+                    var hangIndex = i;
+                    // var hangIndex
+                    // var hangIndex = (ConstValue.HangCount - i - 1);
+                    int colorType = int.Parse(map[hangIndex * ConstValue.LieCount + j]);
                     Diamond diamond = self.CreateOneDiamond(colorType, 0);
-                    diamond.SetIndex(j, i);
-                    self.SetDiamondToList(j, i, diamond);
+                    diamond.SetIndex(j, hangIndex);
+                    self.SetDiamondToList(j, hangIndex, diamond);
                     diamondInfos.Add(diamond.GetMessageInfo());
                 }
             }
@@ -397,19 +411,19 @@ namespace ET
 
             DiamondActionItem specialActionItem = new DiamondActionItem();
             Log.Debug("特殊宝石");
-            if (isFirstAddSpecial)
+            // if (isFirstAddSpecial)
+            // {
+            foreach (var list in endListList)
             {
-                foreach (var list in endListList)
+                //增加特殊钻石
+                DiamondAction diamondAction = self.AddSpecialDiamond(list, touchDiamond, swapDiamond, specialDiamonds);
+                if (diamondAction != null)
                 {
-                    //增加特殊钻石
-                    DiamondAction diamondAction = self.AddSpecialDiamond(list, touchDiamond, swapDiamond, specialDiamonds);
-                    if (diamondAction != null)
-                    {
-                        // diamondActionItem.DiamondActions.Add(diamondAction);
-                        specialActionItem.DiamondActions.Add(diamondAction);
-                        Log.Debug("增加特殊宝石");
-                    }
+                    // diamondActionItem.DiamondActions.Add(diamondAction);
+                    specialActionItem.DiamondActions.Add(diamondAction);
+                    Log.Debug("增加特殊宝石");
                 }
+                // }
             }
 
             var value = false;
@@ -466,7 +480,9 @@ namespace ET
                         isCrashSuccess = true;
                     }
 
-                    if (specialDiamonds.Count > 0)
+                    isCrash = self.CheckCrash(m2CSyncDiamondAction.DiamondActionItems, diamond, nextDiamond, specialDiamonds, isFirstAddSpecial);
+
+                    if (specialDiamonds.Count > 0 && !isCrash)
                     {
                         Diamond specialDiamond = specialDiamonds.Dequeue();
                         Log.Debug("消除特殊宝石");
