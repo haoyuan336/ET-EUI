@@ -197,5 +197,11 @@ namespace ET
 		 public const ushort M2C_GetActivePointValueByConfigIdResponse = 10194;
 		 public const ushort C2M_GetGameTaskAwardRequest = 10195;
 		 public const ushort M2C_GetGameTaskAwardResponse = 10196;
+		 public const ushort C2M_EnterNextLevelPvEGameRequest = 10197;
+		 public const ushort M2C_EnterNextLevelPvEGameResponse = 10198;
+		 public const ushort C2M_EnterChangeTempSceneRequest = 10199;
+		 public const ushort M2C_EnterChangeTempSceneResponse = 10200;
+		 public const ushort C2M_PlayerChooseLevelNumRequest = 10201;
+		 public const ushort M2C_PlayerChooseLevelNumResponse = 10202;
 	}
 }

@@ -456,6 +456,7 @@ message M2C_SyncRoomInfo	//IActorMessage
 	int32 TurnIndex = 2;
 	int32 MySeatIndex = 3;
 	int32 SeatCount = 4;	//房间里面人物的总人数
+	int32 LevelNum = 5;	//当前房间的关卡数
 }
 message C2M_PlayerScrollScreen //IActorLocationMessage
 {
@@ -1251,6 +1252,7 @@ message AccountInfo
 	int32 PvELevelNumber = 6;
 	int32 HeadImageConfigId = 7;	//头像图片的配置Id
 	int32 HeadFrameImageConfigId = 8;	//头像框的配置id
+	int64 CurrentTroopId = 9;	//当前选择的队伍id
 
 }
 //ResponseType M2C_GetFriendRecommendListResponse
@@ -1513,4 +1515,46 @@ message M2C_GetGameTaskAwardResponse //IActorLocationResponse
 	string Message = 92;
 	repeated ItemInfo ItemInfos = 1;	//获得的任务奖励列表
 	GameTaskInfo GameTaskInfo = 2;	//任务信息
+}
+
+//ResponseType M2C_EnterNextLevelPvEGameResponse
+message C2M_EnterNextLevelPvEGameRequest //IActorLocationRequest
+{
+	//需要退出当前游戏
+	int32 RpcId = 90;
+	int64 Account = 1;
+	int64 RoomId = 2;
+
+}
+message M2C_EnterNextLevelPvEGameResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+//ResponseType M2C_EnterChangeTempSceneResponse
+message C2M_EnterChangeTempSceneRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+	int64 RoomId = 2;
+}
+message M2C_EnterChangeTempSceneResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+//ResponseType M2C_PlayerChooseLevelNumResponse
+message C2M_PlayerChooseLevelNumRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+	int32 LevelNum = 2;
+}
+message M2C_PlayerChooseLevelNumResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
 }

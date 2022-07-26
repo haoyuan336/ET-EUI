@@ -50,6 +50,9 @@ namespace ET
                     scene.AddComponent<MailComponent>();
                     
                     break;
+                case SceneType.ChangeTempScene:
+                    scene.AddComponent<UnitComponent>();
+                    break;
                 case SceneType.Location:
                     scene.AddComponent<LocationComponent>();
                     break;

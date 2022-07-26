@@ -62,5 +62,6 @@
         WindowID_TaskLabelLayer, //任务标签层按钮
         WindowID_DayTaskLayer, //每日任务
         WindowID_OwnAwardTipsLayer, // //获得的奖励提示层
+        WindowID_GameLevelStoryLayer, //游戏关卡剧情面板
     }
 }

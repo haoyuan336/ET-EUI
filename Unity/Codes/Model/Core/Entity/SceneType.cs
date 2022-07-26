@@ -14,12 +14,14 @@
         MainScene = 10, //主页面cene
         PVEGameScene = 11,
         MailScene = 12, //邮箱服务器
-        
+
         // 客户端Model层
         Client = 30,
         Zone = 31,
         Login = 32,
         Robot = 33,
         Current = 34,
+
+        ChangeTempScene = 35, //切换场景的临时场景
     }
 }

@@ -11,7 +11,7 @@ namespace ET
         {
             GameObject prefab =
                     await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>("Assets/Bundles/UI/CustomUI/HeroCardInfoUI.prefab");
-            self.GameObject = UnityEngine.Object.Instantiate(prefab, GlobalComponent.Instance.NormalRoot.transform);
+            self.GameObject = UnityEngine.Object.Instantiate(prefab, GlobalComponent.Instance.GameUIRoot);
             if (self.IsDisposed)
             {
                 UnityEngine.Object.Destroy(self.GameObject);

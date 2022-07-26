@@ -175,6 +175,40 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.InputField E_LevelInputInputField
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_LevelInputInputField == null )
+     			{
+		    		this.m_E_LevelInputInputField = UIFindHelper.FindDeepChild<UnityEngine.UI.InputField>(this.uiTransform.gameObject,"E_LevelInput");
+     			}
+     			return this.m_E_LevelInputInputField;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_LevelInputImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_LevelInputImage == null )
+     			{
+		    		this.m_E_LevelInputImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_LevelInput");
+     			}
+     			return this.m_E_LevelInputImage;
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_E_TroopHeroCardItemImage = null;
@@ -187,6 +221,8 @@ namespace ET
 			this.m_E_StartGameImage = null;
 			this.m_E_BackButton = null;
 			this.m_E_BackImage = null;
+			this.m_E_LevelInputInputField = null;
+			this.m_E_LevelInputImage = null;
 			this.uiTransform = null;
 		}
 
@@ -200,6 +236,8 @@ namespace ET
 		private UnityEngine.UI.Image m_E_StartGameImage = null;
 		private UnityEngine.UI.Button m_E_BackButton = null;
 		private UnityEngine.UI.Image m_E_BackImage = null;
+		private UnityEngine.UI.InputField m_E_LevelInputInputField = null;
+		private UnityEngine.UI.Image m_E_LevelInputImage = null;
 		public Transform uiTransform = null;
 	}
 }

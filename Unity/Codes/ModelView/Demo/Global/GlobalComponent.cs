@@ -14,6 +14,7 @@ namespace ET
         public Transform FixedRoot;
         public Transform PoolRoot;
         public Transform OtherRoot;
+        public Transform GameUIRoot;
         public Transform DiamondContent;
     }
 }

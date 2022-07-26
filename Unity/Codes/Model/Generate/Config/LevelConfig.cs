@@ -81,6 +81,14 @@ namespace ET
 		public int AttackAddition { get; set; }
 		[ProtoMember(6)]
 		public string StartAttackAddition { get; set; }
+		[ProtoMember(7)]
+		public string InitBoardData { get; set; }
+		[ProtoMember(8)]
+		public string LevelStoryBegin { get; set; }
+		[ProtoMember(9)]
+		public string LevelStoryWin { get; set; }
+		[ProtoMember(10)]
+		public string LevelStoryLose { get; set; }
 
 	}
 }

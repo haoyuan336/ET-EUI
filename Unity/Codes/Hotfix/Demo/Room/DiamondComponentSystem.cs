@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace ET
@@ -20,20 +21,17 @@ namespace ET
             Log.Debug($"level config {self.LevelConfig}");
             self.Diamonds = new Diamond[ConstValue.HangCount * ConstValue.LieCount];
             List<DiamondInfo> diamondInfos = new List<DiamondInfo>();
-            int[] map =
-            {
-                1, 2, 3, 4, 5, 4, 1, 
-                5, 3, 4, 5, 5, 1, 2, 
-                5, 2, 5, 4, 3, 2, 3, 
-                2, 5, 4, 3, 2, 5, 2, 
-                5, 2, 1, 2, 1, 1, 5, 
-                4, 5, 2, 1, 4, 2, 4,
-            };
+            List<string> map = self.LevelConfig.InitBoardData.Split(',').ToList();
+
+            // int[] map =
+            // {
+            // 1, 2, 3, 4, 5, 4, 1, 5, 3, 4, 5, 5, 1, 2, 5, 2, 5, 4, 3, 2, 3, 2, 5, 4, 3, 2, 5, 2, 5, 2, 1, 2, 1, 1, 5, 4, 5, 2, 1, 4, 2, 4
+            // };
             for (var i = 0; i < ConstValue.HangCount; i++)
             {
                 for (var j = 0; j < ConstValue.LieCount; j++)
                 {
-                    int colorType = map[i * ConstValue.LieCount + j];
+                    int colorType = int.Parse(map[i * ConstValue.LieCount + j]);
                     Diamond diamond = self.CreateOneDiamond(colorType, 0);
                     diamond.SetIndex(j, i);
                     self.SetDiamondToList(j, i, diamond);
@@ -57,10 +55,9 @@ namespace ET
 
         public static async ETTask RemoveChild(this DiamondComponent self, Diamond diamond, int destoryIndex, DiamondAction diamondAction)
         {
-            
-            
             await diamond.Destroy(destoryIndex, diamondAction);
         }
+
         public static Diamond CreateOneDiamond(this DiamondComponent self, int colorType, int boomType)
         {
             long id = IdGenerater.Instance.GenerateId();
@@ -100,11 +97,13 @@ namespace ET
             {
                 return null;
             }
+
             var index = ConstValue.LieCount * HangIndex + LieIndex;
             if (index >= self.Diamonds.Length)
             {
                 return null;
             }
+
             Diamond diamond = self.Diamonds[index];
             return diamond;
         }
@@ -362,19 +361,21 @@ namespace ET
             {
                 endListList.Add(lieList);
             }
+
             //
             foreach (var hangList in hangCrashListList)
             {
                 endListList.Add(hangList);
             }
-            
+
             //排序，先消除目标宝石
-            endListList.Sort((a,b) =>
+            endListList.Sort((a, b) =>
             {
                 if (a[0].DiamondType == touchDiamond.DiamondType)
                 {
                     return -1;
                 }
+
                 return 1;
             });
             //

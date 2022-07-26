@@ -991,6 +991,9 @@ namespace ET
 		[ProtoMember(4)]
 		public int SeatCount { get; set; }
 
+		[ProtoMember(5)]
+		public int LevelNum { get; set; }
+
 	}
 
 	[Message(OuterOpcode.C2M_PlayerScrollScreen)]
@@ -2756,6 +2759,9 @@ namespace ET
 		[ProtoMember(8)]
 		public int HeadFrameImageConfigId { get; set; }
 
+		[ProtoMember(9)]
+		public long CurrentTroopId { get; set; }
+
 	}
 
 	[ResponseType(nameof(M2C_GetFriendRecommendListResponse))]
@@ -3359,6 +3365,100 @@ namespace ET
 
 		[ProtoMember(2)]
 		public GameTaskInfo GameTaskInfo { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_EnterNextLevelPvEGameResponse))]
+	[Message(OuterOpcode.C2M_EnterNextLevelPvEGameRequest)]
+	[ProtoContract]
+	public partial class C2M_EnterNextLevelPvEGameRequest: Object, IActorLocationRequest
+	{
+//需要退出当前游戏
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long Account { get; set; }
+
+		[ProtoMember(2)]
+		public long RoomId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_EnterNextLevelPvEGameResponse)]
+	[ProtoContract]
+	public partial class M2C_EnterNextLevelPvEGameResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_EnterChangeTempSceneResponse))]
+	[Message(OuterOpcode.C2M_EnterChangeTempSceneRequest)]
+	[ProtoContract]
+	public partial class C2M_EnterChangeTempSceneRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long Account { get; set; }
+
+		[ProtoMember(2)]
+		public long RoomId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_EnterChangeTempSceneResponse)]
+	[ProtoContract]
+	public partial class M2C_EnterChangeTempSceneResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_PlayerChooseLevelNumResponse))]
+	[Message(OuterOpcode.C2M_PlayerChooseLevelNumRequest)]
+	[ProtoContract]
+	public partial class C2M_PlayerChooseLevelNumRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long Account { get; set; }
+
+		[ProtoMember(2)]
+		public int LevelNum { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_PlayerChooseLevelNumResponse)]
+	[ProtoContract]
+	public partial class M2C_PlayerChooseLevelNumResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
 
 	}
 

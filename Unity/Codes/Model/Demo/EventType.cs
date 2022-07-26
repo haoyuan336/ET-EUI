@@ -149,6 +149,7 @@ namespace ET
             public long RoomId;
             public int TurnIndex;
             public int MySeatIndex;
+            public int CurrentLevelNum;
         }
 
         public struct UpdateCurrentTurnSeatIndex

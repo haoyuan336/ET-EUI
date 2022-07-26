@@ -23,6 +23,25 @@ namespace ET
 
     public static class PVERoomSystem
     {
+        // public static async void PlayerEnterNextLevel(this PVERoom self, Unit unit)
+        // {
+        //     Log.Debug("玩家申请进入下一关");
+        //     //删掉ai玩家，
+        //
+        //     int levelNum = await self.GetCurrentPlayerLevelNum(unit, unit.AccountId);
+        //     self.LevelConfig = LevelConfigCategory.Instance.Get(levelNum);
+        //
+        //     foreach (var currentUnit in self.Units)
+        //     {
+        //         if (currentUnit.IsAI)
+        //         {
+        //             self.Units.Remove(currentUnit);
+        //         }
+        //     }
+        //
+        //     await ETTask.CompletedTask;
+        // }
+
         // public static void 
         public static async void PlayerGameReady(this PVERoom self, Unit unit, long AccountId)
         {
@@ -118,7 +137,14 @@ namespace ET
                 }
 
                 MessageHelper.SendToClient(unit,
-                    new M2C_SyncRoomInfo() { MySeatIndex = unit.SeatIndex, RoomId = self.Id, TurnIndex = 0, SeatCount = 2 });
+                    new M2C_SyncRoomInfo()
+                    {
+                        MySeatIndex = unit.SeatIndex,
+                        RoomId = self.Id,
+                        TurnIndex = 0,
+                        SeatCount = 2,
+                        LevelNum = self.LevelConfig.Id
+                    });
             }
         }
 
@@ -477,7 +503,7 @@ namespace ET
             }
         }
 
-        public static void PlayerScrollScreen(this PVERoom self, C2M_PlayerScrollScreen message)
+        public static async void PlayerScrollScreen(this PVERoom self, C2M_PlayerScrollScreen message)
         {
             Log.Debug("process scroll screen message");
             M2C_SyncDiamondAction m2CSyncDiamondAction = self.GetComponent<DiamondComponent>().ScrollDiamond(message);
@@ -493,7 +519,6 @@ namespace ET
             {
                 m2CSyncDiamondAction.GameLoseResultAction = new GameLoseResultAction() { LoseAccountId = loseUnit.AccountId };
 
-
                 foreach (var unit in self.Units)
                 {
                     //todo -----------储存游戏结果---------------
@@ -506,8 +531,29 @@ namespace ET
                     };
                     DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(action).Coroutine();
                     action.Dispose();
+                    //玩家当前关卡数量+1
+                    if (!unit.IsAI && !loseUnit.AccountId.Equals(unit.AccountId))
+                    {
+                        Log.Debug("储存胜利信息");
+                        List<Account> accounts = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
+                                .Query<Account>(a => a.Id.Equals(unit.AccountId) && a.State == (int) StateType.Active);
+                        if (accounts.Count != 0)
+                        {
+                            var levelCount = LevelConfigCategory.Instance.GetAll().Count;
+                            var level = accounts[0].PVELevelNumber;
+                            level += 1;
+                            if (level > levelCount)
+                            {
+                                level = levelCount;
+                            }
+
+                            accounts[0].PVELevelNumber = level;
+                            //储存当前关卡数
+                            await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(accounts[0]);
+                            accounts[0].Dispose();
+                        }
+                    }
                 }
-              
             }
 
             foreach (var unit in self.Units)
@@ -518,8 +564,6 @@ namespace ET
                 }
 
                 MessageHelper.SendToClient(unit, m2CSyncDiamondAction);
-
-              
             }
             //储存游戏胜利action
         }

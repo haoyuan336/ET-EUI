@@ -69,6 +69,27 @@ namespace ET
 
             var Account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+
+            var inputText = self.View.E_LevelInputInputField.text;
+            if (!string.IsNullOrEmpty(inputText))
+            {
+                Log.Debug($"玩家输入了关卡数{inputText}");
+                if (int.Parse(inputText) >= LevelConfigCategory.Instance.GetAll().Count)
+                {
+                    await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_AlertLayer);
+
+                    self.DomainScene().GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_AlertLayer).GetComponent<DlgAlertLayer>()
+                            .SetText("输入的关卡数超出配置的关卡数");
+                    return;
+                }
+
+                var response = await session.Call(new C2M_PlayerChooseLevelNumRequest() { Account = Account, LevelNum = int.Parse(inputText) });
+                if (response.Error != ErrorCode.ERR_Success)
+                {
+                    return;
+                }
+            }
+
             M2C_StartPVEGameResponse m2CStartPveGameResponse =
                     (M2C_StartPVEGameResponse) await session.Call(new C2M_StartPVEGameRequest()
                     {
@@ -101,6 +122,17 @@ namespace ET
 
             //显示游戏详情页面
             await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameLevelEnemyInfoLayer);
+            //取出玩家的关卡信息
+            var accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            var session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            var request = new C2M_GetAccountInfoWithAccountIdRequest() { AccountId = accountId };
+            var response = await session.Call(request) as M2C_GetAccountInfoWidthAccointIdResponse;
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                var account = response.AccountInfo;
+                var currentPveLevel = account.PvELevelNumber;
+                self.View.E_LevelText.text = $"挑战关卡:{currentPveLevel}";
+            }
         }
 
         public static async void GetCurrentTroopId(this DlgGameLevelInfoLayer self)

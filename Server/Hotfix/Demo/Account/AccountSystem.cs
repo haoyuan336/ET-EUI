@@ -13,7 +13,8 @@
                 LastLogonTime = self.LastLogonTime,
                 PvELevelNumber = self.PVELevelNumber,
                 HeadImageConfigId = self.HeadImageConfigId,
-                HeadFrameImageConfigId = self.HeadFrameImageConfigId
+                HeadFrameImageConfigId = self.HeadFrameImageConfigId,
+                CurrentTroopId = self.CurrentTroopId
             };
         }
     }
