@@ -11,24 +11,23 @@ namespace ET
             DiamondAction diamondAction = a.DiamondAction;
             Scene scene = a.Scene;
 
-            
             Diamond diamond = a.Diamond;
             int index = a.Index;
             GameObject go = diamond.GetComponent<GameObjectComponent>().GameObject;
             DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamond.ConfigId);
             var effectPos = go.transform.position;
             var boomEffectRes = config.DestoryEffectRes;
-            int waitTime = 100;
+            int waitTime = ConstValue.CrashWaitTime;
             if (config.BoomType != (int) BoomType.Invalide)
             {
                 Log.Debug($"boom effect pos {config.BoomType}");
                 waitTime = 0;
             }
+
             await TimerComponent.Instance.WaitAsync(waitTime * index);
             GameObject.Destroy(go);
             Log.Debug($"boom effect res{boomEffectRes}");
-            
-            
+
             if (diamondAction.AddAngryActions.Count != 0)
             {
                 HeroCardComponent heroCardComponent = scene.GetComponent<HeroCardComponent>();
@@ -36,20 +35,16 @@ namespace ET
                 {
                     HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(addItemAction.HeroCardInfo.HeroId);
                     // Game.EventSystem.pubs
-                    
+
                     // AddItemActions = diamondActionItem.AddAngryItemActions, Scene = session.ZoneScene().CurrentScene()
-                    
+
                     Game.EventSystem.PublishAsync(new EventType.PlayAddAngryViewAnim()
                     {
-                        HeroCard = heroCard,
-                        StartPos = effectPos,
-                        DiamondInfo = diamond.GetMessageInfo(),
-                        AddItemAction = addItemAction
+                        HeroCard = heroCard, StartPos = effectPos, DiamondInfo = diamond.GetMessageInfo(), AddItemAction = addItemAction
                     });
                 }
             }
-            
-            
+
             if (!string.IsNullOrEmpty(boomEffectRes))
             {
                 GameObject effect = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(boomEffectRes);
@@ -59,10 +54,6 @@ namespace ET
                 await TimerComponent.Instance.WaitAsync(600);
                 GameObject.Destroy(effect);
             }
-
-
-
-           
 
             //加载爆炸特效
             diamond.Dispose();

@@ -30,10 +30,23 @@ namespace ET
             self.View.E_NextButton.AddListener(self.OnNextButtonClick);
         }
 
+        public static async ETTask ShowContentAsync(this DlgGameLevelStoryLayer self, int levelNum)
+        {
+            var levelConfig = LevelConfigCategory.Instance.Get(levelNum);
+            await self.SetContent(levelConfig.LevelStoryWin);
+            self.CurrentTask = ETTask.Create();
+            await self.CurrentTask;
+        }
+
         public static void OnCloseButton(this DlgGameLevelStoryLayer self)
         {
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             uiComponent.HideWindow(WindowID.WindowID_GameLevelStoryLayer);
+
+            if (self.CurrentTask != null)
+            {
+                self.CurrentTask.SetResult();
+            }
         }
 
         public static void OnNextButtonClick(this DlgGameLevelStoryLayer self)

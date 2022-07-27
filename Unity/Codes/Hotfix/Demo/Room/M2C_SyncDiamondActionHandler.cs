@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ET.Account;
 using ET.EventType;
+using UnityEngine;
 
 namespace ET
 {
@@ -130,8 +131,12 @@ namespace ET
             {
                 Log.Debug($"lose id{gameLoseResultAction.LoseAccountId}");
                 Log.Debug($"self id {AccountId}");
+                
+                
+                
                 if (!AccountId.Equals(gameLoseResultAction.LoseAccountId))
                 {
+                    
                     Log.Debug("game win");
                     Game.EventSystem.Publish(new EventType.ShowGameWinUI() { ZondScene = session.ZoneScene() });
                 }

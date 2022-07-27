@@ -848,13 +848,27 @@ namespace ET
                     Diamond getDiamond = self.GetDiamond(crashDiamond.LieIndex, crashDiamond.HangIndex);
                     if (crashDiamond != null && !crashDiamond.IsDisposed && getDiamond != null)
                     {
-                        DiamondAction diamondAction = new DiamondAction();
-                        diamondAction.ActionType = (int) DiamondActionType.Destory;
-                        diamondAction.DiamondInfo = crashDiamond.GetMessageInfo();
-                        // self.Diamonds[crashDiamond.LieIndex, crashDiamond.HangIndex] = null;
-                        self.SetDiamondToList(crashDiamond.LieIndex, crashDiamond.HangIndex, null);
-                        crashDiamond.Dispose();
-                        diamondActionItem.DiamondActions.Add(diamondAction);
+                        
+                        if (crashDiamond.HangIndex != diamond.HangIndex && crashDiamond.LieIndex != diamond.LieIndex)
+                        {
+                            DiamondTypeConfig diamondTypeConfig = DiamondTypeConfigCategory.Instance.Get(crashDiamond.ConfigId);
+                            if (diamondTypeConfig.BoomType != (int) BoomType.Invalide)
+                            {
+                                //当前消除的珠是特殊珠，并且不与本特殊珠一样，那么自动消除一下
+                                self.AutoCastSpecialDiamond(diamondActionItems, crashDiamond);
+                            }
+                        }
+                        else
+                        {
+                            DiamondAction diamondAction = new DiamondAction();
+                            diamondAction.ActionType = (int) DiamondActionType.Destory;
+                            diamondAction.DiamondInfo = crashDiamond.GetMessageInfo();
+                            // self.Diamonds[crashDiamond.LieIndex, crashDiamond.HangIndex] = null;
+                            self.SetDiamondToList(crashDiamond.LieIndex, crashDiamond.HangIndex, null);
+                            crashDiamond.Dispose();
+                            diamondActionItem.DiamondActions.Add(diamondAction);
+                        }
+                       
                     }
                 }
             }
@@ -878,6 +892,11 @@ namespace ET
                 Diamond target = self.GetDiamond(directionType == DirectionType.Horizontal? i : diamond.LieIndex,
                     directionType == DirectionType.Horizontal? diamond.HangIndex : i);
 
+                if (target == null)
+                {
+                    continue;
+                    
+                }
                 DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(target.ConfigId);
                 if (!target.Equals(diamond) && config.BoomType != (int) BoomType.Invalide)
                 {
@@ -900,33 +919,49 @@ namespace ET
             {
                 // Diamond target = self.Diamonds[diamond.LieIndex, i];
                 Diamond target = self.GetDiamond(diamond.LieIndex, i);
-                DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(target.ConfigId);
-                if (!target.Equals(diamond) && config.BoomType != (int) BoomType.Invalide)
+             
+                if (target == null)
                 {
-                    //todo 如果被消除的对象是一个特殊猪，并且它不与原来猪是同一颗
+                    continue;
+                    
                 }
-                else
-                {
-                    list.Add(target);
-                }
+                // DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(target.ConfigId);
+                // if (!target.Equals(diamond) && config.BoomType != (int) BoomType.Invalide)
+                // {
+                //     //todo 如果被消除的对象是一个特殊猪，并且它不与原来猪是同一颗
+                // }
+                // else
+                // {
+                //     list.Add(target);
+                // }
+                //特殊珠也一起返回
+                list.Add(target);
             }
 
             for (int i = 0; i < ConstValue.LieCount; i++)
             {
                 // Diamond target = self.Diamonds[i, diamond.HangIndex];
                 Diamond target = self.GetDiamond(i, diamond.HangIndex);
-                DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(target.ConfigId);
-                if (!target.Equals(diamond) && config.BoomType != (int) BoomType.Invalide)
+                
+                if (target == null)
                 {
-                    //todo 如果被消除的对象是一个特殊猪，并且它不与原来猪是同一颗
+                    continue;
+                    
                 }
-                else
-                {
-                    if (!list.Contains(target))
-                    {
-                        list.Add(target);
-                    }
-                }
+                // DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(target.ConfigId);
+                // if (!target.Equals(diamond) && config.BoomType != (int) BoomType.Invalide)
+                // {
+                //     //todo 如果被消除的对象是一个特殊猪，并且它不与原来猪是同一颗
+                // }
+                // else
+                // {
+                //     if (!list.Contains(target))
+                //     {
+                //         list.Add(target);
+                //     }
+                // }
+                //todo 特殊珠也一起返回
+                list.Add(target);
             }
 
             return list;
@@ -946,15 +981,17 @@ namespace ET
                     Diamond targetDiamond = self.GetDiamond(j, i);
                     if (targetDiamond != null)
                     {
-                        DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(targetDiamond.ConfigId);
-                        if (!targetDiamond.Equals(diamond) && config.BoomType != (int) BoomType.Invalide)
-                        {
-                            //todo 如果被消除的对象是一个特殊猪，并且它不与原来猪是同一颗
-                        }
-                        else
-                        {
-                            list.Add(targetDiamond);
-                        }
+                        // DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(targetDiamond.ConfigId);
+                        // if (!targetDiamond.Equals(diamond) && config.BoomType != (int) BoomType.Invalide)
+                        // {
+                        //     //todo 如果被消除的对象是一个特殊猪，并且它不与原来猪是同一颗
+                        // }
+                        // else
+                        // {
+                        //     list.Add(targetDiamond);
+                        // }
+                        //todo 特殊珠也一起返回
+                        list.Add(targetDiamond);
                     }
                 }
             }
