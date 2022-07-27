@@ -5,6 +5,23 @@ namespace ET
 {
 	public  class DlgGameLevelStoryLayerViewComponent : Entity,IAwake,IDestroy 
 	{
+		public UnityEngine.UI.Image E_HeadImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_HeadImage == null )
+     			{
+		    		this.m_E_HeadImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"bg/E_Head");
+     			}
+     			return this.m_E_HeadImage;
+     		}
+     	}
+
 		public UnityEngine.UI.Text E_ContentText
      	{
      		get
@@ -143,6 +160,7 @@ namespace ET
 
 		public void DestroyWidget()
 		{
+			this.m_E_HeadImage = null;
 			this.m_E_ContentText = null;
 			this.m_E_NextButton = null;
 			this.m_E_NextImage = null;
@@ -154,6 +172,7 @@ namespace ET
 			this.uiTransform = null;
 		}
 
+		private UnityEngine.UI.Image m_E_HeadImage = null;
 		private UnityEngine.UI.Text m_E_ContentText = null;
 		private UnityEngine.UI.Button m_E_NextButton = null;
 		private UnityEngine.UI.Image m_E_NextImage = null;

@@ -70,8 +70,15 @@ namespace ET
                 self.EtCancellationToken = null;
             }
 
-            var str = self.ContentQuene.Dequeue();
-            self.View.E_ContentText.text = str;
+            var sentenceIdStr = self.ContentQuene.Dequeue();
+
+            SentenceConfig config = SentenceConfigCategory.Instance.Get(int.Parse(sentenceIdStr));
+
+            var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(config.AtlasImage, config.HeadImage);
+            
+            // self.View.E_
+            self.View.E_HeadImage.sprite = sprite;
+            self.View.E_ContentText.text = config.SentenceContent;
             await TimerComponent.Instance.WaitAsync(3000, self.EtCancellationToken);
             if (self.IsAutoPlay)
             {
@@ -85,7 +92,7 @@ namespace ET
 
         public static async ETTask SetContent(this DlgGameLevelStoryLayer self, string content)
         {
-            List<string> list = content.Split('.').ToList();
+            List<string> list = content.Split(',').ToList();
             self.ContentQuene.Clear();
             foreach (var str in list)
             {
