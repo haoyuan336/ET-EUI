@@ -12,8 +12,8 @@ namespace ET
         
         
 #if !SERVER
-        public const string LoginAddress = "59.110.220.207:10007";
-        // public const string LoginAddress = "127.0.0.1:10007";
+        // public const string LoginAddress = "59.110.220.207:10007";
+        public const string LoginAddress = "127.0.0.1:10007";
         public const float Distance = 0.6f;
         public const string WeaponAtlasPath = "Assets/Res/WeaponTextures/WeaponSpriteAtlas.spriteatlas";
         public const string HeroCardAtlasPath = "Assets/Res/HeroCards/HeroCardSpriteAtlas.spriteatlas";
@@ -21,6 +21,10 @@ namespace ET
         public const string FrameBgPath = "hero_frame003";
 
         public const int CrashWaitTime = 0;
+        public const int CrashItemWaitTime = 200;
 #endif
     }
 }
+
+
+

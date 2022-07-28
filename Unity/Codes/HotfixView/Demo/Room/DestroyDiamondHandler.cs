@@ -51,8 +51,8 @@ namespace ET
                 effect.transform.SetParent(GlobalComponent.Instance.DiamondContent);
 
                 effect.transform.position = effectPos;
-                await TimerComponent.Instance.WaitAsync(600);
-                GameObject.Destroy(effect);
+                // await TimerComponent.Instance.WaitAsync(ConstValue.CrashWaitTime);
+                // GameObject.Destroy(effect, ConstValue.CrashItemWaitTime / 1000.0f);
             }
 
             //加载爆炸特效

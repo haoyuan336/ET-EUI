@@ -37,11 +37,11 @@ namespace ET
                 int count = 0;
                 if (diamondActionItem.AddAttackItemActions.Count != 0)
                 {
-                    Log.Debug($"存在等价攻击力的数据{diamondActionItem.AddAttackItemActions.Count}");
-                    tasks.Add(Game.EventSystem.PublishAsync(new EventType.PlayAddAttackViewAnim()
-                    {
-                        AddItemActions = diamondActionItem.AddAttackItemActions, Scene = session.ZoneScene().CurrentScene()
-                    }));
+                    // Log.Debug($"存在等价攻击力的数据{diamondActionItem.AddAttackItemActions.Count}");
+                    // tasks.Add(Game.EventSystem.PublishAsync(new EventType.PlayAddAttackViewAnim()
+                    // {
+                    //     AddItemActions = diamondActionItem.AddAttackItemActions, Scene = session.ZoneScene().CurrentScene()
+                    // }));
                 }
 
                 if (diamondActionItem.AddAngryItemActions.Count != 0)
@@ -54,11 +54,13 @@ namespace ET
                 }
 
                 var destoryIndex = 0;
+
+                List<ETTask> sunTaskList = new List<ETTask>();
                 foreach (var diamondAction in diamondActionItem.DiamondActions)
                 {
                     DiamondInfo diamondInfo = diamondAction.DiamondInfo;
                     Diamond diamond = diamondComponent.GetChild<Diamond>(diamondInfo.Id);
-                   
+
                     switch (diamondAction.ActionType)
                     {
                         case (int) DiamondActionType.Move:
@@ -68,8 +70,11 @@ namespace ET
                             tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex() { Diamond = diamond }));
                             break;
                         case (int) DiamondActionType.Destory:
-                            tasks.Add(diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction));
-                            destoryIndex++;
+                            // tasks.Add(diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction));
+                            // destoryIndex++;
+                            sunTaskList.Add(diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction));
+                            // await diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction);
+
                             isContainsCrash = true;
                             break;
                         case (int) DiamondActionType.Create:
@@ -78,6 +83,9 @@ namespace ET
                     }
                 }
 
+                // sunTaskList.Add(TimerComponent.Instance.WaitAsync(100));
+                await TimerComponent.Instance.WaitAsync(ConstValue.CrashItemWaitTime);
+                await ETTaskHelper.WaitAll(sunTaskList);
                 await ETTaskHelper.WaitAll(tasks);
             }
 
@@ -131,12 +139,9 @@ namespace ET
             {
                 Log.Debug($"lose id{gameLoseResultAction.LoseAccountId}");
                 Log.Debug($"self id {AccountId}");
-                
-                
-                
+
                 if (!AccountId.Equals(gameLoseResultAction.LoseAccountId))
                 {
-                    
                     Log.Debug("game win");
                     Game.EventSystem.Publish(new EventType.ShowGameWinUI() { ZondScene = session.ZoneScene() });
                 }
