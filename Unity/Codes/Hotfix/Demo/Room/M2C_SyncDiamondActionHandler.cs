@@ -19,7 +19,7 @@ namespace ET
             GameLoseResultAction gameLoseResultAction = message.GameLoseResultAction;
 
             bool isContainsCrash = false;
-
+            var comboCount = 0;
             foreach (var diamondActionItem in diamondActionItems)
             {
                 List<ETTask> tasks = new List<ETTask>();
@@ -34,42 +34,32 @@ namespace ET
                     });
                 }
 
-                int count = 0;
-                if (diamondActionItem.AddAttackItemActions.Count != 0)
-                {
-                    // Log.Debug($"存在等价攻击力的数据{diamondActionItem.AddAttackItemActions.Count}");
-                    // tasks.Add(Game.EventSystem.PublishAsync(new EventType.PlayAddAttackViewAnim()
-                    // {
-                    //     AddItemActions = diamondActionItem.AddAttackItemActions, Scene = session.ZoneScene().CurrentScene()
-                    // }));
-                }
-
-                if (diamondActionItem.AddAngryItemActions.Count != 0)
-                {
-                    // Log.Warning($"存在增加怒气值的数据{diamondActionItem.AddAngryItemActions.Count}");
-                    // tasks.Add(Game.EventSystem.PublishAsync(new EventType.PlayAddAngryViewAnim()
-                    // {
-                    //     AddItemActions = diamondActionItem.AddAngryItemActions, Scene = session.ZoneScene().CurrentScene()
-                    // }));
-                }
+                // int count = 0;
 
                 var destoryIndex = 0;
-
+                if (diamondActionItem.CrashType == (int) CrashType.Normal)
+                {
+                    Game.EventSystem.Publish(
+                        new EventType.ShowComobAnim() { Scene = session.ZoneScene(), ComboCount = comboCount });
+                    comboCount++;
+                }
                 List<ETTask> sunTaskList = new List<ETTask>();
                 foreach (var diamondAction in diamondActionItem.DiamondActions)
                 {
                     DiamondInfo diamondInfo = diamondAction.DiamondInfo;
                     Diamond diamond = diamondComponent.GetChild<Diamond>(diamondInfo.Id);
+                  
 
                     switch (diamondAction.ActionType)
                     {
                         case (int) DiamondActionType.Move:
                             diamond.SetIndex(diamondInfo.LieIndex, diamondInfo.HangIndex);
-                            count++;
+                            // count++;
                             // Log.Debug($"count {count}");
                             tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex() { Diamond = diamond }));
                             break;
                         case (int) DiamondActionType.Destory:
+                        case (int) DiamondActionType.SpecialDestry:
                             // tasks.Add(diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction));
                             // destoryIndex++;
                             sunTaskList.Add(diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction));

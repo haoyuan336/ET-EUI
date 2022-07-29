@@ -66,7 +66,7 @@ namespace ET
                 Transform starObj = UIFindHelper.FindDeepChild(self.uiTransform.gameObject, starStr);
                 if (starObj != null)
                 {
-                    starObj.gameObject.SetActive(i < heroCardInfo.Star);
+                    starObj.gameObject.SetActive(i <= heroCardInfo.Star);
                 }
             }
 

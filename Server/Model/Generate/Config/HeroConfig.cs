@@ -98,14 +98,18 @@ namespace ET
 		[ProtoMember(14)]
 		public string AddAttackRate { get; set; }
 		[ProtoMember(15)]
-		public int TotalAngry { get; set; }
+		public int RoundAddAngry { get; set; }
 		[ProtoMember(16)]
-		public string SkillIdList { get; set; }
+		public int InitAngry { get; set; }
+		[ProtoMember(17)]
+		public int TotalAngry { get; set; }
 		[ProtoMember(18)]
-		public int HeroQuality { get; set; }
+		public string SkillIdList { get; set; }
 		[ProtoMember(20)]
+		public int HeroQuality { get; set; }
+		[ProtoMember(22)]
 		public string HeroIconFrameImage { get; set; }
-		[ProtoMember(21)]
+		[ProtoMember(23)]
 		public int MaterialType { get; set; }
 
 	}

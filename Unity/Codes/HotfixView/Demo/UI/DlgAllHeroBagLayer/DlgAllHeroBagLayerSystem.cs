@@ -102,7 +102,7 @@ namespace ET
                 // var commonAtlas = ConstValue.CommonUIAtlasPath;
                 // var defaultSprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonAtlas, "bgpic");
                 // itemHeroCard.E_HeadImage.sprite = defaultSprite;
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 6; i++)
                 {
                     // var star    
                     var starStr = $"Star_{i}";

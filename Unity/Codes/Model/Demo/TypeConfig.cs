@@ -31,4 +31,10 @@
         WeekTask = 2, //周任务
         GrowUpTask = 3, //成长任务
     }
+
+    public enum CrashType //消除类型
+    {
+        Normal = 1, //普通了类型
+        Special = 2, //特殊珠类型
+    }
 }

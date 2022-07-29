@@ -32,7 +32,24 @@ namespace ET
                 return;
             }
 
-            Vector3 pos = new Vector3(-1.5f + heroCard.InTroopIndex * 1.5f, 0, -2.2f * (heroCard.CampIndex == 0? -1 : 1) + 1);
+            // var distance = 1.5f;
+            Vector3 pos = Vector3.zero;
+            if (heroCard.CampIndex == 0)
+            {
+                pos = new Vector3(1.5f - heroCard.InTroopIndex * 1.5f, 0, -2.2f * (heroCard.CampIndex == 0? -1 : 1) + 1);
+            }
+            else
+            {
+                var levelNum = self.ZoneScene().GetComponent<PlayerComponent>().CurrentLevelNum;
+                var levelConfig = LevelConfigCategory.Instance.Get(levelNum);
+                var heroIdStr = levelConfig.HeroId;
+                var count = heroIdStr.Split(',').Length;
+                var distance = 1.5f;
+                pos = new Vector3((count - 1) * distance * 0.5f - distance * heroCard.InTroopIndex, 0,
+                    -2.2f * (heroCard.CampIndex == 0? -1 : 1) + 1);
+            }
+
+            // Vector3 pos = new Vector3(-1.5f + heroCard.InTroopIndex * 1.5f, 0, -2.2f * (heroCard.CampIndex == 0? -1 : 1) + 1);
             self.HeroMode.transform.position = pos;
             self.HeroMode.transform.forward = heroCard.CampIndex == 0? Vector3.back : Vector3.forward;
             self.HeroModeInitPos = new Vector3(pos.x, pos.y, pos.z);

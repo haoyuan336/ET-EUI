@@ -209,23 +209,6 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Button E_ChooseImageButton
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_ChooseImageButton == null )
-     			{
-		    		this.m_E_ChooseImageButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_ChooseImage");
-     			}
-     			return this.m_E_ChooseImageButton;
-     		}
-     	}
-
 		public UnityEngine.UI.Image E_ChooseImageImage
      	{
      		get
@@ -240,23 +223,6 @@ namespace ET
 		    		this.m_E_ChooseImageImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_ChooseImage");
      			}
      			return this.m_E_ChooseImageImage;
-     		}
-     	}
-
-		public UnityEngine.UI.Text E_AddText
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_AddText == null )
-     			{
-		    		this.m_E_AddText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_ChooseImage/E_Add");
-     			}
-     			return this.m_E_AddText;
      		}
      	}
 
@@ -359,9 +325,7 @@ namespace ET
 			this.m_E_CurrentDefenceText = null;
 			this.m_E_NextDefenceText = null;
 			this.m_E_MaxText = null;
-			this.m_E_ChooseImageButton = null;
 			this.m_E_ChooseImageImage = null;
-			this.m_E_AddText = null;
 			this.m_E_SuccessImageImage = null;
 			this.m_E_RateText = null;
 			this.m_E_OkButtonButton = null;
@@ -382,9 +346,7 @@ namespace ET
 		private UnityEngine.UI.Text m_E_CurrentDefenceText = null;
 		private UnityEngine.UI.Text m_E_NextDefenceText = null;
 		private UnityEngine.UI.Text m_E_MaxText = null;
-		private UnityEngine.UI.Button m_E_ChooseImageButton = null;
 		private UnityEngine.UI.Image m_E_ChooseImageImage = null;
-		private UnityEngine.UI.Text m_E_AddText = null;
 		private UnityEngine.UI.Image m_E_SuccessImageImage = null;
 		private UnityEngine.UI.Text m_E_RateText = null;
 		private UnityEngine.UI.Button m_E_OkButtonButton = null;

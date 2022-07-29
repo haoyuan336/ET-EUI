@@ -1108,11 +1108,10 @@ namespace ET
 		public List<DiamondAction> DiamondActions = new List<DiamondAction>();
 
 		[ProtoMember(2)]
-		public List<AddItemAction> AddAttackItemActions = new List<AddItemAction>();
+		public int CrashType { get; set; }
 
-		[ProtoMember(3)]
-		public List<AddItemAction> AddAngryItemActions = new List<AddItemAction>();
-
+// repeated AddItemAction AddAttackItemActions = 2;
+// repeated AddItemAction AddAngryItemActions = 3;
 		[ProtoMember(4)]
 		public List<MakeSureAttackHeroAction> MakeSureAttackHeroActions = new List<MakeSureAttackHeroAction>();
 

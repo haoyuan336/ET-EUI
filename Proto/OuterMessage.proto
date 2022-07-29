@@ -509,8 +509,9 @@ message MakeSureAttackHeroAction
 message DiamondActionItem
 {
 	repeated DiamondAction DiamondActions = 1;
-	repeated AddItemAction AddAttackItemActions = 2;
-	repeated AddItemAction AddAngryItemActions = 3;
+	int32 CrashType = 2;		//消除类型，普通消除。特殊珠消除
+	// repeated AddItemAction AddAttackItemActions = 2;
+	// repeated AddItemAction AddAngryItemActions = 3;
 	repeated MakeSureAttackHeroAction MakeSureAttackHeroActions = 4;	
 }
 message GameLoseResultAction

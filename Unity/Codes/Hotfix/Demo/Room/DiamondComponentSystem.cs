@@ -24,21 +24,6 @@ namespace ET
             List<DiamondInfo> diamondInfos = new List<DiamondInfo>();
             List<string> map = self.LevelConfig.InitBoardData.Split(',').ToList();
 
-            // int[] mapInt =
-            // {
-            //     1, 1, 1, 1, 5, 4, 1, 
-            //     5, 3, 4, 5, 5, 1, 2, 
-            //     5, 2, 5, 4, 3, 2, 3, 
-            //     2, 5, 4, 3, 2, 5, 2, 
-            //     5, 2, 1, 2, 1, 1, 5, 
-            //     5, 5, 2, 1, 4, 2, 4
-            // };
-            // List<string> map = new List<string>();
-            // foreach (var num in mapInt)
-            // {
-            // map.Add(num.ToString());
-            // }
-
             for (var i = 0; i < ConstValue.HangCount; i++)
             {
                 for (var j = 0; j < ConstValue.LieCount; j++)
@@ -388,15 +373,20 @@ namespace ET
             endListList.Sort((a, b) => { return b.Count - a.Count; });
 
             //排序，先消除目标宝石
-            // endListList.Sort((a, b) =>
-            // {
-            //     if (a[0] == touchDiamond)
-            //     {
-            //         return -1;
-            //     }
-            //
-            //     return 1;
-            // });
+            endListList.Sort((a, b) =>
+            {
+                if (a.Contains(touchDiamond))
+                {
+                    return -1;
+                }
+
+                if (b.Contains(touchDiamond))
+                {
+                    return 1;
+                }
+
+                return 0;
+            });
             //
 
             // Dictionary<int, Diamond> diamondMap = endListList.ToDictionary(a=>a.ty)
@@ -405,6 +395,7 @@ namespace ET
             foreach (var crashList in endListList)
             {
                 DiamondActionItem diamondActionItem = new DiamondActionItem();
+                diamondActionItem.CrashType = (int) CrashType.Normal;
                 foreach (var diamond in crashList)
                 {
                     DiamondAction diamondAction = new DiamondAction();

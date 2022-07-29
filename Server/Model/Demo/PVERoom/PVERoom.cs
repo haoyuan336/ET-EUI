@@ -12,5 +12,7 @@ namespace ET
         public LevelConfig LevelConfig;
         public HeroCard CurrentBeAttackHeroCard;
         // public HeroCard Current
+
+        public List<DiamondActionItem> DiamondActionItems = new List<DiamondActionItem>();
     }
 }

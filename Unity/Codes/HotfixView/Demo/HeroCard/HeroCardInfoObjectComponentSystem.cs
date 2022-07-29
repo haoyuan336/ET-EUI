@@ -96,6 +96,7 @@ namespace ET
 
         public static async ETTask UpdateAngryView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo info)
         {
+            
             self.ESHeroCardInfoUI.E_AngryBarImage.GetComponent<Image>().fillAmount = (float) info.Angry / self.HeroConfig.TotalAngry;
             await ETTask.CompletedTask;
         }
@@ -114,6 +115,8 @@ namespace ET
             // var common = addItemAction.CrashCommonInfo;
             // self.ESHeroCardInfoUI.E_CommonText.GetComponent<Text>().text = $"CommonX{common.CommonCount}";
             self.ESHeroCardInfoUI.E_AttackBarImage.GetComponent<Image>().fillAmount = (float) addition / 200;
+            
+            
             await ETTask.CompletedTask;
         }
     }
