@@ -72,8 +72,8 @@ namespace ET
             var baseHP = HeroHelper.GetHeroBaseHP(heroCard.GetMessageInfo());
             var weaponHP = heroCard.GetWeaponBaseValueByType(WordBarType.HP);
             var weaponHPAddition = heroCard.GetWeaponBaseValueByType(WordBarType.HPAddition);
-            var totalHp = (baseHP + weaponHP) * (1.0f + (float) weaponHPAddition / 10000);
-            return (int) totalHp;
+            var totalHp = (baseHP + weaponHP) * (1.0f + (float)weaponHPAddition / 10000);
+            return (int)totalHp;
             // return 0;
         }
 
@@ -103,7 +103,7 @@ namespace ET
             var levelValue = baseValue * (0.03f + growthCoefficient / 1000.0f) * (level + 1);
             baseValue = baseValue + levelValue; //升级后的成长值
             var starValue = growthCoefficient * 100 * (star); //升星后的成长值
-            return (int) Mathf.Ceil(baseValue + starValue);
+            return (int)Mathf.Ceil(baseValue + starValue);
         }
 
         public static bool IsAngryFull(this HeroCardDataComponent self)
@@ -134,28 +134,42 @@ namespace ET
                 return false;
             });
             self.CurrentSkillId = skill.Id;
+            self.Angry = 0;
         }
 
         public static void MakeSureSkill(this HeroCardDataComponent self, int firstCrashCount)
         {
             //todo 确定当前技能
-            firstCrashCount -= 3;
-            if (firstCrashCount < 0)
+            // firstCrashCount -= 3;
+            // if (firstCrashCount < 0)
+            // {
+            //     firstCrashCount = 0;
+            // }
+            //
+            // if (firstCrashCount > 3)
+            // {
+            //     firstCrashCount = 3;
+            // }
+            SkillType skillType = SkillType.Attack;
+            switch (firstCrashCount)
             {
-                firstCrashCount = 0;
-            }
-
-            if (firstCrashCount > 3)
-            {
-                firstCrashCount = 3;
+                case 3:
+                    skillType = SkillType.Attack;
+                    break;
+                case 4:
+                    skillType = SkillType.Skill1;
+                    break;
+                case 5:
+                    skillType = SkillType.Skill2;
+                    break;
             }
 
             List<Skill> skills = self.Parent.GetChilds<Skill>();
-            
+
             Skill skill = skills.Find(a =>
             {
                 SkillConfig config = SkillConfigCategory.Instance.Get(a.ConfigId);
-                if (config.SkillType == (firstCrashCount + 1))
+                if (config.SkillType == (int)skillType)
                 {
                     Log.Debug($"确定的技能type {config.SkillType}");
                     return true;
@@ -163,7 +177,10 @@ namespace ET
 
                 return false;
             });
-            self.CurrentSkillId = skill.Id;
+            if (skill != null)
+            {
+                self.CurrentSkillId = skill.Id;
+            }
         }
     }
 }

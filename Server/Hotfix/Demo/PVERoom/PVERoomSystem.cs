@@ -4,11 +4,13 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Net.Sockets;
 using System.Xml;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.VisualBasic;
 using NLog.Fluent;
 using NLog.LayoutRenderers;
+using OfficeOpenXml.FormulaParsing.Excel.Functions;
 
 namespace ET
 {
@@ -191,7 +193,7 @@ namespace ET
                 }
 
                 List<HeroCard> heroCards = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
-                        .Query<HeroCard>((a) => a.TroopId.Equals(troopId) && a.State == (int) HeroCardState.Active);
+                        .Query<HeroCard>((a) => a.TroopId.Equals(troopId) && a.State == (int)HeroCardState.Active);
 
                 foreach (var heroCard in heroCards)
                 {
@@ -205,13 +207,13 @@ namespace ET
                     }
 
                     List<Weapon> weapons = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
-                            .Query<Weapon>(a => a.OnWeaponHeroId.Equals(heroCard.Id) && a.State == (int) StateType.Active);
+                            .Query<Weapon>(a => a.OnWeaponHeroId.Equals(heroCard.Id) && a.State == (int)StateType.Active);
                     foreach (var weapon in weapons)
                     {
                         heroCard.AddChild(weapon);
                         //取出来，装备的词条
                         List<WordBar> wordBars = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
-                                .Query<WordBar>(a => a.OwnerId.Equals(weapon.Id) && a.State == (int) StateType.Active);
+                                .Query<WordBar>(a => a.OwnerId.Equals(weapon.Id) && a.State == (int)StateType.Active);
                         foreach (var wordBar in wordBars)
                         {
                             weapon.AddChild(wordBar);
@@ -303,22 +305,22 @@ namespace ET
                 List<DiamondAction> diamondActions = diamondActionItem.DiamondActions;
                 //取出与宝石的颜色相同的英雄
                 List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
-                if (diamondActionItem.CrashType == (int) CrashType.Normal)
+                if (diamondActionItem.CrashType == (int)CrashType.Normal)
                 {
                     count++;
                 }
 
-                if (count == 1)
-                {
-                    continue;
-                }
+                // if (count == 1)
+                // {
+                // continue;
+                // }
 
                 foreach (var diamondAction in diamondActions)
                 {
                     List<HeroCard> heros = heroCards.FindAll((a) =>
                     {
                         HeroConfig heroConfig = HeroConfigCategory.Instance.Get(a.ConfigId);
-                        return heroConfig.HeroColor == diamondAction.DiamondInfo.DiamondType;
+                        return heroConfig.HeroColor == diamondAction.DiamondInfo.DiamondType && !a.GetIsDead();
                     });
                     List<AddItemAction> addAngryActions = new List<AddItemAction>();
                     foreach (var heroCard in heros)
@@ -350,7 +352,7 @@ namespace ET
                     continue;
                 }
 
-                if (item.CrashType != (int) CrashType.Normal)
+                if (item.CrashType != (int)CrashType.Normal)
                 {
                     continue;
                 }
@@ -363,14 +365,13 @@ namespace ET
             if (diamondActionItem != null)
             {
                 Unit unit = self.GetCurrentAttackUnit();
-                //todo 处理增加卡牌怒气值的逻辑
                 //取出与宝石的颜色相同的英雄
                 List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
                 heroCards = heroCards.FindAll(a =>
                 {
                     HeroConfig heroConfig = HeroConfigCategory.Instance.Get(a.ConfigId);
                     Log.Debug($"herocolor {heroConfig.HeroColor}");
-                    if (heroConfig.HeroColor == diamondActionItem.DiamondActions[0].DiamondInfo.DiamondType)
+                    if (heroConfig.HeroColor == diamondActionItem.DiamondActions[0].DiamondInfo.DiamondType && !a.GetIsDead())
                     {
                         return true;
                     }
@@ -392,26 +393,77 @@ namespace ET
             }
         }
 
-        public static void ProcessComboResult(this PVERoom self, List<DiamondActionItem> diamondActionItems)
+        public static void ProcessComboResult(this PVERoom self, M2C_SyncDiamondAction message)
+
         {
-            //计算连击结果
-            var count = 0;
+            var diamondActionItems = message.DiamondActionItems;
+            Unit unit = self.GetCurrentAttackUnit();
+            // Unit beUnit = self.GetBeAttackUnit(unit);
+            Log.Debug("处理攻击逻辑");
+            // AttackActionItem attackActionItem = new AttackActionItem();
+            //todo 找到需要发动攻击的英雄
+            List<HeroCard> heroCards = new List<HeroCard>();
             foreach (var diamondActionItem in diamondActionItems)
             {
-                
-                
-                if (diamondActionItem.CrashType == (int) CrashType.Normal)
+                List<MakeSureAttackHeroAction> makeSureAttackHeroActions = diamondActionItem.MakeSureAttackHeroActions;
+                foreach (var makeSureAttackHeroAction in makeSureAttackHeroActions)
                 {
-                    count++;
+                    HeroCardDataComponentInfo info = makeSureAttackHeroAction.HeroCardDataComponentInfo;
+                    HeroCard heroCard = unit.GetChild<HeroCard>(info.HeroId);
+                    heroCards.Add(heroCard);
                 }
-
-                if (count == 1)
-                {
-                    continue;
-                }
-                
-                
             }
+
+            ComboActionItem comboActionItem = new ComboActionItem();
+
+            var comboCount = 0;
+
+            List<AddItemAction> addItemActions = new List<AddItemAction>();
+            foreach (var diamondActionItem in diamondActionItems)
+            {
+                if (diamondActionItem.CrashType == (int)CrashType.Normal)
+                {
+                    if (comboCount != 0)
+                    {
+                        Log.Debug("普通消除，那么需要给相应的英雄增加");
+                        foreach (var heroCard in heroCards)
+                        {
+                            AddItemAction action = new AddItemAction();
+                            heroCard.GetComponent<HeroCardDataComponent>().DiamondAttackAddition += self.LevelConfig.AttackAddition;
+                            action.HeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo();
+                            action.CrashCommonInfo = new CrashCommonInfo() { CommonCount = comboCount };
+                            addItemActions.Add(action);
+                        }
+                    }
+
+                    comboCount++;
+                }
+            }
+
+            comboActionItem.AddAttackActions = addItemActions;
+            message.ComboActionItem = comboActionItem;
+        }
+
+        public static void ProcessAddRoundAngry(this PVERoom self, M2C_SyncDiamondAction m2CSyncDiamondAction)
+        {
+            //处理回合结束增加怒气值的操作
+            // var roundAngry = self.LevelConfig.
+            //取出来或者说的英雄
+            var AddRoundAngryItem = new AddRoundAngryItem();
+            foreach (var unit in self.Units)
+            {
+                List<HeroCard> cards = unit.GetChilds<HeroCard>();
+                foreach (var heroCard in cards)
+                {
+                    if (!heroCard.GetIsDead())
+                    {
+                        HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
+                        heroCard.GetComponent<HeroCardDataComponent>().Angry += config.RoundAddAngry;
+                        AddRoundAngryItem.HeroCardDataComponentInfos.Add(heroCard.GetComponent<HeroCardDataComponent>().GetInfo());
+                    }
+                }
+            }
+            m2CSyncDiamondAction.AddRoundAngryItem = AddRoundAngryItem;
         }
 
         public static async void PlayerScrollScreen(this PVERoom self, C2M_PlayerScrollScreen message)
@@ -422,10 +474,13 @@ namespace ET
             // self.AddHeroCardsAttackAddition(m2CSyncDiamondAction); //增加英雄卡牌的攻击值
             self.MakeSureAttackHeros(m2CSyncDiamondAction);
             self.ProcessAddHeroCardAngryLogic(m2CSyncDiamondAction.DiamondActionItems);
-            self.ProcessComboResult(m2CSyncDiamondAction.DiamondActionItems);
+            self.ProcessComboResult(m2CSyncDiamondAction);
             self.ProcessAttackLogic(m2CSyncDiamondAction); //处理攻击逻辑
+            // self.ProcessAngryAttack(m2CSyncDiamondAction);  //处理怒气值的攻击
             self.CurrentBeAttackHeroCard = null;
             self.ProcessReBackAttackLogic(m2CSyncDiamondAction);
+            self.ProcessAddRoundAngry(m2CSyncDiamondAction);
+            
             // self.CurrentAttackHeroCard = null;
 
             Unit loseUnit = self.CheckGameEndResult();
@@ -451,7 +506,7 @@ namespace ET
                     {
                         Log.Debug("储存胜利信息");
                         List<Account> accounts = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
-                                .Query<Account>(a => a.Id.Equals(unit.AccountId) && a.State == (int) StateType.Active);
+                                .Query<Account>(a => a.Id.Equals(unit.AccountId) && a.State == (int)StateType.Active);
                         if (accounts.Count != 0)
                         {
                             var levelCount = LevelConfigCategory.Instance.GetAll().Count;
@@ -519,7 +574,7 @@ namespace ET
                 var diamondActions = diamondActionItem.DiamondActions;
                 foreach (var diamondAction in diamondActions)
                 {
-                    if (diamondAction.ActionType == (int) DiamondActionType.Destory)
+                    if (diamondAction.ActionType == (int)DiamondActionType.Destory)
                     {
                         isHaveCreash = true;
                         break;
@@ -559,7 +614,8 @@ namespace ET
             attackHero.GetComponent<HeroCardDataComponent>().MakeSureSkill(3);
 
             attackHero.GetComponent<HeroCardDataComponent>().MakeSureAngrySkill();
-            var attackAction = attackHero.AttackTarget(beAttackHero);
+            
+            var attackAction = attackHero.AttackTarget(beAttackHero, 0);
             attackActionItem.AttackActions.Add(attackAction);
             m2CSyncDiamondAction.AttackActionItems.Add(attackActionItem);
         }
@@ -594,12 +650,17 @@ namespace ET
             return null;
         }
 
+        // public static void ProcessAngryAttack(this PVERoom self, M2C_SyncDiamondAction m2CSyncDiamondAction)
+        // {
+        //     //todo 处理怒气值的攻击
+        //     
+        // }
+
         public static void ProcessAttackLogic(this PVERoom self, M2C_SyncDiamondAction m2CSyncDiamondAction)
         {
             //todo 1 先找到当前需要释放技能的玩家
             Unit unit = self.GetCurrentAttackUnit();
             Unit beUnit = self.GetBeAttackUnit(unit);
-
             Log.Debug("处理攻击逻辑");
             AttackActionItem attackActionItem = new AttackActionItem();
             //todo 找到需要发动攻击的英雄
@@ -612,41 +673,27 @@ namespace ET
                     HeroCardDataComponentInfo info = makeSureAttackHeroAction.HeroCardDataComponentInfo;
                     HeroCard heroCard = unit.GetChild<HeroCard>(info.HeroId);
                     heroCards.Add(heroCard);
-                }
-
-                // List<AddItemAction> angryActions = diamondActionItem.AddAngryItemActions;
-                // foreach (var action in angryActions)
-                // {
-                //     HeroCard heroCard = unit.GetChild<HeroCard>(action.HeroCardInfo.HeroId);
-                //     if (heroCard.GetComponent<HeroCardDataComponent>().IsAngryFull())
-                //     {
-                //         // attackHeroMap.Add(heroCard);
-                //         if (!heroCards.Contains(heroCard))
-                //         {
-                //             heroCards.Add(heroCard);
-                //         }
-                //     }
-                // }
-            }
-
-            List<HeroCard> unitHeroCards = unit.GetChilds<HeroCard>();
-            foreach (var heroCard in unitHeroCards)
-            {
-                if (heroCard.GetComponent<HeroCardDataComponent>().IsAngryFull())
-                {
-                    if (!heroCards.Contains(heroCard))
-                    {
-                        heroCards.Add(heroCard);
-                    }
+                    // heroCard.GetComponent<HeroCardDataComponent>().MakeSureSkill(diamondActionItem);
                 }
             }
 
-            Log.Debug($"找到需要发动攻击的英雄{heroCards.Count}");
-
-            foreach (var heroCard in heroCards)
-            {
-                heroCard.GetComponent<HeroCardDataComponent>().MakeSureAngrySkill();
-            }
+            // List<HeroCard> unitHeroCards = unit.GetChilds<HeroCard>();
+            // foreach (var heroCard in unitHeroCards)
+            // {
+            //     if (heroCard.GetComponent<HeroCardDataComponent>().IsAngryFull())
+            //     {
+            //         if (!heroCards.Contains(heroCard))
+            //         {
+            //             heroCards.Add(heroCard);
+            //         }
+            //     }
+            // }
+            // Log.Debug($"找到需要发动攻击的英雄{heroCards.Count}");
+            //
+            // foreach (var heroCard in heroCards)
+            // {
+            //     heroCard.GetComponent<HeroCardDataComponent>().MakeSureAngrySkill();
+            // }
 
             Log.Debug("确定攻击技能");
             // heroCards = heroCards.FindAll(a => a.CurrentSkillId != 0);
@@ -665,8 +712,14 @@ namespace ET
 
                 if (beAttackHeroCard != null)
                 {
-                    var attackAction = heroCard.AttackTarget(beAttackHeroCard);
+                    var attackAction = heroCard.AttackTarget(beAttackHeroCard, heroCard.GetComponent<HeroCardDataComponent>().DiamondAttackAddition);
                     attackActionItem.AttackActions.Add(attackAction);
+
+                    var angryAttack = heroCard.AngryAttack(beAttackHeroCard);
+                    if (angryAttack != null)
+                    {
+                        attackActionItem.AttackActions.Add(angryAttack);
+                    }
                 }
             }
 

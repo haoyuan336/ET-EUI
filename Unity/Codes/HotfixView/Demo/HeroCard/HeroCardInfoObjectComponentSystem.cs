@@ -22,8 +22,8 @@ namespace ET
             self.ESHeroCardInfoUI = self.AddChildWithId<ESHeroCardInfoUI, Transform>(IdGenerater.Instance.GenerateId(), self.GameObject.transform);
             self.ESHeroCardInfoUI.SetInfo(heroCardInfo, heroCardDataComponentInfo);
 
-            self.ESHeroCardInfoUI.E_AttackBarImage.fillAmount = heroCardDataComponentInfo.DiamondAttackAddition;
-            await self.UpdateAngryView(heroCardDataComponentInfo);
+            self.ESHeroCardInfoUI.E_AttackBarImage.fillAmount = heroCardDataComponentInfo.DiamondAttackAddition; 
+            self.UpdateAngryView(heroCardDataComponentInfo);
         }
     }
 
@@ -94,11 +94,10 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
-        public static async ETTask UpdateAngryView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo info)
+        public static void UpdateAngryView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo info)
         {
             
             self.ESHeroCardInfoUI.E_AngryBarImage.GetComponent<Image>().fillAmount = (float) info.Angry / self.HeroConfig.TotalAngry;
-            await ETTask.CompletedTask;
         }
 
         public static async ETTask InitAttackAdditionView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo info)
@@ -109,15 +108,18 @@ namespace ET
         }
 
         //todo 更新显示增加的攻击力加成
-        public static async ETTask UpdateAttackAdditionView(this HeroCardInfoObjectComponent self, AddItemAction addItemAction)
+        public static void UpdateAttackAdditionView(this HeroCardInfoObjectComponent self, AddItemAction addItemAction)
         {
             var addition = addItemAction.HeroCardDataComponentInfo.DiamondAttackAddition;
             // var common = addItemAction.CrashCommonInfo;
             // self.ESHeroCardInfoUI.E_CommonText.GetComponent<Text>().text = $"CommonX{common.CommonCount}";
-            self.ESHeroCardInfoUI.E_AttackBarImage.GetComponent<Image>().fillAmount = (float) addition / 200;
+            self.ESHeroCardInfoUI.E_AttackBarImage.GetComponent<Image>().fillAmount = (float) addition / 100;
             
-            
-            await ETTask.CompletedTask;
         }
+
+        // public static void UpdateAngryView(this HeroCardInfoObjectComponent self, HeroCardDataComponent)
+        // {
+        //     
+        // }
     }
 }

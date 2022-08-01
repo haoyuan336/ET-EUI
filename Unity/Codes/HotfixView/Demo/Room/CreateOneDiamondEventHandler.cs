@@ -24,7 +24,7 @@ namespace ET
                 ConstValue.Distance, ConstValue.DiamondOffsetZ);
             Vector3 endScale = new Vector3(1f, 1f, 1f);
             float time = 0;
-            TimerComponent.Instance.WaitAsync(1000);
+            // await TimerComponent.Instance.WaitAsync(1000);
             while (time < 0.2f)
             {
                 go.transform.localScale = Vector3.Lerp(Vector3.zero, endScale, time * 1 / 0.2f);

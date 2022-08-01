@@ -498,7 +498,7 @@ message DiamondAction
 	int32 PpcId = 90;
 	int32 ActionType = 1;
 	DiamondInfo DiamondInfo = 2;
-	repeated AddItemAction AddAttackActions = 3;
+	// repeated AddItemAction AddAttackActions = 3;
 	repeated AddItemAction AddAngryActions = 4;
 }
 message MakeSureAttackHeroAction
@@ -544,6 +544,16 @@ message InitHeroCardDataActionItem
 	//初始化英雄卡牌的数据
 	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
 }
+message ComboActionItem 
+{
+	repeated AddItemAction AddAttackActions = 1;
+}
+message AddRoundAngryItem
+{
+
+	//增加每回合的怒气值
+	repeated HeroCardDataComponentInfo HeroCardDataComponentInfos = 1;
+}
 message M2C_SyncDiamondAction //IActorMessage
 {
 	int32 RpcId = 90;
@@ -551,7 +561,8 @@ message M2C_SyncDiamondAction //IActorMessage
 	repeated AttackActionItem AttackActionItems = 2;
 	// repeated InitHeroCardDataActionItem InitHeroCardDataActionItems = 3;
 	GameLoseResultAction GameLoseResultAction = 4;
-
+	ComboActionItem ComboActionItem = 5;
+	AddRoundAngryItem AddRoundAngryItem = 6;
 	// repeated AddItemAction AddAttackItemActions = 4;
 	// repeated AddItemAction AddAngryItemActions = 5;
 

@@ -27,10 +27,11 @@ namespace ET
                 HeroCard heroCard = new HeroCard();
                 heroCard.SetMessageInfo(heroCardInfos[i]);
                 self.AddChild(heroCard);
-                Game.EventSystem.PublishAsync(new EventType.CreateOneHeroCardView()
+                Game.EventSystem.Publish(new EventType.CreateOneHeroCardView()
                 {
                     HeroCard = heroCard, HeroCardInfo = heroCardInfos[i], HeroCardDataComponentInfo = heroCardDataComponentInfos[i]
-                });
+                });      
+                
             }
             //todo 同步给显示层
         }

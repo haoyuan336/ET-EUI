@@ -10,6 +10,18 @@ using Vector3 = System.Numerics.Vector3;
 
 namespace ET
 {
+    public class HideComboEvent: AEvent<HideCombo>
+    {
+        protected override async ETTask Run(HideCombo a)
+        {
+            Scene scene = a.Scene;
+            var uiComponent = scene.GetComponent<UIComponent>();
+            var baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_GameUI);
+            baseWindow.GetComponent<DlgGameUI>().HideCombo();
+            await ETTask.CompletedTask;
+        }
+    }
+
     public class ShowComboEvent: AEvent<EventType.ShowComobAnim>
     {
         protected override async ETTask Run(ShowComobAnim a)
@@ -91,6 +103,23 @@ namespace ET
                 self.ItemGameCombo.E_ComboText.GetComponent<RectTransform>().localScale = new Vector2(scale + 1, scale + 1);
                 await TimerComponent.Instance.WaitFrameAsync();
             }
+        }
+
+        public static async void HideCombo(this DlgGameUI self)
+        {
+            var time = 0.0f;
+            while (time < Math.PI * 0.5f)
+            {
+                time += Time.deltaTime * 10;
+
+                var scale = Mathf.Sin(time);
+
+                self.ItemGameCombo.E_ComboText.GetComponent<RectTransform>().localScale = new Vector2(1 - scale, 1 - scale);
+                await TimerComponent.Instance.WaitFrameAsync();
+            }
+            self.ItemGameCombo.uiTransform.gameObject.SetActive(false);
+            self.ItemGameCombo.E_ComboText.GetComponent<RectTransform>().localScale = new Vector2(1, 1);
+
         }
     }
 }

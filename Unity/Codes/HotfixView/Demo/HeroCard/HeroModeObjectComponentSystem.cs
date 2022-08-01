@@ -318,8 +318,8 @@ namespace ET
             self.HeroMode.GetComponent<Animator>().SetTrigger(skillAnimStr);
             var skillTime = skillConfig.SkillTime;
             await TimerComponent.Instance.WaitAsync(skillTime);
-            await self.Parent.GetComponent<HeroCardInfoObjectComponent>().InitAttackAdditionView(message.AttackHeroCardDataComponentInfo);
-            await self.Parent.GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(message.AttackHeroCardDataComponentInfo);
+            await self.Parent.GetComponent<HeroCardInfoObjectComponent>().InitAttackAdditionView(message.AttackHeroCardDataComponentInfo); 
+            self.Parent.GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(message.AttackHeroCardDataComponentInfo);
         }
 
         public static async void PlayFlyEffect(this HeroModeObjectCompoent self, SkillConfig config, HeroCard beAttackHeroCard)

@@ -67,7 +67,7 @@ namespace ET
         {
             var baseValue = ConstValue.DomineeringBaseValue;
             float endValue = baseValue + (self.Level * 15) + (baseValue * 0.1f * self.Rank) + baseValue * self.Star;
-            return (int) endValue;
+            return (int)endValue;
         }
 
         // public static int GetWeaponDefenceAddition(this HeroCard self)
@@ -91,6 +91,7 @@ namespace ET
             {
                 return 0;
             }
+
             Log.Debug($"weapon s {weapons.Count}");
             var baseValue = 0;
             foreach (var weapon in weapons)
@@ -113,30 +114,64 @@ namespace ET
         //     return baseValue;
         // }
 
-        public static AttackAction AttackTarget(this HeroCard self, HeroCard targetHeroCard)
+        public static AttackAction AngryAttack(this HeroCard self, HeroCard tatgetHeroCard)
+        {
+            //首先确定，玩家是否已经满怒气
+            HeroCardDataComponent heroCardDataComponent = self.GetComponent<HeroCardDataComponent>();
+            if (!heroCardDataComponent.IsAngryFull())
+            {
+                return null;
+            }
+
+            //然后找出玩家的必杀技id
+            List<Skill> skills = self.GetChilds<Skill>();
+            Skill bigSkill = skills.Find(a =>
+            {
+                var skillConfig = SkillConfigCategory.Instance.Get(a.ConfigId);
+                if (skillConfig.SkillType == (int)SkillType.BigSkill)
+                {
+                    return true;
+                }
+
+                return false;
+            });
+            if (bigSkill == null)
+            {
+                return null;
+            }
+
+            heroCardDataComponent.CurrentSkillId = bigSkill.Id;
+            heroCardDataComponent.Angry = 0;
+            AttackAction attackAction = self.AttackTarget(tatgetHeroCard, 0);
+            return attackAction;
+        }
+
+        public static AttackAction AttackTarget(this HeroCard self, HeroCard targetHeroCard, int comboAddition)
         {
             HeroConfig config = HeroConfigCategory.Instance.Get(self.ConfigId);
             Log.Debug($"name {config.HeroName}");
             HeroCardDataComponent attackCom = self.GetComponent<HeroCardDataComponent>();
             HeroCardDataComponent beAttackCom = targetHeroCard.GetComponent<HeroCardDataComponent>();
             var baseAttack = attackCom.GetHeroBaseAttack(); //角色的基础攻击
-            Log.Debug($"base attack{baseAttack}");
-
+            // Log.Debug($"base attack{baseAttack}");
             var weaponAttack = self.GetWeaponBaseValueByType(WordBarType.Attack); // 装备的基础攻击
-            Log.Debug($"base weaponAttack {weaponAttack}");
+            // Log.Debug($"base weaponAttack {weaponAttack}");
             var weaponAttackAddition = self.GetWeaponBaseValueByType(WordBarType.AttackAddition); //装备的攻击力加成
-            Log.Debug($"weaponAttackAddition{weaponAttackAddition}");
-
+            // Log.Debug($"weaponAttackAddition{weaponAttackAddition}");
             var planeAttack = (baseAttack + weaponAttack) * (1 + weaponAttackAddition / 10000); //面板攻击力
-            Log.Debug($"planeAttack{planeAttack}");
 
+            //取出消除宝石combo加成
+            // var comboAddition = self.GetComponent<HeroCardDataComponent>().DiamondAttackAddition;
+            planeAttack += (int)(planeAttack * comboAddition / 100.0f);
+
+            // Log.Debug($"planeAttack{planeAttack}");
             var domineeringValue = self.GetDomineering(); //霸气值
-            Log.Debug($"domineeringValue{domineeringValue}");
+            // Log.Debug($"domineeringValue{domineeringValue}");
 
             float baseDefence = beAttackCom.GetHeroBaseDefence(); //被攻击对象的基础攻击力
             float weaponDefence = targetHeroCard.GetWeaponBaseValueByType(WordBarType.Defecnce); //被攻击对象的装备防御力
             float weaponDefecceAddition = targetHeroCard.GetWeaponBaseValueByType(WordBarType.DefenceAddition); //被攻击对象的装备防御力加成
-            float planeDefence = (baseDefence + weaponDefence) * (1 + (float) weaponDefecceAddition / 10000); //被攻击对象的面板防御力
+            float planeDefence = (baseDefence + weaponDefence) * (1 + (float)weaponDefecceAddition / 10000); //被攻击对象的面板防御力
             float attackBuff = 0; //攻击buff
             float attackDeBuff = 0; //攻击debuff
             float deffenceBuff = 0; //防御buff
@@ -158,12 +193,12 @@ namespace ET
             {
                 var critialDamage = self.GetWeaponBaseValueByType(WordBarType.CriticalHitDamage);
                 Log.Debug($"{critialDamage}");
-                damage *= 1 + 0.5f + (float) critialDamage / 10000;
+                damage *= 1 + 0.5f + (float)critialDamage / 10000;
             }
 
             var oldHp = beAttackCom.HP;
             Log.Debug($"old hp {oldHp}");
-            beAttackCom.HP -= (int) damage;
+            beAttackCom.HP -= (int)damage;
             if (beAttackCom.HP < 0)
             {
                 beAttackCom.HP = 0;
@@ -171,14 +206,14 @@ namespace ET
 
             damage = oldHp - beAttackCom.HP;
             Log.Debug($"damage {damage}");
-            beAttackCom.Damage = (int) damage;
+            beAttackCom.Damage = (int)damage;
             beAttackCom.IsCritical = isCritical;
             attackCom.DiamondAttackAddition = 0;
-            if (attackCom.IsAngryFull())
-            {
-                //todo 如果施放的是大招技能，那么需要将怒气值归零
-                attackCom.Angry = 0;
-            }
+            // if (attackCom.IsAngryFull())
+            // {
+            //     //todo 如果施放的是大招技能，那么需要将怒气值归零
+            //     attackCom.Angry = 0;
+            // }
 
             var attackAction = new AttackAction()
             {

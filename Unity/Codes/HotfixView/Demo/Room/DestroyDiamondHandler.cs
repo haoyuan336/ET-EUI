@@ -38,7 +38,7 @@ namespace ET
 
                     // AddItemActions = diamondActionItem.AddAngryItemActions, Scene = session.ZoneScene().CurrentScene()
 
-                    Game.EventSystem.PublishAsync(new EventType.PlayAddAngryViewAnim()
+                    Game.EventSystem.Publish(new EventType.PlayAddAngryViewAnim()
                     {
                         HeroCard = heroCard, StartPos = effectPos, DiamondInfo = diamond.GetMessageInfo(), AddItemAction = addItemAction
                     });

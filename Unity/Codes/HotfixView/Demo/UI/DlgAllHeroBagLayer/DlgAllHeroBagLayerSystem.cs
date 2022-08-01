@@ -99,6 +99,7 @@ namespace ET
                 itemHeroCard.E_QualityIconImage.gameObject.SetActive(false);
                 itemHeroCard.E_CountText.gameObject.SetActive(false);
                 itemHeroCard.E_ChooseToggle.gameObject.SetActive(false);
+                itemHeroCard.E_RankImage.gameObject.SetActive(false);
                 // var commonAtlas = ConstValue.CommonUIAtlasPath;
                 // var defaultSprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonAtlas, "bgpic");
                 // itemHeroCard.E_HeadImage.sprite = defaultSprite;

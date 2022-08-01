@@ -6,12 +6,17 @@ namespace ET
 {
     namespace EventType
     {
+        public struct HideCombo
+        {
+            public Scene Scene;
+        }
         public struct ShowComobAnim
         {
             //显示comob动画
             public Scene Scene;
             public int ComboCount;
         }
+        
         public struct ShowAttackMark
         {
             public HeroCard HeroCard;
@@ -339,6 +344,18 @@ namespace ET
         {
             public ChatInfo ChatInfo;
             public Scene Scene;
+        }
+
+        public struct UpdateHeroAttackInfo
+        {
+            public AddItemAction AddItemAction;
+            public HeroCard HeroCard;
+        }
+
+        public struct UpdateHeroAngryInfo
+        {
+            public HeroCard HeroCard;
+            public HeroCardDataComponentInfo HeroCardDataComponentInfo;
         }
     }
 }

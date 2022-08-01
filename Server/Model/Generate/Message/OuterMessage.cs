@@ -1082,9 +1082,7 @@ namespace ET
 		[ProtoMember(2)]
 		public DiamondInfo DiamondInfo { get; set; }
 
-		[ProtoMember(3)]
-		public List<AddItemAction> AddAttackActions = new List<AddItemAction>();
-
+// repeated AddItemAction AddAttackActions = 3;
 		[ProtoMember(4)]
 		public List<AddItemAction> AddAngryActions = new List<AddItemAction>();
 
@@ -1177,6 +1175,25 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.ComboActionItem)]
+	[ProtoContract]
+	public partial class ComboActionItem: Object
+	{
+		[ProtoMember(1)]
+		public List<AddItemAction> AddAttackActions = new List<AddItemAction>();
+
+	}
+
+	[Message(OuterOpcode.AddRoundAngryItem)]
+	[ProtoContract]
+	public partial class AddRoundAngryItem: Object
+	{
+//增加每回合的怒气值
+		[ProtoMember(1)]
+		public List<HeroCardDataComponentInfo> HeroCardDataComponentInfos = new List<HeroCardDataComponentInfo>();
+
+	}
+
 	[Message(OuterOpcode.M2C_SyncDiamondAction)]
 	[ProtoContract]
 	public partial class M2C_SyncDiamondAction: Object, IActorMessage
@@ -1193,6 +1210,12 @@ namespace ET
 // repeated InitHeroCardDataActionItem InitHeroCardDataActionItems = 3;
 		[ProtoMember(4)]
 		public GameLoseResultAction GameLoseResultAction { get; set; }
+
+		[ProtoMember(5)]
+		public ComboActionItem ComboActionItem { get; set; }
+
+		[ProtoMember(6)]
+		public AddRoundAngryItem AddRoundAngryItem { get; set; }
 
 // repeated AddItemAction AddAttackItemActions = 4;
 // repeated AddItemAction AddAngryItemActions = 5;

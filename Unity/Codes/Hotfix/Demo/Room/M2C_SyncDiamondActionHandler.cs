@@ -17,14 +17,21 @@ namespace ET
             List<DiamondActionItem> diamondActionItems = message.DiamondActionItems;
             List<AttackActionItem> attackActionItems = message.AttackActionItems;
             GameLoseResultAction gameLoseResultAction = message.GameLoseResultAction;
+            ComboActionItem comboActionItem = message.ComboActionItem;
 
             bool isContainsCrash = false;
             var comboCount = 0;
+            bool isContainsAttackHero = false;
             foreach (var diamondActionItem in diamondActionItems)
             {
                 List<ETTask> tasks = new List<ETTask>();
 
                 List<MakeSureAttackHeroAction> makeSureAttackHeroActions = diamondActionItem.MakeSureAttackHeroActions;
+                if (makeSureAttackHeroActions.Count > 0)
+                {
+                    isContainsAttackHero = true;
+                }
+
                 foreach (var makeSureAttackHeroAction in makeSureAttackHeroActions)
                 {
                     Game.EventSystem.Publish(new EventType.ShowAttackMark()
@@ -37,29 +44,32 @@ namespace ET
                 // int count = 0;
 
                 var destoryIndex = 0;
-                if (diamondActionItem.CrashType == (int) CrashType.Normal)
+                if (diamondActionItem.CrashType == (int)CrashType.Normal && isContainsAttackHero)
                 {
-                    Game.EventSystem.Publish(
-                        new EventType.ShowComobAnim() { Scene = session.ZoneScene(), ComboCount = comboCount });
+                    Log.Debug($"combo count {comboCount}");
+                    // if (comboCount != 0)
+                    // {
+                    Game.EventSystem.Publish(new EventType.ShowComobAnim() { Scene = session.ZoneScene(), ComboCount = comboCount });
+                    // }
                     comboCount++;
                 }
+
                 List<ETTask> sunTaskList = new List<ETTask>();
                 foreach (var diamondAction in diamondActionItem.DiamondActions)
                 {
                     DiamondInfo diamondInfo = diamondAction.DiamondInfo;
                     Diamond diamond = diamondComponent.GetChild<Diamond>(diamondInfo.Id);
-                  
 
                     switch (diamondAction.ActionType)
                     {
-                        case (int) DiamondActionType.Move:
+                        case (int)DiamondActionType.Move:
                             diamond.SetIndex(diamondInfo.LieIndex, diamondInfo.HangIndex);
                             // count++;
                             // Log.Debug($"count {count}");
                             tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex() { Diamond = diamond }));
                             break;
-                        case (int) DiamondActionType.Destory:
-                        case (int) DiamondActionType.SpecialDestry:
+                        case (int)DiamondActionType.Destory:
+                        case (int)DiamondActionType.SpecialDestry:
                             // tasks.Add(diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction));
                             // destoryIndex++;
                             sunTaskList.Add(diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction));
@@ -67,7 +77,7 @@ namespace ET
 
                             isContainsCrash = true;
                             break;
-                        case (int) DiamondActionType.Create:
+                        case (int)DiamondActionType.Create:
                             tasks.Add(diamondComponent.CreateDiamoneWithMessage(diamondAction.DiamondInfo));
                             break;
                     }
@@ -79,8 +89,15 @@ namespace ET
                 await ETTaskHelper.WaitAll(tasks);
             }
 
-            List<ETTask> animTasks = new List<ETTask>();
+            foreach (var addAttackAction in comboActionItem.AddAttackActions)
+            {
+                HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(addAttackAction.HeroCardDataComponentInfo.HeroId);
+                await Game.EventSystem.PublishAsync(new ET.EventType.UpdateHeroAttackInfo() { AddItemAction = addAttackAction, HeroCard = heroCard });
+            }
 
+            Game.EventSystem.Publish(new HideCombo() { Scene = session.ZoneScene() });
+
+            List<ETTask> animTasks = new List<ETTask>();
             if (isContainsCrash)
             {
                 animTasks.Add(Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook() { ZoneScene = session.ZoneScene(), Value = true }));
@@ -117,6 +134,19 @@ namespace ET
             await ETTaskHelper.WaitAll(animTaskList);
             List<HeroCard> heroCards = heroCardComponent.GetChilds<HeroCard>();
             Game.EventSystem.Publish(new EventType.GameAroundOver() { HeroCards = heroCards });
+
+            if (message.AddRoundAngryItem != null)
+            {
+                foreach (var heroCardDataComponentInfo in message.AddRoundAngryItem.HeroCardDataComponentInfos)
+                {
+                    HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(heroCardDataComponentInfo.HeroId);
+                    Game.EventSystem.Publish(new UpdateHeroAngryInfo()
+                    {
+                        HeroCard = heroCard, HeroCardDataComponentInfo = heroCardDataComponentInfo
+                    });
+                }
+            }
+
             //
             long AccountId = session.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
 

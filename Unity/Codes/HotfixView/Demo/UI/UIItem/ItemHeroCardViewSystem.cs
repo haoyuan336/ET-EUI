@@ -18,6 +18,7 @@ namespace ET
             self.E_QualityIconImage.gameObject.SetActive(false);
             self.E_ElementImage.gameObject.SetActive(false);
             self.E_AddTextText.gameObject.SetActive(true);
+            self.E_RankImage.gameObject.SetActive(false);
 
             var commonPath = ConstValue.CommonUIAtlasPath;
             var framePath = ConstValue.FrameBgPath;
@@ -32,6 +33,8 @@ namespace ET
                 self.SetNullStateView();
                 return;
             }
+            
+            self.E_RankImage.gameObject.SetActive(false);
 
             self.E_AddTextText.gameObject.SetActive(false);
 
