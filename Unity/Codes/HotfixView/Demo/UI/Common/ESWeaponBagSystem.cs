@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using ET.Account;
 using UnityEngine;
 using UnityEngine.UI;
 

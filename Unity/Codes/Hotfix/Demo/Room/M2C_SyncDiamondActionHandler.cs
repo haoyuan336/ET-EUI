@@ -49,9 +49,9 @@ namespace ET
                     Log.Debug($"combo count {comboCount}");
                     // if (comboCount != 0)
                     // {
+                    comboCount++;
                     Game.EventSystem.Publish(new EventType.ShowComobAnim() { Scene = session.ZoneScene(), ComboCount = comboCount });
                     // }
-                    comboCount++;
                 }
 
                 List<ETTask> sunTaskList = new List<ETTask>();

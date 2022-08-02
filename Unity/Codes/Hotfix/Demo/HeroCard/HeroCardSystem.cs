@@ -204,6 +204,7 @@ namespace ET
                 beAttackCom.HP = 0;
             }
 
+            beAttackCom.Angry += 5;
             damage = oldHp - beAttackCom.HP;
             Log.Debug($"damage {damage}");
             beAttackCom.Damage = (int)damage;

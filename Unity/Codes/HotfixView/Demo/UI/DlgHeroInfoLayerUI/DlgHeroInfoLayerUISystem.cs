@@ -1,17 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
-using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
-using System.Globalization;
-using System.Linq;
-using ET.Account;
-using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
-
+﻿using UnityEngine;
 namespace ET
 {
     public static class DlgHeroInfoLayerUISystem

@@ -1,7 +1,5 @@
-﻿using System.Diagnostics.Eventing.Reader;
-using UnityEngine.ResourceManagement.AsyncOperations;
+﻿using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
-using UnityEngine.SceneManagement;
 
 namespace ET
 {

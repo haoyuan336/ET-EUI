@@ -51,11 +51,11 @@ namespace ILRuntime.Runtime.Generated
             method = type.GetMethod("get_one", flag, null, args, null);
             app.RegisterCLRMethodRedirection(method, get_one_8);
             args = new Type[]{};
-            method = type.GetMethod("get_back", flag, null, args, null);
-            app.RegisterCLRMethodRedirection(method, get_back_9);
-            args = new Type[]{};
             method = type.GetMethod("get_forward", flag, null, args, null);
-            app.RegisterCLRMethodRedirection(method, get_forward_10);
+            app.RegisterCLRMethodRedirection(method, get_forward_9);
+            args = new Type[]{};
+            method = type.GetMethod("get_back", flag, null, args, null);
+            app.RegisterCLRMethodRedirection(method, get_back_10);
             args = new Type[]{};
             method = type.GetMethod("get_down", flag, null, args, null);
             app.RegisterCLRMethodRedirection(method, get_down_11);
@@ -299,24 +299,24 @@ namespace ILRuntime.Runtime.Generated
             return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
         }
 
-        static StackObject* get_back_9(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
-        {
-            ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
-            StackObject* __ret = ILIntepreter.Minus(__esp, 0);
-
-
-            var result_of_this_method = UnityEngine.Vector3.back;
-
-            return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
-        }
-
-        static StackObject* get_forward_10(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        static StackObject* get_forward_9(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
             StackObject* __ret = ILIntepreter.Minus(__esp, 0);
 
 
             var result_of_this_method = UnityEngine.Vector3.forward;
+
+            return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
+        }
+
+        static StackObject* get_back_10(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        {
+            ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
+            StackObject* __ret = ILIntepreter.Minus(__esp, 0);
+
+
+            var result_of_this_method = UnityEngine.Vector3.back;
 
             return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
         }

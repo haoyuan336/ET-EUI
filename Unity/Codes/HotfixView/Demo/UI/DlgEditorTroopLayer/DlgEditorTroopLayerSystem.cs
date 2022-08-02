@@ -1,13 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
-using System.Diagnostics.Eventing.Reader;
-using System.Runtime.CompilerServices;
-using ET.Account;
-using ILRuntime.Runtime;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace ET
 {

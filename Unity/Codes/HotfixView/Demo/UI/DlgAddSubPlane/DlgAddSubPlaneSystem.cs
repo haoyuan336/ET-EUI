@@ -1,11 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
-using System.Diagnostics.Eventing.Reader;
-using UnityEngine;
-using UnityEngine.UI;
-
-namespace ET
+﻿namespace ET
 {
     public static class DlgAddSubPlaneSystem
     {

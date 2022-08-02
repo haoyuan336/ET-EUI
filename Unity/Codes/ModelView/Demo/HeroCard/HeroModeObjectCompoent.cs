@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace ET
 {
@@ -12,5 +13,7 @@ namespace ET
 
         public GameObject AttackMark;
         // public bool IsClickSelf = false;
+        
+        public List<MoveActionItem> MoveActionItems = new List<MoveActionItem>();
     }
 }

@@ -84,12 +84,12 @@ namespace ILRuntime.Runtime.Generated
                     }
                 }
             }
-            args = new Type[]{typeof(UnityEngine.Texture)};
+            args = new Type[]{typeof(UnityEngine.AudioClip)};
             if (genericMethods.TryGetValue("LoadAssetAsync", out lst))
             {
                 foreach(var m in lst)
                 {
-                    if(m.MatchGenericParameters(args, typeof(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.Texture>), typeof(System.Object)))
+                    if(m.MatchGenericParameters(args, typeof(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.AudioClip>), typeof(System.Object)))
                     {
                         method = m.MakeGenericMethod(args);
                         app.RegisterCLRMethodRedirection(method, LoadAssetAsync_5);
@@ -261,7 +261,7 @@ namespace ILRuntime.Runtime.Generated
             __intp.Free(ptr_of_this_method);
 
 
-            var result_of_this_method = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<UnityEngine.Texture>(@key);
+            var result_of_this_method = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<UnityEngine.AudioClip>(@key);
 
             return ILIntepreter.PushObject(__ret, __mStack, result_of_this_method);
         }

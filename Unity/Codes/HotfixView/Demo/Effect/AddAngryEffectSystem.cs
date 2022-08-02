@@ -55,6 +55,7 @@ namespace ET.Demo.Effect
                 }
                 else
                 {
+                    self.EffectGameObject.transform.position = self.EndPos;
                     GameObject.Destroy(self.EffectGameObject);
                     self.Task.SetResult();
                     self.EffectMap.Clear();

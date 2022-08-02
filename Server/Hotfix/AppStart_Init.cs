@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace ET
@@ -26,17 +27,30 @@ namespace ET
             Game.Scene.AddComponent<ActorMessageDispatcherComponent>();
             // 数值订阅组件
             Game.Scene.AddComponent<NumericWatcherComponent>();
-            
+
             Game.Scene.AddComponent<NetThreadComponent>();
-            
+
             // Game.Scene.AddComponent<NavmeshComponent, Func<string, byte[]>>(RecastFileReader.Read);
             Game.Scene.AddComponent<DBManagerComponent>();
+
+            // List<HeroCard> allHeroCard = await DBManagerComponent.Instance.GetZoneDB(1).Query<HeroCard>(a => a.State == (int)StateType.Active);
+            //
+            // foreach (var heroCard in allHeroCard)
+            // {
+            //     HeroConfig heroConfig = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
+            //     if (heroConfig.MaterialType == (int)HeroBagType.Materail)
+            //     {
+            //         heroCard.State = (int)StateType.Destroy;
+            //         await DBManagerComponent.Instance.GetZoneDB(1).Save(heroCard);
+            //     }
+            // }
 
             switch (Game.Options.AppType)
             {
                 case AppType.Server:
                 {
-                    Game.Scene.AddComponent<NetInnerComponent, IPEndPoint, int>(processConfig.InnerIPPort, SessionStreamDispatcherType.SessionStreamDispatcherServerInner);
+                    Game.Scene.AddComponent<NetInnerComponent, IPEndPoint, int>(processConfig.InnerIPPort,
+                        SessionStreamDispatcherType.SessionStreamDispatcherServerInner);
                     //
                     var processScenes = StartSceneConfigCategory.Instance.GetByProcess(Game.Options.Process);
                     foreach (StartSceneConfig startConfig in processScenes)
@@ -44,7 +58,7 @@ namespace ET
                         await SceneFactory.Create(Game.Scene, startConfig.Id, startConfig.InstanceId, startConfig.Zone, startConfig.Name,
                             startConfig.Type, startConfig);
                     }
-            
+
                     break;
                 }
                 case AppType.Watcher:
@@ -52,7 +66,9 @@ namespace ET
                     StartMachineConfig startMachineConfig = WatcherHelper.GetThisMachineConfig();
                     WatcherComponent watcherComponent = Game.Scene.AddComponent<WatcherComponent>();
                     watcherComponent.Start(Game.Options.CreateScenes);
-                    Game.Scene.AddComponent<NetInnerComponent, IPEndPoint, int>(NetworkHelper.ToIPEndPoint($"{startMachineConfig.InnerIP}:{startMachineConfig.WatcherPort}"), SessionStreamDispatcherType.SessionStreamDispatcherServerInner);
+                    Game.Scene.AddComponent<NetInnerComponent, IPEndPoint, int>(
+                        NetworkHelper.ToIPEndPoint($"{startMachineConfig.InnerIP}:{startMachineConfig.WatcherPort}"),
+                        SessionStreamDispatcherType.SessionStreamDispatcherServerInner);
                     break;
                 }
                 case AppType.GameTool:

@@ -1,11 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
-using ET.Account;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 namespace ET
@@ -139,11 +133,11 @@ namespace ET
                         {
                             itemHeroCard.E_ChooseToggle.isOn = true;
                         }
-                        else if (heroConfig.MaterialType == (int) HeroBagType.Materail)
-                        {
-                            itemHeroCard.E_ChooseCountText.gameObject.SetActive(true);
-                            itemHeroCard.E_ChooseCountText.text = findInfo.Count.ToString();
-                        }
+                        // else if (heroConfig.MaterialType == (int) HeroBagType.Materail)
+                        // {
+                        //     itemHeroCard.E_ChooseCountText.gameObject.SetActive(true);
+                        //     itemHeroCard.E_ChooseCountText.text = findInfo.Count.ToString();
+                        // }
                         // itemHeroCard.E_ChooseToggle.isOn = true;
                     }
                 }
@@ -343,20 +337,20 @@ namespace ET
                 self.View.E_BagCountText.text = $"{self.HeroCount}/{self.BagCount}";
 
                 //根据当前类型，过滤一下列表
-                if (self.BagType != HeroBagType.HeroAndMaterial)
-                {
-                    //过滤调与背包类型不符的 元素
-                    self.HeroCardInfos.RemoveAll(a =>
-                    {
-                        var config = HeroConfigCategory.Instance.Get(a.ConfigId);
-                        if (config.MaterialType == (int) self.BagType)
-                        {
-                            return false;
-                        }
-
-                        return true;
-                    });
-                }
+                // if (self.BagType != HeroBagType.HeroAndMaterial)
+                // {
+                //     //过滤调与背包类型不符的 元素
+                //     self.HeroCardInfos.RemoveAll(a =>
+                //     {
+                //         var config = HeroConfigCategory.Instance.Get(a.ConfigId);
+                //         if (config.MaterialType == (int) self.BagType)
+                //         {
+                //             return false;
+                //         }
+                //
+                //         return true;
+                //     });
+                // }
 
                 if (index != 5)
                 {

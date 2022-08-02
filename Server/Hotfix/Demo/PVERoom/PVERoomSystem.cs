@@ -673,30 +673,9 @@ namespace ET
                     HeroCardDataComponentInfo info = makeSureAttackHeroAction.HeroCardDataComponentInfo;
                     HeroCard heroCard = unit.GetChild<HeroCard>(info.HeroId);
                     heroCards.Add(heroCard);
-                    // heroCard.GetComponent<HeroCardDataComponent>().MakeSureSkill(diamondActionItem);
                 }
             }
-
-            // List<HeroCard> unitHeroCards = unit.GetChilds<HeroCard>();
-            // foreach (var heroCard in unitHeroCards)
-            // {
-            //     if (heroCard.GetComponent<HeroCardDataComponent>().IsAngryFull())
-            //     {
-            //         if (!heroCards.Contains(heroCard))
-            //         {
-            //             heroCards.Add(heroCard);
-            //         }
-            //     }
-            // }
-            // Log.Debug($"找到需要发动攻击的英雄{heroCards.Count}");
-            //
-            // foreach (var heroCard in heroCards)
-            // {
-            //     heroCard.GetComponent<HeroCardDataComponent>().MakeSureAngrySkill();
-            // }
-
             Log.Debug("确定攻击技能");
-            // heroCards = heroCards.FindAll(a => a.CurrentSkillId != 0);
             //todo 找到了发动攻击的英雄，开始寻找被攻击的英雄
             //todo 从左往右排序
             heroCards.Sort((a, b) => { return a.InTroopIndex - b.InTroopIndex; });
@@ -714,7 +693,8 @@ namespace ET
                 {
                     var attackAction = heroCard.AttackTarget(beAttackHeroCard, heroCard.GetComponent<HeroCardDataComponent>().DiamondAttackAddition);
                     attackActionItem.AttackActions.Add(attackAction);
-
+                    // beAttackHeroCard.GetComponent<HeroCardDataComponent>()
+                    // beAttackHeroCard.GetComponent<HeroCardDataComponent>()
                     var angryAttack = heroCard.AngryAttack(beAttackHeroCard);
                     if (angryAttack != null)
                     {

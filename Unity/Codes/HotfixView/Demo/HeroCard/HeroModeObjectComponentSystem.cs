@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace ET
 {
@@ -63,6 +64,22 @@ namespace ET
     {
         public override void Update(HeroModeObjectCompoent self)
         {
+            if (self.MoveActionItems.Count > 0)
+            {
+                var moveActionItem = self.MoveActionItems[0];
+                moveActionItem.CurrentTime += Time.deltaTime * moveActionItem.Speed;
+
+                var value = Mathf.Sin(moveActionItem.CurrentTime);
+                var prePos = Vector3.Lerp(moveActionItem.CurrentPos, moveActionItem.EndPos, value);
+                moveActionItem.GameObject.transform.position = prePos;
+                if (moveActionItem.CurrentTime >= moveActionItem.Time)
+                {
+                    moveActionItem.Task.SetResult();
+                    moveActionItem.GameObject.transform.position = moveActionItem.EndPos;
+                    self.MoveActionItems.RemoveAt(0);
+                }
+            }
+
             if (Input.GetMouseButtonDown(0))
             {
                 self.IsTouching = true;
@@ -140,18 +157,31 @@ namespace ET
         public static async ETTask PlayMoveToAnim(this HeroModeObjectCompoent self, Vector3 startPos, Vector3 targetPos)
         {
             await self.TurnTargetAnim(targetPos);
-            float time = 0;
+            // float time = 0;
             // float distance = Vector3.Distance(targetPos, self.HeroModeInitPos);
             self.HeroMode.GetComponent<Animator>().SetBool("Run", true);
-            while (time < Mathf.PI * 0.5f)
+
+            ETTask task = ETTask.Create();
+            self.MoveActionItems.Add(new MoveActionItem()
             {
-                time += Time.deltaTime * 2;
-                float value = Mathf.Sin(time);
-                Vector3 prePos = Vector3.Lerp(startPos, targetPos, value);
-                self.HeroMode.transform.position = prePos;
-                // distance = Vector3.Distance(prePos, targetPos);
-                await TimerComponent.Instance.WaitFrameAsync();
-            }
+                CurrentPos = startPos,
+                EndPos = targetPos,
+                Time = Mathf.PI * 0.5f,
+                Speed = 2,
+                Task = task,
+                GameObject = self.HeroMode
+            });
+            await task.GetAwaiter();
+
+            // while (time < Mathf.PI * 0.5f)
+            // {
+            //     time += Time.deltaTime * 2;
+            //     float value = Mathf.Sin(time);
+            //     Vector3 prePos = Vector3.Lerp(startPos, targetPos, value);
+            //     self.HeroMode.transform.position = prePos;
+            //     // distance = Vector3.Distance(prePos, targetPos);
+            //     await TimerComponent.Instance.WaitFrameAsync();
+            // }
 
             self.HeroMode.GetComponent<Animator>().SetBool("Run", false);
 
@@ -166,7 +196,7 @@ namespace ET
             while (time < 0.4f)
             {
                 time += Time.deltaTime * 2;
-                self.HeroMode.transform.rotation = Quaternion.Lerp(self.HeroMode.transform.rotation, targetQuaternion, time);
+                self.HeroMode.transform.rotation = Quaternion.Slerp(self.HeroMode.transform.rotation, targetQuaternion, time);
                 await TimerComponent.Instance.WaitFrameAsync();
             }
 
@@ -197,25 +227,24 @@ namespace ET
 
             int campIndex = message.AttackHeroCard.CampIndex;
             await self.TurnTargetAnim((campIndex == 0? Vector3.back : Vector3.forward) + self.HeroMode.transform.position);
-            // await self.PlayMoveToAnim(self.HeroMode.transform.position, self.HeroModeInitPos);
             await ETTask.CompletedTask;
         }
 
         public static async ETTask BackMoveToInitPos(this HeroModeObjectCompoent self, SkillConfig skillConfig)
         {
-            if (skillConfig.MoveType == (int) HeroMoveType.NoMove)
+            if (skillConfig.MoveType == (int)HeroMoveType.NoMove)
             {
                 return;
             }
 
             await self.PlayMoveToAnim(self.HeroMode.transform.position, self.HeroModeInitPos);
 
-            // await self.TurnTargetAnim();
+            await ETTask.CompletedTask;
         }
 
         public static async ETTask MoveToEnemyTarget(this HeroModeObjectCompoent self, HeroCard beAttackHeroCard, SkillConfig skillConfig)
         {
-            if (skillConfig.MoveType == (int) HeroMoveType.NoMove)
+            if (skillConfig.MoveType == (int)HeroMoveType.NoMove)
             {
                 return;
             }
@@ -227,9 +256,9 @@ namespace ET
             var endPos = beAttackHeroModeCom.HeroMode.transform.position + offsetPos;
             switch (skillConfig.TargetPosType)
             {
-                case (int) TargetPosMoveType.Face:
+                case (int)TargetPosMoveType.Face:
                     break;
-                case (int) TargetPosMoveType.Middle:
+                case (int)TargetPosMoveType.Middle:
 
                     endPos = (self.HeroMode.transform.position + beAttackHeroModeCom.HeroMode.transform.position) * 0.5f;
                     break;
@@ -290,6 +319,7 @@ namespace ET
             self.HeroMode.GetComponent<Animator>().SetTrigger("BeAttack");
             // self.Parent.GetComponent<HeroCardObjectComponent>().UpdateHeroCardTextView(message.BeAttackHeroCardDataComponentInfo, message.CommonInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().UpdateHPView(componentInfo);
+            self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(componentInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowDamageViewAnim(componentInfo);
             self.PlayBeHitedEffect(skillConfig).Coroutine();
             if (componentInfo.HP <= 0)
@@ -318,7 +348,7 @@ namespace ET
             self.HeroMode.GetComponent<Animator>().SetTrigger(skillAnimStr);
             var skillTime = skillConfig.SkillTime;
             await TimerComponent.Instance.WaitAsync(skillTime);
-            await self.Parent.GetComponent<HeroCardInfoObjectComponent>().InitAttackAdditionView(message.AttackHeroCardDataComponentInfo); 
+            await self.Parent.GetComponent<HeroCardInfoObjectComponent>().InitAttackAdditionView(message.AttackHeroCardDataComponentInfo);
             self.Parent.GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(message.AttackHeroCardDataComponentInfo);
         }
 
@@ -335,15 +365,27 @@ namespace ET
             Vector3 startPos = self.HeroMode.transform.position + Vector3.up;
             Vector3 endPos = heroModeObject.HeroMode.transform.position + Vector3.up * 0.5f;
             effect.transform.position = startPos;
-            float time = 0;
+            // float time = 0;
             effect.transform.forward = endPos - startPos;
-            while (time < 0.5f)
+            // while (time < 0.5f)
+            // {
+            //     Vector3 pos = Vector3.Lerp(startPos, endPos, time * 2);
+            //     effect.transform.position = pos;
+            //     time += Time.deltaTime;
+            //     await TimerComponent.Instance.WaitFrameAsync();
+            // }
+
+            ETTask task = ETTask.Create();
+            self.MoveActionItems.Add(new MoveActionItem()
             {
-                Vector3 pos = Vector3.Lerp(startPos, endPos, time * 2);
-                effect.transform.position = pos;
-                time += Time.deltaTime;
-                await TimerComponent.Instance.WaitFrameAsync();
-            }
+                Time = Mathf.PI * 0.5f,
+                CurrentPos = startPos,
+                EndPos = endPos,
+                Speed = 2,
+                GameObject = effect,
+                Task = task
+            });
+            await task.GetAwaiter();
 
             //
             GameObject.Destroy(effect);
@@ -363,26 +405,26 @@ namespace ET
             }
         }
 
-        public static async ETTask PlayAddEffectAnim(this HeroModeObjectCompoent self, Vector3 startPos, string effectName)
-        {
-            Log.Debug("play add effect anim");
-            Vector3 endPos = self.HeroMode.transform.position + Vector3.up;
-            Log.Debug($"Load effect {effectName}");
-            GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(effectName);
-            GameObject go = GameObject.Instantiate(prefab, GlobalComponent.Instance.Unit);
-            go.transform.position = startPos;
-            float time = 0;
-            while (time < Mathf.PI * 0.5f)
-            {
-                var value = Mathf.Sin(time);
-                Vector3 prePos = Vector3.Lerp(startPos, endPos, value);
-                time += Time.deltaTime * 5;
-                go.transform.position = prePos;
-                await TimerComponent.Instance.WaitFrameAsync();
-            }
-
-            GameObject.Destroy(go);
-        }
+        // public static async ETTask PlayAddEffectAnim(this HeroModeObjectCompoent self, Vector3 startPos, string effectName)
+        // {
+        //     Log.Debug("play add effect anim");
+        //     Vector3 endPos = self.HeroMode.transform.position + Vector3.up;
+        //     Log.Debug($"Load effect {effectName}");
+        //     GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(effectName);
+        //     GameObject go = GameObject.Instantiate(prefab, GlobalComponent.Instance.Unit);
+        //     go.transform.position = startPos;
+        //     float time = 0;
+        //     while (time < Mathf.PI * 0.5f)
+        //     {
+        //         var value = Mathf.Sin(time);
+        //         Vector3 prePos = Vector3.Lerp(startPos, endPos, value);
+        //         time += Time.deltaTime * 5;
+        //         go.transform.position = prePos;
+        //         await TimerComponent.Instance.WaitFrameAsync();
+        //     }
+        //
+        //     GameObject.Destroy(go);
+        // }
 
         public static async void ShowAttackMark(this HeroModeObjectCompoent self, bool isShow)
         {

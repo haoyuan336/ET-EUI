@@ -37,6 +37,9 @@ namespace ILRuntime.Runtime.Generated
             args = new Type[]{};
             method = type.GetMethod("get_Count", flag, null, args, null);
             app.RegisterCLRMethodRedirection(method, get_Count_4);
+            args = new Type[]{typeof(System.Comparison<System.Collections.Generic.List<ILRuntime.Runtime.Intepreter.ILTypeInstance>>)};
+            method = type.GetMethod("Sort", flag, null, args, null);
+            app.RegisterCLRMethodRedirection(method, Sort_5);
 
             args = new Type[]{};
             method = type.GetConstructor(flag, null, args, null);
@@ -130,6 +133,25 @@ namespace ILRuntime.Runtime.Generated
             __ret->ObjectType = ObjectTypes.Integer;
             __ret->Value = result_of_this_method;
             return __ret + 1;
+        }
+
+        static StackObject* Sort_5(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        {
+            ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
+            StackObject* ptr_of_this_method;
+            StackObject* __ret = ILIntepreter.Minus(__esp, 2);
+
+            ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
+            System.Comparison<System.Collections.Generic.List<ILRuntime.Runtime.Intepreter.ILTypeInstance>> @comparison = (System.Comparison<System.Collections.Generic.List<ILRuntime.Runtime.Intepreter.ILTypeInstance>>)typeof(System.Comparison<System.Collections.Generic.List<ILRuntime.Runtime.Intepreter.ILTypeInstance>>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)8);
+            __intp.Free(ptr_of_this_method);
+
+            ptr_of_this_method = ILIntepreter.Minus(__esp, 2);
+            System.Collections.Generic.List<System.Collections.Generic.List<ILRuntime.Runtime.Intepreter.ILTypeInstance>> instance_of_this_method = (System.Collections.Generic.List<System.Collections.Generic.List<ILRuntime.Runtime.Intepreter.ILTypeInstance>>)typeof(System.Collections.Generic.List<System.Collections.Generic.List<ILRuntime.Runtime.Intepreter.ILTypeInstance>>).CheckCLRTypes(StackObject.ToObject(ptr_of_this_method, __domain, __mStack), (CLR.Utils.Extensions.TypeFlags)0);
+            __intp.Free(ptr_of_this_method);
+
+            instance_of_this_method.Sort(@comparison);
+
+            return __ret;
         }
 
 

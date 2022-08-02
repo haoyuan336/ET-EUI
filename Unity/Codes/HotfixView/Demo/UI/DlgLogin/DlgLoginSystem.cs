@@ -1,10 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
-using System.Diagnostics.Eventing.Reader;
+﻿using System;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace ET
@@ -24,8 +19,17 @@ namespace ET
             // {
             //     Log.Debug("buttoin click");
             // });
+            self.PlayBgMusic();
         }
-
+        public static async void PlayBgMusic(this DlgLogin self)
+        {
+            //首先家在音频
+            var audioClip = await AddressableComponent.Instance.LoadAssetByPathAsync<AudioClip>("Assets/Res/Audios/Main_1.mp3");
+            AudioSource audioSource = self.View.uiTransform.GetComponent<AudioSource>();
+            audioSource.clip = audioClip;
+            audioSource.loop = true;
+            audioSource.Play();
+        }
         public static void OnCancelClickhandler(this DlgLogin self)
         {
         }

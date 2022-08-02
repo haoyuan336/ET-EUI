@@ -81,7 +81,6 @@ namespace ET
                 time += Time.deltaTime;
                 await TimerComponent.Instance.WaitFrameAsync();
             }
-
             GameObject.Destroy(text);
         }
 

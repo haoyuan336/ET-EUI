@@ -1,12 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
-using System.Diagnostics.Eventing.Reader;
+﻿using System;
 using ET.EventType;
-using ILRuntime.Runtime;
 using UnityEngine;
-using UnityEngine.UI;
-using Vector3 = System.Numerics.Vector3;
 
 namespace ET
 {
@@ -93,6 +87,13 @@ namespace ET
 
             self.ItemGameCombo.uiTransform.gameObject.SetActive(true);
             self.ItemGameCombo.E_ComboText.text = $"COMBOX{count}";
+            
+            ComboConfig config = ComboConfigCategory.Instance.Get(count);
+            AudioSource audioSource = self.View.uiTransform.GetComponent<AudioSource>();
+            var audioClip = await AddressableComponent.Instance.LoadAssetByPathAsync<AudioClip>(config.AudioClip);
+            audioSource.clip = audioClip;
+            audioSource.Play();
+            
             var time = 0.0f;
             while (time < Math.PI)
             {
@@ -103,6 +104,8 @@ namespace ET
                 self.ItemGameCombo.E_ComboText.GetComponent<RectTransform>().localScale = new Vector2(scale + 1, scale + 1);
                 await TimerComponent.Instance.WaitFrameAsync();
             }
+
+        
         }
 
         public static async void HideCombo(this DlgGameUI self)

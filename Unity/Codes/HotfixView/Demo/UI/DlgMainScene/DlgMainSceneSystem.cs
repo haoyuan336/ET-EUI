@@ -14,6 +14,17 @@ namespace ET
         public static void RegisterUIEvent(this DlgMainScene self)
         {
             self.RegisterNewMailMessage();
+            self.PlayBgMusic();
+        }
+
+        public static async void PlayBgMusic(this DlgMainScene self)
+        {
+            //首先家在音频
+            var audioClip = await AddressableComponent.Instance.LoadAssetByPathAsync<AudioClip>("Assets/Res/Audios/Main_1.mp3");
+            AudioSource audioSource = self.View.uiTransform.GetComponent<AudioSource>();
+            audioSource.clip = audioClip;
+            audioSource.loop = true;
+            audioSource.Play();
         }
 
         public static void RegisterNewMailMessage(this DlgMainScene self)
@@ -29,7 +40,7 @@ namespace ET
             long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             M2C_GetAllTroopInfosResponse m2CGetAllTroopInfosResponse;
-            m2CGetAllTroopInfosResponse = (M2C_GetAllTroopInfosResponse) await session
+            m2CGetAllTroopInfosResponse = (M2C_GetAllTroopInfosResponse)await session
                     .Call(new C2M_GetAllTroopInfosRequest() { Account = AccountId });
 
             if (m2CGetAllTroopInfosResponse.Error == ErrorCode.ERR_Success)
@@ -53,7 +64,7 @@ namespace ET
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             M2C_GetHeroInfosWithTroopIdResponse m2CGetHeroInfosWithTroopIdResponse;
             m2CGetHeroInfosWithTroopIdResponse =
-                    (M2C_GetHeroInfosWithTroopIdResponse) await session.Call(new C2M_GetHeroInfosWithTroopIdRequest() { TroopId = troopId });
+                    (M2C_GetHeroInfosWithTroopIdResponse)await session.Call(new C2M_GetHeroInfosWithTroopIdRequest() { TroopId = troopId });
             HeroCardInfo target = null;
             if (m2CGetHeroInfosWithTroopIdResponse.Error == ErrorCode.ERR_Success)
             {

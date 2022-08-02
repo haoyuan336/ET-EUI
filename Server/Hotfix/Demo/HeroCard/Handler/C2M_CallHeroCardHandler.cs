@@ -12,46 +12,49 @@ namespace ET
         {
             Log.Debug("call hero message");
             response.Error = ErrorCode.ERR_Success;
-            var keys = HeroConfigCategory.Instance.GetAll().Keys.ToArray();
-            Log.Debug($"keys = {keys.Length}");
-            int randomIndex = RandomHelper.RandomNumber(0, keys.Length);
-            int key = keys[randomIndex];
+
+            // heroConfigs.RemoveAll(a => a.Value.MaterialType == (int)HeroBagType.Materail);
+            // heroConfigs.Remove()
+
+            List<HeroConfig> heroConfigs = HeroConfigCategory.Instance.GetAll().Values.ToList(); 
+
+            heroConfigs.RemoveAll(a=>a.MaterialType == (int)HeroBagType.Materail);
+            int randomIndex = RandomHelper.RandomNumber(0, heroConfigs.Count);
             
-            HeroConfig config = HeroConfigCategory.Instance.Get(key);
-            if (config.MaterialType == (int)HeroBagType.Materail)
-            {
+            // if (config.MaterialType == (int)HeroBagType.Materail)
+            // {
                 // Log.Warning("召唤到的是材料");
                 //召唤出来的是 材料
                 //首先从数据库里面查询一下 ，玩家是否拥有此类型的英雄材料
-                List<HeroCard> heroCards = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
-                        .Query<HeroCard>(a => a.OwnerId.Equals(request.Account) && a.ConfigId.Equals(key));
-                if (heroCards.Count > 0)
-                {
-                    //说明数据库里面存在此类型的英雄材料，那么数目自加并且保存
-                    heroCards[0].Count++;
-                    // Log.Warning($"存在此材料 自加1 {key}");
-                    await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(heroCards[0]);
-                }
-                else
-                {
-                    // Log.Warning("不存在此材料，需要重新创建");
-                    HeroCard heroCard = new HeroCard();
-                    heroCard.Id = IdGenerater.Instance.GenerateId();
-                    heroCard.ConfigId = key;
-                    unit.AddChild(heroCard);
-                    await heroCard.Call(unit.DomainZone(), request.Account);
-                }
-            }
-            else
-            {
+                // List<HeroCard> heroCards = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
+                //         .Query<HeroCard>(a => a.OwnerId.Equals(request.Account) && a.ConfigId.Equals(key));
+                // if (heroCards.Count > 0)
+                // {
+                //     //说明数据库里面存在此类型的英雄材料，那么数目自加并且保存
+                //     heroCards[0].Count++;
+                //     // Log.Warning($"存在此材料 自加1 {key}");
+                //     await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(heroCards[0]);
+                // }
+                // else
+                // {
+                //     // Log.Warning("不存在此材料，需要重新创建");
+                //     HeroCard heroCard = new HeroCard();
+                //     heroCard.Id = IdGenerater.Instance.GenerateId();
+                //     heroCard.ConfigId = key;
+                //     unit.AddChild(heroCard);
+                //     await heroCard.Call(unit.DomainZone(), request.Account);
+                // }
+            // }
+            // else
+            // {
                 HeroCard heroCard = new HeroCard();
                 heroCard.Id = IdGenerater.Instance.GenerateId();
-                heroCard.ConfigId = key;
+                heroCard.ConfigId = heroConfigs[randomIndex].Id;
                 unit.AddChild(heroCard);
                 // HeroCard heroCard = unit.AddChild<HeroCard, int>(key);
                 await heroCard.Call(unit.DomainZone(), request.Account);
                 response.HeroCardInfo = heroCard.GetMessageInfo();
-            }
+            // }
 
             reply();
             await ETTask.CompletedTask;
