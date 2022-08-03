@@ -76,20 +76,18 @@ namespace ET
 		[ProtoMember(3)]
 		public string DiamondTypes { get; set; }
 		[ProtoMember(4)]
-		public int BeHitedAngry { get; set; }
-		[ProtoMember(5)]
 		public int AngryCount { get; set; }
-		[ProtoMember(6)]
+		[ProtoMember(5)]
 		public int AttackAddition { get; set; }
-		[ProtoMember(7)]
+		[ProtoMember(6)]
 		public string StartAttackAddition { get; set; }
-		[ProtoMember(8)]
+		[ProtoMember(7)]
 		public string InitBoardData { get; set; }
-		[ProtoMember(9)]
+		[ProtoMember(8)]
 		public string LevelStoryBegin { get; set; }
-		[ProtoMember(10)]
+		[ProtoMember(9)]
 		public string LevelStoryWin { get; set; }
-		[ProtoMember(11)]
+		[ProtoMember(10)]
 		public string LevelStoryLose { get; set; }
 
 	}

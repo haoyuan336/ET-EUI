@@ -21,6 +21,7 @@ namespace ET
 
         private void Awake()
         {
+            Application.targetFrameRate = 60;
             // #if ENABLE_IL2CPP
             // 			this.CodeMode = CodeMode.ILRuntime;
             // #endif
@@ -63,31 +64,47 @@ namespace ET
             if (handler.IsDone)
             {
                 Debug.Log("更新资源完成");
-                Destroy(this.LoadProgressBar.gameObject);
+                if (this.LoadProgressBar.gameObject != null)
+                {
+                    this.LoadProgressBar.gameObject.SetActive(false);
+                }
+                // Destroy(this.LoadProgressBar.gameObject);
+                Debug.Log("init code");
                 this.InitCode();
             }
         }
 
         void InitCode()
         {
+            Debug.Log("init code");
 #if ENABLE_IL2CPP
-            			this.CodeMode = CodeMode.ILRuntime;
+            Debug.Log("ENABLE_IL2CPP");
+            this.CodeMode = CodeMode.ILRuntime;
 #endif
 
-            System.AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error(e.ExceptionObject.ToString()); };
+            Debug.Log("system appdome  current domain");
+            System.AppDomain.CurrentDomain.UnhandledException += (sender, e) => { Log.Error($"UnhandledException{e.ExceptionObject.ToString()}"); };
+            Debug.Log("SetSynchronizationContext");
 
             SynchronizationContext.SetSynchronizationContext(ThreadSynchronizationContext.Instance);
+            Debug.Log("DontDestroyOnLoad");
 
             DontDestroyOnLoad(gameObject);
+            Debug.Log("ExceptionHandler");
 
             ETTask.ExceptionHandler += Log.Error;
 
             Log.ILog = new UnityLogger();
+            Debug.Log("UnityLogger");
 
             Options.Instance = new Options();
+            Debug.Log("CodeMode");
 
             CodeLoader.Instance.CodeMode = this.CodeMode;
+            Debug.Log("Instance Start");
+
             CodeLoader.Instance.Start();
+            Debug.Log("start");
         }
 
         // private void Start()

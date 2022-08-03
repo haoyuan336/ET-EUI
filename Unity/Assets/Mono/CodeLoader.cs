@@ -35,10 +35,12 @@ namespace ET
 
         public void Start()
         {
+            Debug.Log($"code mode {this.CodeMode}");
             switch (this.CodeMode)
             {
                 case CodeMode.Mono:
                 {
+                    
                     // Dictionary<string, UnityEngine.Object> dictionary = AssetsBundleHelper.LoadBundle("code.unity3d");
                     // byte[] assBytes = ((TextAsset) dictionary["Code.dll"]).bytes;
                     // byte[] pdbBytes = ((TextAsset) dictionary["Code.pdb"]).bytes;
@@ -55,39 +57,51 @@ namespace ET
                 }
                 case CodeMode.ILRuntime:
                 {
+                    Debug.Log("code move il runtime");
                     // Dictionary<string, UnityEngine.Object> dictionary = AssetsBundleHelper.LoadBundle("code.unity3d");
                     // byte[] assBytes = ((TextAsset) dictionary["Code.dll"]).bytes;
                     // byte[] pdbBytes = ((TextAsset) dictionary["Code.pdb"]).bytes;
 
                     //byte[] assBytes = File.ReadAllBytes(Path.Combine("../Unity/", Define.BuildOutputDir, "Code.dll"));
                     //byte[] pdbBytes = File.ReadAllBytes(Path.Combine("../Unity/", Define.BuildOutputDir, "Code.pdb"));
+                    Debug.Log("load code dll");
 
                     TextAsset codedll = Addressables.LoadAssetAsync<TextAsset>("Code.dll").WaitForCompletion();
+                    Debug.Log("load code dll success");
+
                     TextAsset codepdb = Addressables.LoadAssetAsync<TextAsset>("Code.pdb").WaitForCompletion();
+                    Debug.Log("load code pdb success");
+
                     byte[] assBytes = codedll.bytes;
                     byte[] pdbBytes = codepdb.bytes;
+                    Debug.Log($"ass bytes {assBytes.Length}");
+                    Debug.Log($"pdb bytes {pdbBytes.Length}");
                     appDomain = new ILRuntime.Runtime.Enviorment.AppDomain();
 #if DEBUG && (UNITY_EDITOR || UNITY_ANDROID || UNITY_IPHONE)
+                    Debug.Log($"System.Threading.Thread.CurrentThread.ManagedThreadId");
                     this.appDomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
 #endif
                     MemoryStream assStream = new MemoryStream(assBytes);
                     MemoryStream pdbStream = new MemoryStream(pdbBytes);
+                    Debug.Log($"System.Threading.Thread.CurrentThread.ManagedThreadId");
+
                     appDomain.LoadAssembly(assStream, pdbStream, new ILRuntime.Mono.Cecil.Pdb.PdbReaderProvider());
-
+                    Debug.Log($"ILRuntime.Mono.Cecil.Pdb.PdbReaderProvider");
+                    Debug.Log("InitILRuntime");
                     ILHelper.InitILRuntime(appDomain);
-
+                    Debug.Log("appDomain.LoadedTypes.Values.Select(x => x.ReflectionType).ToArray();");
                     this.allTypes = appDomain.LoadedTypes.Values.Select(x => x.ReflectionType).ToArray();
+                    Debug.Log(" IStaticMethod start = new ILStaticMethod");
                     IStaticMethod start = new ILStaticMethod(appDomain, "ET.Entry", "Start", 0);
+                    Debug.Log("start run");
                     start.Run();
                     break;
                 }
                 case CodeMode.Reload:
                 {
+                    Debug.Log("reload");
                     byte[] assBytes = File.ReadAllBytes(Path.Combine(Define.BuildOutputDir, "Data.dll"));
                     byte[] pdbBytes = File.ReadAllBytes(Path.Combine(Define.BuildOutputDir, "Data.pdb"));
-                    
-                    
-                    
 
                     assembly = Assembly.Load(assBytes, pdbBytes);
                     this.LoadLogic();

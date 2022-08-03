@@ -29,8 +29,6 @@ namespace ILRuntime.Runtime.Generated
             method = type.GetMethod("ToString", flag, null, args, null);
             app.RegisterCLRMethodRedirection(method, ToString_1);
 
-            app.RegisterCLRCreateArrayInstance(type, s => new System.Single[s]);
-
 
         }
 

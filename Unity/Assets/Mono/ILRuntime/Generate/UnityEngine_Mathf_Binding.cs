@@ -26,14 +26,14 @@ namespace ILRuntime.Runtime.Generated
             method = type.GetMethod("Ceil", flag, null, args, null);
             app.RegisterCLRMethodRedirection(method, Ceil_0);
             args = new Type[]{typeof(System.Single)};
-            method = type.GetMethod("Cos", flag, null, args, null);
-            app.RegisterCLRMethodRedirection(method, Cos_1);
-            args = new Type[]{typeof(System.Single)};
             method = type.GetMethod("Sin", flag, null, args, null);
-            app.RegisterCLRMethodRedirection(method, Sin_2);
+            app.RegisterCLRMethodRedirection(method, Sin_1);
             args = new Type[]{typeof(System.Single)};
             method = type.GetMethod("RoundToInt", flag, null, args, null);
-            app.RegisterCLRMethodRedirection(method, RoundToInt_3);
+            app.RegisterCLRMethodRedirection(method, RoundToInt_2);
+            args = new Type[]{typeof(System.Single)};
+            method = type.GetMethod("Cos", flag, null, args, null);
+            app.RegisterCLRMethodRedirection(method, Cos_3);
             args = new Type[]{typeof(System.Single)};
             method = type.GetMethod("Sqrt", flag, null, args, null);
             app.RegisterCLRMethodRedirection(method, Sqrt_4);
@@ -109,24 +109,7 @@ namespace ILRuntime.Runtime.Generated
             return __ret + 1;
         }
 
-        static StackObject* Cos_1(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
-        {
-            ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
-            StackObject* ptr_of_this_method;
-            StackObject* __ret = ILIntepreter.Minus(__esp, 1);
-
-            ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
-            System.Single @f = *(float*)&ptr_of_this_method->Value;
-
-
-            var result_of_this_method = UnityEngine.Mathf.Cos(@f);
-
-            __ret->ObjectType = ObjectTypes.Float;
-            *(float*)&__ret->Value = result_of_this_method;
-            return __ret + 1;
-        }
-
-        static StackObject* Sin_2(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        static StackObject* Sin_1(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
             StackObject* ptr_of_this_method;
@@ -143,7 +126,7 @@ namespace ILRuntime.Runtime.Generated
             return __ret + 1;
         }
 
-        static StackObject* RoundToInt_3(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        static StackObject* RoundToInt_2(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
         {
             ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
             StackObject* ptr_of_this_method;
@@ -157,6 +140,23 @@ namespace ILRuntime.Runtime.Generated
 
             __ret->ObjectType = ObjectTypes.Integer;
             __ret->Value = result_of_this_method;
+            return __ret + 1;
+        }
+
+        static StackObject* Cos_3(ILIntepreter __intp, StackObject* __esp, IList<object> __mStack, CLRMethod __method, bool isNewObj)
+        {
+            ILRuntime.Runtime.Enviorment.AppDomain __domain = __intp.AppDomain;
+            StackObject* ptr_of_this_method;
+            StackObject* __ret = ILIntepreter.Minus(__esp, 1);
+
+            ptr_of_this_method = ILIntepreter.Minus(__esp, 1);
+            System.Single @f = *(float*)&ptr_of_this_method->Value;
+
+
+            var result_of_this_method = UnityEngine.Mathf.Cos(@f);
+
+            __ret->ObjectType = ObjectTypes.Float;
+            *(float*)&__ret->Value = result_of_this_method;
             return __ret + 1;
         }
 

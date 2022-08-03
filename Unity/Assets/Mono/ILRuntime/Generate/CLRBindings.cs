@@ -104,11 +104,6 @@ namespace ILRuntime.Runtime.Generated
             System_Exception_Binding.Register(app);
             ET_TimeInfo_Binding.Register(app);
             ET_RpcException_Binding.Register(app);
-            System_Collections_Generic_Dictionary_2_String_Int64_Binding.Register(app);
-            System_Func_2_String_Byte_Array_Binding.Register(app);
-            ET_Recast_Binding.Register(app);
-            ET_MathHelper_Binding.Register(app);
-            ET_StringHelper_Binding.Register(app);
             UnityEngine_TextAsset_Binding.Register(app);
             ET_ETTask_1_List_1_Object_Binding.Register(app);
             System_Collections_Generic_List_1_Object_Binding.Register(app);
@@ -162,11 +157,11 @@ namespace ILRuntime.Runtime.Generated
             ET_ETAsyncTaskMethodBuilder_1_List_1_ILTypeInstance_Binding.Register(app);
             ET_ETTask_1_List_1_ILTypeInstance_Binding.Register(app);
             System_Collections_Generic_Queue_1_String_Binding.Register(app);
+            ET_ETTask_1_AudioClip_Binding.Register(app);
+            UnityEngine_AudioSource_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_ILTypeInstance_List_1_ILTypeInstance_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_ILTypeInstance_List_1_ILTypeInstance_Binding_Enumerator_Binding.Register(app);
             System_Collections_Generic_KeyValuePair_2_ILTypeInstance_List_1_ILTypeInstance_Binding.Register(app);
-            ET_ETTask_1_AudioClip_Binding.Register(app);
-            UnityEngine_AudioSource_Binding.Register(app);
             ET_ETTask_1_List_1_GameObject_Binding.Register(app);
             ET_ETAsyncTaskMethodBuilder_1_Int64_Binding.Register(app);
             ET_ETTask_1_Int64_Binding.Register(app);
@@ -271,6 +266,7 @@ namespace ILRuntime.Runtime.Generated
             ET_MultiMap_2_Int64_ILTypeInstance_Binding.Register(app);
             System_IO_Stream_Binding.Register(app);
             ET_ByteHelper_Binding.Register(app);
+            ET_StringHelper_Binding.Register(app);
             System_ValueTuple_2_UInt16_MemoryStream_Binding.Register(app);
             System_Collections_Generic_HashSet_1_UInt16_Binding.Register(app);
             ET_ILog_Binding.Register(app);

@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-
 #if NOT_UNITY
 using NLog;
 #endif
@@ -20,6 +19,7 @@ namespace ET
 
         private static bool CheckLogLevel(int level)
         {
+            // Debug.Log("CheckLogLevel");
             return Options.Instance.LogLevel <= level;
         }
         

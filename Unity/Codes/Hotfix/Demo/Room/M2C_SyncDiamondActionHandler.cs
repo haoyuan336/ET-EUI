@@ -21,16 +21,16 @@ namespace ET
 
             bool isContainsCrash = false;
             var comboCount = 0;
-            bool isContainsAttackHero = false;
+            // bool isContainsAttackHero = false;
             foreach (var diamondActionItem in diamondActionItems)
             {
                 List<ETTask> tasks = new List<ETTask>();
 
                 List<MakeSureAttackHeroAction> makeSureAttackHeroActions = diamondActionItem.MakeSureAttackHeroActions;
-                if (makeSureAttackHeroActions.Count > 0)
-                {
-                    isContainsAttackHero = true;
-                }
+                // if (makeSureAttackHeroActions.Count > 0)
+                // {
+                //     isContainsAttackHero = true;
+                // }
 
                 foreach (var makeSureAttackHeroAction in makeSureAttackHeroActions)
                 {
@@ -44,7 +44,7 @@ namespace ET
                 // int count = 0;
 
                 var destoryIndex = 0;
-                if (diamondActionItem.CrashType == (int)CrashType.Normal && isContainsAttackHero)
+                if (diamondActionItem.CrashType == (int)CrashType.Normal)
                 {
                     Log.Debug($"combo count {comboCount}");
                     // if (comboCount != 0)
