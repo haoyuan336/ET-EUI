@@ -37,4 +37,11 @@
         Normal = 1, //普通了类型
         Special = 2, //特殊珠类型
     }
+
+    public enum GoldInfoUIType
+    {
+        MainScene = 1, //主页面
+        HeroInfo = 2, //英雄详情页面
+        WeaponInfo = 3, //武器详情页面
+    }
 }

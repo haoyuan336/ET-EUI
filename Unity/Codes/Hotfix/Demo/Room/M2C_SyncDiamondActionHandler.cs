@@ -50,7 +50,10 @@ namespace ET
                     // if (comboCount != 0)
                     // {
                     comboCount++;
-                    Game.EventSystem.Publish(new EventType.ShowComobAnim() { Scene = session.ZoneScene(), ComboCount = comboCount });
+                    Game.EventSystem.Publish(new EventType.ShowComobAnim()
+                    {
+                        Scene = session.ZoneScene(), ComboCount = comboCount, CrashCount = diamondActionItem.DiamondActions.Count
+                    });
                     // }
                 }
 
@@ -72,7 +75,7 @@ namespace ET
                         case (int)DiamondActionType.SpecialDestry:
                             // tasks.Add(diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction));
                             // destoryIndex++;
-                            sunTaskList.Add(diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction));
+                            sunTaskList.Add(diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction,diamondActionItem));
                             // await diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction);
 
                             isContainsCrash = true;

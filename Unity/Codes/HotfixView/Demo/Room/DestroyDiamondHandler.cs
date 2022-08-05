@@ -15,16 +15,24 @@ namespace ET
             int index = a.Index;
             GameObject go = diamond.GetComponent<GameObjectComponent>().GameObject;
             DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamond.ConfigId);
+            var audioCrashStr = config.CrashAudio;
+            Log.Debug($"audio {audioCrashStr}");
+            if (!string.IsNullOrEmpty(audioCrashStr))
+            {
+                //加载音频资源
+                // var audio = await AddressableComponent.Instance.LoadAssetByPathAsync<AudioClip>(audioCrashStr);
+                // AudioSource audioSource = go.GetComponent<AudioSource>();
+                // audioSource.clip = audio;
+                // audioSource.Play();
+                Game.EventSystem.Publish(new EventType.PlayAudioEffect()
+                {
+                    AudioStr = audioCrashStr,
+                    ZoneScene = scene.ZoneScene()
+                });
+            }
             var effectPos = go.transform.position;
             var boomEffectRes = config.DestoryEffectRes;
-            int waitTime = ConstValue.CrashWaitTime;
-            if (config.BoomType != (int) BoomType.Invalide)
-            {
-                Log.Debug($"boom effect pos {config.BoomType}");
-                waitTime = 0;
-            }
-
-            await TimerComponent.Instance.WaitAsync(waitTime * index);
+            // go.transform.localScale = Vector3.zero;
             GameObject.Destroy(go);
             Log.Debug($"boom effect res{boomEffectRes}");
 
@@ -34,28 +42,22 @@ namespace ET
                 foreach (var addItemAction in diamondAction.AddAngryActions)
                 {
                     HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(addItemAction.HeroCardInfo.HeroId);
-                    // Game.EventSystem.pubs
-
-                    // AddItemActions = diamondActionItem.AddAngryItemActions, Scene = session.ZoneScene().CurrentScene()
-
                     Game.EventSystem.Publish(new EventType.PlayAddAngryViewAnim()
                     {
                         HeroCard = heroCard, StartPos = effectPos, DiamondInfo = diamond.GetMessageInfo(), AddItemAction = addItemAction
                     });
                 }
             }
-
             if (!string.IsNullOrEmpty(boomEffectRes))
             {
                 GameObject effect = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(boomEffectRes);
                 effect.transform.SetParent(GlobalComponent.Instance.DiamondContent);
 
                 effect.transform.position = effectPos;
-                // await TimerComponent.Instance.WaitAsync(ConstValue.CrashWaitTime);
-                // GameObject.Destroy(effect, ConstValue.CrashItemWaitTime / 1000.0f);
+                var time = config.DestoryEffectTime;
+                await TimerComponent.Instance.WaitAsync(time);
             }
-
-            //加载爆炸特效
+            // GameObject.Destroy(go);
             diamond.Dispose();
             await ETTask.CompletedTask;
         }

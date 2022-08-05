@@ -73,13 +73,17 @@ namespace ET
 		public int Id { get; set; }
 		[ProtoMember(2)]
 		public int ColorId { get; set; }
+		[ProtoMember(4)]
+		public string CrashAudio { get; set; }
 		[ProtoMember(6)]
-		public string AddAttack { get; set; }
+		public int DestoryEffectTime { get; set; }
 		[ProtoMember(7)]
+		public string AddAttack { get; set; }
+		[ProtoMember(8)]
 		public string AddAngry { get; set; }
-		[ProtoMember(10)]
+		[ProtoMember(11)]
 		public int BoomType { get; set; }
-		[ProtoMember(13)]
+		[ProtoMember(14)]
 		public string ElementDes { get; set; }
 
 	}

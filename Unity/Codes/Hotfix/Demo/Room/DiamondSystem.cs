@@ -145,6 +145,23 @@ namespace ET
             return false;
         }
 
+        public static async ETTask DestoryWithAnim(this Diamond self,int index, DiamondAction diamondAction, BoomType boomType)
+        {
+#if !SERVER
+
+            // Scene scene = self.ZoneScene().CurrentScene();
+            // HeroCardComponent heroCardComponent = scene.GetComponent<HeroCardComponent>();
+            var DesEvent = new EventType.DestoryDiamondView();
+            DesEvent.Diamond = self;
+            DesEvent.Index = index;
+            DesEvent.DiamondAction = diamondAction;
+            DesEvent.Scene = self.ZoneScene().CurrentScene();
+            await Game.EventSystem.PublishAsync(DesEvent);
+#endif
+            self.Dispose();
+            await ETTask.CompletedTask;
+        }
+
         public static async ETTask Destroy(this Diamond self, int index, DiamondAction diamondAction)
         {
 #if !SERVER

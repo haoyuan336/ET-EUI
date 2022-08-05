@@ -6,17 +6,25 @@ namespace ET
 {
     namespace EventType
     {
+        public struct PlayAudioEffect
+        {
+            public string AudioStr;
+            public Scene ZoneScene;
+        }
+
         public struct HideCombo
         {
             public Scene Scene;
         }
+
         public struct ShowComobAnim
         {
             //显示comob动画
             public Scene Scene;
             public int ComboCount;
+            public int CrashCount; //消除的个数
         }
-        
+
         public struct ShowAttackMark
         {
             public HeroCard HeroCard;
@@ -176,6 +184,14 @@ namespace ET
             public int HangIndex;
         }
 
+        public struct DestoryDiamondWithAnim
+        {
+            public Diamond Diamond;
+            public int Index;
+            public DiamondAction DiamondAction;
+            public Scene Scene;
+        }
+
         public struct DestoryDiamondView
         {
             public Diamond Diamond;
@@ -254,6 +270,7 @@ namespace ET
 
             public HeroCard HeroCard;
             public Diamond Diamond;
+
             public AddItemAction AddItemAction;
             // public HeroCard HeroCard;
             // public HeroCardInfo HeroCardInfo;
@@ -270,11 +287,13 @@ namespace ET
             public List<AddItemAction> AddItemActions;
 
             public Scene Scene;
-            
+
             public HeroCard HeroCard;
+
             // public Diamond Diamond;
             public Vector3 StartPos;
             public DiamondInfo DiamondInfo;
+
             public AddItemAction AddItemAction;
             // public HeroCard HeroCard;
             //

@@ -89,7 +89,7 @@ namespace ET
             {
                 AccountId = accountId,
                 AccountInfo = accountInfo,
-                ApplyProcessType = procss? (int) ApplyProcessType.Accept : (int) ApplyProcessType.Refuse
+                ApplyProcessType = procss? (int)ApplyProcessType.Accept : (int)ApplyProcessType.Refuse
             };
             var response = await session.Call(request) as M2C_ProcessFriendApplyResponse;
             if (response.Error == ErrorCode.ERR_Success)
@@ -109,6 +109,7 @@ namespace ET
             if (index < self.RecommendAccountInfos.Count)
             {
                 AccountInfo accountInfo = self.RecommendAccountInfos[index];
+                itemRecommend.E_AddButton.onClick.RemoveAllListeners();
                 itemRecommend.E_AddButton.AddListener(() => { self.OnAddFriendButtonClick(accountInfo); });
                 itemRecommend.E_NameText.text = accountInfo.NickName;
                 var disTime = TimeHelper.ServerNow() - accountInfo.LastLogonTime;
@@ -175,7 +176,7 @@ namespace ET
                     Log.Debug($"response count  {response.AccountInfos.Count}");
 
                     self.RecommendAccountInfos = response.AccountInfos;
-                    self.RecommendAccountInfos.Sort((a, b) => { return (int) (b.LastLogonTime - a.LastLogonTime); });
+                    self.RecommendAccountInfos.Sort((a, b) => { return (int)(b.LastLogonTime - a.LastLogonTime); });
                     self.AddUIScrollItems(ref self.ItemRecommends, self.RecommendAccountInfos.Count);
                     self.View.ELoopRecommendLoopVerticalScrollRect.SetVisible(true, self.RecommendAccountInfos.Count);
                 }
@@ -196,7 +197,24 @@ namespace ET
             C2M_AddFriendRequest request = new C2M_AddFriendRequest() { Account = account, TargetInfo = accountInfo };
 
             M2C_AddFriendResponse response = await session.Call(request) as M2C_AddFriendResponse;
+            if (response.Error == ErrorCode.ERR_SelfFriendCount_IsFull)
+            {
+                UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+                await uiComponent.ShowWindow(WindowID.WindowID_AlertLayer);
+                UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_AlertLayer);
+                baseWindow.GetComponent<DlgAlertLayer>().SetText("自己的好友数量已达到上限");
+                return;
+            }
 
+            if (response.Error == ErrorCode.ERR_OtherFriendCount_IsFull)
+            {
+                UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+                await uiComponent.ShowWindow(WindowID.WindowID_AlertLayer);
+                UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_AlertLayer);
+                baseWindow.GetComponent<DlgAlertLayer>().SetText("对方的好友数量已达到上限");
+                return;
+            }
+            
             self.RecommendAccountInfos.Remove(accountInfo);
             self.AddUIScrollItems(ref self.ItemRecommends, self.RecommendAccountInfos.Count);
             self.View.ELoopRecommendLoopVerticalScrollRect.SetVisible(true, self.RecommendAccountInfos.Count);

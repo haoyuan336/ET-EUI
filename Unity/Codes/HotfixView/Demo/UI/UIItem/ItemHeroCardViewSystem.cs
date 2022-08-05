@@ -20,6 +20,18 @@ namespace ET
             self.E_AddTextText.gameObject.SetActive(true);
             self.E_RankImage.gameObject.SetActive(false);
 
+            for (int i = 1; i < 6; i++)
+            {
+                // var star    
+                var starStr = $"Star_{i}";
+                Transform starObj = UIFindHelper.FindDeepChild(self.uiTransform.gameObject, starStr);
+                if (starObj != null)
+                {
+                    starObj.gameObject.SetActive(false);
+                }
+            }
+            
+            
             var commonPath = ConstValue.CommonUIAtlasPath;
             var framePath = ConstValue.FrameBgPath;
             self.E_HeadImage.sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonPath, framePath);
@@ -33,7 +45,16 @@ namespace ET
                 self.SetNullStateView();
                 return;
             }
-            
+            // for (int i = 0; i < 5; i++)
+            // {
+            //     // var star    
+            //     var starStr = $"Star_{i}";
+            //     Transform starObj = UIFindHelper.FindDeepChild(self.uiTransform.gameObject, starStr);
+            //     if (starObj != null)
+            //     {
+            //         starObj.gameObject.SetActive(false);
+            //     }
+            // }
             self.E_RankImage.gameObject.SetActive(false);
 
             self.E_AddTextText.gameObject.SetActive(false);
@@ -62,7 +83,7 @@ namespace ET
             self.E_QualityIconImage.gameObject.SetActive(true);
             self.E_QualityIconImage.sprite = aualityIcon;
             // self.E_QualityIconImage.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
-            for (int i = 0; i < 5; i++)
+            for (int i = 1; i < 6; i++)
             {
                 // var star    
                 var starStr = $"Star_{i}";

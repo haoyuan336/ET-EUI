@@ -205,5 +205,7 @@ namespace ET
 		 public const ushort M2C_EnterChangeTempSceneResponse = 10202;
 		 public const ushort C2M_PlayerChooseLevelNumRequest = 10203;
 		 public const ushort M2C_PlayerChooseLevelNumResponse = 10204;
+		 public const ushort C2M_LockHeroCardRequest = 10205;
+		 public const ushort M2C_LockHeroCardResponse = 10206;
 	}
 }

@@ -11,7 +11,7 @@ namespace ET
 		public long CurrentChooseTroopId;
 
 		public List<Scroll_ItemHeroCard> ItemHeroCards = new List<Scroll_ItemHeroCard>();
-		public List<HeroCardInfo> TroopHeroCardInfos = new List<HeroCardInfo>();
+		// public List<HeroCardInfo> TroopHeroCardInfos = new List<HeroCardInfo>();
 
 	}
 }

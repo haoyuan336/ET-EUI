@@ -17,12 +17,31 @@ namespace ET
             self.View.E_AddExpButton.AddListenerAsync(self.RequestAddExpAsync);
         }
 
+        public static void ShowWidgetWithType(this DlgGoldInfoUI self, GoldInfoUIType type)
+        {
+            self.View.E_PowerGroupImage.gameObject.SetActive(false);
+            self.View.E_ExpGroupImage.gameObject.SetActive(false);
+            self.View.E_WeaponChipGroupImage.gameObject.SetActive(false);
+            switch (type)
+            {
+                case GoldInfoUIType.HeroInfo:
+                    self.View.E_ExpGroupImage.gameObject.SetActive(true);
+                    break;
+                case GoldInfoUIType.MainScene:
+                    self.View.E_PowerGroupImage.gameObject.SetActive(true);
+                    break;
+                case GoldInfoUIType.WeaponInfo:
+                    self.View.E_WeaponChipGroupImage.gameObject.SetActive(true);
+                    break;
+            }
+        }
+
         public static async ETTask RequestAddExpAsync(this DlgGoldInfoUI self)
         {
             long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             M2C_AddItemResponse response =
-                    (M2C_AddItemResponse) await session.Call(new C2M_AddItemRequest() { AccountId = AccountId, Count = 10000, ConfigId = 1008 });
+                    (M2C_AddItemResponse)await session.Call(new C2M_AddItemRequest() { AccountId = AccountId, Count = 10000, ConfigId = 1008 });
             if (response.Error == ErrorCode.ERR_Success)
             {
                 // Log.Debug("增加体力值成功");
@@ -39,7 +58,7 @@ namespace ET
             long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             M2C_AddItemResponse response =
-                    (M2C_AddItemResponse) await session.Call(new C2M_AddItemRequest() { AccountId = AccountId, Count = 1000, ConfigId = 1002 });
+                    (M2C_AddItemResponse)await session.Call(new C2M_AddItemRequest() { AccountId = AccountId, Count = 1000, ConfigId = 1002 });
             if (response.Error == ErrorCode.ERR_Success)
             {
                 // Log.Debug("增加体力值成功");
@@ -52,7 +71,7 @@ namespace ET
             long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             M2C_AddItemResponse response =
-                    (M2C_AddItemResponse) await session.Call(new C2M_AddItemRequest() { AccountId = AccountId, Count = 10, ConfigId = 1003 });
+                    (M2C_AddItemResponse)await session.Call(new C2M_AddItemRequest() { AccountId = AccountId, Count = 10, ConfigId = 1003 });
             if (response.Error == ErrorCode.ERR_Success)
             {
                 // Log.Debug("增加体力值成功");
@@ -65,7 +84,7 @@ namespace ET
             long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             M2C_AddItemResponse response =
-                    (M2C_AddItemResponse) await session.Call(new C2M_AddItemRequest() { AccountId = AccountId, Count = 10, ConfigId = 1001 });
+                    (M2C_AddItemResponse)await session.Call(new C2M_AddItemRequest() { AccountId = AccountId, Count = 10, ConfigId = 1001 });
             if (response.Error == ErrorCode.ERR_Success)
             {
                 // Log.Debug("增加体力值成功");
@@ -83,7 +102,7 @@ namespace ET
             long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             // M2C_GetGoldInfoResponse response = (M2C_GetGoldInfoResponse) await session.Call(new C2M_GetGoldInfoRequest() { AccountId = AccountId });
-            M2C_GetAllItemResponse response = (M2C_GetAllItemResponse) await session.Call(new C2M_GetAllItemRequest() { AccountId = AccountId });
+            M2C_GetAllItemResponse response = (M2C_GetAllItemResponse)await session.Call(new C2M_GetAllItemRequest() { AccountId = AccountId });
             if (response.Error == ErrorCode.ERR_Success)
             {
                 var goldItem = response.ItemInfos.Find((a) => { return a.ConfigId == 1001; });

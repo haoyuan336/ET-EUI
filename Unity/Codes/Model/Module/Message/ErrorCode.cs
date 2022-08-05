@@ -52,6 +52,9 @@ namespace ET
         public const int ERR_GameTask_Award_AlGet = 200029; //任务奖励已经领取
         public const int ERR_GameTask_UnComplete = 200030; //任务还未完成
 
+        public const int ERR_SelfFriendCount_IsFull = 200031; //好友个数已经达到上限
+
+        public const int ERR_OtherFriendCount_IsFull = 200032; //对方的好友个数已经达到上限
         // 200001以上不抛异常
     }
 }

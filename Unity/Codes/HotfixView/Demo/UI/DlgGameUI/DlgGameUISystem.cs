@@ -1,9 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ET.EventType;
 using UnityEngine;
 
 namespace ET
 {
+    public class PlayAudioEffect: AEvent<EventType.PlayAudioEffect>
+    {
+        protected override async ETTask Run(EventType.PlayAudioEffect a)
+        {
+            UIComponent uiComponent = a.ZoneScene.GetComponent<UIComponent>();
+            UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_GameUI);
+            baseWindow.GetComponent<DlgGameUI>().PlayEffectAudio(a.AudioStr);
+
+            await ETTask.CompletedTask;
+        }
+    }
+
     public class HideComboEvent: AEvent<HideCombo>
     {
         protected override async ETTask Run(HideCombo a)
@@ -26,7 +40,7 @@ namespace ET
             var uiComponent = scene.GetComponent<UIComponent>();
             //
             var baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_GameUI);
-            baseWindow.GetComponent<DlgGameUI>().ShowComboAnim(count);
+            baseWindow.GetComponent<DlgGameUI>().ShowComboAnim(a);
 
             await ETTask.CompletedTask;
         }
@@ -34,6 +48,23 @@ namespace ET
 
     public static class DlgGameUISystem
     {
+        public static async void PlayEffectAudio(this DlgGameUI self, string audioStr)
+        {
+            //加载资源
+            var audioClip = await AddressableComponent.Instance.LoadAssetByPathAsync<AudioClip>(audioStr);
+
+            List<AudioSource> audioSources = self.View.uiTransform.GetComponents<AudioSource>().ToList();
+            foreach (var audioSource in audioSources)
+            {
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.clip = audioClip;
+                    audioSource.Play();
+                    break;
+                }
+            }
+        }
+
         public static async void RegisterUIEvent(this DlgGameUI self)
         {
             self.View.E_BackButton.AddListenerAsync(self.ExitGameButtonClick);
@@ -78,34 +109,52 @@ namespace ET
             self.IsShow = false;
         }
 
-        public static async void ShowComboAnim(this DlgGameUI self, int count)
+        public static async void ShowComboAnim(this DlgGameUI self, ShowComobAnim a)
         {
-            if (count == 0)
-            {
-                return;
-            }
+            // if (a.ComboCount == 0)
+            // {
+            //     return;
+            // }
 
             self.ItemGameCombo.uiTransform.gameObject.SetActive(true);
-            self.ItemGameCombo.E_ComboText.text = $"COMBOX{count}";
-            
-            ComboConfig config = ComboConfigCategory.Instance.Get(count);
-            AudioSource audioSource = self.View.uiTransform.GetComponent<AudioSource>();
-            var audioClip = await AddressableComponent.Instance.LoadAssetByPathAsync<AudioClip>(config.AudioClip);
-            audioSource.clip = audioClip;
-            audioSource.Play();
-            
+            self.ItemGameCombo.E_ComboText.text = $"COMBOX{a.ComboCount}";
+
+            // ComboConfig config = ComboConfigCategory.Instance.Get(count);
+            // AudioSource audioSource = self.View.uiTransform.GetComponent<AudioSource>();
+            // var audioClip = await AddressableComponent.Instance.LoadAssetByPathAsync<AudioClip>(config.AudioClip);
+            // audioSource.clip = audioClip;
+            // audioSource.Play();
+            self.PlayCrashDiamondAudio(a);
             var time = 0.0f;
             while (time < Math.PI)
             {
                 time += Time.deltaTime * 10;
-
                 var scale = Mathf.Sin(time);
-
                 self.ItemGameCombo.E_ComboText.GetComponent<RectTransform>().localScale = new Vector2(scale + 1, scale + 1);
                 await TimerComponent.Instance.WaitFrameAsync();
             }
+        }
 
-        
+        public static async void PlayCrashDiamondAudio(this DlgGameUI self, ShowComobAnim a)
+        {
+            // List<AudioSource> audioSources = self.View.uiTransform.GetComponents<AudioSource>().ToList();
+            //首先加载audioclip 
+            var config = ComboConfigCategory.Instance.Get(a.ComboCount);
+            Log.Debug($"config  name {config.AudioClip}");
+            self.PlayEffectAudio(config.AudioClip);
+            // var audioClip = await AddressableComponent.Instance.LoadAssetByPathAsync<AudioClip>(config.AudioClip);
+            // foreach (var audioSource in audioSources)
+            // {
+            //     if (!audioSource.isPlaying)
+            //     {
+            //         // audioSource.clip
+            //         audioSource.clip = audioClip;
+            //         audioSource.Play();
+            //         break;
+            //     }
+            // }
+
+            await ETTask.CompletedTask;
         }
 
         public static async void HideCombo(this DlgGameUI self)
@@ -120,9 +169,9 @@ namespace ET
                 self.ItemGameCombo.E_ComboText.GetComponent<RectTransform>().localScale = new Vector2(1 - scale, 1 - scale);
                 await TimerComponent.Instance.WaitFrameAsync();
             }
+
             self.ItemGameCombo.uiTransform.gameObject.SetActive(false);
             self.ItemGameCombo.E_ComboText.GetComponent<RectTransform>().localScale = new Vector2(1, 1);
-
         }
     }
 }

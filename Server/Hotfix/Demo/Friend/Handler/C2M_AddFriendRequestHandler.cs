@@ -20,12 +20,47 @@ namespace ET
                 return;
             }
 
+            List<Friends> friends = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
+                    .Query<Friends>(a => a.OwnerId.Equals(accounts) && a.State == (int)StateType.Active);
+            if (friends.Count >= 30)
+            {
+                foreach (var friend in friends)
+                {
+                    friend.Dispose();
+                }
+
+                friends = null;
+                response.Error = ErrorCode.ERR_SelfFriendCount_IsFull;
+                reply();
+                return;
+            }
+
+            //检查目标的好友个数是否达到上限
+
+            List<Friends> otherFriends = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
+                    .Query<Friends>(a => a.OwnerId.Equals(targetInfo.Account) && a.State == (int)StateType.Active);
+
+            // Log.Warning("other friend s");
+            if (otherFriends.Count >= 30)
+            {
+                foreach (var friend in otherFriends)
+                {
+                    friend.Dispose();
+                }
+
+                otherFriends = null;
+                response.Error = ErrorCode.ERR_OtherFriendCount_IsFull;
+                reply();
+                return;
+            }
+
             Account account = accounts[0];
             //储存一条消息
 
-            //获取目标用户的所有邮件
+            //获取目标用户的所有邮件, 检查是否发生过请求加好友的消息
             List<Mail> mails = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
-                    .Query<Mail>(a => a.ReceiveId.Equals(targetInfo.Account) && a.SendId.Equals(accountId) && a.MailType == MailType.AddFriendRequest);
+                    .Query<Mail>(a =>
+                            a.ReceiveId.Equals(targetInfo.Account) && a.SendId.Equals(accountId) && a.MailType == MailType.AddFriendRequest);
             Mail mail;
             if (mails.Count == 0)
             {

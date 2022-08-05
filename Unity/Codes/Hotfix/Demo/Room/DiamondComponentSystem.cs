@@ -53,8 +53,15 @@ namespace ET
             self.Diamonds[index] = diamond;
         }
 
-        public static async ETTask RemoveChild(this DiamondComponent self, Diamond diamond, int destoryIndex, DiamondAction diamondAction)
+        public static async ETTask RemoveChild(this DiamondComponent self, Diamond diamond, int destoryIndex, DiamondAction diamondAction, DiamondActionItem diamondActionItem)
         {
+
+            // if (diamondActionItem.CrashType == (int)CrashType.Special)
+            // {
+                // await diamond.DestoryWithAnim(destoryIndex, diamondAction);
+                // return;
+            // }
+            
             await diamond.Destroy(destoryIndex, diamondAction);
             // await TimerComponent.Instance.WaitAsync(1000);
         }
@@ -899,6 +906,7 @@ namespace ET
                         diamondAction.DiamondInfo = diamond.GetMessageInfo();
                         self.SetDiamondToList(diamond.LieIndex, diamond.HangIndex, null);
                         diamond.Dispose();
+                        diamondActionItem.CrashType = (int)CrashType.Special;
                         diamondActionItem.DiamondActions.Add(diamondAction);
                     }
                 }

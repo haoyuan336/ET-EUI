@@ -37,7 +37,7 @@ namespace ET
 
             // itemWeapon.E_ChooseButton.isOn = false;
             WeaponsConfig config = WeaponsConfigCategory.Instance.Get(weaponInfo.ConfigId);
-            if (config.MaterialType == (int) WeaponBagType.Weapon)
+            if (config.MaterialType == (int)WeaponBagType.Weapon)
             {
                 self.ShowWeaponInfoLayer(weaponInfo);
             }
@@ -53,7 +53,19 @@ namespace ET
         {
             self.View.ESWeaponBagCommon.ShowWindow();
 
+            //切换gold info 内容
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            var goldInfoUIBaseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_GoldInfoUI);
+            goldInfoUIBaseWindow.GetComponent<DlgGoldInfoUI>().ShowWidgetWithType(GoldInfoUIType.WeaponInfo);
+
             await ETTask.CompletedTask;
+        }
+
+        public static void HideWindow(this DlgBagLayer self)
+        {
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            var goldInfoUIBaseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_GoldInfoUI);
+            goldInfoUIBaseWindow.GetComponent<DlgGoldInfoUI>().ShowWidgetWithType(GoldInfoUIType.MainScene);
         }
     }
 }

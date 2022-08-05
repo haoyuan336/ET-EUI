@@ -6,11 +6,13 @@ namespace ET
         public const int LieCount = 7;
         public const int DomineeringBaseValue = 300; //霸气值基数
 
-        public const int PreDayFreePowerGiftCount = 5;  //每天免费的体力礼物数量
+        public const int FriendsCountMax = 30; //好友个数上限
+        public const int PreDayFreePowerGiftCount = 10; //每天免费的体力礼物数量
         public const float DiamondOffsetZ = 1;
-        public const float FlyEffectFlySpeed = 2;   //飞行特效的飞行速度
-        
-        
+        public const float FlyEffectFlySpeed = 2; //飞行特效的飞行速度
+        public const int PowerCountMax = 5; //体力的最大值
+        public const int PowerCountMaxExtar = 20; //体力的爆体最大值
+
 #if !SERVER
         public const string LoginAddress = "59.110.220.207:10007";
         // public const string LoginAddress = "127.0.0.1:10007";
@@ -25,6 +27,3 @@ namespace ET
 #endif
     }
 }
-
-
-

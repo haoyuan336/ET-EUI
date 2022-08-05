@@ -55,6 +55,7 @@ namespace ET
 
         public static async ETTask StartGameClickAction(this DlgGameLevelInfoLayer self)
         {
+            
             bool isPowerEnough = await self.CheckPowerIsEnough();
             if (!isPowerEnough)
             {

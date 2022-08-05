@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ET.Friend
+namespace ET
 {
     public class M2C_ReceiveChatFromFriendMessage: AMHandler<M2C_ReceiveChatFromFriend>
     {

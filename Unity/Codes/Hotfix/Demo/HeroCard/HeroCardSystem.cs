@@ -295,6 +295,7 @@ namespace ET
                 Count = self.Count,
                 Rank = self.Rank,
                 CurrentExp = self.CurrentExp,
+                IsLock = self.IsLock
             };
             return heroCardInfo;
         }
@@ -312,6 +313,7 @@ namespace ET
             self.Count = heroCardInfo.Count;
             self.Rank = heroCardInfo.Rank;
             self.CurrentExp = heroCardInfo.CurrentExp;
+            self.IsLock = heroCardInfo.IsLock;
         }
 
         // public static float GetTotalHP(this HeroCard self)

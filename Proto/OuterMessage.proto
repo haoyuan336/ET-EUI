@@ -602,6 +602,7 @@ message HeroCardInfo
 	HeroCardDataComponentInfo HeroCardDataComponentInfo = 20;	//英雄的基础数据
 	int32 Rank = 21;		//英雄的阶数
 	int32 CurrentExp = 22;	//当前的经验值
+	bool IsLock = 23;	//是否锁定状态
 
 	// repeated long SkillIdList = 11;	//技能id
 }
@@ -1570,3 +1571,18 @@ message M2C_PlayerChooseLevelNumResponse //IActorLocationResponse
 	int32 Error = 91;
 	string Message = 92;
 }
+//ResponseType M2C_LockHeroCardResponse
+message C2M_LockHeroCardRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+	int64 HeroId = 2;
+	bool Lock = 3;
+}
+message M2C_LockHeroCardResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+

@@ -20,6 +20,22 @@ namespace ET
             {
                 baseWindow.GetComponent<DlgGoldInfoUI>().DataChangeAction += self.RegisterAccountInfoDataChangeAction;
             }
+
+            self.View.E_LockToggle.onValueChanged.AddListener(self.OnLockToogleValueChange);
+            // self.View.e_show
+        }
+        // public static void
+
+        public static async void OnLockToogleValueChange(this DlgShowHeroInfoLayer self, bool value)
+        {
+            var account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            var session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            C2M_LockHeroCardRequest request = new C2M_LockHeroCardRequest() { Account = account, HeroId = self.HeroCardInfo.HeroId, Lock = value };
+            var response = await session.Call(request) as M2C_LockHeroCardResponse;
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                Log.Debug("切换英雄锁的消息发送成功");
+            }
         }
 
         public static void OnUpdateHeroRankSuccessAction(this DlgShowHeroInfoLayer self, HeroCardInfo heroCardInfo)
@@ -148,6 +164,8 @@ namespace ET
             self.SetElementInfo(heroCardInfo);
             self.InitOnWeapon();
             self.RequestCurrentExp();
+
+            self.View.E_LockToggle.isOn = heroCardInfo.IsLock;
         }
 
         public static async void InitOnWeapon(this DlgShowHeroInfoLayer self)
@@ -164,7 +182,7 @@ namespace ET
                     weapon.uiTransform = obj.transform;
                     weapon.ShowAddButtonState();
                     weapon.E_ChooseButton.onClick.AddListener(() => { self.OnWeaponPosClick(weaponType); });
-                    self.WeaponDicts.Add((int) weaponType, weapon);
+                    self.WeaponDicts.Add((int)weaponType, weapon);
                 }
             }
 
@@ -203,7 +221,7 @@ namespace ET
         {
             Log.Debug($" click weapon pos {weaponType}");
             // await ETTask.CompletedTask;
-            Scroll_ItemWeapon itemWeapon = self.WeaponDicts[(int) weaponType];
+            Scroll_ItemWeapon itemWeapon = self.WeaponDicts[(int)weaponType];
             if (itemWeapon.WeaponInfo == null)
             {
                 self.ShowChooseWeaponLayer(weaponType);
@@ -301,7 +319,7 @@ namespace ET
             // self.View.E_ExpText.text = $"{expCount}/{needExp}";
             self.View.E_ExpText.text = needExp != 0? $"{needExp}" : "  ";
 
-            var rate = (float) expCount / needExp;
+            var rate = (float)expCount / needExp;
             self.View.E_ExpBarImage.fillAmount = rate;
             self.View.E_UpdateLevelButton.interactable = expCount >= needExp;
             //判断是否可以升级

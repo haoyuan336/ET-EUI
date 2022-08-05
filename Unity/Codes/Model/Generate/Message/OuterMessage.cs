@@ -1300,6 +1300,9 @@ namespace ET
 		[ProtoMember(22)]
 		public int CurrentExp { get; set; }
 
+		[ProtoMember(23)]
+		public bool IsLock { get; set; }
+
 // repeated long SkillIdList = 11;	//技能id
 	}
 
@@ -3472,6 +3475,40 @@ namespace ET
 	[Message(OuterOpcode.M2C_PlayerChooseLevelNumResponse)]
 	[ProtoContract]
 	public partial class M2C_PlayerChooseLevelNumResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_LockHeroCardResponse))]
+	[Message(OuterOpcode.C2M_LockHeroCardRequest)]
+	[ProtoContract]
+	public partial class C2M_LockHeroCardRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long Account { get; set; }
+
+		[ProtoMember(2)]
+		public long HeroId { get; set; }
+
+		[ProtoMember(3)]
+		public bool Lock { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_LockHeroCardResponse)]
+	[ProtoContract]
+	public partial class M2C_LockHeroCardResponse: Object, IActorLocationResponse
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }

@@ -73,6 +73,8 @@ namespace ET
 		public int Id { get; set; }
 		[ProtoMember(2)]
 		public string AudioClip { get; set; }
+		[ProtoMember(3)]
+		public int ComboAudio { get; set; }
 
 	}
 }

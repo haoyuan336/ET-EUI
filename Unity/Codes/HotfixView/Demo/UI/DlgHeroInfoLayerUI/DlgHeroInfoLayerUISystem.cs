@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+
 namespace ET
 {
     public static class DlgHeroInfoLayerUISystem
@@ -9,27 +10,35 @@ namespace ET
 
         public static void HideWindow(this DlgHeroInfoLayerUI self)
         {
-            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer);
+            var uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            uiComponent.HideWindow(WindowID.WindowID_AllHeroBagLayer);
+
+            var goldInfoUIBaseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_GoldInfoUI);
+            goldInfoUIBaseWindow.GetComponent<DlgGoldInfoUI>().ShowWidgetWithType(GoldInfoUIType.MainScene);
         }
 
         public static async void ShowWindow(this DlgHeroInfoLayerUI self, Entity contextData = null)
         {
-            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_AllHeroBagLayer);
-            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainSceneMenu);
-            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GoldInfoUI);
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_AllHeroBagLayer);
+            await uiComponent.ShowWindow(WindowID.WindowID_MainSceneMenu);
+            await uiComponent.ShowWindow(WindowID.WindowID_GoldInfoUI);
 
-            UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer];
+            UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int)WindowID.WindowID_AllHeroBagLayer];
             baseWindow.GetComponent<DlgAllHeroBagLayer>().OnHeroItemInfoClick = self.OnClickHeroItem;
             baseWindow.GetComponent<DlgAllHeroBagLayer>().SetShowHeroType(HeroBagType.HeroAndMaterial);
             baseWindow.uiTransform.GetComponent<RectTransform>().offsetMax = new Vector2(0, -400);
             baseWindow.uiTransform.GetComponent<RectTransform>().offsetMin = new Vector2(0, 200);
+
+            UIBaseWindow goldInfoBaseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_GoldInfoUI);
+            goldInfoBaseWindow.GetComponent<DlgGoldInfoUI>().ShowWidgetWithType(GoldInfoUIType.HeroInfo);
         }
 
         public static async void OnClickHeroItem(this DlgHeroInfoLayerUI self, HeroCardInfo heroCardInfo, Scroll_ItemHeroCard itemHeroCard,
         bool value)
         {
             var config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
-            if (config.MaterialType == (int) HeroBagType.Materail)
+            if (config.MaterialType == (int)HeroBagType.Materail)
             {
                 itemHeroCard.E_ChooseToggle.isOn = false;
                 return;
@@ -45,7 +54,7 @@ namespace ET
                 // self.DomainScene().GetComponent<UIComponent>().GetChild<UIBaseWindow>(WindowID.WindowID_ShowHeroInfoLayer);
 
                 // UIEventComponent.Instance.GetUIEventHandler(WindowID.WindowID_ShowHeroInfoLayer).OnInitWindowCoreData(baseWindow);
-                UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().AllWindowsDic[(int) WindowID.WindowID_ShowHeroInfoLayer];
+                UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().AllWindowsDic[(int)WindowID.WindowID_ShowHeroInfoLayer];
                 baseWindow.GetComponent<DlgShowHeroInfoLayer>().SetHeroInfo(heroCardInfo);
             }
         }

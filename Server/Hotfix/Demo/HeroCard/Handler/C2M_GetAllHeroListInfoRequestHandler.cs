@@ -15,6 +15,15 @@ namespace ET
             heroCards = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
                     .Query<HeroCard>(a => a.OwnerId.Equals(AccountId) && a.State == (int) HeroCardState.Active && a.Count > 0);
 
+            heroCards.RemoveAll((a) =>
+            {
+                HeroConfig config = HeroConfigCategory.Instance.Get(a.ConfigId);
+                if (config.MaterialType == (int)HeroBagType.Materail)
+                {
+                    return true;
+                }
+                return false;
+            });
             List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>();
             foreach (var heroCard in heroCards)
             {
