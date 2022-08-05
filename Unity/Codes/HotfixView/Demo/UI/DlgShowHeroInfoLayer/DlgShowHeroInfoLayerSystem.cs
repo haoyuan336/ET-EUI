@@ -22,9 +22,13 @@ namespace ET
             }
 
             self.View.E_LockToggle.onValueChanged.AddListener(self.OnLockToogleValueChange);
-            // self.View.e_show
+            self.View.E_ShowModelButton.AddListenerAsync(self.ShowHeroModeButtonClick);
         }
-        // public static void
+
+        public static async ETTask ShowHeroModeButtonClick(this DlgShowHeroInfoLayer self)
+        {
+            await ETTask.CompletedTask;
+        }
 
         public static async void OnLockToogleValueChange(this DlgShowHeroInfoLayer self, bool value)
         {

@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace ET
 {
-    public class PlayAudioEffect: AEvent<EventType.PlayAudioEffect>
+    public class PlayGameAudioEffect: AEvent<EventType.PlayGameAudioEffect>
     {
-        protected override async ETTask Run(EventType.PlayAudioEffect a)
+        protected override async ETTask Run(EventType.PlayGameAudioEffect a)
         {
             UIComponent uiComponent = a.ZoneScene.GetComponent<UIComponent>();
             UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_GameUI);
@@ -48,7 +48,7 @@ namespace ET
 
     public static class DlgGameUISystem
     {
-        public static async void PlayEffectAudio(this DlgGameUI self, string audioStr)
+        public static async void PlayEffectAudio(this DlgGameUI self, string audioStr, bool isLoop = false)
         {
             //加载资源
             var audioClip = await AddressableComponent.Instance.LoadAssetByPathAsync<AudioClip>(audioStr);
@@ -58,6 +58,8 @@ namespace ET
             {
                 if (!audioSource.isPlaying)
                 {
+                    audioSource.loop = isLoop;
+                    audioSource.playOnAwake = false;
                     audioSource.clip = audioClip;
                     audioSource.Play();
                     break;
@@ -101,6 +103,7 @@ namespace ET
             //         }
             //     }
             // }
+            self.PlayEffectAudio("Assets/Res/Audios/12_dungeon_pvp_bgm_loop.mp3", true);
         }
 
         public static void HideWindow(this DlgGameUI self)

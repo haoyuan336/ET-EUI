@@ -153,7 +153,7 @@ namespace ET
 
         #region UI按钮事件
 
-        public static void AddListenerAsync(this Button self, Func<ETTask> action)
+        public static void AddListenerAsync(this Button self, Func<ETTask> action, string clickAudioStr = "")
         {
             self.onClick.RemoveAllListeners();
 
@@ -171,8 +171,47 @@ namespace ET
                     return;
                 }
 
+                self.PlayButtonClickAudio(clickAudioStr);
                 clickActionAsync().Coroutine();
             });
+        }
+
+        public static async void PlayButtonClickAudio(this Toggle self, string clickAudioStr = "")
+        {
+            var audioStr = ConstValue.ButtonClickAudioStr;
+
+            if (!string.IsNullOrEmpty(clickAudioStr))
+            {
+                audioStr = clickAudioStr;
+            }
+
+            AudioComponent.Instance.PlayAudioEffect(audioStr);
+
+            await ETTask.CompletedTask;
+            // var audioClip = await AddressableComponent.Instance.LoadAssetByPathAsync<AudioClip>(audioStr);
+            //
+            // AudioSource audioSource;
+            // if (!self.gameObject.TryGetComponent(out audioSource))
+            // {
+            //     audioSource = self.gameObject.AddComponent<AudioSource>();
+            //     // self.gameObject.AddComponent<AudioSource>();
+            //     audioSource.playOnAwake = false;
+            // }
+            //
+            // audioSource.clip = audioClip;
+            // audioSource.Play();
+        }
+
+        public static void PlayButtonClickAudio(this Button self, string clickAudioStr = "")
+        {
+            var audioStr = ConstValue.ButtonClickAudioStr;
+            if (!string.IsNullOrEmpty(clickAudioStr))
+            {
+                audioStr = clickAudioStr;
+            }
+
+            AudioComponent.Instance.PlayAudioEffect(audioStr);
+         
         }
 
         // public static void AddListenerAsync(this Toggle self, Func<ETTask> action)
@@ -183,13 +222,24 @@ namespace ET
         public static void AddListener(this Toggle toggle, UnityAction<bool> selectEventHandler)
         {
             toggle.onValueChanged.RemoveAllListeners();
-            toggle.onValueChanged.AddListener(selectEventHandler);
+            toggle.onValueChanged.AddListener((value) =>
+            {
+                if (value)
+                {
+                    toggle.PlayButtonClickAudio();
+                }
+                selectEventHandler(value);
+            });
         }
 
         public static void AddListener(this Button button, UnityAction clickEventHandler)
         {
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(clickEventHandler);
+            button.onClick.AddListener(() =>
+            {
+                button.PlayButtonClickAudio();
+                clickEventHandler();
+            });
         }
 
         public static void AddListenerWithId(this Button button, Action<int> clickEventHandler, int id)
@@ -231,7 +281,5 @@ namespace ET
         }
 
         #endregion
-
-       
     }
 }

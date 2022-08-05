@@ -15,6 +15,20 @@ namespace ET
         {
             self.RegisterNewMailMessage();
             self.PlayBgMusic();
+
+            self.LoadAllAudio();
+        }
+
+        public static async void LoadAllAudio(this DlgMainScene self)
+        {
+            List<AudioClip> audioClips = await AddressableComponent.Instance.LoadAssetsByLabelAsync<AudioClip>("MainSceneAudio", (result) => { });
+            Log.Debug("all audio load success");
+            foreach (var clip in audioClips)
+            {
+                Log.Debug($"load audio name {clip.name}");
+            }
+
+            await ETTask.CompletedTask;
         }
 
         public static async void PlayBgMusic(this DlgMainScene self)

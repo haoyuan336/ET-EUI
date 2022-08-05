@@ -15,6 +15,7 @@ namespace ET
 
 #if !SERVER
         public const string LoginAddress = "59.110.220.207:10007";
+
         // public const string LoginAddress = "127.0.0.1:10007";
         public const float Distance = 0.6f;
         public const string WeaponAtlasPath = "Assets/Res/WeaponTextures/WeaponSpriteAtlas.spriteatlas";
@@ -24,6 +25,7 @@ namespace ET
 
         public const int CrashWaitTime = 0;
         public const int CrashItemWaitTime = 200;
+        public const string ButtonClickAudioStr = "Assets/Res/Audios/按键音-确认战斗.mp3";
 #endif
     }
 }

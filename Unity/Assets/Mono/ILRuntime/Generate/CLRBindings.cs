@@ -158,12 +158,17 @@ namespace ILRuntime.Runtime.Generated
             ET_ETTask_1_List_1_ILTypeInstance_Binding.Register(app);
             System_Collections_Generic_Queue_1_String_Binding.Register(app);
             ET_ETTask_1_AudioClip_Binding.Register(app);
+            System_Collections_Generic_List_1_AudioSource_Binding.Register(app);
+            System_Collections_Generic_List_1_AudioSource_Binding_Enumerator_Binding.Register(app);
             UnityEngine_AudioSource_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_ILTypeInstance_List_1_ILTypeInstance_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_ILTypeInstance_List_1_ILTypeInstance_Binding_Enumerator_Binding.Register(app);
             System_Collections_Generic_KeyValuePair_2_ILTypeInstance_List_1_ILTypeInstance_Binding.Register(app);
             ET_ETTask_1_List_1_GameObject_Binding.Register(app);
             ET_ETAsyncTaskMethodBuilder_1_Int64_Binding.Register(app);
+            ET_ETTask_1_List_1_AudioClip_Binding.Register(app);
+            System_Collections_Generic_List_1_AudioClip_Binding.Register(app);
+            System_Collections_Generic_List_1_AudioClip_Binding_Enumerator_Binding.Register(app);
             ET_ETTask_1_Int64_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Int32_ILTypeInstance_Binding_ValueCollection_Binding.Register(app);
             System_Collections_Generic_Dictionary_2_Int32_ILTypeInstance_Binding_ValueCollection_Binding_Enumerator_Binding.Register(app);
@@ -180,6 +185,7 @@ namespace ILRuntime.Runtime.Generated
             System_Collections_Generic_Dictionary_2_Int32_ILTypeInstance_Binding_Enumerator_Binding.Register(app);
             System_Collections_Generic_KeyValuePair_2_Int32_ILTypeInstance_Binding.Register(app);
             System_Func_1_ETTask_Binding.Register(app);
+            UnityEngine_Events_UnityAction_Binding.Register(app);
             System_Action_1_Int32_Binding.Register(app);
             System_Action_1_Int64_Binding.Register(app);
             ET_ETAsyncTaskMethodBuilder_1_Sprite_Binding.Register(app);
@@ -254,6 +260,7 @@ namespace ILRuntime.Runtime.Generated
             UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_AudioClip_Binding.Register(app);
             UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_IList_1_Object_Binding.Register(app);
             UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_IList_1_GameObject_Binding.Register(app);
+            UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_IList_1_AudioClip_Binding.Register(app);
             UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_SpriteAtlas_Binding.Register(app);
             UnityEngine_ResourceManagement_ResourceProviders_SceneInstance_Binding.Register(app);
             UnityEngine_AsyncOperation_Binding.Register(app);

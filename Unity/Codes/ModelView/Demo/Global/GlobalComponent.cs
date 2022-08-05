@@ -16,5 +16,6 @@ namespace ET
         public Transform OtherRoot;
         public Transform GameUIRoot;
         public Transform DiamondContent;
+        public Transform AudioResourceRoot;
     }
 }

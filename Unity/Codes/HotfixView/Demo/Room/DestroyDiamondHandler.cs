@@ -24,7 +24,7 @@ namespace ET
                 // AudioSource audioSource = go.GetComponent<AudioSource>();
                 // audioSource.clip = audio;
                 // audioSource.Play();
-                Game.EventSystem.Publish(new EventType.PlayAudioEffect()
+                Game.EventSystem.Publish(new EventType.PlayGameAudioEffect()
                 {
                     AudioStr = audioCrashStr,
                     ZoneScene = scene.ZoneScene()

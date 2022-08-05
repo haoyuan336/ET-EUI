@@ -12,6 +12,12 @@ namespace ET
             public Scene ZoneScene;
         }
 
+        public struct PlayGameAudioEffect
+        {
+            public string AudioStr;
+            public Scene ZoneScene;
+        }
+
         public struct HideCombo
         {
             public Scene Scene;

@@ -10,6 +10,7 @@ namespace ET
             zoneScene.AddComponent<UIEventComponent>();
             zoneScene.AddComponent<RedDotComponent>();
             zoneScene.AddComponent<CameraComponent>();
+            zoneScene.AddComponent<AudioComponent>();
             // zoneScene.AddComponent<ResourcesLoaderComponent>();
         
             // zoneScene.AddComponent<>()

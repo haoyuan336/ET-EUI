@@ -143,6 +143,8 @@ namespace ET
             appdomain.DelegateManager.RegisterFunctionDelegate<ILRuntime.Runtime.Intepreter.ILTypeInstance, ILRuntime.Runtime.Intepreter.ILTypeInstance>();
             appdomain.DelegateManager.RegisterMethodDelegate<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.AudioClip>>();
             // 注册适配器
+            appdomain.DelegateManager.RegisterMethodDelegate<UnityEngine.AudioClip>();
+            appdomain.DelegateManager.RegisterMethodDelegate<UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<System.Collections.Generic.IList<UnityEngine.AudioClip>>>();
             RegisterAdaptor(appdomain);
 
             //注册Json的CLR

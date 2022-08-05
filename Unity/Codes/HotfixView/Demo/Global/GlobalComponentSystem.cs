@@ -20,6 +20,7 @@ namespace ET
             self.GameUIRoot = GameObject.Find("Global/UIRoot/GameUIRoot").transform;
 
             self.DiamondContent = GameObject.Find("Global/DiamondContent").transform;
+            self.AudioResourceRoot = GameObject.Find("Global/UIRoot/AudioResourceRoot").transform;
         }
     }
 }
