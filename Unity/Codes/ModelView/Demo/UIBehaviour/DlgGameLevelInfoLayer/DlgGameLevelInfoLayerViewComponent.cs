@@ -5,23 +5,6 @@ namespace ET
 {
 	public  class DlgGameLevelInfoLayerViewComponent : Entity,IAwake,IDestroy 
 	{
-		public UnityEngine.UI.Image E_TroopHeroCardItemImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_TroopHeroCardItemImage == null )
-     			{
-		    		this.m_E_TroopHeroCardItemImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_TroopHeroCardItem");
-     			}
-     			return this.m_E_TroopHeroCardItemImage;
-     		}
-     	}
-
 		public UnityEngine.UI.Button E_EditorTroopButton
      	{
      		get
@@ -209,9 +192,25 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Image E_TroopHeroCardItemImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_TroopHeroCardItemImage == null )
+     			{
+		    		this.m_E_TroopHeroCardItemImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_TroopHeroCardItem");
+     			}
+     			return this.m_E_TroopHeroCardItemImage;
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
-			this.m_E_TroopHeroCardItemImage = null;
 			this.m_E_EditorTroopButton = null;
 			this.m_E_EditorTroopImage = null;
 			this.m_E_EditorSkillButton = null;
@@ -223,10 +222,10 @@ namespace ET
 			this.m_E_BackImage = null;
 			this.m_E_LevelInputInputField = null;
 			this.m_E_LevelInputImage = null;
+			this.m_E_TroopHeroCardItemImage = null;
 			this.uiTransform = null;
 		}
 
-		private UnityEngine.UI.Image m_E_TroopHeroCardItemImage = null;
 		private UnityEngine.UI.Button m_E_EditorTroopButton = null;
 		private UnityEngine.UI.Image m_E_EditorTroopImage = null;
 		private UnityEngine.UI.Button m_E_EditorSkillButton = null;
@@ -238,6 +237,7 @@ namespace ET
 		private UnityEngine.UI.Image m_E_BackImage = null;
 		private UnityEngine.UI.InputField m_E_LevelInputInputField = null;
 		private UnityEngine.UI.Image m_E_LevelInputImage = null;
+		private UnityEngine.UI.Image m_E_TroopHeroCardItemImage = null;
 		public Transform uiTransform = null;
 	}
 }

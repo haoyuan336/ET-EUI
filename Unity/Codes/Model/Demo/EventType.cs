@@ -382,5 +382,11 @@ namespace ET
             public HeroCard HeroCard;
             public HeroCardDataComponentInfo HeroCardDataComponentInfo;
         }
+
+        public struct ShowMatchPVPRoomSuccessAnim
+        {
+            public Scene Scene;
+            public long RoomId;
+        }
     }
 }

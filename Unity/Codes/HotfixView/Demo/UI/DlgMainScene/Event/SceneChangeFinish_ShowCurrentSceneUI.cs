@@ -43,8 +43,6 @@ namespace ET
 
                     await args.ZoneScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameLevelLayer);
                     await args.ZoneScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameUI);
-                    
-                    
 
                     break;
             }

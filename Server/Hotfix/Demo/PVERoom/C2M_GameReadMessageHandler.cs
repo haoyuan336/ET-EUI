@@ -4,11 +4,13 @@
     {
         protected override async ETTask Run(Unit unit, C2M_GameReadyMessage message)
         {
-            Log.Debug("unit game ready");
+            Log.Debug($"unit game readyP{unit.DomainScene().SceneType}");
             PVERoom pveRoom = unit.DomainScene().GetComponent<PVERoomComponent>().AddChild<PVERoom>();
             unit.AccountId = message.AccountId;
             pveRoom.PlayerGameReady(unit, message.AccountId);
 
+            
+            
             await ETTask.CompletedTask;
         }
     }

@@ -17,12 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: e20e4104d931462418d76c4f15ced3fb
   m_SerializeEntries:
-  - m_GUID: 2c85f9bc9b5b07a49b9acc3cdab85b74
-    m_Address: DlgEditorTroopLayer
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - All
-    - UI
   - m_GUID: c291809cebe94124d90890c07e9939a2
     m_Address: DlgGameUI
     m_ReadOnly: 0
@@ -210,19 +204,13 @@ MonoBehaviour:
     - All
     - UI
   - m_GUID: 258160371f4aafa49952a5dd5099e079
-    m_Address: DlgGameLevelInfoLayer
+    m_Address: DlgEditorTroopLayer
     m_ReadOnly: 0
     m_SerializedLabels:
     - All
     - UI
   - m_GUID: 4b3898bc1b8c1cc47a339baf73095295
     m_Address: DlgBackButton
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - All
-    - UI
-  - m_GUID: bd3e827590887ab4ca6be7490910d5c3
-    m_Address: DlgGameLevelEnemyInfoLayer
     m_ReadOnly: 0
     m_SerializedLabels:
     - All
@@ -349,6 +337,30 @@ MonoBehaviour:
     - All
   - m_GUID: bfb35c5350496b44bb41fca9154aafcc
     m_Address: DlgGameLevelStoryLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 017f5207837954fec8742d8467f32604
+    m_Address: DlgPVPSceneLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: e1b49114129954e08bf50dd9709e2e16
+    m_Address: DlgPVPFightPrepareLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 599310a8290914d5cb04ff6a14b7580d
+    m_Address: DlgPVESceneLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 1e8078ac79a614c05b98f5f8a9a339b3
+    m_Address: DlgPVPMatchFightLayer
     m_ReadOnly: 0
     m_SerializedLabels:
     - All

@@ -1,171 +1,245 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-
 namespace ET
 {
     public static class DlgEditorTroopLayerSystem
     {
         public static void RegisterUIEvent(this DlgEditorTroopLayer self)
         {
+            // self.View.E_EditorTroopButton.AddListenerAsync(self.ShowEditorTroopLayer);
             // self.View.ESTroopHeroCards.RegisterUIEvent();
-            self.View.E_BackButton.AddListener(self.OnBackButtonClick);
+        }
+
+        // public static async ETTask StartGame(this DlgGameLevelInfoLayer self)
+        // {
+        //     
+        //     await ETTask.CompletedTask;
+        // }
+        /// <summary>
+        /// 检查体力是否足够
+        /// </summary>
+        /// <param name="self"></param>
+        public static async ETTask<bool> CheckPowerIsEnough(this DlgEditorTroopLayer self)
+        {
+            long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            M2C_GetGoldInfoResponse response = (M2C_GetGoldInfoResponse)await session.Call(new C2M_GetGoldInfoRequest() { AccountId = AccountId });
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                // if (response.PowerCount > 0)
+                // {
+                //     return true;
+                // }
+                var powerCount = 0;
+                foreach (var itemCountInfo in response.ItemInfos)
+                {
+                    if (itemCountInfo.ConfigId == 1003)
+                    {
+                        powerCount = itemCountInfo.Count;
+                    }
+                }
+
+                if (powerCount > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public static async void ShowWindow(this DlgEditorTroopLayer self, Entity contextData = null)
+        {
+            List<HeroCardInfo> heroCardInfos = await self.RequestCurrentTroopInfo();
+            self.SetTroopHeroCardInfo(heroCardInfos);
+        }
+
+        public static async void GetCurrentTroopId(this DlgEditorTroopLayer self)
+        {
+            long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+
+            C2M_GetAllTroopInfosRequest request = new C2M_GetAllTroopInfosRequest() { Account = accountId };
+            M2C_GetAllTroopInfosResponse response = (M2C_GetAllTroopInfosResponse)await session.Call(request);
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                self.CurrentChooseTroopId = response.TroopInfos[0].TroopId;
+            }
+        }
+
+        public static async void SetTroopHeroCardInfo(this DlgEditorTroopLayer self, List<HeroCardInfo> heroCardInfos)
+        {
+            if (self.ItemHeroCards.Count == 0)
+            {
+                var itemHeroPrefab = "ItemHeroCard";
+                GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(itemHeroPrefab);
+                for (int i = 0; i < 3; i++)
+                {
+                    GameObject obj = GameObject.Instantiate(prefab, self.View.E_TroopHeroCardItemImage.transform);
+                    Scroll_ItemHeroCard heroCard =
+                            self.AddChildWithId<Scroll_ItemHeroCard, Transform>(IdGenerater.Instance.GenerateId(), obj.transform);
+                    self.ItemHeroCards.Add(heroCard);
+                    heroCard.InTroopIndex = i;
+                    heroCard.E_ChooseToggle.onValueChanged.RemoveAllListeners();
+                    heroCard.E_ChooseToggle.onValueChanged.AddListener((value) => { self.OnHeroCardItemClick(heroCard, value); });
+                }
+            }
+
+            Log.Debug($"heroc card infos {heroCardInfos.Count}");
+
+            for (int i = 0; i < self.ItemHeroCards.Count; i++)
+            {
+                var item = self.ItemHeroCards[i];
+                var heroCardInfo = heroCardInfos.Find(a => a.InTroopIndex == i);
+                item.InitHeroCard(heroCardInfo);
+            }
+        }
+
+        public static async void OnHeroCardItemClick(this DlgEditorTroopLayer self, Scroll_ItemHeroCard heroCard, bool value)
+        {
+            if (value)
+            {
+                heroCard.E_ChooseToggle.isOn = false;
+                if (heroCard.HeroCardInfo == null)
+                {
+                    Log.Debug($"choose hero card index {heroCard.InTroopIndex}");
+                    self.ShowChooseHeroCardLayer();
+                }
+                else
+                {
+                    //取消
+                    HeroCardInfo heroCardInfo = heroCard.HeroCardInfo;
+                    List<HeroCardInfo> heroCardInfos = await self.UnSetHeroCardTroopIdRequest(heroCardInfo.HeroId);
+
+                    self.UpdateChooseHeroState(heroCardInfos);
+                    self.SetTroopHeroCardInfo(heroCardInfos);
+                }
+            }
+        }
+
+        public static async ETTask<List<HeroCardInfo>> UnSetHeroCardTroopIdRequest(this DlgEditorTroopLayer self, long heroId)
+        {
+            long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            C2M_UnSetHeroToTroopRequest request = new C2M_UnSetHeroToTroopRequest()
+            {
+                AccountId = accountId, HeroId = heroId, TroopId = self.CurrentChooseTroopId
+            };
+            M2C_UnSetHeroToTroopResponse response = (M2C_UnSetHeroToTroopResponse)await session.Call(request);
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                // self.SetTroopHeroCardInfo(response.HeroCardInfos);
+                return response.HeroCardInfos;
+            }
+
+            return new List<HeroCardInfo>();
+        }
+
+        public static async ETTask<List<HeroCardInfo>> UpdateHeroCardTroopId(this DlgEditorTroopLayer self, long heroId, long troopId)
+        {
+            long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            //更新此英雄到队伍里面
+            C2M_SetHeroToTroopRequest request = new C2M_SetHeroToTroopRequest()
+            {
+                AccountId = account, TroopId = self.CurrentChooseTroopId, HeroId = heroId
+            };
+            M2C_SetHeroToTroopResponse response = (M2C_SetHeroToTroopResponse)await session.Call(request);
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                return response.HeroCardInfos;
+            }
+
+            return new List<HeroCardInfo>();
+        }
+
+        public static async void OnHeroItemClick(this DlgEditorTroopLayer self, HeroCardInfo heroCardInfo, Scroll_ItemHeroCard heroCard, bool value)
+        {
+            //
+            if (value)
+            {
+                List<HeroCardInfo> heroCardInfos = await self.UpdateHeroCardTroopId(heroCardInfo.HeroId, self.CurrentChooseTroopId);
+                self.SetTroopHeroCardInfo(heroCardInfos);
+                self.UpdateChooseHeroState(heroCardInfos);
+            }
+            else
+            {
+                List<HeroCardInfo> heroCardInfos = await self.UnSetHeroCardTroopIdRequest(heroCardInfo.HeroId);
+                self.SetTroopHeroCardInfo(heroCardInfos);
+            }
+        }
+
+        public static void UpdateChooseHeroState(this DlgEditorTroopLayer self, List<HeroCardInfo> heroCardInfos)
+        {
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_AllHeroBagLayer);
+            if (baseWindow != null)
+            {
+                baseWindow.GetComponent<DlgAllHeroBagLayer>().SetAllChooseHeroCardInfos(heroCardInfos);
+                baseWindow.GetComponent<DlgAllHeroBagLayer>().SetUnabelNameHeroCardInfo(heroCardInfos);
+            }
+        }
+
+        public static async void ShowChooseHeroCardLayer(this DlgEditorTroopLayer self)
+        {
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_AllHeroBagLayer);
+            UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_AllHeroBagLayer);
+            RectTransform rectTransform = baseWindow.uiTransform.GetComponent<RectTransform>();
+            baseWindow.GetComponent<DlgAllHeroBagLayer>().SetShowHeroType(HeroBagType.Hero);
+            rectTransform.anchorMax = new Vector2(1, 1);
+            rectTransform.anchorMin = new Vector2(0, 0);
+            rectTransform.offsetMax = new Vector2(0, -700);
+            rectTransform.offsetMin = new Vector2(0, 0);
+
+            await uiComponent.ShowWindow(WindowID.WindowID_BackButton);
+            UIBaseWindow backBaseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_BackButton);
+            // backBaseWindow.uiTransform.GetComponent<RectTransform>().anchoredPosition = new Vector2(166, -205);
+            backBaseWindow.GetComponent<DlgBackButton>().BackButtonClickAction = () =>
+            {
+                uiComponent.HideWindow(WindowID.WindowID_AllHeroBagLayer);
+                uiComponent.HideWindow(WindowID.WindowID_BackButton);
+            };
+            baseWindow.GetComponent<DlgAllHeroBagLayer>().OnHeroItemInfoClick = null;
+            baseWindow.GetComponent<DlgAllHeroBagLayer>().OnHeroItemInfoClick = self.OnHeroItemClick;
+        }
+
+        public static async ETTask<List<HeroCardInfo>> RequestCurrentTroopInfo(this DlgEditorTroopLayer self)
+        {
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            C2M_GetAllTroopInfosRequest troopInfosRequest = new C2M_GetAllTroopInfosRequest() { Account = account };
+            M2C_GetAllTroopInfosResponse response = (M2C_GetAllTroopInfosResponse)await session.Call(troopInfosRequest);
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                // Log.Debug($"response {response.TroopInfos.Count}");
+                // TroopInfo troopInfo = response.TroopInfos[0];
+                if (response.TroopInfos.Count > 0)
+                {
+                    long troopId = response.TroopInfos[0].TroopId;
+                    //获取此id下的玩家列表
+                    self.CurrentChooseTroopId = troopId;
+                    C2M_GetHeroInfosWithTroopIdRequest c2m = new C2M_GetHeroInfosWithTroopIdRequest() { TroopId = troopId };
+                    M2C_GetHeroInfosWithTroopIdResponse getHeroInfosWithTroopIdResponse =
+                            (M2C_GetHeroInfosWithTroopIdResponse)await session.Call(c2m);
+                    if (getHeroInfosWithTroopIdResponse.Error == ErrorCode.ERR_Success)
+                    {
+                        List<HeroCardInfo> heroCardInfos = getHeroInfosWithTroopIdResponse.HeroCardInfos;
+                        return heroCardInfos;
+                    }
+                }
+            }
+
+            return null;
         }
 
         public static void OnBackButtonClick(this DlgEditorTroopLayer self)
         {
-            // await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_BackButton);
-            // UIBaseWindow baseWindow = self.DomainScene().GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_BackButton);
-            // baseWindow.GetComponent<DlgBackButton>().BackButtonClickAction = () =>
-            // {
-            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer);
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_EditorTroopLayer);
-            //     
-            // };
-        }
-
-        public static async void ShowTroopHeroCardInfo(this DlgEditorTroopLayer self)
-        {
-            //显示当前的队伍信息
-            //首先获取到当前的玩家队伍id
-            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
-            long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-
-            M2C_GetAllTroopInfosResponse troopInfosResponse =
-                    (M2C_GetAllTroopInfosResponse) await session.Call(new C2M_GetAllTroopInfosRequest() { Account = accountId });
-            if (troopInfosResponse.Error == ErrorCode.ERR_Success)
-            {
-                Log.Debug($"troop info {troopInfosResponse.TroopInfos.Count}");
-
-                self.CurrentChooseTroopId = troopInfosResponse.TroopInfos[0].TroopId;
-                //获取此id下的所有英雄
-                Log.Debug($"current choose troop id{self.CurrentChooseTroopId}");
-                M2C_GetHeroInfosWithTroopIdResponse troopIdResponse = (M2C_GetHeroInfosWithTroopIdResponse) await session.Call(
-                    new C2M_GetHeroInfosWithTroopIdRequest() { TroopId = troopInfosResponse.TroopInfos[0].TroopId });
-                if (troopIdResponse.Error == ErrorCode.ERR_Success)
-                {
-                    self.TroopHeroCardInfos = troopIdResponse.HeroCardInfos;
-                    Log.Debug($"self troop card info {self.TroopHeroCardInfos.Count}");
-                    self.UpdateTroopHeroCardInfoAsync(self.TroopHeroCardInfos);
-                    // self.View.E_TroopCardContentLoopVerticalScrollRect.RefreshCells();
-                    self.SetAlChooseHeroCardInfo();
-                }
-            }
-        }
-
-        public static async ETTask UnSetHeroToTroopAsync(this DlgEditorTroopLayer self, HeroCardInfo heroCardInfo)
-        {
-            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
-            long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            M2C_UnSetHeroToTroopResponse response = (M2C_UnSetHeroToTroopResponse) await session.Call(new C2M_UnSetHeroToTroopRequest()
-            {
-                AccountId = accountId, TroopId = self.CurrentChooseTroopId, HeroId = heroCardInfo.HeroId
-            });
-            if (response.Error == ErrorCode.ERR_Success)
-            {
-                Log.Debug("从队伍里面移除英雄成功");
-                self.TroopHeroCardInfos = response.HeroCardInfos;
-                // self.View.E_TroopCardContentLoopVerticalScrollRect.RefreshCells();
-                // SetAllChooseHeroCardInfos
-                self.UpdateTroopHeroCardInfoAsync(self.TroopHeroCardInfos);
-
-                self.SetAlChooseHeroCardInfo();
-            }
-        }
-
-        public static async void OnTroopHeroCardItemClickAction(this DlgEditorTroopLayer self, HeroCardInfo heroCardInfo, bool value)
-        {
-            if (value)
-            {
-                if (heroCardInfo != null)
-                {
-                    await self.UnSetHeroToTroopAsync(heroCardInfo);
-                }
-            }
-        }
-
-        public static void SetAlChooseHeroCardInfo(this DlgEditorTroopLayer self)
-        {
-            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
-            UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer];
-            baseWindow.GetComponent<DlgAllHeroBagLayer>().SetAllChooseHeroCardInfos(self.TroopHeroCardInfos);
-            baseWindow.GetComponent<DlgAllHeroBagLayer>().SetUnabelNameHeroCardInfo(self.TroopHeroCardInfos);
-            // baseWindow.GetComponent<DlgAllHeroBagLayer>().SetUnableElementHeroCardInfo(self.TroopHeroCardInfos);
-            // baseWindow.GetComponent<DlgAllHeroBagLayer>().UnableElementHeroCardInfos = self.TroopHeroCardInfos;
-        }
-
-        public static void UpdateTroopHeroCardInfoAsync(this DlgEditorTroopLayer self, List<HeroCardInfo> heroCardInfos)
-        {
-            // self.View.ESTroopHeroCards.UpdateHeroCardInfo(heroCardInfos);
-        }
-
-        public static async void OnHeroCardItemClickAction(this DlgEditorTroopLayer self, HeroCardInfo info, Scroll_ItemHeroCard heroCard, bool value)
-        {
-            Log.Debug("on hero card click");
-            if (value)
-            {
-                if (self.TroopHeroCardInfos.Count == 3)
-                {
-                    heroCard.E_ChooseToggle.isOn = false;
-                    return;
-                }
-
-                Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
-                long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-                M2C_SetHeroToTroopResponse response = (M2C_SetHeroToTroopResponse) await
-                        session.Call(new C2M_SetHeroToTroopRequest()
-                        {
-                            HeroId = info.HeroId, TroopId = self.CurrentChooseTroopId, AccountId = accountId
-                        });
-                if (response.Error == ErrorCode.ERR_Success)
-                {
-                    // Log.Debug($"设置队伍成功{response.HeroCardInfos.Count}");
-                    self.TroopHeroCardInfos = response.HeroCardInfos;
-
-                    if (self.EditorHeroCardAction != null)
-                    {
-                        self.EditorHeroCardAction(response.HeroCardInfos);
-                    }
-                    
-                    self.UpdateTroopHeroCardInfoAsync(self.TroopHeroCardInfos);
-                }
-                else
-                {
-                    heroCard.E_ChooseToggle.isOn = false;
-                }
-            }
-
-            if (!value)
-            {
-                await self.UnSetHeroToTroopAsync(info);
-            }
-
-            self.SetAlChooseHeroCardInfo();
-        }
-
-        public static async void ShowWindow(this DlgEditorTroopLayer self, Entity contextData = null)
-        {
-            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
-            await uiComponent.ShowWindow(WindowID.WindowID_AllHeroBagLayer);
-            UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int) WindowID.WindowID_AllHeroBagLayer];
-            baseWindow.uiTransform.GetComponent<RectTransform>().offsetMax = new Vector2(0, -600);
-            baseWindow.uiTransform.GetComponent<RectTransform>().offsetMin = new Vector2(0, 250);
-            DlgAllHeroBagLayer allHeroBagLayer = baseWindow.GetComponent<DlgAllHeroBagLayer>();
-            allHeroBagLayer.OnHeroItemInfoClick = self.OnHeroCardItemClickAction;
-            await allHeroBagLayer.SetShowHeroTypeAsync(HeroBagType.Hero);
-            // self.View.ESTroopHeroCards.ItemCardClickAction = self.OnTroopHeroCardItemClickAction;
-            self.ShowTroopHeroCardInfo();
-            // self.ShowBackButton();
+            self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainScene).Coroutine();
         }
 
         public static void HideWindow(this DlgEditorTroopLayer self)
         {
-            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer);
-            // self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_TroopHeroCardLayer);
-            // self.View.E_StartGameButton.gameObject.SetActive(false);
-            if (self.HideEditorTroopLayerAction != null)
-            {
-                self.HideEditorTroopLayerAction();
-            }
+            self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_BackButton);
         }
     }
 }

@@ -140,7 +140,7 @@ namespace ET
         public static async ETTask PvEButtonClick(this DlgMainSceneMenu self)
         {
             Log.Debug("pve button click");
-            await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_EditorTroopLayer);
+            // await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_EditorTroopLayer);
             self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_MainScene);
 
             await ETTask.CompletedTask;

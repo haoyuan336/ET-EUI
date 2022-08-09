@@ -5,7 +5,7 @@ namespace ET
 {
 	public  class DlgEditorTroopLayerViewComponent : Entity,IAwake,IDestroy 
 	{
-		public UnityEngine.UI.Text E_TroopNameText
+		public UnityEngine.UI.Image E_TroopHeroCardItemImage
      	{
      		get
      		{
@@ -14,59 +14,21 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_TroopNameText == null )
+     			if( this.m_E_TroopHeroCardItemImage == null )
      			{
-		    		this.m_E_TroopNameText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_TroopName");
+		    		this.m_E_TroopHeroCardItemImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_TroopHeroCardItem");
      			}
-     			return this.m_E_TroopNameText;
-     		}
-     	}
-
-		public UnityEngine.UI.Button E_BackButton
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_BackButton == null )
-     			{
-		    		this.m_E_BackButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Back");
-     			}
-     			return this.m_E_BackButton;
-     		}
-     	}
-
-		public UnityEngine.UI.Image E_BackImage
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_BackImage == null )
-     			{
-		    		this.m_E_BackImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Back");
-     			}
-     			return this.m_E_BackImage;
+     			return this.m_E_TroopHeroCardItemImage;
      		}
      	}
 
 		public void DestroyWidget()
 		{
-			this.m_E_TroopNameText = null;
-			this.m_E_BackButton = null;
-			this.m_E_BackImage = null;
+			this.m_E_TroopHeroCardItemImage = null;
 			this.uiTransform = null;
 		}
 
-		private UnityEngine.UI.Text m_E_TroopNameText = null;
-		private UnityEngine.UI.Button m_E_BackButton = null;
-		private UnityEngine.UI.Image m_E_BackImage = null;
+		private UnityEngine.UI.Image m_E_TroopHeroCardItemImage = null;
 		public Transform uiTransform = null;
 	}
 }

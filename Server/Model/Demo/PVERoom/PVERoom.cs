@@ -4,15 +4,15 @@ namespace ET
 {
     public class PVERoom: Entity, IAwake, IUpdate, IDestroy
     {
-        public List<Unit> Units = new List<Unit>();
-        public int CurrentTurnIndex = 0;
-        public int HangCount = 0;
-        public int LieCount = 0;
-        public DiamondComponent DiamondComponent = null;
-        public LevelConfig LevelConfig;
-        public HeroCard CurrentBeAttackHeroCard;
-        // public HeroCard Current
-
-        public List<DiamondActionItem> DiamondActionItems = new List<DiamondActionItem>();
+        // public List<Unit> Units = new List<Unit>();
+        // public int CurrentTurnIndex = 0;
+        // public int HangCount = 0;
+        // public int LieCount = 0;
+        // // public DiamondComponent DiamondComponent = null;
+        // public LevelConfig LevelConfig;
+        // public HeroCard CurrentBeAttackHeroCard;
+        // // public HeroCard Current
+        //
+        // public List<DiamondActionItem> DiamondActionItems = new List<DiamondActionItem>();
     }
 }

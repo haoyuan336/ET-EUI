@@ -16,7 +16,8 @@
         WindowID_CallHeroLayer, //召唤英雄页面
         WindowID_MainScene, //游戏的主页面
         WindowID_BagLayer, //背部页面
-        WindowID_EditorTroopLayer, //编辑队伍页面
+
+        // WindowID_EditorTroopLayer, //编辑队伍页面
         WindowID_GameWinUI, //游戏胜利UI
         WindowID_GoldInfoUI, //游戏金币体力钻石信息
         WindowID_AccountInfo, //用户信息 id 以及经验值
@@ -38,9 +39,11 @@
         WindowID_AddSubPlane, //
         WindowID_AllHeroBagLayer, //所有英雄的背包页面
         WindowID_HeroStrengthenLayer, //强化英雄页面
-        WindowID_GameLevelInfoLayer, // 游戏关卡详情页面
+
+        // WindowID_GameLevelInfoLayer, // 游戏关卡详情页面
         WindowID_BackButton, //返回按钮
-        WindowID_GameLevelEnemyInfoLayer, //游戏关卡敌人信息层
+
+        // WindowID_GameLevelEnemyInfoLayer, //游戏关卡敌人信息层
         WindowID_WeaponInfoLayer, //装备相信层
         WindowID_UpdateHeroRankLayer, //英雄升阶页面
         WindowID_UpdateHeroStarLayer, //英雄升星页面
@@ -63,5 +66,12 @@
         WindowID_DayTaskLayer, //每日任务
         WindowID_OwnAwardTipsLayer, // //获得的奖励提示层
         WindowID_GameLevelStoryLayer, //游戏关卡剧情面板
+        WindowID_PVPSceneLayer, //对战层
+
+        // WindowID_EditorTroopWidget, //编辑队伍控件
+        WindowID_EditorTroopLayer, //编辑队伍层
+        WindowID_PVESceneLayer, //pve游戏主页面
+        WindowID_PVPFightPrepareLayer, //对战 站前准备层
+        WindowID_PVPMatchFightLayer, //对战 匹配层
     }
 }

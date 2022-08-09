@@ -23,5 +23,6 @@
         Current = 34,
 
         ChangeTempScene = 35, //切换场景的临时场景
+        PVPGameScene = 36, // 
     }
 }

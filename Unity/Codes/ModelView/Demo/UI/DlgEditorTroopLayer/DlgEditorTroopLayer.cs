@@ -18,5 +18,7 @@ namespace ET
 
         public Action<List<HeroCardInfo>> EditorHeroCardAction;
 
+        public List<Scroll_ItemHeroCard> ItemHeroCards = new List<Scroll_ItemHeroCard>();
+
     }
 }

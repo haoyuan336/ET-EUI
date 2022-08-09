@@ -23,11 +23,11 @@ namespace ET
             Log.Debug("获取按钮点击");
             switch (self.GameTaskInfo.TaskState)
             {
-                case (int) TaskStateType.Completed:
+                case (int)TaskStateType.Completed:
                     Log.Debug("领取任务奖励");
                     await self.GetTaskAward();
                     break;
-                case (int) TaskStateType.UnComplete:
+                case (int)TaskStateType.UnComplete:
                     Log.Debug("去完成游戏");
                     self.OnUnCompleteButtonClick();
                     break;
@@ -42,7 +42,6 @@ namespace ET
             var configId = self.TaskConfig.ActionConfigId;
             uiComponent.HideWindow(WindowID.WindowID_TaskLabelLayer);
 
-
             switch (configId)
             {
                 case 10002:
@@ -54,14 +53,14 @@ namespace ET
                     uiComponent.HideWindow(WindowID.WindowID_SettingUI);
                     uiComponent.HideWindow(WindowID.WindowID_FormationUI);
                     uiComponent.HideWindow(WindowID.WindowID_MainSceneMenu);
-                    await uiComponent.ShowWindow(WindowID.WindowID_GameLevelInfoLayer);
+                    await uiComponent.ShowWindow(WindowID.WindowID_PVESceneLayer);
 
                     uiComponent.ShowWindow(WindowID.WindowID_GoldInfoUI).Coroutine();
                     break;
-                
+
                 case 10004:
                     await uiComponent.ShowWindow(WindowID.WindowID_FriendLayer);
-                    
+
                     break;
                 case 10005:
                     uiComponent.HideWindow(WindowID.WindowID_MainScene);
@@ -71,7 +70,7 @@ namespace ET
                     uiComponent.HideWindow(WindowID.WindowID_SettingUI);
                     uiComponent.HideWindow(WindowID.WindowID_FormationUI);
                     uiComponent.HideWindow(WindowID.WindowID_MainSceneMenu);
-                    await uiComponent.ShowWindow(WindowID.WindowID_GameLevelInfoLayer);
+                    await uiComponent.ShowWindow(WindowID.WindowID_PVESceneLayer);
                     break;
             }
         }
@@ -117,17 +116,17 @@ namespace ET
             string buttonImageName = "";
             switch (gameTaskInfo.TaskState)
             {
-                case (int) TaskStateType.Awarded:
+                case (int)TaskStateType.Awarded:
                     self.E_GetTipText.text = "完成";
                     self.E_GetButton.interactable = false;
                     buttonImageName = "smbtn_hui";
                     break;
-                case (int) TaskStateType.UnComplete:
+                case (int)TaskStateType.UnComplete:
                     self.E_GetTipText.text = "去完成";
                     self.E_GetButton.interactable = true;
                     buttonImageName = "smbtnhuang";
                     break;
-                case (int) TaskStateType.Completed:
+                case (int)TaskStateType.Completed:
                     self.E_GetTipText.text = "领取";
                     self.E_GetButton.interactable = true;
                     buttonImageName = "smbtnlv";

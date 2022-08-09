@@ -27,12 +27,10 @@
 
 		public void OnHideWindow(UIBaseWindow uiBaseWindow)
 		{
-			uiBaseWindow.GetComponent<DlgEditorTroopLayer>().HideWindow();
 		}
 
 		public void BeforeUnload(UIBaseWindow uiBaseWindow)
 		{
-			
 		}
 
 	}

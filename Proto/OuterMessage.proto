@@ -290,15 +290,15 @@ message M2C_TestActorMessage //IActorMessage
 	string Content = 1;
 }
 
-message C2M_MatchRoomActorLocationMessage //IActorLocationMessage
-{
-	int32 RpcId = 90;
-	string Content = 1;
-}
-message M2C_SyncCurrentMatchingCount	//IActorMessage
-{
-	int32 Content = 1;
-}
+// message C2M_MatchRoomActorLocationMessage //IActorLocationMessage
+// {
+// 	int32 RpcId = 90;
+// 	string Content = 1;
+// }
+// message M2C_SyncCurrentMatchingCount	//IActorMessage
+// {
+// 	int32 Content = 1;
+// }
 //ResponseType A2C_LoginAccount
 message C2A_LoginAccount //IRequest
 {
@@ -397,6 +397,7 @@ message G2C_LoginGateResponse //IResponse
 message C2M_MatchRoomRequest //IActorLocationRequest
 {
 	int RpcId = 90;
+	int64 AccountId = 1;
 }
 message M2C_MatchRoomResponse //IActorLocationResponse
 {
@@ -415,12 +416,6 @@ message M2C_CancelMatchRoomResponse //IActorLocationResponse
 	int RpcId = 90;
 	int32 Error = 91;
 	string Message = 92;
-}
-
-message M2C_SyncCreateRoomMessage	//IActorMessage
-{
-	int RpcId = 90;
-	int32 InRoomIndex = 1;			//在房间里面的座位号
 }
 
 
@@ -1586,3 +1581,22 @@ message M2C_LockHeroCardResponse //IActorLocationResponse
 	string Message = 92;
 }
 
+message M2C_MatchPVPSuccess	//IActorMessage
+{
+	int RpcId = 90;
+	int64 RoomId = 1;
+	repeated int64 AccountIds = 2;	//匹配到的玩家id 
+}
+
+//ResponseType M2C_ReadyToPVPRoomResponse
+message C2M_ReadyToPVPRoomRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+}
+message M2C_ReadyToPVPRoomResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}

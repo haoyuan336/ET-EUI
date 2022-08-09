@@ -20,17 +20,17 @@ namespace ET
                     }
 
                     break;
+                case SceneType.PVPGameScene:
+                    Log.Debug("reveive player scroll screen message pvp room");
+                    PVPRoomComponent pvpRoomComponent = entity.DomainScene().GetComponent<PVPRoomComponent>();
+                    PVPRoom pvpRoom = pvpRoomComponent.GetChild<PVPRoom>(message.RoomId);
+                    if (pvpRoom != null)
+                    {
+                        // pvpRoom.
+                        
+                    }
+                    break;
             }
-
-            // if (room != null)
-            // {
-            //     // Log.Debug("room is have");
-            //     room.PlayerScrollScreen(message);
-            // }
-            // else
-            // {
-            //     Log.Error("room is null");
-            // }
 
             await ETTask.CompletedTask;
         }

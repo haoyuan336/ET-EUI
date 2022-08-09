@@ -15,7 +15,7 @@ namespace ET
 
                     if (room != null)
                     {
-                        foreach (var target in room.Units)
+                        foreach (var target in room.GetComponent<FightComponent>().Units)
                         {
                             target.RemoveAllChild<HeroCard>();
                         }

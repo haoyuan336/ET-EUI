@@ -609,27 +609,15 @@ namespace ET
 
 	}
 
-	[Message(OuterOpcode.C2M_MatchRoomActorLocationMessage)]
-	[ProtoContract]
-	public partial class C2M_MatchRoomActorLocationMessage: Object, IActorLocationMessage
-	{
-		[ProtoMember(90)]
-		public int RpcId { get; set; }
-
-		[ProtoMember(1)]
-		public string Content { get; set; }
-
-	}
-
-	[Message(OuterOpcode.M2C_SyncCurrentMatchingCount)]
-	[ProtoContract]
-	public partial class M2C_SyncCurrentMatchingCount: Object, IActorMessage
-	{
-		[ProtoMember(1)]
-		public int Content { get; set; }
-
-	}
-
+// message C2M_MatchRoomActorLocationMessage //IActorLocationMessage
+// {
+// 	int32 RpcId = 90;
+// 	string Content = 1;
+// }
+// message M2C_SyncCurrentMatchingCount	//IActorMessage
+// {
+// 	int32 Content = 1;
+// }
 	[ResponseType(nameof(A2C_LoginAccount))]
 	[Message(OuterOpcode.C2A_LoginAccount)]
 	[ProtoContract]
@@ -866,6 +854,9 @@ namespace ET
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
 
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
 	}
 
 	[Message(OuterOpcode.M2C_MatchRoomResponse)]
@@ -905,18 +896,6 @@ namespace ET
 
 		[ProtoMember(92)]
 		public string Message { get; set; }
-
-	}
-
-	[Message(OuterOpcode.M2C_SyncCreateRoomMessage)]
-	[ProtoContract]
-	public partial class M2C_SyncCreateRoomMessage: Object, IActorMessage
-	{
-		[ProtoMember(90)]
-		public int RpcId { get; set; }
-
-		[ProtoMember(1)]
-		public int InRoomIndex { get; set; }
 
 	}
 
@@ -3509,6 +3488,49 @@ namespace ET
 	[Message(OuterOpcode.M2C_LockHeroCardResponse)]
 	[ProtoContract]
 	public partial class M2C_LockHeroCardResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_MatchPVPSuccess)]
+	[ProtoContract]
+	public partial class M2C_MatchPVPSuccess: Object, IActorMessage
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long RoomId { get; set; }
+
+		[ProtoMember(2)]
+		public List<long> AccountIds = new List<long>();
+
+	}
+
+	[ResponseType(nameof(M2C_ReadyToPVPRoomResponse))]
+	[Message(OuterOpcode.C2M_ReadyToPVPRoomRequest)]
+	[ProtoContract]
+	public partial class C2M_ReadyToPVPRoomRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long Account { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_ReadyToPVPRoomResponse)]
+	[ProtoContract]
+	public partial class M2C_ReadyToPVPRoomResponse: Object, IActorLocationResponse
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }

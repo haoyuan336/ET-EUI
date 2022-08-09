@@ -63,6 +63,7 @@
      <Compile Include="Assets/Mono/ILRuntime/Generate/UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_t9.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_Enum_Binding.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_List_1_Action_Binding.cs" />
+     <Compile Include="Assets/Mono/ILRuntime/Generate/UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_t10.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/ET_ColorTool_Binding.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/ET_MultiMap_2_Int64_Int64_Binding.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_Dictionary_2_Int32_Int64_Binding.cs" />
@@ -120,6 +121,7 @@
      <Compile Include="Assets/Mono/Helper/IStaticMethod.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/ET_RpcException_Binding.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/UnityEngine_UI_Button_Binding.cs" />
+     <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_List_1_AudioClip_Binding.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_Dictionary_2_Type_ILTypeInstance_Binding_V_t1.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/UnityEngine_Events_UnityEvent_1_Boolean_Binding.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_Exception_Binding.cs" />
@@ -137,7 +139,9 @@
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_List_1_ILTypeInstance_Binding.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/UnityEngine_AnimationClip_Binding.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_Dictionary_2_Int32_Boolean_Binding.cs" />
+     <Compile Include="Assets/Mono/ILRuntime/Generate/ET_ETTask_1_List_1_AudioClip_Binding.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/UnityEngine_UI_LoopScrollRectBase_Binding.cs" />
+     <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_List_1_AudioSource_Binding_Enumerator_Bind.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/ET_ETTask_1_List_1_GameObject_Binding.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_ValueTuple_3_Int32_Int64_Int32_Binding.cs" />
      <Compile Include="Assets/Mono/MonoBehaviour/LoopScrollRect/LoopScrollSizeHelper.cs" />
@@ -244,6 +248,7 @@
      <Compile Include="Assets/Mono/ILRuntime/Generate/ET_ListComponent_1_Task_Binding.cs" />
      <Compile Include="Assets/Mono/Core/MonoPool.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_List_1_Object_Binding.cs" />
+     <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_List_1_AudioSource_Binding.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_Dictionary_2_Type_HashSet_1_Type_Binding.cs" />
      <Compile Include="Assets/Mono/Core/UnOrderMultiMapSet.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/ET_ETAsyncTaskMethodBuilder_1_Int32_Binding.cs" />
@@ -276,6 +281,7 @@
      <Compile Include="Assets/Mono/ILRuntime/Generate/ET_NetworkHelper_Binding.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/UnityEngine_Networking_UnityWebRequest_Binding.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/UnityEngine_Networking_DownloadHandler_Binding.cs" />
+     <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_List_1_AudioClip_Binding_Enumerator_Bindin.cs" />
      <Compile Include="Assets/Mono/MonoBehaviour/LoopScrollRect/LoopScrollMultiDataSource.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_Action_2_ILTypeInstance_Boolean_Binding.cs" />
      <Compile Include="Assets/Mono/Core/TimeHelper.cs" />
@@ -316,6 +322,7 @@
      <Compile Include="Assets/Mono/ILRuntime/Generate/ET_AcceptAllCertificate_Binding.cs" />
      <Compile Include="Assets/Mono/Module/Mongo/BsonIgnoreIfDefaultAttribute.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_Dictionary_2_Int64_ILTypeInstance_Binding.cs" />
+     <Compile Include="Assets/Mono/ILRuntime/Generate/UnityEngine_Events_UnityAction_Binding.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_Dictionary_2_Type_Int32_Binding.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_Type_Binding.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_List_1_Task_Binding.cs" />
@@ -393,13 +400,6 @@
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_HashSet_1_ILTypeInstance_Binding_Enumerato.cs" />
      <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_HashSet_1_AService_Binding_Enumerator_Bind.cs" />
      <Compile Include="Assets/Mono/Define.cs" />
-     <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_List_1_AudioClip_Binding_Enumerator_Bindin.cs" />
-     <Compile Include="Assets/Mono/ILRuntime/Generate/ET_ETTask_1_List_1_AudioClip_Binding.cs" />
-     <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_List_1_AudioSource_Binding_Enumerator_Bind.cs" />
-     <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_List_1_AudioSource_Binding.cs" />
-     <Compile Include="Assets/Mono/ILRuntime/Generate/System_Collections_Generic_List_1_AudioClip_Binding.cs" />
-     <Compile Include="Assets/Mono/ILRuntime/Generate/UnityEngine_ResourceManagement_AsyncOperations_AsyncOperationHandle_1_t10.cs" />
-     <Compile Include="Assets/Mono/ILRuntime/Generate/UnityEngine_Events_UnityAction_Binding.cs" />
      <None Include="Assets/Mono/Unity.Mono.asmdef" />
      <Reference Include="UnityEngine">
      <HintPath>/Applications/Unity/Hub/Editor/2021.3.6f1c1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>

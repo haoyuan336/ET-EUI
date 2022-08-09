@@ -33,8 +33,8 @@ namespace ET
                 case SceneType.Map:
                     scene.AddComponent<UnitComponent>();
                     scene.AddComponent<AOIManagerComponent>();
-                    scene.AddComponent<MatchComponent>();
-                    scene.AddComponent<RoomComponent>();
+                    // scene.AddComponent<MatchComponent>();
+                    // scene.AddComponent<PVPRoomComponent>();
                     // scene.AddComponent<DiamondComponent>();
                     // scene.AddComponent<PVERoomComponent>();
                     break;
@@ -44,10 +44,16 @@ namespace ET
                     // scene.AddComponent<DiamondComponent>();
                     scene.AddComponent<PVERoomComponent>();
                     break;
+                case SceneType.PVPGameScene:
+                    scene.AddComponent<UnitComponent>();
+                    // scene.AddComponent<MatchComponent>();
+                    // scene.AddComponent<PV>()
+                    break;
                 case SceneType.MainScene:
                     scene.AddComponent<UnitComponent>();
                     scene.AddComponent<AOIManagerComponent>();
                     scene.AddComponent<MailComponent>();
+                    scene.AddComponent<MatchComponent>();
                     
                     break;
                 case SceneType.ChangeTempScene:

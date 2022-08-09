@@ -15,7 +15,7 @@ namespace ET
 
             if (pveRoom != null)
             {
-                foreach (var target in pveRoom.Units)
+                foreach (var target in pveRoom.GetComponent<FightComponent>().Units)
                 {
                     target.RemoveAllChild<HeroCard>();
                 }
