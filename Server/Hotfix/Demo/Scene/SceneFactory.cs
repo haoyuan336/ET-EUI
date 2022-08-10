@@ -42,10 +42,11 @@ namespace ET
                     scene.AddComponent<UnitComponent>();
                     scene.AddComponent<AOIManagerComponent>();
                     // scene.AddComponent<DiamondComponent>();
-                    scene.AddComponent<PVERoomComponent>();
+                    scene.AddComponent<RoomComponent>();
                     break;
                 case SceneType.PVPGameScene:
                     scene.AddComponent<UnitComponent>();
+                    scene.AddComponent<RoomComponent>();
                     // scene.AddComponent<MatchComponent>();
                     // scene.AddComponent<PV>()
                     break;

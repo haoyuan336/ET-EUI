@@ -19,6 +19,10 @@ namespace ET
             GameLoseResultAction gameLoseResultAction = message.GameLoseResultAction;
             ComboActionItem comboActionItem = message.ComboActionItem;
 
+            //开始处理的时候 锁定触摸
+            await Game.EventSystem.PublishAsync(
+                new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene(), IsLockTouch = true });
+
             bool isContainsCrash = false;
             var comboCount = 0;
             // bool isContainsAttackHero = false;
@@ -75,7 +79,7 @@ namespace ET
                         case (int)DiamondActionType.SpecialDestry:
                             // tasks.Add(diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction));
                             // destoryIndex++;
-                            sunTaskList.Add(diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction,diamondActionItem));
+                            sunTaskList.Add(diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction, diamondActionItem));
                             // await diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction);
 
                             isContainsCrash = true;
@@ -156,7 +160,10 @@ namespace ET
             if (gameLoseResultAction == null)
             {
                 Log.Debug("一回合结束了");
-                await Game.EventSystem.PublishAsync(new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene() });
+                await Game.EventSystem.PublishAsync(new EventType.UnLockTouchLock()
+                {
+                    ZoneScene = session.ZoneScene().CurrentScene(), IsLockTouch = false
+                });
             }
             else
             {

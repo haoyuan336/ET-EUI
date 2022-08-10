@@ -12,7 +12,7 @@ namespace ET
             {
                 case SceneType.PVEGameScene:
                     Log.Debug("receive player scrollscreen message");
-                    PVERoomComponent roomComponent = entity.DomainScene().GetComponent<PVERoomComponent>();
+                    RoomComponent roomComponent = entity.DomainScene().GetComponent<RoomComponent>();
                     PVERoom room = roomComponent.GetChild<PVERoom>(message.RoomId);
                     if (room != null)
                     {
@@ -22,11 +22,12 @@ namespace ET
                     break;
                 case SceneType.PVPGameScene:
                     Log.Debug("reveive player scroll screen message pvp room");
-                    PVPRoomComponent pvpRoomComponent = entity.DomainScene().GetComponent<PVPRoomComponent>();
+                    RoomComponent pvpRoomComponent = entity.DomainScene().GetComponent<RoomComponent>();
                     PVPRoom pvpRoom = pvpRoomComponent.GetChild<PVPRoom>(message.RoomId);
                     if (pvpRoom != null)
                     {
                         // pvpRoom.
+                        pvpRoom.PlayerScrollScreen(message,entity);
                         
                     }
                     break;

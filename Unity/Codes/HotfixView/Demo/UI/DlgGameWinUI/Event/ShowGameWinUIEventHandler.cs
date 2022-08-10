@@ -12,16 +12,15 @@ namespace ET
             Log.Debug($"current level num {currentLevelNum}");
 
             //首先展示剧情
+            var levelConfig = LevelConfigCategory.Instance.Get(currentLevelNum);
+            if (!string.IsNullOrEmpty(levelConfig.LevelStoryWin))
+            {
+                await a.ZondScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameLevelStoryLayer);
+                UIBaseWindow baseWindow = a.ZondScene.GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_GameLevelStoryLayer);
+                var gameLevelStoryLayer = baseWindow.GetComponent<DlgGameLevelStoryLayer>();
+                await gameLevelStoryLayer.ShowContentAsync(levelConfig.LevelStoryWin);
+            }
 
-            await a.ZondScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameLevelStoryLayer);
-
-
-            UIBaseWindow baseWindow = a.ZondScene.GetComponent<UIComponent>().GetUIBaseWindow(WindowID.WindowID_GameLevelStoryLayer);
-            var gameLevelStoryLayer = baseWindow.GetComponent<DlgGameLevelStoryLayer>();
-
-
-            await gameLevelStoryLayer.ShowContentAsync(currentLevelNum);
-            
             await a.ZondScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameWinUI);
             await ETTask.CompletedTask;
         }

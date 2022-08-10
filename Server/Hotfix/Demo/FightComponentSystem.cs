@@ -12,12 +12,21 @@ namespace ET
 
     public static class FightComponentSystem
     {
-         public static void SyncCreateHeroCardMessage(this FightComponent self)
+        public static void SetUnitSeatIndex(this FightComponent self)
+        {
+            int seatIndex = 0;
+            foreach (var unit in self.Units)
+            {
+                unit.SeatIndex = seatIndex;
+                seatIndex++;
+            }
+        }
+
+        public static void SyncCreateHeroCardMessage(this FightComponent self)
         {
             List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>();
             List<HeroCardDataComponentInfo> heroCardDataComponentInfos = new List<HeroCardDataComponentInfo>();
-            
-            
+
             foreach (var unit in self.Units)
             {
                 List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
@@ -263,6 +272,7 @@ namespace ET
                     heroCards.Add(child);
                 }
             }
+
             return heroCards;
         }
 
@@ -280,6 +290,7 @@ namespace ET
                 {
                     count++;
                 }
+
                 foreach (var diamondAction in diamondActions)
                 {
                     List<HeroCard> heros = heroCards.FindAll((a) =>
@@ -303,6 +314,7 @@ namespace ET
                 }
             }
         }
+
         /**
          * 确定攻击英雄
          */
@@ -315,10 +327,12 @@ namespace ET
                 {
                     continue;
                 }
+
                 if (item.CrashType != (int)CrashType.Normal)
                 {
                     continue;
                 }
+
                 diamondActionItem = item;
                 Log.Debug($"找到了，第一次消除的action{diamondActionItem.DiamondActions.Count}");
                 break;
@@ -411,6 +425,11 @@ namespace ET
             //处理回合结束增加怒气值的操作
             // var roundAngry = self.LevelConfig.
             //取出来或者说的英雄
+
+            if (!self.CheckIsHaveCrash(m2CSyncDiamondAction))
+            {
+                return;
+            }
             var AddRoundAngryItem = new AddRoundAngryItem();
             foreach (var unit in self.Units)
             {
@@ -425,80 +444,81 @@ namespace ET
                     }
                 }
             }
+
             m2CSyncDiamondAction.AddRoundAngryItem = AddRoundAngryItem;
         }
 
-        public static async void PlayerScrollScreen(this FightComponent self, C2M_PlayerScrollScreen message)
-        {
-            self.DiamondActionItems = new List<DiamondActionItem>();
-            Log.Debug("process scroll screen message");
-            M2C_SyncDiamondAction m2CSyncDiamondAction = self.Parent.GetComponent<DiamondComponent>().ScrollDiamond(message);
-            // self.AddHeroCardsAttackAddition(m2CSyncDiamondAction); //增加英雄卡牌的攻击值
-            self.MakeSureAttackHeros(m2CSyncDiamondAction);
-            self.ProcessAddHeroCardAngryLogic(m2CSyncDiamondAction.DiamondActionItems);
-            self.ProcessComboResult(m2CSyncDiamondAction);
-            self.ProcessAttackLogic(m2CSyncDiamondAction); //处理攻击逻辑
-            // self.ProcessAngryAttack(m2CSyncDiamondAction);  //处理怒气值的攻击
-            self.CurrentBeAttackHeroCard = null;
-            self.ProcessReBackAttackLogic(m2CSyncDiamondAction);
-            self.ProcessAddRoundAngry(m2CSyncDiamondAction);
-            
-            // self.CurrentAttackHeroCard = null;
-
-            Unit loseUnit = self.CheckGameEndResult();
-
-            if (loseUnit != null)
-            {
-                m2CSyncDiamondAction.GameLoseResultAction = new GameLoseResultAction() { LoseAccountId = loseUnit.AccountId };
-
-                foreach (var unit in self.Units)
-                {
-                    //todo -----------储存游戏结果---------------
-                    var action = new GameAction()
-                    {
-                        Id = IdGenerater.Instance.GenerateId(),
-                        OwnerId = unit.AccountId,
-                        ConfigId = 10002,
-                        Win = !loseUnit.AccountId.Equals(unit.AccountId)
-                    };
-                    DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(action).Coroutine();
-                    action.Dispose();
-                    //玩家当前关卡数量+1
-                    if (!unit.IsAI && !loseUnit.AccountId.Equals(unit.AccountId))
-                    {
-                        Log.Debug("储存胜利信息");
-                        List<Account> accounts = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
-                                .Query<Account>(a => a.Id.Equals(unit.AccountId) && a.State == (int)StateType.Active);
-                        if (accounts.Count != 0)
-                        {
-                            var levelCount = LevelConfigCategory.Instance.GetAll().Count;
-                            var level = accounts[0].PVELevelNumber;
-                            level += 1;
-                            if (level > levelCount)
-                            {
-                                level = levelCount;
-                            }
-
-                            accounts[0].PVELevelNumber = level;
-                            //储存当前关卡数
-                            await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(accounts[0]);
-                            accounts[0].Dispose();
-                        }
-                    }
-                }
-            }
-
-            foreach (var unit in self.Units)
-            {
-                if (unit.IsAI)
-                {
-                    continue;
-                }
-
-                MessageHelper.SendToClient(unit, m2CSyncDiamondAction);
-            }
-            //储存游戏胜利action
-        }
+        // public static async void PlayerScrollScreen(this FightComponent self, C2M_PlayerScrollScreen message)
+        // {
+        //     self.DiamondActionItems = new List<DiamondActionItem>();
+        //     Log.Debug("process scroll screen message");
+        //     M2C_SyncDiamondAction m2CSyncDiamondAction = self.Parent.GetComponent<DiamondComponent>().ScrollDiamond(message);
+        //     // self.AddHeroCardsAttackAddition(m2CSyncDiamondAction); //增加英雄卡牌的攻击值
+        //     self.MakeSureAttackHeros(m2CSyncDiamondAction);
+        //     self.ProcessAddHeroCardAngryLogic(m2CSyncDiamondAction.DiamondActionItems);
+        //     self.ProcessComboResult(m2CSyncDiamondAction);
+        //     self.ProcessAttackLogic(m2CSyncDiamondAction); //处理攻击逻辑
+        //     // self.ProcessAngryAttack(m2CSyncDiamondAction);  //处理怒气值的攻击
+        //     self.CurrentBeAttackHeroCard = null;
+        //     self.ProcessReBackAttackLogic(m2CSyncDiamondAction);
+        //     self.ProcessAddRoundAngry(m2CSyncDiamondAction);
+        //
+        //     // self.CurrentAttackHeroCard = null;
+        //
+        //     Unit loseUnit = self.CheckGameEndResult();
+        //
+        //     if (loseUnit != null)
+        //     {
+        //         m2CSyncDiamondAction.GameLoseResultAction = new GameLoseResultAction() { LoseAccountId = loseUnit.AccountId };
+        //
+        //         foreach (var unit in self.Units)
+        //         {
+        //             //todo -----------储存游戏结果---------------
+        //             var action = new GameAction()
+        //             {
+        //                 Id = IdGenerater.Instance.GenerateId(),
+        //                 OwnerId = unit.AccountId,
+        //                 ConfigId = 10002,
+        //                 Win = !loseUnit.AccountId.Equals(unit.AccountId)
+        //             };
+        //             DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(action).Coroutine();
+        //             action.Dispose();
+        //             //玩家当前关卡数量+1
+        //             if (!unit.IsAI && !loseUnit.AccountId.Equals(unit.AccountId))
+        //             {
+        //                 Log.Debug("储存胜利信息");
+        //                 List<Account> accounts = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
+        //                         .Query<Account>(a => a.Id.Equals(unit.AccountId) && a.State == (int)StateType.Active);
+        //                 if (accounts.Count != 0)
+        //                 {
+        //                     var levelCount = LevelConfigCategory.Instance.GetAll().Count;
+        //                     var level = accounts[0].PVELevelNumber;
+        //                     level += 1;
+        //                     if (level > levelCount)
+        //                     {
+        //                         level = levelCount;
+        //                     }
+        //
+        //                     accounts[0].PVELevelNumber = level;
+        //                     //储存当前关卡数
+        //                     await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(accounts[0]);
+        //                     accounts[0].Dispose();
+        //                 }
+        //             }
+        //         }
+        //     }
+        //
+        //     foreach (var unit in self.Units)
+        //     {
+        //         if (unit.IsAI)
+        //         {
+        //             continue;
+        //         }
+        //
+        //         MessageHelper.SendToClient(unit, m2CSyncDiamondAction);
+        //     }
+        //     //储存游戏胜利action
+        // }
 
         public static Unit CheckGameEndResult(this FightComponent self)
         {
@@ -525,12 +545,8 @@ namespace ET
             return null;
         }
 
-        public static void ProcessReBackAttackLogic(this FightComponent self, M2C_SyncDiamondAction m2CSyncDiamondAction)
+        public static bool CheckIsHaveCrash(this FightComponent self, M2C_SyncDiamondAction m2CSyncDiamondAction)
         {
-            Log.Debug($"attack action items {m2CSyncDiamondAction.AttackActionItems[0].AttackActions.Count}");
-            //todo 处理反击逻辑
-            //产看动作队列里面是否存在消除动作
-            bool isHaveCreash = false;
             foreach (var diamondActionItem in m2CSyncDiamondAction.DiamondActionItems)
             {
                 var diamondActions = diamondActionItem.DiamondActions;
@@ -538,11 +554,20 @@ namespace ET
                 {
                     if (diamondAction.ActionType == (int)DiamondActionType.Destory)
                     {
-                        isHaveCreash = true;
-                        break;
+                        return true;
                     }
                 }
             }
+
+            return false;
+        }
+
+        public static void ProcessReBackAttackLogic(this FightComponent self, M2C_SyncDiamondAction m2CSyncDiamondAction)
+        {
+            Log.Debug($"attack action items {m2CSyncDiamondAction.AttackActionItems[0].AttackActions.Count}");
+            //todo 处理反击逻辑
+            //产看动作队列里面是否存在消除动作
+            bool isHaveCreash = self.CheckIsHaveCrash(m2CSyncDiamondAction);
 
             if (!isHaveCreash)
             {
@@ -576,7 +601,7 @@ namespace ET
             attackHero.GetComponent<HeroCardDataComponent>().MakeSureSkill(3);
 
             attackHero.GetComponent<HeroCardDataComponent>().MakeSureAngrySkill();
-            
+
             var attackAction = attackHero.AttackTarget(beAttackHero, 0);
             attackActionItem.AttackActions.Add(attackAction);
             m2CSyncDiamondAction.AttackActionItems.Add(attackActionItem);
@@ -637,6 +662,7 @@ namespace ET
                     heroCards.Add(heroCard);
                 }
             }
+
             Log.Debug("确定攻击技能");
             //todo 找到了发动攻击的英雄，开始寻找被攻击的英雄
             //todo 从左往右排序

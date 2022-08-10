@@ -11,7 +11,7 @@ namespace ET
         {
             var zone = unit.DomainZone();
             //收钱退出当前房间
-            PVERoom pveRoom = unit.DomainScene().GetComponent<PVERoomComponent>().GetChild<PVERoom>(request.RoomId);
+            PVERoom pveRoom = unit.DomainScene().GetComponent<RoomComponent>().GetChild<PVERoom>(request.RoomId);
 
             if (pveRoom != null)
             {

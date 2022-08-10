@@ -131,13 +131,11 @@ namespace ET
             self.View.E_BackButton.interactable = false;
 
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
-            await uiComponent.ShowWindow(WindowID.WindowID_AlertLayer);
-
-            UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_AlertLayer);
-            baseWindow.GetComponent<DlgAlertLayer>().SetText("匹配房间成功");
-            await TimerComponent.Instance.WaitAsync(3000);
-            uiComponent.HideWindow(WindowID.WindowID_AlertLayer);
-
+            // await uiComponent.ShowWindow(WindowID.WindowID_AlertLayer);
+            // UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_AlertLayer);
+            // baseWindow.GetComponent<DlgAlertLayer>().SetText("匹配房间成功");
+            await TimerComponent.Instance.WaitAsync(1000);
+            // uiComponent.HideWindow(WindowID.WindowID_AlertLayer);
             long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             C2M_ReadyToPVPRoomRequest request = new C2M_ReadyToPVPRoomRequest();
@@ -145,13 +143,11 @@ namespace ET
             M2C_ReadyToPVPRoomResponse response = await session.Call(request) as M2C_ReadyToPVPRoomResponse;
             if (response.Error == ErrorCode.ERR_Success)
             {
-                Log.Debug("发送准备好进入房间的消息");
+                // Log.Debug("发送准备好进入房间的消息");
                 uiComponent.HideWindow(WindowID.WindowID_PVPMatchFightLayer);
                 uiComponent.HideWindow(WindowID.WindowID_PVPSceneLayer);
                 uiComponent.HideWindow(WindowID.WindowID_PVPFightPrepareLayer);
                 uiComponent.HideWindow(WindowID.WindowID_GoldInfoUI);
-
-
             }
         }
     }

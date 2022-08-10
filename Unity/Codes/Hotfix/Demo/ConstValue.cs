@@ -12,10 +12,13 @@ namespace ET
         public const float FlyEffectFlySpeed = 2; //飞行特效的飞行速度
         public const int PowerCountMax = 5; //体力的最大值
         public const int PowerCountMaxExtar = 20; //体力的爆体最大值
-        public const int RoomPlayerCount = 1; //房间里面的玩家个数
+        public const int RoomPlayerCount = 2; //房间里面的玩家个数
+        public const int PVPLevelConfigId = 100000; //对战关卡地图
 
 #if !SERVER
         public const string LoginAddress = "59.110.220.207:10007";
+        // public const string LoginAddress = "192.168.100.8:10007";
+
         // public const string LoginAddress = "127.0.0.1:10007";
         public const float Distance = 0.6f;
         public const string WeaponAtlasPath = "Assets/Res/WeaponTextures/WeaponSpriteAtlas.spriteatlas";

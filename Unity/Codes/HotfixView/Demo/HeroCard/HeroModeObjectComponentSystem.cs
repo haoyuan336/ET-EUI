@@ -35,24 +35,27 @@ namespace ET
 
             // var distance = 1.5f;
             Vector3 pos = Vector3.zero;
-            if (heroCard.CampIndex == 0)
+            long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            if (heroCard.OwnerId.Equals(accountId))
             {
-                pos = new Vector3(1.5f - heroCard.InTroopIndex * 1.5f, 0, -2.2f * (heroCard.CampIndex == 0? -1 : 1) + 1);
+                pos = new Vector3(1.5f - heroCard.InTroopIndex * 1.5f, 0, 2.2f + 1);
             }
             else
             {
-                var levelNum = self.ZoneScene().GetComponent<PlayerComponent>().CurrentLevelNum;
-                var levelConfig = LevelConfigCategory.Instance.Get(levelNum);
-                var heroIdStr = levelConfig.HeroId;
-                var count = heroIdStr.Split(',').Length;
-                var distance = 1.5f;
-                pos = new Vector3((count - 1) * distance * 0.5f - distance * heroCard.InTroopIndex, 0,
-                    -2.2f * (heroCard.CampIndex == 0? -1 : 1) + 1);
+                pos = new Vector3(1.5f - heroCard.InTroopIndex * 1.5f, 0, -2.2f + 1);
+
+                // var levelNum = self.ZoneScene().GetComponent<PlayerComponent>().CurrentLevelNum;
+                // var levelConfig = LevelConfigCategory.Instance.Get(levelNum);
+                // var heroIdStr = levelConfig.HeroId;
+                // var count = heroIdStr.Split(',').Length;
+                // var distance = 1.5f;
+                // pos = new Vector3((count - 1) * distance * 0.5f - distance * heroCard.InTroopIndex, 0,
+                //     -2.2f * (heroCard.CampIndex == 0? -1 : 1) + 1);
             }
 
             // Vector3 pos = new Vector3(-1.5f + heroCard.InTroopIndex * 1.5f, 0, -2.2f * (heroCard.CampIndex == 0? -1 : 1) + 1);
             self.HeroMode.transform.position = pos;
-            self.HeroMode.transform.forward = heroCard.CampIndex == 0? Vector3.back : Vector3.forward;
+            self.HeroMode.transform.forward = heroCard.OwnerId.Equals(accountId)? Vector3.back : Vector3.forward;
             self.HeroModeInitPos = new Vector3(pos.x, pos.y, pos.z);
 
             // heroCard.AddComponent<HeroCardInfoObjectComponent>();
@@ -102,8 +105,9 @@ namespace ET
                     self.IsTouching = false;
                     Log.Debug($"is hitde obj {self.HeroMode.name}");
                     HeroCard heroCard = self.GetParent<HeroCard>();
-                    Log.Debug($"hero card camp index{heroCard.CampIndex}");
-                    if (heroCard.CampIndex != 0)
+                    // Log.Debug($"hero card camp index{heroCard.CampIndex}");
+                    long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+                    if (!heroCard.OwnerId.Equals(account))
                     {
                         //点击了 非本阵营的英雄，开启集火模式
                         // heroCard.GetComponent<>()
@@ -146,14 +150,6 @@ namespace ET
             }
         }
 
-        // public static void UpdateShowDataView(this HeroModeObjectCompoent self, HeroCardDataComponentInfo heroCardDataComponentInfo,
-        // CrashCommonInfo crashCommonInfo)
-        // {
-        //     //todo 更新显示的英雄数据
-        //     HeroCardInfoObjectComponent component = self.GetComponent<HeroCardInfoObjectComponent>();
-        //     component.UpdateView(heroCardDataComponentInfo, crashCommonInfo);
-        // }
-
         public static async ETTask PlayMoveToAnim(this HeroModeObjectCompoent self, Vector3 startPos, Vector3 targetPos)
         {
             await self.TurnTargetAnim(targetPos);
@@ -172,17 +168,6 @@ namespace ET
                 GameObject = self.HeroMode
             });
             await task.GetAwaiter();
-
-            // while (time < Mathf.PI * 0.5f)
-            // {
-            //     time += Time.deltaTime * 2;
-            //     float value = Mathf.Sin(time);
-            //     Vector3 prePos = Vector3.Lerp(startPos, targetPos, value);
-            //     self.HeroMode.transform.position = prePos;
-            //     // distance = Vector3.Distance(prePos, targetPos);
-            //     await TimerComponent.Instance.WaitFrameAsync();
-            // }
-
             self.HeroMode.GetComponent<Animator>().SetBool("Run", false);
 
             await ETTask.CompletedTask;
@@ -212,21 +197,15 @@ namespace ET
             //     GameObject.Destroy(self.ChooseMark);
             // }
             HeroCard beAttackHeroCards = message.BeAttackHeroCard;
-            // HeroCard heroCard = message.AttackHeroCard;
-            // long skillId = message.AttackHeroCardDataComponentInfo.CurrentSkillId;
-            // Log.Debug($"skill id {skillId}");
-            // Skill skill = heroCard.GetChild<Skill>(skillId);
-            // skill.ConfigId = 1000009;
-
             SkillInfo skill = message.AttackHeroCardDataComponentInfo.CurrentSkillInfo;
-
             SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.SkillConfigId);
             await self.MoveToEnemyTarget(beAttackHeroCards, skillConfig);
             await self.PlayAttackAnim(message, skillConfig);
             await self.BackMoveToInitPos(skillConfig);
+            // int campIndex = message.AttackHeroCard.CampIndex;
 
-            int campIndex = message.AttackHeroCard.CampIndex;
-            await self.TurnTargetAnim((campIndex == 0? Vector3.back : Vector3.forward) + self.HeroMode.transform.position);
+            bool isCamp = message.AttackHeroCard.OwnerId.Equals(self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId);
+            await self.TurnTargetAnim((isCamp? Vector3.back : Vector3.forward) + self.HeroMode.transform.position);
             await ETTask.CompletedTask;
         }
 
@@ -250,7 +229,9 @@ namespace ET
             }
 
             HeroModeObjectCompoent beAttackHeroModeCom = beAttackHeroCard.GetComponent<HeroModeObjectCompoent>();
-            Vector3 offsetPos = self.GetParent<HeroCard>().CampIndex == 0? Vector3.forward
+            var isCamp = self.GetParent<HeroCard>().OwnerId.Equals(self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId);
+
+            Vector3 offsetPos = isCamp? Vector3.forward
                     : Vector3.back;
 
             var endPos = beAttackHeroModeCom.HeroMode.transform.position + offsetPos;
@@ -266,14 +247,6 @@ namespace ET
 
             await self.PlayMoveToAnim(self.HeroModeInitPos, endPos);
         }
-        // public static async ETTask LoadPrefab(this HeroModeObjectCompoent self, string path)
-        // {
-        //     Log.Debug($"加载技能特效预制件 {path}");
-        //     GameObject effect = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(path);
-        //
-        //     TimerComponent.Instance.WaitAsync(5000);
-        //     GameObject.Destroy(effect);
-        // }
 
         public static async ETTask PlayBeHitedEffect(this HeroModeObjectCompoent self, SkillConfig skillConfig)
         {
@@ -365,16 +338,7 @@ namespace ET
             Vector3 startPos = self.HeroMode.transform.position + Vector3.up;
             Vector3 endPos = heroModeObject.HeroMode.transform.position + Vector3.up * 0.5f;
             effect.transform.position = startPos;
-            // float time = 0;
             effect.transform.forward = endPos - startPos;
-            // while (time < 0.5f)
-            // {
-            //     Vector3 pos = Vector3.Lerp(startPos, endPos, time * 2);
-            //     effect.transform.position = pos;
-            //     time += Time.deltaTime;
-            //     await TimerComponent.Instance.WaitFrameAsync();
-            // }
-
             ETTask task = ETTask.Create();
             self.MoveActionItems.Add(new MoveActionItem()
             {
@@ -404,27 +368,6 @@ namespace ET
                 GameObject.Destroy(obj);
             }
         }
-
-        // public static async ETTask PlayAddEffectAnim(this HeroModeObjectCompoent self, Vector3 startPos, string effectName)
-        // {
-        //     Log.Debug("play add effect anim");
-        //     Vector3 endPos = self.HeroMode.transform.position + Vector3.up;
-        //     Log.Debug($"Load effect {effectName}");
-        //     GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(effectName);
-        //     GameObject go = GameObject.Instantiate(prefab, GlobalComponent.Instance.Unit);
-        //     go.transform.position = startPos;
-        //     float time = 0;
-        //     while (time < Mathf.PI * 0.5f)
-        //     {
-        //         var value = Mathf.Sin(time);
-        //         Vector3 prePos = Vector3.Lerp(startPos, endPos, value);
-        //         time += Time.deltaTime * 5;
-        //         go.transform.position = prePos;
-        //         await TimerComponent.Instance.WaitFrameAsync();
-        //     }
-        //
-        //     GameObject.Destroy(go);
-        // }
 
         public static async void ShowAttackMark(this HeroModeObjectCompoent self, bool isShow)
         {

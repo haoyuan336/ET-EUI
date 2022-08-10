@@ -12,7 +12,8 @@ namespace ET
         public long AccountId;
         public int ConfigId; //配置表id
         // public bool isMatching; //是否在匹配中
-
+        // public long CurrentTroopId;
+        
         public int InRoomIndex; //在房间里面的id
 
         public int SeatIndex;

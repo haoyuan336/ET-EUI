@@ -214,6 +214,7 @@ namespace ET
         public struct UnLockTouchLock
         {
             public Scene ZoneScene;
+            public bool IsLockTouch;
         }
 
         public struct ShowSceneUI

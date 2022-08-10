@@ -25,10 +25,9 @@ namespace ET
             self.View.E_NextButton.AddListener(self.OnNextButtonClick);
         }
 
-        public static async ETTask ShowContentAsync(this DlgGameLevelStoryLayer self, int levelNum)
+        public static async ETTask ShowContentAsync(this DlgGameLevelStoryLayer self, string storyConternt)
         {
-            var levelConfig = LevelConfigCategory.Instance.Get(levelNum);
-            await self.SetContent(levelConfig.LevelStoryWin);
+            await self.SetContent(storyConternt);
             self.CurrentTask = ETTask.Create();
             await self.CurrentTask;
         }
@@ -70,7 +69,7 @@ namespace ET
             SentenceConfig config = SentenceConfigCategory.Instance.Get(int.Parse(sentenceIdStr));
 
             var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(config.AtlasImage, config.HeadImage);
-            
+
             // self.View.E_
             self.View.E_HeadImage.sprite = sprite;
             self.View.E_ContentText.text = config.SentenceContent;
