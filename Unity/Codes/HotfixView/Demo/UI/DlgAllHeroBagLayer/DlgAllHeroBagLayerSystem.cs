@@ -15,7 +15,7 @@ namespace ET
             self.View.E_BackButton.AddListener(() =>
             {
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer);
-            });
+            }, ConstValue.BackButtonAudioStr);
         }
 
         public static void InitAllToggleEvent(this DlgAllHeroBagLayer self)
@@ -203,7 +203,7 @@ namespace ET
 
             
 
-                itemHeroCard.E_ChooseToggle.onValueChanged.AddListener((value) =>
+                itemHeroCard.E_ChooseToggle.AddListener((value) =>
                 {
                     if (self.OnHeroItemInfoClick != null)
                     {
@@ -215,7 +215,7 @@ namespace ET
 
         public static void InitColorToggleEvent(this DlgAllHeroBagLayer self, GameObject go, int index)
         {
-            go.GetComponent<Toggle>().onValueChanged.AddListener((value) =>
+            go.GetComponent<Toggle>().AddListener((value) =>
             {
                 if (value)
                 {
@@ -271,7 +271,7 @@ namespace ET
             //初始化背包个数
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            C2M_GetAllItemRequest request = new C2M_GetAllItemRequest() { AccountId = account };
+            C2M_GetAllItemRequest request = new C2M_GetAllItemRequest();
             M2C_GetAllItemResponse response = (M2C_GetAllItemResponse) await session.Call(request);
             // Log.Debug("获取道具数据成功");
             if (response.Error == ErrorCode.ERR_Success)

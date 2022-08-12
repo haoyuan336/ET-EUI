@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace ET
 {
@@ -13,6 +14,8 @@ namespace ET
             UIComponent uiComponent = args.CurrentScene.GetComponent<UIComponent>();
             long AccountId = args.CurrentScene.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = args.CurrentScene.ZoneScene().GetComponent<SessionComponent>().Session;
+            AudioComponent.Instance.StopMusicAudio();
+
             switch (args.CurrentScene.Name)
             {
                 case "MainScene":
@@ -37,6 +40,8 @@ namespace ET
                     tasks.Add(AddressableComponent.Instance.LoadAssetsByLabelAsyncNotReturn<GameObject>("Unit"));
                     tasks.Add(AddressableComponent.Instance.LoadAssetsByLabelAsyncNotReturn<GameObject>("Effect"));
                     //切换摄像机
+                    
+                    
 
                     await ETTaskHelper.WaitAll(tasks);
 
@@ -44,13 +49,16 @@ namespace ET
 
                     await args.ZoneScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameLevelLayer);
                     await args.ZoneScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameUI);
+                    AudioComponent.Instance.PlayMusicAudio(ConstValue.PVEBgMusicStr);
 
                     break;
                 case "PVPGameScene":
                     //进入了对战层
                     session.Send(new C2M_GameReadyMessage() { AccountId = AccountId });
-
+                    AudioComponent.Instance.PlayAudioEffect(ConstValue.PVPBgMusicStr);
                     await args.ZoneScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_GameUI);
+                    
+                    //播放背景音乐
                     
                     // args.ZoneScene.GetComponent<UIComponent>().HideWindow(WindowID.WindowID_PVPMatchFightLayer);
                     // args.ZoneScene.GetComponent<UIComponent>().HideWindow(WindowID.WindowID_PVPSceneLayer);

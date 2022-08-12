@@ -13,12 +13,14 @@ namespace ET
                 case UnitType.Player:
                 {
                     Unit unit = unitComponent.AddChildWithId<Unit, int>(id, 1001);
+                    // unit.AddComponent<ItemComponent>();
                     // unit.AddComponent<MoveComponent>();
                     unit.Position = new Vector3(-10, 0, -10);
 
                     NumericComponent numericComponent = unit.AddComponent<NumericComponent>();
                     numericComponent.Set(NumericType.Speed, 6f); // 速度是6米每秒
                     numericComponent.Set(NumericType.AOI, 15000); // 视野15米
+                    
 
                     unitComponent.Add(unit);
                     // 加入aoi

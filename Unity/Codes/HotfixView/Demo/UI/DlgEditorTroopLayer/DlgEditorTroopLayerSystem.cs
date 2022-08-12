@@ -79,7 +79,7 @@ namespace ET
                     self.ItemHeroCards.Add(heroCard);
                     heroCard.InTroopIndex = i;
                     heroCard.E_ChooseToggle.onValueChanged.RemoveAllListeners();
-                    heroCard.E_ChooseToggle.onValueChanged.AddListener((value) => { self.OnHeroCardItemClick(heroCard, value); });
+                    heroCard.E_ChooseToggle.AddListener((value) => { self.OnHeroCardItemClick(heroCard, value); });
                 }
             }
 

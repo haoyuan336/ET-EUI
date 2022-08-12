@@ -39,40 +39,6 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Toggle E_HeadLabelToggle
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_HeadLabelToggle == null )
-     			{
-		    		this.m_E_HeadLabelToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"E_Bg/ToggleGroup/E_HeadLabel");
-     			}
-     			return this.m_E_HeadLabelToggle;
-     		}
-     	}
-
-		public UnityEngine.UI.Toggle E_HeadFrameLabelToggle
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_E_HeadFrameLabelToggle == null )
-     			{
-		    		this.m_E_HeadFrameLabelToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"E_Bg/ToggleGroup/E_HeadFrameLabel");
-     			}
-     			return this.m_E_HeadFrameLabelToggle;
-     		}
-     	}
-
 		public UnityEngine.UI.LoopVerticalScrollRect E_HeadLoopVerticalScrollRect
      	{
      		get
@@ -107,23 +73,95 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Toggle E_HeadLabelToggle
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_HeadLabelToggle == null )
+     			{
+		    		this.m_E_HeadLabelToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"E_Bg/ToggleGroup/E_HeadLabel");
+     			}
+     			return this.m_E_HeadLabelToggle;
+     		}
+     	}
+
+		public UnityEngine.UI.Toggle E_HeadFrameLabelToggle
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_HeadFrameLabelToggle == null )
+     			{
+		    		this.m_E_HeadFrameLabelToggle = UIFindHelper.FindDeepChild<UnityEngine.UI.Toggle>(this.uiTransform.gameObject,"E_Bg/ToggleGroup/E_HeadFrameLabel");
+     			}
+     			return this.m_E_HeadFrameLabelToggle;
+     		}
+     	}
+
+		public UnityEngine.UI.Button E_BackButton
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_BackButton == null )
+     			{
+		    		this.m_E_BackButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_Back");
+     			}
+     			return this.m_E_BackButton;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_BackImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_BackImage == null )
+     			{
+		    		this.m_E_BackImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Back");
+     			}
+     			return this.m_E_BackImage;
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_E_BgButton = null;
 			this.m_E_BgImage = null;
-			this.m_E_HeadLabelToggle = null;
-			this.m_E_HeadFrameLabelToggle = null;
 			this.m_E_HeadLoopVerticalScrollRect = null;
 			this.m_E_HeadFrameLoopVerticalScrollRect = null;
+			this.m_E_HeadLabelToggle = null;
+			this.m_E_HeadFrameLabelToggle = null;
+			this.m_E_BackButton = null;
+			this.m_E_BackImage = null;
 			this.uiTransform = null;
 		}
 
 		private UnityEngine.UI.Button m_E_BgButton = null;
 		private UnityEngine.UI.Image m_E_BgImage = null;
-		private UnityEngine.UI.Toggle m_E_HeadLabelToggle = null;
-		private UnityEngine.UI.Toggle m_E_HeadFrameLabelToggle = null;
 		private UnityEngine.UI.LoopVerticalScrollRect m_E_HeadLoopVerticalScrollRect = null;
 		private UnityEngine.UI.LoopVerticalScrollRect m_E_HeadFrameLoopVerticalScrollRect = null;
+		private UnityEngine.UI.Toggle m_E_HeadLabelToggle = null;
+		private UnityEngine.UI.Toggle m_E_HeadFrameLabelToggle = null;
+		private UnityEngine.UI.Button m_E_BackButton = null;
+		private UnityEngine.UI.Image m_E_BackImage = null;
 		public Transform uiTransform = null;
 	}
 }

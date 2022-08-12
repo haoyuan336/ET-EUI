@@ -45,13 +45,6 @@ namespace ET
                 return;
             }
 
-            // if (Regex.IsMatch(request.Password.Trim(), "^(?=.*[0-9])(?=.*[a-zA-Z])(.{8,})$"))
-            // {
-            //     response.Error = ErrorCode.ERR_PasswordFormateErr;
-            //     reply();
-            //     session.Disconnect().Coroutine();
-            //     return;
-            // }
 
             using (session.AddComponent<SessionLockComponent>())
             {
@@ -93,21 +86,30 @@ namespace ET
                         account.NickName = request.AccountName;
                         // account.NickName = $"{str.RandomChar()}{str.RandomChar()}{str.RandomChar()}";
                         //储存用户道具信息
-                        KeyValuePair<int, ItemConfig>[] itemConfigs = ItemConfigCategory.Instance.GetAll().ToArray();
-                        foreach (var itemConfig in itemConfigs)
-                        {
-                            Item item = new Item()
-                            {
-                                Id = IdGenerater.Instance.GenerateId(),
-                                ConfigId = itemConfig.Key,
-                                Count = itemConfig.Value.DefaultValue,
-                                OwnerId = account.Id
-                            };
-
-                            await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save(item);
-                            item.Dispose();
-                        }
+                        // KeyValuePair<int, ItemConfig>[] itemConfigs = ItemConfigCategory.Instance.GetAll().ToArray();
+                        // foreach (var itemConfig in itemConfigs)
+                        // {
+                        //     Item item = new Item()
+                        //     {
+                        //         Id = IdGenerater.Instance.GenerateId(),
+                        //         ConfigId = itemConfig.Key,
+                        //         Count = itemConfig.Value.DefaultValue,
+                        //         OwnerId = account.Id
+                        //     };
+                        //
+                        //     await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save(item);
+                        //     item.Dispose();
+                        // }
                     }
+
+                    
+                    // {
+                        
+                        
+                        //todo 储存用户的基础道具信息
+                    // }
+                    // account.AddComponent<ItemComponent>();
+                    // account.AddComponent(Herocard)
 
                     account.LastLogonTime = TimeHelper.ServerNow();
                     await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).Save<Account>(account);

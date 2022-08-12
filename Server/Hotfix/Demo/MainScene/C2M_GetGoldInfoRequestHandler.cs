@@ -9,20 +9,7 @@ namespace ET.MainScene
     {
         protected override async ETTask Run(Unit unit, C2M_GetGoldInfoRequest request, M2C_GetGoldInfoResponse response, Action reply)
         {
-            var sceneType = unit.DomainScene().SceneType;
-            Log.Warning($"current scene type {sceneType}");
             long AccountId = request.AccountId;
-            Log.Debug($"get gold info {AccountId}");
-
-            // List<Account> list = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<Account>(a => a.Id.Equals(AccountId));
-
-            // if (list.Count > 0)
-            // {
-            // response.Error = ErrorCode.ERR_Success;
-            // response.GoldCount = list[0].GoldCount;
-            // response.PowerCount = list[0].PowerCount;
-            // response.DiamondCount = list[0].DiamondCount;
-            // }
             List<Item> list = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<Item>(a => a.OwnerId.Equals(AccountId));
 
             if (list.Count == 0)

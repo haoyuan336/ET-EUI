@@ -62,6 +62,25 @@ namespace ET
                 }
 
                 List<ETTask> sunTaskList = new List<ETTask>();
+                // DiamondAction speialDiamondAction = null
+                // if (diamondActionItem.CrashType == (int)CrashType.Special)
+                // {
+                //     //找到特殊珠
+                //     // DiamondInfo diamondInfo
+                //
+                //     DiamondAction diamondAction = diamondActionItem.DiamondActions.Find(a =>
+                //     {
+                //         DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(a.DiamondInfo.ConfigId);
+                //         if (config.BoomType != (int)BoomType.Invalide)
+                //         {
+                //             return true;
+                //         }
+                //
+                //         return false;
+                //     });
+                //     // Game.EventSystem.PublishAsync()
+                // }
+
                 foreach (var diamondAction in diamondActionItem.DiamondActions)
                 {
                     DiamondInfo diamondInfo = diamondAction.DiamondInfo;
@@ -69,11 +88,21 @@ namespace ET
 
                     switch (diamondAction.ActionType)
                     {
+                        case (int)DiamondActionType.MoveDown:
+                            diamond.SetIndex(diamondInfo.LieIndex, diamondInfo.HangIndex);
+                            tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex()
+                            {
+                                Diamond = diamond, DiamondActionType = DiamondActionType.MoveDown
+                            }));
+                            break;
                         case (int)DiamondActionType.Move:
                             diamond.SetIndex(diamondInfo.LieIndex, diamondInfo.HangIndex);
                             // count++;
                             // Log.Debug($"count {count}");
-                            tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex() { Diamond = diamond }));
+                            tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex()
+                            {
+                                Diamond = diamond, DiamondActionType = DiamondActionType.Move
+                            }));
                             break;
                         case (int)DiamondActionType.Destory:
                         case (int)DiamondActionType.SpecialDestry:

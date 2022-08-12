@@ -11,21 +11,21 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgStore self)
         {
-            self.View.E_ItemToggle.onValueChanged.AddListener((result) =>
+            self.View.E_ItemToggle.AddListener((result) =>
             {
                 if (result)
                 {
                     self.ShowAllItem();
                 }
             });
-            self.View.E_WeaponToggle.onValueChanged.AddListener((result) =>
+            self.View.E_WeaponToggle.AddListener((result) =>
             {
                 if (result)
                 {
                     self.ShowAllWeapon();
                 }
             });
-            self.View.E_StoreToggle.onValueChanged.AddListener((result) => { });
+            self.View.E_StoreToggle.AddListener((result) => { });
             self.View.ELoopScrollListLoopVerticalScrollRect.AddItemRefreshListener(self.OnScrollListEvennt);
             self.ShowAllWeapon();
         }
@@ -40,7 +40,7 @@ namespace ET
             item.E_QualityIconImage.gameObject.SetActive(false);
 
             item.InitGoodsInfo(config);
-            item.E_ChooseToggle.onValueChanged.AddListener((value) =>
+            item.E_ChooseToggle.AddListener((value) =>
             {
                 if (value)
                 {

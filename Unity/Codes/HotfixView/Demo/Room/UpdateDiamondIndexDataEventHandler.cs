@@ -12,8 +12,17 @@ namespace ET
             //
             Vector3 endPos = CustomHelper.GetDiamondPos(ConstValue.LieCount, ConstValue.HangCount, diamond.LieIndex, diamond.HangIndex,
                 ConstValue.Distance, ConstValue.DiamondOffsetZ);
-            
-            await diamond.GetComponent<GameObjectComponent>().MoveToPos(endPos);
+
+            switch (a.DiamondActionType)
+            {
+                case DiamondActionType.Move:
+                    await diamond.GetComponent<GameObjectComponent>().MoveToPos(endPos);
+                    break;
+                case DiamondActionType.MoveDown:
+                    await diamond.GetComponent<GameObjectComponent>().MoveDown(endPos);
+                    break;
+            }
+
             await ETTask.CompletedTask;
         }
     }

@@ -10,8 +10,8 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgFormationUI self)
         {
-            self.View.E_PVEButton.AddListener(self.PVEButtonClick);
-            self.View.E_PVPButton.AddListener(self.PVPButtonClick);
+            self.View.E_PVEButton.AddListener(self.PVEButtonClick, ConstValue.PVPPVEButtonClickAudioStr);
+            self.View.E_PVPButton.AddListener(self.PVPButtonClick, ConstValue.PVPPVEButtonClickAudioStr);
         }
 
         public static async void PVPButtonClick(this DlgFormationUI self)

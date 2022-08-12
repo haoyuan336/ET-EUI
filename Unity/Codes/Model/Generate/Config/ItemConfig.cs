@@ -81,6 +81,10 @@ namespace ET
 		public string Name { get; set; }
 		[ProtoMember(6)]
 		public int CountType { get; set; }
+		[ProtoMember(7)]
+		public string AtlasSprite { get; set; }
+		[ProtoMember(8)]
+		public int MinType { get; set; }
 
 	}
 }

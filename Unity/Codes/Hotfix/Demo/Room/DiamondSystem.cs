@@ -162,7 +162,7 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
-        public static async ETTask Destroy(this Diamond self, int index, DiamondAction diamondAction)
+        public static async ETTask Destroy(this Diamond self, int index, DiamondAction diamondAction, DiamondActionItem diamondActionItem)
         {
 #if !SERVER
 
@@ -173,6 +173,7 @@ namespace ET
             DesEvent.Index = index;
             DesEvent.DiamondAction = diamondAction;
             DesEvent.Scene = self.ZoneScene().CurrentScene();
+            DesEvent.DiamondActionItem = diamondActionItem;
             await Game.EventSystem.PublishAsync(DesEvent);
 #endif
             self.Dispose();

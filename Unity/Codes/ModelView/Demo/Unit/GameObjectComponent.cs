@@ -13,6 +13,7 @@ namespace ET
         public ETTask Task;
         public float Speed;
         public GameObject GameObject;
+        public MoveActionType MoveActionType;
     }
     public class GameObjectComponent: Entity, IAwake, IDestroy, IUpdate
     {

@@ -14,7 +14,7 @@ namespace ET
             self.View.E_ApplyToggle.onValueChanged.AddListener(self.OnApplyToggleClick);
             self.View.ELoopRecommendLoopVerticalScrollRect.AddItemRefreshListener(self.OnRecommendLoop);
             self.View.ELoopApplyLoopVerticalScrollRect.AddItemRefreshListener(self.OnApplyLoop);
-            self.View.E_BackButton.AddListener(self.BackButtonClick);
+            self.View.E_BackButton.AddListener(self.BackButtonClick,ConstValue.BackButtonAudioStr);
             self.View.E_SearchButton.AddListenerAsync(self.OnSearchButtonClick);
         }
 
@@ -59,15 +59,17 @@ namespace ET
 
                 itemAddFriendApply.E_AcceptButton.AddListener(() => { self.OnAcceptButtonClick(info, true); });
                 itemAddFriendApply.E_RefuseButton.AddListener(() => { self.OnAcceptButtonClick(info, false); });
-                var headImageConfig = PlayerHeadImageResConfigCategory.Instance.Get(info.HeadImageConfigId);
-                var headImageFrameConfig = PlayerHeadImageResConfigCategory.Instance.Get(info.HeadFrameImageConfigId);
+                // var headImageConfig = PlayerHeadImageResConfigCategory.Instance.Get(info.HeadImageConfigId);
+                // var headImageFrameConfig = PlayerHeadImageResConfigCategory.Instance.Get(info.HeadFrameImageConfigId);
+                //
+                // itemAddFriendApply.E_HeadImage.sprite =
+                //         await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headImageConfig.SpriteAtlasRes, headImageConfig.ImageRes);
+                //
+                // itemAddFriendApply.E_HeadFrameImage.sprite =
+                //         await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headImageFrameConfig.SpriteAtlasRes,
+                //             headImageFrameConfig.ImageRes);
 
-                itemAddFriendApply.E_HeadImage.sprite =
-                        await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headImageConfig.SpriteAtlasRes, headImageConfig.ImageRes);
-
-                itemAddFriendApply.E_HeadFrameImage.sprite =
-                        await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headImageFrameConfig.SpriteAtlasRes,
-                            headImageFrameConfig.ImageRes);
+                await ETTask.CompletedTask;
 
                 itemAddFriendApply.E_HeadFrameButton.onClick.RemoveAllListeners();
                 itemAddFriendApply.E_HeadFrameButton.AddListener(async () =>
@@ -115,16 +117,17 @@ namespace ET
                 var disTime = TimeHelper.ServerNow() - accountInfo.LastLogonTime;
                 var str = CustomHelper.GetLastTimeByMSecond(disTime);
                 itemRecommend.E_TimeText.text = str;
-                var headImageConfig = PlayerHeadImageResConfigCategory.Instance.Get(accountInfo.HeadImageConfigId);
-                var headImageFrameConfig = PlayerHeadImageResConfigCategory.Instance.Get(accountInfo.HeadFrameImageConfigId);
+                // var headImageConfig = PlayerHeadImageResConfigCategory.Instance.Get(accountInfo.HeadImageConfigId);
+                // var headImageFrameConfig = PlayerHeadImageResConfigCategory.Instance.Get(accountInfo.HeadFrameImageConfigId);
+                //
+                // itemRecommend.E_HeadImage.sprite =
+                //         await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headImageConfig.SpriteAtlasRes, headImageConfig.ImageRes);
+                //
+                // itemRecommend.E_HeadFrameImage.sprite =
+                //         await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headImageFrameConfig.SpriteAtlasRes,
+                //             headImageFrameConfig.ImageRes);
 
-                itemRecommend.E_HeadImage.sprite =
-                        await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headImageConfig.SpriteAtlasRes, headImageConfig.ImageRes);
-
-                itemRecommend.E_HeadFrameImage.sprite =
-                        await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headImageFrameConfig.SpriteAtlasRes,
-                            headImageFrameConfig.ImageRes);
-
+                await ETTask.CompletedTask;
                 itemRecommend.E_HeadFrameButton.onClick.RemoveAllListeners();
                 itemRecommend.E_HeadFrameButton.AddListener(async () =>
                 {

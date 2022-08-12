@@ -24,10 +24,13 @@ namespace ET
         // public int DiamondCount; //钻石个数
         public int Level; //等级
         public int Exp; //经验值
-        public int State = (int) StateType.Active;
+        public int State = (int)StateType.Active;
         public bool IsRegisterMailBox = false; //是否注册了邮箱
+
         public long LastLogonTime = 0;
-        public int HeadImageConfigId = 1;
-        public int HeadFrameImageConfigId = 7;
+
+        // public int HeadImageConfigId = 1;
+        // public int HeadFrameImageConfigId = 7;
+        public long HeadImageItemId; //头像道具的id
     }
 }

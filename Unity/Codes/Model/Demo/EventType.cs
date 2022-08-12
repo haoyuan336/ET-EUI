@@ -188,6 +188,7 @@ namespace ET
             public Diamond Diamond;
             public int LieIndex;
             public int HangIndex;
+            public DiamondActionType DiamondActionType;
         }
 
         public struct DestoryDiamondWithAnim
@@ -204,6 +205,7 @@ namespace ET
             public int Index;
             public DiamondAction DiamondAction;
             public Scene Scene;
+            public DiamondActionItem DiamondActionItem;
         }
 
         public struct InitDiamondAndMoveDown

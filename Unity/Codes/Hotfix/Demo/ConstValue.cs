@@ -1,3 +1,5 @@
+using System;
+
 namespace ET
 {
     public static class ConstValue
@@ -16,8 +18,8 @@ namespace ET
         public const int PVPLevelConfigId = 100000; //对战关卡地图
 
 #if !SERVER
-        public const string LoginAddress = "59.110.220.207:10007";
-        // public const string LoginAddress = "192.168.100.8:10007";
+        // public const string LoginAddress = "59.110.220.207:10007";
+        public const string LoginAddress = "192.168.100.8:10007";
 
         // public const string LoginAddress = "127.0.0.1:10007";
         public const float Distance = 0.6f;
@@ -28,7 +30,17 @@ namespace ET
 
         public const int CrashWaitTime = 0;
         public const int CrashItemWaitTime = 200;
-        public const string ButtonClickAudioStr = "Assets/Res/Audios/按键音-确认战斗.mp3";
+        public const string ButtonClickAudioStr = "Assets/Res/Audios/返回键.wav";
+        public const string PVPPVEButtonClickAudioStr = "Assets/Res/Audios/点击UIPVPPVE.mp3";
+        public const string MakeSureFightAudioStr = "Assets/Res/Audios/按键音-确认战斗.mp3";
+        public const string CallHeroAudioStr = "Assets/Res/Audios/召唤.mp3"; //召唤音频
+        public const string PVEBgMusicStr = "Assets/Res/Audios/12_dungeon_pvp_bgm_loop.mp3"; //pve背景音乐
+        public const string PVPBgMusicStr = "Assets/Res/Audios/竞技场.wav"; //竞技场背景音乐
+        public const string PVPFightLayerMusicStr = ""; //竞技场主页面背景音乐
+        public const string BackButtonAudioStr = "Assets/Res/Audios/返回键.wav"; //返回键
+        public const string UpdateLevelAudioStr = "Assets/Res/Audios/升级.mp3"; //升级音效
+
+        public const string DiamondPoolName = "Diamond"; //宝石对象池名称
 #endif
     }
 }

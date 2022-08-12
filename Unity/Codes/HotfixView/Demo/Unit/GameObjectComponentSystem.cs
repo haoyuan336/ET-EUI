@@ -17,7 +17,24 @@ namespace ET
     {
         public override void Destroy(GameObjectComponent self)
         {
-            UnityEngine.Object.Destroy(self.GameObject);
+            // UnityEngine.Object.Destroy(self.GameObject);
+            // PoolObject po = self.GameObject.GetComponent<PoolObject>();
+
+            PoolObject po;
+            if (!self.GameObject.TryGetComponent(out po))
+            {
+                UnityEngine.Object.Destroy(self.GameObject);
+                Log.Debug("object 不是对象池对象，那么销毁掉");
+            }
+            else
+            {
+                if (!po.isPooled)
+                {
+                    GameObjectPoolHelper.ReturnObjectToPool(self.GameObject);
+                }
+            }
+
+            Log.Debug($"destroy po {po} + name = {po.name}");
         }
     }
 
@@ -29,10 +46,34 @@ namespace ET
             if (self.MoveActionItems.Count > 0)
             {
                 MoveActionItem moveActionItem = self.MoveActionItems[0];
-                moveActionItem.CurrentTime += Time.deltaTime * moveActionItem.Speed;
+                float value = 0;
+                Vector3 prePos = moveActionItem.CurrentPos;
+                switch (moveActionItem.MoveActionType)
+                {
+                    case MoveActionType.Jump:
+                        moveActionItem.Speed += 0.2f;
+                        moveActionItem.CurrentTime += Time.deltaTime * moveActionItem.Speed;
+                        value = Mathf.Abs(Mathf.Cos(moveActionItem.CurrentTime) * Mathf.Cos(moveActionItem.CurrentTime / 2));
+                        prePos = Vector3.Lerp(moveActionItem.CurrentPos, moveActionItem.EndPos, (1 - value));
+                        break;
+                    case MoveActionType.Normal:
+                        moveActionItem.CurrentTime += Time.deltaTime * moveActionItem.Speed;
+                        value = Mathf.Abs(Mathf.Cos(moveActionItem.CurrentTime));
+                        prePos = Vector3.Lerp(moveActionItem.CurrentPos, moveActionItem.EndPos, (1 - value));
+                        break;
+                    case MoveActionType.CircleToPoint:
+                        moveActionItem.CurrentTime += Time.deltaTime * moveActionItem.Speed;
 
-                var value = Mathf.Sin(moveActionItem.CurrentTime);
-                Vector3 prePos = Vector3.Lerp(moveActionItem.CurrentPos, moveActionItem.EndPos, value);
+                        var x = moveActionItem.CurrentTime;
+                        var y = Mathf.Cos(moveActionItem.CurrentTime);
+
+                        x += moveActionItem.CurrentPos.x;
+                        y += moveActionItem.EndPos.y;
+
+                        prePos = new Vector3(x, moveActionItem.CurrentPos.y, y);
+                        break;
+                }
+
                 self.GameObject.transform.position = prePos;
 
                 if (moveActionItem.CurrentTime >= moveActionItem.Time)
@@ -47,6 +88,21 @@ namespace ET
 
     public static class GameObjectComponentSystem
     {
+        public static async ETTask MoveDown(this GameObjectComponent self, Vector3 endPos)
+        {
+            ETTask task = ETTask.Create();
+            self.MoveActionItems.Add(new MoveActionItem()
+            {
+                Time = Mathf.PI * 1,
+                CurrentPos = self.GameObject.transform.position,
+                EndPos = endPos,
+                Task = task,
+                Speed = 5,
+                MoveActionType = MoveActionType.Jump
+            });
+            await task.GetAwaiter();
+        }
+
         public static async ETTask MoveToPos(this GameObjectComponent self, Vector3 endPos)
         {
             ETTask task = ETTask.Create();
@@ -56,7 +112,8 @@ namespace ET
                 CurrentPos = self.GameObject.transform.position,
                 EndPos = endPos,
                 Task = task,
-                Speed = 5
+                Speed = 5,
+                MoveActionType = MoveActionType.Normal
             });
             await task.GetAwaiter();
         }
@@ -65,6 +122,22 @@ namespace ET
         public static async ETTask RotateToVector(this GameObjectComponent self, Vector3 endVector3)
         {
             await ETTask.CompletedTask;
+        }
+
+        public static async void PlayerCircleActionToPos(this GameObjectComponent self, Vector3 endVector3, Action callBack)
+        {
+            ETTask task = ETTask.Create();
+            self.MoveActionItems.Add(new MoveActionItem()
+            {
+                Time = Mathf.PI * 100,
+                CurrentPos = self.GameObject.transform.position,
+                EndPos = endVector3,
+                Task = task,
+                Speed = 1,
+                MoveActionType = MoveActionType.CircleToPoint
+            });
+            await task.GetAwaiter();
+            callBack();
         }
     }
 }

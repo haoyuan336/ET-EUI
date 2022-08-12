@@ -10,6 +10,10 @@ namespace ET
     {
         protected override async ETTask Run(EventType.PlayGameAudioEffect a)
         {
+            if (string.IsNullOrEmpty(a.AudioStr))
+            {
+                return;
+            }
             UIComponent uiComponent = a.ZoneScene.GetComponent<UIComponent>();
             UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_GameUI);
             baseWindow.GetComponent<DlgGameUI>().PlayEffectAudio(a.AudioStr);
@@ -69,7 +73,7 @@ namespace ET
 
         public static async void RegisterUIEvent(this DlgGameUI self)
         {
-            self.View.E_BackButton.AddListenerAsync(self.ExitGameButtonClick);
+            self.View.E_BackButton.AddListenerAsync(self.ExitGameButtonClick,ConstValue.BackButtonAudioStr);
 
             GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>("ItemGameCombo");
 
@@ -103,7 +107,7 @@ namespace ET
             //         }
             //     }
             // }
-            self.PlayEffectAudio("Assets/Res/Audios/12_dungeon_pvp_bgm_loop.mp3", true);
+            // self.PlayEffectAudio("Assets/Res/Audios/12_dungeon_pvp_bgm_loop.mp3", true);
         }
 
         public static void HideWindow(this DlgGameUI self)

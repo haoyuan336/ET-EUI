@@ -1035,18 +1035,11 @@ namespace ET
 
 	}
 
-	[Message(OuterOpcode.M2C_SyncDiamondUpdatePos)]
-	[ProtoContract]
-	public partial class M2C_SyncDiamondUpdatePos: Object, IActorMessage
-	{
-		[ProtoMember(90)]
-		public int RpcId { get; set; }
-
-		[ProtoMember(1)]
-		public List<DiamondInfo> DiamondInfos = new List<DiamondInfo>();
-
-	}
-
+// message M2C_SyncDiamondUpdatePos	//IActorMessage
+// {
+// 	int RpcId = 90;
+// 	repeated DiamondInfo DiamondInfos = 1;
+// }
 	[Message(OuterOpcode.DiamondAction)]
 	[ProtoContract]
 	public partial class DiamondAction: Object
@@ -1958,9 +1951,6 @@ namespace ET
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
 
-		[ProtoMember(1)]
-		public long AccountId { get; set; }
-
 	}
 
 	[Message(OuterOpcode.M2C_GetAllItemResponse)]
@@ -2757,12 +2747,9 @@ namespace ET
 		[ProtoMember(6)]
 		public int PvELevelNumber { get; set; }
 
-		[ProtoMember(7)]
-		public int HeadImageConfigId { get; set; }
-
-		[ProtoMember(8)]
-		public int HeadFrameImageConfigId { get; set; }
-
+// int64 ItemInfo = 7;	//道具info
+// int32 HeadImageConfigId = 7;	//头像图片的配置Id
+// int32 HeadFrameImageConfigId = 8;	//头像框的配置id
 		[ProtoMember(9)]
 		public long CurrentTroopId { get; set; }
 
@@ -3155,12 +3142,13 @@ namespace ET
 		[ProtoMember(1)]
 		public long AccountId { get; set; }
 
+		[ProtoMember(3)]
+		public long ItemId { get; set; }
+
 		[ProtoMember(2)]
 		public int HeadType { get; set; }
 
-		[ProtoMember(3)]
-		public int ConfigId { get; set; }
-
+// int32 ConfigId = 3;
 	}
 
 	[Message(OuterOpcode.M2C_ChangePlayerHeadOrFrameResponse)]

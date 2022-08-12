@@ -13,7 +13,7 @@ namespace ET
             self.View.E_BackButton.AddListener(() =>
             {
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_WeaponInfoLayer);
-            });
+            },ConstValue.BackButtonAudioStr);
             self.View.E_WeaponStrengthButton.AddListenerAsync(self.WeaponStrengthButtonClick);
             // self
             self.View.E_WeaponClearButton.AddListener(async () =>

@@ -6,5 +6,6 @@
         Move = 2, //移动
         Create = 3, //创建
         SpecialDestry = 4, //特殊消除
+        MoveDown = 5, //向下移动
     }
 }

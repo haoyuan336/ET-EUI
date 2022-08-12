@@ -44,4 +44,17 @@
         HeroInfo = 2, //英雄详情页面
         WeaponInfo = 3, //武器详情页面
     }
+
+    public enum MoveActionType
+    {
+        Normal = 1, //普通移动
+        Jump = 2, //跳动
+        CircleToPoint = 3, //转圈到某一点
+    }
+
+    public enum ItemMinType
+    {
+        Normal = 1, //普通
+        HeadImage = 2, //头像
+    }
 }

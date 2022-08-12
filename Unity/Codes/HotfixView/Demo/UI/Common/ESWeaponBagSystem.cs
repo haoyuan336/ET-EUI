@@ -165,7 +165,7 @@ namespace ET
         {
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            C2M_GetAllItemRequest request = new C2M_GetAllItemRequest() { AccountId = account };
+            C2M_GetAllItemRequest request = new C2M_GetAllItemRequest();
             M2C_GetAllItemResponse response = (M2C_GetAllItemResponse) await session.Call(request);
             if (response.Error == ErrorCode.ERR_Success)
             {

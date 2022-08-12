@@ -11,7 +11,7 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgMailLayer self)
         {
-            self.View.E_BackButton.AddListener(() => { self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_MailLayer); });
+            self.View.E_BackButton.AddListener(() => { self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_MailLayer); },ConstValue.BackButtonAudioStr);
             self.AddUIScrollItems(ref self.ItemMails, 10);
             // self.View.ELoopScrollList_LoopVerticalScrollRect.SetVisible(true, 10);
             self.View.ELoopScrollList_LoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopEventListener);

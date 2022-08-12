@@ -482,11 +482,11 @@ message M2C_ChangeCurrentTurnSeatIndex	//IActorMessage
 	int32 CurrentTurnIndex = 1;
 }
 
-message M2C_SyncDiamondUpdatePos	//IActorMessage
-{
-	int RpcId = 90;
-	repeated DiamondInfo DiamondInfos = 1;
-}
+// message M2C_SyncDiamondUpdatePos	//IActorMessage
+// {
+// 	int RpcId = 90;
+// 	repeated DiamondInfo DiamondInfos = 1;
+// }
 message DiamondAction
 {
 	//宝石的action
@@ -909,7 +909,6 @@ message M2C_StrenthenHeroResponse //IActorLocationResponse
 message C2M_GetAllItemRequest	//IActorLocationRequest
 {
 	int32 RpcId = 90;
-	int64 AccountId = 1;
 }
 message M2C_GetAllItemResponse //IActorLocationResponse
 {
@@ -1258,8 +1257,9 @@ message AccountInfo
 	int64 LastLogonTime = 4;	//最近登录时间
 	int64 CreateTime = 5;	//创建时间
 	int32 PvELevelNumber = 6;
-	int32 HeadImageConfigId = 7;	//头像图片的配置Id
-	int32 HeadFrameImageConfigId = 8;	//头像框的配置id
+	int64 ItemId = 7;	//道具info
+	// int32 HeadImageConfigId = 7;	//头像图片的配置Id
+	// int32 HeadFrameImageConfigId = 8;	//头像框的配置id
 	int64 CurrentTroopId = 9;	//当前选择的队伍id
 
 }
@@ -1431,9 +1431,10 @@ message M2C_GetPlayerOwnHeroTypeCountResponse //IActorLocationResponse
 message C2M_ChangePlayerHeadOrFrameRequest	//IActorLocationRequest
 {
 	int32 RpcId = 90;
-	int64 AccountId = 1;	
+	int64 AccountId = 1;
+	int64 ItemId = 3;	//道具id	
 	int32 HeadType = 2;
-	int32 ConfigId = 3; 
+	// int32 ConfigId = 3; 
 }
 message M2C_ChangePlayerHeadOrFrameResponse //IActorLocationResponse
 {

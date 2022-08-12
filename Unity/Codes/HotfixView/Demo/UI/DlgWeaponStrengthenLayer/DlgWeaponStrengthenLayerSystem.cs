@@ -16,10 +16,10 @@ namespace ET
 
         public static void RegisterUIEvent(this DlgWeaponStrengthenLayer self)
         {
-            self.View.E_BackButton.onClick.AddListener(() =>
+            self.View.E_BackButton.AddListener(() =>
             {
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_WeaponStrengthenLayer);
-            });
+            },ConstValue.BackButtonAudioStr);
             // self.AddUIScrollItems(ref self.TargetItemWeapons, 10);
             self.View.E_TargetWeaponContentLoopVerticalScrollRect.AddItemRefreshListener(self.OnTargetLoopScrollview);
             self.View.E_BagContentLoopVerticalScrollRect.AddItemRefreshListener(self.OnWeaponsLoopScrollview);

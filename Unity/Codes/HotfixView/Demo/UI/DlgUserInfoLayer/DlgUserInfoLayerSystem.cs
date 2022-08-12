@@ -7,7 +7,7 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgUserInfoLayer self)
         {
-            self.View.E_BackButton.AddListener(self.OnBackButtonClick);
+            self.View.E_BackButton.AddListener(self.OnBackButtonClick, ConstValue.BackButtonAudioStr);
             self.View.E_HeadButton.AddListenerAsync(self.OnHeadButtonClick);
             self.View.E_CopyButton.AddListener(self.OnCopyButtonClick);
         }
@@ -15,7 +15,6 @@ namespace ET
         public static void OnCopyButtonClick(this DlgUserInfoLayer self)
         {
             UnityEngine.GUIUtility.systemCopyBuffer = self.AccountInfo.Name;
-            
         }
 
         public static async ETTask OnHeadButtonClick(this DlgUserInfoLayer self)
@@ -39,31 +38,32 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
-        public static async void OnChooseHeadCallBack(this DlgUserInfoLayer self, HeadImageType type, int configId)
+        public static async void OnChooseHeadCallBack(this DlgUserInfoLayer self, HeadImageType type, ItemInfo itemInfo)
         {
             Log.Debug("ChangeHeadOrFrameRequest");
             //取出相关参数
             long accountId = self.AccountInfo.Account;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
-            var request = new C2M_ChangePlayerHeadOrFrameRequest() { AccountId = accountId, ConfigId = configId, HeadType = (int) type };
+            var request = new C2M_ChangePlayerHeadOrFrameRequest() { AccountId = accountId, ItemId = itemInfo.ItemId, HeadType = (int)type };
             var response = await session.Call(request) as M2C_ChangePlayerHeadOrFrameResponse;
             if (response.Error == ErrorCode.ERR_Success)
             {
                 self.AccountInfo = response.AccountInfo;
                 // self.View..RefillCells();
-                PlayerHeadImageResConfig config = PlayerHeadImageResConfigCategory.Instance.Get(self.AccountInfo.HeadImageConfigId);
-                var spriteAtlas = config.SpriteAtlasRes;
-                var sptiteRes = config.ImageRes;
+                // PlayerHeadImageResConfig config = PlayerHeadImageResConfigCategory.Instance.Get(self.AccountInfo.HeadImageConfigId);
+                ItemConfig config = ItemConfigCategory.Instance.Get(itemInfo.ConfigId);
+                var spriteAtlas = config.AtlasSprite;
+                var sptiteRes = config.IconImageStr;
 
                 self.View.E_HeadIconImage.sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, sptiteRes);
 
-                var headFrameConfig = PlayerHeadImageResConfigCategory.Instance.Get(self.AccountInfo.HeadFrameImageConfigId);
-
-                var headFrameAtlas = headFrameConfig.SpriteAtlasRes;
-                var headFrameImage = headFrameConfig.ImageRes;
-
-                self.View.E_HeadFrameImage.sprite =
-                        await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headFrameAtlas, headFrameImage);
+                // var headFrameConfig = PlayerHeadImageResConfigCategory.Instance.Get(self.AccountInfo.HeadFrameImageConfigId);
+                //
+                // var headFrameAtlas = headFrameConfig.SpriteAtlasRes;
+                // var headFrameImage = headFrameConfig.ImageRes;
+                //
+                // self.View.E_HeadFrameImage.sprite =
+                //         await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headFrameAtlas, headFrameImage);
             }
         }
 
@@ -85,14 +85,14 @@ namespace ET
             self.View.E_IDText.text = accountInfo.Name;
             var levelCount = LevelConfigCategory.Instance.GetAll().Count;
             Log.Debug($"current level number {accountInfo.PvELevelNumber}");
-            self.View.E_ClearanceProgressText.text = $"{(float) accountInfo.PvELevelNumber / (float) levelCount * 100}%";
+            self.View.E_ClearanceProgressText.text = $"{(float)accountInfo.PvELevelNumber / (float)levelCount * 100}%";
 
             long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             // self.View.E_NameText
             self.View.E_EdItorButton.gameObject.SetActive(accountInfo.Account.Equals(accountId));
             List<HeroConfig> heroConfigs = HeroConfigCategory.Instance.GetAll().Values.ToList().FindAll(a =>
             {
-                return a.MaterialType == (int) HeroBagType.Hero;
+                return a.MaterialType == (int)HeroBagType.Hero;
             });
             var heroCount = heroConfigs.Count;
 
@@ -103,17 +103,21 @@ namespace ET
             {
                 var count = response.Count;
                 Log.Debug($"拥有的英雄种类数量{count}");
-                float percent = 100 * (float) count / heroCount;
+                float percent = 100 * (float)count / heroCount;
                 self.View.E_HeroProgressText.text = $"{percent}%";
             }
 
             //初始化头像
 
-            PlayerHeadImageResConfig config = PlayerHeadImageResConfigCategory.Instance.Get(accountInfo.HeadImageConfigId);
-            var spriteAtlas = config.SpriteAtlasRes;
-            var sptiteRes = config.ImageRes;
+            M2C_GetAllItemResponse allItemResponse = await session.Call(new C2M_GetAllItemRequest()) as M2C_GetAllItemResponse;
 
-            self.View.E_HeadIconImage.sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, sptiteRes);
+            
+            // ItemConfig itemConfig = ItemConfigCategory.Instance.Get(allItemResponse)
+            // PlayerHeadImageResConfig config = PlayerHeadImageResConfigCategory.Instance.Get(accountInfo.HeadImageConfigId);
+            // var spriteAtlas = config.SpriteAtlasRes;
+            // var sptiteRes = config.ImageRes;
+
+            // self.View.E_HeadIconImage.sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, sptiteRes);
             //查看英雄英雄多少种类的英雄
         }
     }

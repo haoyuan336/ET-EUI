@@ -28,7 +28,7 @@ namespace ET
             {
                 self.CancelMatch();
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_PVPMatchFightLayer);
-            });
+            },ConstValue.BackButtonAudioStr);
             self.View.E_CancelMatchButton.AddListener(self.OnCancelMatchButton);
 
             self.Loop();

@@ -11,14 +11,25 @@ namespace ET
             var diamondInfo = a.DiamondInfo;
             DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamondInfo.ConfigId);
             var str = config.PrefabRes;
-            GameObject go = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(str);
+
+            GameObject go = GameObjectPoolHelper.GetObjectFromPool(str, true, 1);
+            
+            // GameObject go = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(str);
+            // GameObjectPoolHelper.InitPool(ConstValue.DiamondPoolName, 10, PoolInflationType.INCREMENT);
+            if (go == null)
+            {
+                Log.Debug("对象池为空");
+            }
+            
+            
+            
             go.transform.SetParent(GlobalComponent.Instance.DiamondContent);
             if (a.Diamond.IsDisposed)
             {
                 Log.Error("diamond al disposed");
             }
 
-            go.name = $"diamond {a.Diamond.LieIndex}{a.Diamond.HangIndex}";
+            // go.name = $"diamond {a.Diamond.LieIndex}{a.Diamond.HangIndex}";
             a.Diamond.AddComponent<GameObjectComponent>().GameObject = go;
             go.transform.position = CustomHelper.GetDiamondPos(ConstValue.LieCount, ConstValue.HangCount, a.Diamond.LieIndex, a.Diamond.HangIndex,
                 ConstValue.Distance, ConstValue.DiamondOffsetZ);
@@ -31,6 +42,7 @@ namespace ET
                 time += Time.deltaTime;
                 await TimerComponent.Instance.WaitFrameAsync();
             }
+
             go.transform.localScale = endScale;
             await ETTask.CompletedTask;
         }

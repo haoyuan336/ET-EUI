@@ -10,8 +10,9 @@ namespace ET
         Action reply)
         {
             var accountId = request.AccountId;
-            var configId = request.ConfigId;
+            // var configId = request.ConfigId;
             var type = request.HeadType;
+            long itemId = request.ItemId;
 
             //取出来用户信息
             List<Account> accounts = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
@@ -27,11 +28,12 @@ namespace ET
             switch (type)
             {
                 case (int) HeadImageType.Head:
-                    account.HeadImageConfigId = configId;
+                    // account.HeadImageConfigId = configId;
+                    account.HeadImageItemId = itemId;
                     break;
-                case (int) HeadImageType.HeadFrame:
-                    account.HeadFrameImageConfigId = configId;
-                    break;
+                // case (int) HeadImageType.HeadFrame:
+                    // account.HeadFrameImageConfigId = configId;
+                    // break;
             }
 
             await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(account);

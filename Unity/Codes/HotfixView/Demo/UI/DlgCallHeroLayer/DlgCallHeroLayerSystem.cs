@@ -12,7 +12,7 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgCallHeroLayer self)
         {
-            self.View.E_CallButton.AddListenerAsync(() => { return self.CallHeroButtonClick(); });
+            self.View.E_CallButton.AddListenerAsync(() => { return self.CallHeroButtonClick(); },ConstValue.CallHeroAudioStr);
             // self.View.oNL
             
         }

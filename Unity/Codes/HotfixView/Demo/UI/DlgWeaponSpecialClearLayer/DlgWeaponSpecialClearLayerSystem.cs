@@ -15,7 +15,7 @@ namespace ET
             {
                 UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
                 uiComponent.HideWindow(WindowID.WindowID_WeaponSpecialClearLayer);
-            });
+            },ConstValue.BackButtonAudioStr);
             self.View.E_OkButtonButton.AddListenerAsync(self.OnOkButtonClick);
         }
 

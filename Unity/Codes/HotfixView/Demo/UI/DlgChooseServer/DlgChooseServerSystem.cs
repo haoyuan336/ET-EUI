@@ -31,7 +31,7 @@ namespace ET
 
         public static void AddToggleOnClickListener(this DlgChooseServer self, UnityEngine.UI.Toggle toggle, ServerInfo serverInfo)
         {
-            toggle.onValueChanged.AddListener(delegate(bool arg0)
+            toggle.AddListener(delegate(bool arg0)
             {
                 // Log.Debug("value change " + arg0);
                 if (arg0)

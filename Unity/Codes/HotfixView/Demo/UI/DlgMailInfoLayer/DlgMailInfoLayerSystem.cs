@@ -12,7 +12,7 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgMailInfoLayer self)
         {
-            self.View.E_BackButton.AddListener(self.OnBackButtonClick);
+            self.View.E_BackButton.AddListener(self.OnBackButtonClick, ConstValue.BackButtonAudioStr);
             self.View.ELoopAwardLoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopEventListener);
             self.View.E_GetClickButton.AddListenerAsync(self.OnGetClickButton);
         }

@@ -20,7 +20,7 @@ namespace ET
                 }
             });
 
-            self.View.E_CloseButton.AddListener(self.OnCloseButton);
+            self.View.E_CloseButton.AddListener(self.OnCloseButton, ConstValue.BackButtonAudioStr);
 
             self.View.E_NextButton.AddListener(self.OnNextButtonClick);
         }

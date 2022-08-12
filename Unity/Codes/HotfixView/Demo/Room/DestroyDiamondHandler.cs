@@ -10,31 +10,41 @@ namespace ET
         {
             DiamondAction diamondAction = a.DiamondAction;
             Scene scene = a.Scene;
-
             Diamond diamond = a.Diamond;
-            int index = a.Index;
             GameObject go = diamond.GetComponent<GameObjectComponent>().GameObject;
             DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamond.ConfigId);
             var audioCrashStr = config.CrashAudio;
-            Log.Debug($"audio {audioCrashStr}");
-            if (!string.IsNullOrEmpty(audioCrashStr))
-            {
-                //加载音频资源
-                // var audio = await AddressableComponent.Instance.LoadAssetByPathAsync<AudioClip>(audioCrashStr);
-                // AudioSource audioSource = go.GetComponent<AudioSource>();
-                // audioSource.clip = audio;
-                // audioSource.Play();
-                Game.EventSystem.Publish(new EventType.PlayGameAudioEffect()
-                {
-                    AudioStr = audioCrashStr,
-                    ZoneScene = scene.ZoneScene()
-                });
-            }
+            Game.EventSystem.Publish(new EventType.PlayGameAudioEffect() { AudioStr = audioCrashStr, ZoneScene = scene.ZoneScene() });
             var effectPos = go.transform.position;
-            var boomEffectRes = config.DestoryEffectRes;
-            // go.transform.localScale = Vector3.zero;
-            GameObject.Destroy(go);
-            Log.Debug($"boom effect res{boomEffectRes}");
+
+            //检查一下是否是是特殊珠消除
+            // DiamondActionItem diamondActionItem = a.DiamondActionItem;
+            // if (diamondActionItem.CrashType == (int)CrashType.Special &&
+            //     DiamondTypeConfigCategory.Instance.Get(diamond.ConfigId).BoomType == (int)BoomType.Invalide)
+            // {
+                // Log.Warning("存在特殊珠的消除");
+                // //特殊珠的消除
+                // //找到特殊珠的位置
+                // DiamondAction action = diamondActionItem.DiamondActions.Find((target) =>
+                // {
+                //     var diamondConfig = DiamondTypeConfigCategory.Instance.Get(target.DiamondInfo.ConfigId);
+                //     if (diamondConfig.BoomType != (int)BoomType.Invalide)
+                //     {
+                //         return true;
+                //     }
+                //
+                //     return false;
+                // });
+                //
+                // Diamond targetDiamond = a.Scene.GetComponent<DiamondComponent>().GetChild<Diamond>(action.DiamondInfo.Id);
+                // diamond.GetComponent<GameObjectComponent>().PlayerCircleActionToPos(
+                //     targetDiamond.GetComponent<GameObjectComponent>().GameObject.transform.position,
+                //     () => { GameObjectPoolHelper.ReturnObjectToPool(go); });
+            // }
+            // else
+            // {
+                GameObjectPoolHelper.ReturnObjectToPool(go);
+            // }
 
             if (diamondAction.AddAngryActions.Count != 0)
             {
@@ -48,16 +58,17 @@ namespace ET
                     });
                 }
             }
-            if (!string.IsNullOrEmpty(boomEffectRes))
-            {
-                GameObject effect = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(boomEffectRes);
-                effect.transform.SetParent(GlobalComponent.Instance.DiamondContent);
 
+            if (!string.IsNullOrEmpty(config.DestoryEffectRes))
+            {
+                GameObject effect = GameObjectPoolHelper.GetObjectFromPool(config.DestoryEffectRes, true, 1);
+                effect.transform.SetParent(GlobalComponent.Instance.DiamondContent);
                 effect.transform.position = effectPos;
                 var time = config.DestoryEffectTime;
                 await TimerComponent.Instance.WaitAsync(time);
+                GameObjectPoolHelper.ReturnObjectToPool(effect);
             }
-            // GameObject.Destroy(go);
+
             diamond.Dispose();
             await ETTask.CompletedTask;
         }

@@ -17,7 +17,7 @@ namespace ET
 				{
 					self.BackButtonClickAction();
 				}
-			}); 
+			}, ConstValue.BackButtonAudioStr); 
 		}
 
 		public static void ShowWindow(this DlgBackButton self, Entity contextData = null)

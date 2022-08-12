@@ -7,8 +7,8 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgPVESceneLayer self)
         {
-            self.View.E_StartGameButton.AddListenerAsync(self.StartGameClickAction);
-            self.View.E_BackButton.AddListener(self.OnBackButtonClick);
+            self.View.E_StartGameButton.AddListenerAsync(self.StartGameClickAction, ConstValue.MakeSureFightAudioStr);
+            self.View.E_BackButton.AddListener(self.OnBackButtonClick,ConstValue.BackButtonAudioStr);
         }
         public static async ETTask<bool> CheckPowerIsEnough(this DlgPVESceneLayer self)
         {

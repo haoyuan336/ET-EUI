@@ -14,7 +14,7 @@ namespace ET
             {
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_PVPSceneLayer);
                 self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainScene).Coroutine();
-            });
+            },ConstValue.BackButtonAudioStr);
             self.View.E_StartFightButton.AddListener(self.OnStartFightButtonClick);
         }
 

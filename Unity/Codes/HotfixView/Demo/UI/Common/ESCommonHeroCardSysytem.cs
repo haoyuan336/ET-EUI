@@ -17,7 +17,7 @@ namespace ET
             {
                 self.E_Toggle.onValueChanged.RemoveAllListeners();
                 // self.E_Toggle.isOn = false;
-                self.E_Toggle.onValueChanged.AddListener((value) =>
+                self.E_Toggle.AddListener((value) =>
                 {
                     if (value)
                     {

@@ -10,7 +10,7 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgTaskLabelLayer self)
         {
-            self.View.E_BackButton.AddListener(self.BackButtonClick);
+            self.View.E_BackButton.AddListener(self.BackButtonClick,ConstValue.BackButtonAudioStr);
             self.View.EDayTaskButton.AddListener(self.DayTaskButtonClick);
         }
 

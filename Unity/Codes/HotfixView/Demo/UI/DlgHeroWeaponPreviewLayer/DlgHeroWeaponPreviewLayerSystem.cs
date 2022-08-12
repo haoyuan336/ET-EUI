@@ -11,7 +11,7 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgHeroWeaponPreviewLayer self)
         {
-            self.View.E_BackButton.AddListener(self.BackButtonClick);
+            self.View.E_BackButton.AddListener(self.BackButtonClick,ConstValue.BackButtonAudioStr);
             // self.View.E_EquipButton.AddListenerAsync(self.ShowChooseEquipLayer);
             // self.View.E_WeaponButton.AddListenerAsync(self.ShowWeaponLayer);
             // self.View.E_RingButton.AddListenerAsync(self.ShowAllRingLayer);

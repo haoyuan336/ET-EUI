@@ -11,7 +11,7 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgFriendLayer self)
         {
-            self.View.E_BackButton.AddListener(self.OnBackButtonClick);
+            self.View.E_BackButton.AddListener(self.OnBackButtonClick, ConstValue.BackButtonAudioStr);
             self.View.E_SearchButton.AddListenerAsync(self.OnSearchButtonClick);
             self.View.ELoopFriendListLoopVerticalScrollRect.AddItemRefreshListener(self.OnItemFriendLoop);
             self.View.E_QuickGetButton.AddListenerAsync(self.OnQuickButtonClick);
@@ -124,14 +124,17 @@ namespace ET
                 itemFriend.E_NewChatMarkImage.gameObject.SetActive(false);
                 itemFriend.E_HeadFrameButton.onClick.RemoveAllListeners();
                 itemFriend.E_HeadFrameButton.AddListener(() => { self.OnHeadButtonClick(accountInfo); });
-                var headImageConfig = PlayerHeadImageResConfigCategory.Instance.Get(accountInfo.HeadImageConfigId);
-                var headFrameImageConfig = PlayerHeadImageResConfigCategory.Instance.Get(accountInfo.HeadFrameImageConfigId);
-                itemFriend.E_HeadImage.sprite =
-                        await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headImageConfig.SpriteAtlasRes, headImageConfig.ImageRes);
-                itemFriend.E_HeadFrameImage.sprite =
-                        await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headFrameImageConfig.SpriteAtlasRes,
-                            headImageConfig.ImageRes);
+               
+                
+                // var headImageConfig = PlayerHeadImageResConfigCategory.Instance.Get(accountInfo.HeadImageConfigId);
+                // var headFrameImageConfig = PlayerHeadImageResConfigCategory.Instance.Get(accountInfo.HeadFrameImageConfigId);
+                // itemFriend.E_HeadImage.sprite =
+                //         await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headImageConfig.SpriteAtlasRes, headImageConfig.ImageRes);
+                // itemFriend.E_HeadFrameImage.sprite =
+                //         await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(headFrameImageConfig.SpriteAtlasRes,
+                //             headImageConfig.ImageRes);
 
+                await ETTask.CompletedTask;
                 if (self.ChatInfosMap.Keys.Contains(accountInfo.Account))
                 {
                     itemFriend.E_NewChatMarkImage.gameObject.SetActive(true);

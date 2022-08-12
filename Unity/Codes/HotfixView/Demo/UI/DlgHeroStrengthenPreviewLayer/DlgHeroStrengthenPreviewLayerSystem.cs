@@ -15,7 +15,7 @@ namespace ET
             self.View.E_BackButton.AddListener(() =>
             {
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_HeroStrengthenPreviewLayer);
-            });
+            },ConstValue.BackButtonAudioStr);
 
             for (int i = 0; i < 5; i++)
             {

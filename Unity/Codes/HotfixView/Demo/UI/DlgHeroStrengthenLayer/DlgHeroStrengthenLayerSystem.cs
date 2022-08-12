@@ -10,7 +10,7 @@ namespace ET
             self.View.E_BackButton.AddListener(() =>
             {
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_HeroStrengthenLayer);
-            });
+            },ConstValue.BackButtonAudioStr);
 
             self.View.ETargetHeroContentLoopHorizontalScrollRect.AddItemRefreshListener(self.OnLoopTargetHeroItem);
             self.View.E_OKButton.AddListenerAsync(self.OnOkButtonClick);

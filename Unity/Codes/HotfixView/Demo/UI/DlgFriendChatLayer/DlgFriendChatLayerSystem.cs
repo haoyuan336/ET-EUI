@@ -15,7 +15,7 @@ namespace ET
             {
                 UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
                 uiComponent.HideWindow(WindowID.WindowID_FriendChatLayer);
-            });
+            }, ConstValue.BackButtonAudioStr);
 
             self.View.ELoopScrollListLoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopEventListener);
 

@@ -11,7 +11,7 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgShowHeroInfoLayer self)
         {
-            self.View.E_BackButton.AddListener(self.BackButtonClick);
+            self.View.E_BackButton.AddListener(self.BackButtonClick,ConstValue.BackButtonAudioStr);
             self.View.E_UpdateStarButton.AddListener(self.OnUpStarButtonClick);
             self.View.E_UpdateLevelButton.AddListenerAsync(self.OnUpdateHeroLevelButtonClick);
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
@@ -80,6 +80,7 @@ namespace ET
             var response = await session.Call(request) as M2C_UpdateHeroLevelResponse;
             if (response.Error == ErrorCode.ERR_Success)
             {
+                AudioComponent.Instance.PlayAudioEffect(ConstValue.UpdateLevelAudioStr);
                 self.SetHeroInfo(response.HeroCardInfo);
 
                 UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();

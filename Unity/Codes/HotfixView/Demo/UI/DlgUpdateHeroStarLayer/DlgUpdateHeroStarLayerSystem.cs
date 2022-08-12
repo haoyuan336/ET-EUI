@@ -12,7 +12,7 @@ namespace ET
             self.View.E_BackButton.AddListener(() =>
             {
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_UpdateHeroStarLayer);
-            });
+            },ConstValue.BackButtonAudioStr);
             self.View.E_OkButtonButton.AddListenerAsync(self.OkButtonClick);
             self.CurrentCommonHeroCard =
                     self.AddChildWithId<ESCommonHeroCard, Transform>(IdGenerater.Instance.GenerateId(),

@@ -79,7 +79,7 @@ namespace ET
             // return;
             // }
 
-            await diamond.Destroy(destoryIndex, diamondAction);
+            await diamond.Destroy(destoryIndex, diamondAction, diamondActionItem);
             // await TimerComponent.Instance.WaitAsync(1000);
         }
 
@@ -578,7 +578,7 @@ namespace ET
                             self.SetDiamondToList(i, j, diamond);
                             diamond.SetIndex(i, j);
                             DiamondAction action = new DiamondAction();
-                            action.ActionType = (int)DiamondActionType.Move;
+                            action.ActionType = (int)DiamondActionType.MoveDown;
                             action.DiamondInfo = diamond.GetMessageInfo();
                             moveActionItem.DiamondActions.Add(action);
                         }

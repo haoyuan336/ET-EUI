@@ -232,12 +232,12 @@ namespace ET
             });
         }
 
-        public static void AddListener(this Button button, UnityAction clickEventHandler)
+        public static void AddListener(this Button button, UnityAction clickEventHandler, string AudioStr = "")
         {
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() =>
             {
-                button.PlayButtonClickAudio();
+                button.PlayButtonClickAudio(AudioStr);
                 clickEventHandler();
             });
         }

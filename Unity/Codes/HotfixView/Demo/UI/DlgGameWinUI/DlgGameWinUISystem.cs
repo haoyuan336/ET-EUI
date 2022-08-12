@@ -11,7 +11,7 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgGameWinUI self)
         {
-            self.View.E_BackButton.AddListenerAsync(self.BackButtonClick);
+            self.View.E_BackButton.AddListenerAsync(self.BackButtonClick,ConstValue.BackButtonAudioStr);
             self.View.E_NextLevelButton.AddListenerAsync(self.NextLevelButtonClick);
         }
 

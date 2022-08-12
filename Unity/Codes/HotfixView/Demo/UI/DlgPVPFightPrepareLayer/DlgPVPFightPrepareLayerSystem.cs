@@ -16,7 +16,7 @@ namespace ET
 			{
 				self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_PVPFightPrepareLayer);
 				// Log.Debug("back button");
-			});
+			},ConstValue.BackButtonAudioStr);
 			
 			self.View.E_MatchPlayerButton.AddListener(self.OnMatchButtonClick);
 			// self.View.e_

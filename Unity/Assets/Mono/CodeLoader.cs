@@ -45,8 +45,8 @@ namespace ET
                     // byte[] assBytes = ((TextAsset) dictionary["Code.dll"]).bytes;
                     // byte[] pdbBytes = ((TextAsset) dictionary["Code.pdb"]).bytes;
 
-                    TextAsset codedll = Addressables.LoadAssetAsync<TextAsset>("Assets/Bundles/Code/Code.dll.bytes").WaitForCompletion();
-                    TextAsset codepdb = Addressables.LoadAssetAsync<TextAsset>("Assets/Bundles/Code/Code.pdb.bytes").WaitForCompletion();
+                    TextAsset codedll = Addressables.LoadAssetAsync<TextAsset>("Code.dll").WaitForCompletion();
+                    TextAsset codepdb = Addressables.LoadAssetAsync<TextAsset>("Code.pdb").WaitForCompletion();
                     byte[] assBytes = codedll.bytes;
                     byte[] pdbBytes = codepdb.bytes;
                     assembly = Assembly.Load(assBytes, pdbBytes);

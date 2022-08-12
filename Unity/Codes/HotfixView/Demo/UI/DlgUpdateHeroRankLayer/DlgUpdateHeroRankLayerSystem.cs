@@ -14,7 +14,7 @@ namespace ET
             self.View.E_BackButton.AddListener(() =>
             {
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_UpdateHeroRankLayer);
-            });
+            },ConstValue.BackButtonAudioStr);
             self.View.E_OkButtonButton.AddListenerAsync(self.OnUpdateRankButtonClick);
         }
 
