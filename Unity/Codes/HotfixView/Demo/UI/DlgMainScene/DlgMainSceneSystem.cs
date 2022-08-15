@@ -51,62 +51,63 @@ namespace ET
 
         public static async ETTask<long> GetTroopIdAsync(this DlgMainScene self)
         {
-            long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
-            M2C_GetAllTroopInfosResponse m2CGetAllTroopInfosResponse;
-            m2CGetAllTroopInfosResponse = (M2C_GetAllTroopInfosResponse)await session
-                    .Call(new C2M_GetAllTroopInfosRequest() { Account = AccountId });
+            // long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            // Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            // M2C_GetAllTroopInfosResponse m2CGetAllTroopInfosResponse;
+            // m2CGetAllTroopInfosResponse = (M2C_GetAllTroopInfosResponse)await session
+            //         .Call(new C2M_GetAllTroopInfosRequest() { Account = AccountId });
+            //
+            // if (m2CGetAllTroopInfosResponse.Error == ErrorCode.ERR_Success)
+            // {
+            //     // self.TroopInfos = m2CGetAllTroopInfosResponse.TroopInfos;
+            //     // self.ShowTroopItemList();
+            //     List<TroopInfo> troopInfos = m2CGetAllTroopInfosResponse.TroopInfos;
+            //     if (troopInfos.Count > 0)
+            //     {
+            //         var troopId = troopInfos[0].TroopId;
+            //         return troopId;
+            //     }
+            // }
 
-            if (m2CGetAllTroopInfosResponse.Error == ErrorCode.ERR_Success)
-            {
-                // self.TroopInfos = m2CGetAllTroopInfosResponse.TroopInfos;
-                // self.ShowTroopItemList();
-                List<TroopInfo> troopInfos = m2CGetAllTroopInfosResponse.TroopInfos;
-                if (troopInfos.Count > 0)
-                {
-                    var troopId = troopInfos[0].TroopId;
-                    return troopId;
-                }
-            }
-
+            await ETTask.CompletedTask;
             return 0;
         }
 
-        public static async ETTask<HeroCardInfo> GetFirstHeroCardInfoAsync(this DlgMainScene self, long troopId)
-        {
-            // long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
-            M2C_GetHeroInfosWithTroopIdResponse m2CGetHeroInfosWithTroopIdResponse;
-            m2CGetHeroInfosWithTroopIdResponse =
-                    (M2C_GetHeroInfosWithTroopIdResponse)await session.Call(new C2M_GetHeroInfosWithTroopIdRequest() { TroopId = troopId });
-            HeroCardInfo target = null;
-            if (m2CGetHeroInfosWithTroopIdResponse.Error == ErrorCode.ERR_Success)
-            {
-                Log.Debug("获取队伍英雄成功");
-
-                List<HeroCardInfo> heroCardInfos = m2CGetHeroInfosWithTroopIdResponse.HeroCardInfos;
-                Log.Debug($"hero card infos{heroCardInfos.Count}");
-                if (heroCardInfos.Count > 0)
-                {
-                    target = heroCardInfos[0];
-                    if (heroCardInfos.Count > 1)
-                    {
-                        // heroCardInfos.Sort((a, b) => { return a.InTroopIndex - b.InTroopIndex; }); 
-                        int index = 10000;
-                        foreach (var heroCardInfo in heroCardInfos)
-                        {
-                            if (heroCardInfo.InTroopIndex < index)
-                            {
-                                index = heroCardInfo.InTroopIndex;
-                                target = heroCardInfo;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return target;
-        }
+        // public static async ETTask<HeroCardInfo> GetFirstHeroCardInfoAsync(this DlgMainScene self, long troopId)
+        // {
+        //     // long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+        //     Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+        //     M2C_GetHeroInfosWithTroopIdResponse m2CGetHeroInfosWithTroopIdResponse;
+        //     m2CGetHeroInfosWithTroopIdResponse =
+        //             (M2C_GetHeroInfosWithTroopIdResponse)await session.Call(new C2M_GetHeroInfosWithTroopIdRequest() { TroopId = troopId });
+        //     HeroCardInfo target = null;
+        //     if (m2CGetHeroInfosWithTroopIdResponse.Error == ErrorCode.ERR_Success)
+        //     {
+        //         Log.Debug("获取队伍英雄成功");
+        //
+        //         List<HeroCardInfo> heroCardInfos = m2CGetHeroInfosWithTroopIdResponse.HeroCardInfos;
+        //         Log.Debug($"hero card infos{heroCardInfos.Count}");
+        //         if (heroCardInfos.Count > 0)
+        //         {
+        //             target = heroCardInfos[0];
+        //             if (heroCardInfos.Count > 1)
+        //             {
+        //                 // heroCardInfos.Sort((a, b) => { return a.InTroopIndex - b.InTroopIndex; }); 
+        //                 int index = 10000;
+        //                 foreach (var heroCardInfo in heroCardInfos)
+        //                 {
+        //                     if (heroCardInfo.InTroopIndex < index)
+        //                     {
+        //                         index = heroCardInfo.InTroopIndex;
+        //                         target = heroCardInfo;
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        //
+        //     return target;
+        // }
 
         public static async void ShowWindow(this DlgMainScene self, Entity contextData = null)
         {
@@ -120,11 +121,11 @@ namespace ET
             long troopId = await self.GetTroopIdAsync();
             if (troopId != 0)
             {
-                HeroCardInfo heroCardInfo = await self.GetFirstHeroCardInfoAsync(troopId);
-                if (heroCardInfo != null)
-                {
-                    self.ShowHeroMode(heroCardInfo);
-                }
+                // HeroCardInfo heroCardInfo = await self.GetFirstHeroCardInfoAsync(troopId);
+                // if (heroCardInfo != null)
+                // {
+                //     self.ShowHeroMode(heroCardInfo);
+                // }
             }
         }
 

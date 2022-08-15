@@ -1420,22 +1420,19 @@ namespace ET
 
 	}
 
-	[ResponseType(nameof(M2C_GetHeroInfosWithTroopIdResponse))]
-	[Message(OuterOpcode.C2M_GetHeroInfosWithTroopIdRequest)]
+	[ResponseType(nameof(M2C_GetCurrentTroopHeroInfosResponse))]
+	[Message(OuterOpcode.C2M_GetCurrentTroopHeroInfosRequest)]
 	[ProtoContract]
-	public partial class C2M_GetHeroInfosWithTroopIdRequest: Object, IActorLocationRequest
+	public partial class C2M_GetCurrentTroopHeroInfosRequest: Object, IActorLocationRequest
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
 
-		[ProtoMember(1)]
-		public long TroopId { get; set; }
-
 	}
 
-	[Message(OuterOpcode.M2C_GetHeroInfosWithTroopIdResponse)]
+	[Message(OuterOpcode.M2C_GetCurrentTroopHeroInfosResponse)]
 	[ProtoContract]
-	public partial class M2C_GetHeroInfosWithTroopIdResponse: Object, IActorLocationResponse
+	public partial class M2C_GetCurrentTroopHeroInfosResponse: Object, IActorLocationResponse
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -2747,7 +2744,9 @@ namespace ET
 		[ProtoMember(6)]
 		public int PvELevelNumber { get; set; }
 
-// int64 ItemInfo = 7;	//道具info
+		[ProtoMember(7)]
+		public long ItemId { get; set; }
+
 // int32 HeadImageConfigId = 7;	//头像图片的配置Id
 // int32 HeadFrameImageConfigId = 8;	//头像框的配置id
 		[ProtoMember(9)]
@@ -3519,6 +3518,62 @@ namespace ET
 	[Message(OuterOpcode.M2C_ReadyToPVPRoomResponse)]
 	[ProtoContract]
 	public partial class M2C_ReadyToPVPRoomResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_GetCurrentTroopIndexResponse))]
+	[Message(OuterOpcode.C2M_GetCurrentTroopIndexRequest)]
+	[ProtoContract]
+	public partial class C2M_GetCurrentTroopIndexRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_GetCurrentTroopIndexResponse)]
+	[ProtoContract]
+	public partial class M2C_GetCurrentTroopIndexResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public int CurrentTroopIndex { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2C_PlayerChooseTroopIndexResponse))]
+	[Message(OuterOpcode.C2M_PlayerChooseTroopIndexRequest)]
+	[ProtoContract]
+	public partial class C2M_PlayerChooseTroopIndexRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public int Index { get; set; }
+
+	}
+
+	[Message(OuterOpcode.M2C_PlayerChooseTroopIndexResponse)]
+	[ProtoContract]
+	public partial class M2C_PlayerChooseTroopIndexResponse: Object, IActorLocationResponse
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }

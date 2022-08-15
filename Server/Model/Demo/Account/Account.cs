@@ -18,6 +18,7 @@ namespace ET
         public int PVELevelNumber = 1; //pve模式下，玩家玩到第几关了
 
         public long CurrentTroopId; //当前选择的队伍id
+        public int CurrentTroopIndex = 0; //当前队伍的index
 
         // public int GoldCount; //金币个数
         // public int PowerCount; //体力个数

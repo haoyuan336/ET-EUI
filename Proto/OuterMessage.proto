@@ -662,13 +662,12 @@ message M2C_CreateTroopResponse //IActorLocationResponse
 	string Message = 92;
 	TroopInfo TroopInfo = 1;
 }
-//ResponseType M2C_GetHeroInfosWithTroopIdResponse
-message C2M_GetHeroInfosWithTroopIdRequest //IActorLocationRequest
+//ResponseType M2C_GetCurrentTroopHeroInfosResponse
+message C2M_GetCurrentTroopHeroInfosRequest //IActorLocationRequest
 {
 	int32 RpcId = 90;
-	int64 TroopId = 1;
 }
-message M2C_GetHeroInfosWithTroopIdResponse //IActorLocationResponse
+message M2C_GetCurrentTroopHeroInfosResponse //IActorLocationResponse
 {
 	int32 RpcId = 90;
 	int32 Error = 91;
@@ -1596,6 +1595,30 @@ message C2M_ReadyToPVPRoomRequest	//IActorLocationRequest
 	int64 Account = 1;
 }
 message M2C_ReadyToPVPRoomResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+//ResponseType M2C_GetCurrentTroopIndexResponse
+message C2M_GetCurrentTroopIndexRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+}
+message M2C_GetCurrentTroopIndexResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	int32 CurrentTroopIndex = 1;
+}
+//ResponseType M2C_PlayerChooseTroopIndexResponse
+message C2M_PlayerChooseTroopIndexRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int32 Index = 1;
+}
+message M2C_PlayerChooseTroopIndexResponse //IActorLocationResponse
 {
 	int32 RpcId = 90;
 	int32 Error = 91;

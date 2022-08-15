@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
-using UnityEngine;
+// using MongoDB.Driver;
 
 namespace ET
 {
@@ -423,6 +423,12 @@ namespace ET
                 return;
             }
 
+            if (this is IBeforeDestroy)
+            {
+                EventSystem.Instance.BeforeDestroy(this);
+                // EventSystem.Instance.Destroy(this);
+            }
+
             this.IsRegister = false;
             this.InstanceId = 0;
 
@@ -565,6 +571,16 @@ namespace ET
             this.RemoveFromComponentsDB(component);
         }
 
+        // public void RemoveChild<T>(long id)
+        // {
+        //     if (this.children == null)
+        //     {
+        //         return;
+        //     }
+        //
+        //     this.children.Remove(id);
+        // }
+
         public K GetChild<K>(long id) where K : Entity
         {
             if (this.children == null)
@@ -697,7 +713,7 @@ namespace ET
                 EventSystem.Instance.GetComponent(this, component);
             }
 
-            return (K) component;
+            return (K)component;
         }
 
         public Entity GetComponent(Type type)
@@ -873,7 +889,7 @@ namespace ET
         public T AddChild<T>(bool isFromPool = false) where T : Entity, IAwake
         {
             Type type = typeof (T);
-            T component = (T) Entity.Create(type, isFromPool);
+            T component = (T)Entity.Create(type, isFromPool);
             component.Id = IdGenerater.Instance.GenerateId();
             component.Parent = this;
 
@@ -884,7 +900,7 @@ namespace ET
         public T AddChild<T, A>(A a, bool isFromPool = false) where T : Entity, IAwake<A>
         {
             Type type = typeof (T);
-            T component = (T) Entity.Create(type, isFromPool);
+            T component = (T)Entity.Create(type, isFromPool);
             component.Id = IdGenerater.Instance.GenerateId();
             component.Parent = this;
 
@@ -895,7 +911,7 @@ namespace ET
         public T AddChild<T, A, B>(A a, B b, bool isFromPool = false) where T : Entity, IAwake<A, B>
         {
             Type type = typeof (T);
-            T component = (T) Entity.Create(type, isFromPool);
+            T component = (T)Entity.Create(type, isFromPool);
             component.Id = IdGenerater.Instance.GenerateId();
             component.Parent = this;
 
@@ -906,7 +922,7 @@ namespace ET
         public T AddChild<T, A, B, C>(A a, B b, C c, bool isFromPool = false) where T : Entity, IAwake<A, B, C>
         {
             Type type = typeof (T);
-            T component = (T) Entity.Create(type, isFromPool);
+            T component = (T)Entity.Create(type, isFromPool);
             component.Id = IdGenerater.Instance.GenerateId();
             component.Parent = this;
 
@@ -917,7 +933,7 @@ namespace ET
         public T AddChild<T, A, B, C, D>(A a, B b, C c, D d, bool isFromPool = false) where T : Entity, IAwake<A, B, C, D>
         {
             Type type = typeof (T);
-            T component = (T) Entity.Create(type, isFromPool);
+            T component = (T)Entity.Create(type, isFromPool);
             component.Id = IdGenerater.Instance.GenerateId();
             component.Parent = this;
 
@@ -949,7 +965,7 @@ namespace ET
         public T AddChildWithId<T, A>(long id, A a, bool isFromPool = false) where T : Entity, IAwake<A>
         {
             Type type = typeof (T);
-            T component = (T) Entity.Create(type, isFromPool);
+            T component = (T)Entity.Create(type, isFromPool);
             component.Id = id;
             component.Parent = this;
 
@@ -970,7 +986,7 @@ namespace ET
         public T AddChildWithId<T, A, B>(long id, A a, B b, bool isFromPool = false) where T : Entity, IAwake<A, B>
         {
             Type type = typeof (T);
-            T component = (T) Entity.Create(type, isFromPool);
+            T component = (T)Entity.Create(type, isFromPool);
             component.Id = id;
             component.Parent = this;
 
@@ -981,7 +997,7 @@ namespace ET
         public T AddChildWithId<T, A, B, C>(long id, A a, B b, C c, bool isFromPool = false) where T : Entity, IAwake<A, B, C>
         {
             Type type = typeof (T);
-            T component = (T) Entity.Create(type, isFromPool);
+            T component = (T)Entity.Create(type, isFromPool);
             component.Id = id;
             component.Parent = this;
 

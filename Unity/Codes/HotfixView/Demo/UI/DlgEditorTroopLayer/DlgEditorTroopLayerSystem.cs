@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.UIElements;
+using Toggle = UnityEngine.UI.Toggle;
+
 namespace ET
 {
     public static class DlgEditorTroopLayerSystem
@@ -8,13 +12,30 @@ namespace ET
         {
             // self.View.E_EditorTroopButton.AddListenerAsync(self.ShowEditorTroopLayer);
             // self.View.ESTroopHeroCards.RegisterUIEvent();
+
+            var childCount = self.View.E_TroopGroupContentImage.transform.childCount;
+            for (int i = 0; i < childCount; i++)
+            {
+                var go = self.View.E_TroopGroupContentImage.transform.GetChild(i);
+                self.OnTroopToggleOnClick(go, i + 1);
+            }
         }
 
-        // public static async ETTask StartGame(this DlgGameLevelInfoLayer self)
-        // {
-        //     
-        //     await ETTask.CompletedTask;
-        // }
+        public static void OnTroopToggleOnClick(this DlgEditorTroopLayer self, Transform transform, int index)
+        {
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            transform.GetComponent<Toggle>().onValueChanged.AddListener(async (value) =>
+            {
+                if (value)
+                {
+                    var response = await session.Call(new C2M_PlayerChooseTroopIndexRequest() { Index = index });
+                    if (response.Error == ErrorCode.ERR_Success)
+                    {
+                    }
+                }
+            });
+        }
+
         /// <summary>
         /// 检查体力是否足够
         /// </summary>
@@ -44,26 +65,57 @@ namespace ET
                     return true;
                 }
             }
+
             return false;
         }
+
         public static async void ShowWindow(this DlgEditorTroopLayer self, Entity contextData = null)
         {
-            List<HeroCardInfo> heroCardInfos = await self.RequestCurrentTroopInfo();
+            // List<HeroCardInfo> heroCardInfos = await self.RequestCurrentTroopInfo();
+            // self.SetTroopHeroCardInfo(heroCardInfos);
+
+            int index = await self.RequestCurrentTroopIndex();
+            self.ChangeTroopToggleState(index);
+            Log.Debug($"index {index}");
+            List<HeroCardInfo> heroCardInfos = await self.RequestCurrentTroopInfo(index);
             self.SetTroopHeroCardInfo(heroCardInfos);
         }
 
-        public static async void GetCurrentTroopId(this DlgEditorTroopLayer self)
+        public static void ChangeTroopToggleState(this DlgEditorTroopLayer self, int index)
         {
-            long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            Transform transform = self.View.E_TroopGroupContentImage.transform.GetChild(index - 1);
+            transform.GetComponent<Toggle>().isOn = true;
+        }
 
-            C2M_GetAllTroopInfosRequest request = new C2M_GetAllTroopInfosRequest() { Account = accountId };
-            M2C_GetAllTroopInfosResponse response = (M2C_GetAllTroopInfosResponse)await session.Call(request);
+        public static async ETTask<int> RequestCurrentTroopIndex(this DlgEditorTroopLayer self)
+        {
+            // await ETTask.CompletedTask;
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            var response = await session.Call(new C2M_GetCurrentTroopIndexRequest()) as M2C_GetCurrentTroopIndexResponse;
             if (response.Error == ErrorCode.ERR_Success)
             {
-                self.CurrentChooseTroopId = response.TroopInfos[0].TroopId;
+                var index = response.CurrentTroopIndex;
+
+                Log.Debug($"index {index}");
+                return index;
             }
+
+            // return 1;
+            return 1;
         }
+
+        // public static async void GetCurrentTroopId(this DlgEditorTroopLayer self)
+        // {
+        //     long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+        //     Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+        //
+        //     C2M_GetAllTroopInfosRequest request = new C2M_GetAllTroopInfosRequest() { Account = accountId };
+        //     M2C_GetAllTroopInfosResponse response = (M2C_GetAllTroopInfosResponse)await session.Call(request);
+        //     if (response.Error == ErrorCode.ERR_Success)
+        //     {
+        //         self.CurrentChooseTroopId = response.TroopInfos[0].TroopId;
+        //     }
+        // }
 
         public static async void SetTroopHeroCardInfo(this DlgEditorTroopLayer self, List<HeroCardInfo> heroCardInfos)
         {
@@ -202,30 +254,16 @@ namespace ET
             baseWindow.GetComponent<DlgAllHeroBagLayer>().OnHeroItemInfoClick = self.OnHeroItemClick;
         }
 
-        public static async ETTask<List<HeroCardInfo>> RequestCurrentTroopInfo(this DlgEditorTroopLayer self)
+        public static async ETTask<List<HeroCardInfo>> RequestCurrentTroopInfo(this DlgEditorTroopLayer self, int index)
         {
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
-            long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            C2M_GetAllTroopInfosRequest troopInfosRequest = new C2M_GetAllTroopInfosRequest() { Account = account };
-            M2C_GetAllTroopInfosResponse response = (M2C_GetAllTroopInfosResponse)await session.Call(troopInfosRequest);
-            if (response.Error == ErrorCode.ERR_Success)
+
+            var getHeroInfosWithTroopIdResponse =
+                    await session.Call(new C2M_GetCurrentTroopHeroInfosRequest()) as M2C_GetCurrentTroopHeroInfosResponse;
+            if (getHeroInfosWithTroopIdResponse.Error == ErrorCode.ERR_Success)
             {
-                // Log.Debug($"response {response.TroopInfos.Count}");
-                // TroopInfo troopInfo = response.TroopInfos[0];
-                if (response.TroopInfos.Count > 0)
-                {
-                    long troopId = response.TroopInfos[0].TroopId;
-                    //获取此id下的玩家列表
-                    self.CurrentChooseTroopId = troopId;
-                    C2M_GetHeroInfosWithTroopIdRequest c2m = new C2M_GetHeroInfosWithTroopIdRequest() { TroopId = troopId };
-                    M2C_GetHeroInfosWithTroopIdResponse getHeroInfosWithTroopIdResponse =
-                            (M2C_GetHeroInfosWithTroopIdResponse)await session.Call(c2m);
-                    if (getHeroInfosWithTroopIdResponse.Error == ErrorCode.ERR_Success)
-                    {
-                        List<HeroCardInfo> heroCardInfos = getHeroInfosWithTroopIdResponse.HeroCardInfos;
-                        return heroCardInfos;
-                    }
-                }
+                List<HeroCardInfo> heroCardInfos = getHeroInfosWithTroopIdResponse.HeroCardInfos;
+                return heroCardInfos;
             }
 
             return null;

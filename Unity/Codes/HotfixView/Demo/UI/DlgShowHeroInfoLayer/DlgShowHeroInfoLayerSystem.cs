@@ -305,6 +305,11 @@ namespace ET
 
         public static async void ShowWindow(this DlgShowHeroInfoLayer self, Entity contextData = null)
         {
+
+            UIComponent uiComponent =  self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_GoldInfoUI);
+            UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_GoldInfoUI);
+            baseWindow.GetComponent<DlgGoldInfoUI>().ShowWidgetWithType(GoldInfoUIType.HeroInfo);
             await ETTask.CompletedTask;
         }
 

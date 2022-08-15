@@ -17,6 +17,10 @@ namespace ET
         public const int RoomPlayerCount = 2; //房间里面的玩家个数
         public const int PVPLevelConfigId = 100000; //对战关卡地图
 
+        public const int ExpItemConfigId = 1008; //经验值道具的configid；
+        public const int AutoSaveTime = 360000; //自动保存事件
+        public const int MaxHeroStarCount = 5;  //最大的英雄星的个数
+
 #if !SERVER
         // public const string LoginAddress = "59.110.220.207:10007";
         public const string LoginAddress = "192.168.100.8:10007";
@@ -41,6 +45,7 @@ namespace ET
         public const string UpdateLevelAudioStr = "Assets/Res/Audios/升级.mp3"; //升级音效
 
         public const string DiamondPoolName = "Diamond"; //宝石对象池名称
+
 #endif
     }
 }

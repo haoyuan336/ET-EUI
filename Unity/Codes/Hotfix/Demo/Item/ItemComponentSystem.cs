@@ -10,7 +10,6 @@ namespace ET
         {
             //取出来 用户背包里面的所有道具
             // Log.Warning("item component awake system ");
-
             await ETTask.CompletedTask;
         }
     }
@@ -20,6 +19,14 @@ namespace ET
         public override void Destroy(ItemComponent self)
         {
             // Log.Warning("组件销毁时候 ，储存一次数据");
+            // self.SaveData();
+        }
+    }
+
+    public class ItemComponentBeforeDestroySystem: BeforeDestroySystem<ItemComponent>
+    {
+        public override void BeforeDestroy(ItemComponent self)
+        {
             self.SaveData();
         }
     }
@@ -29,14 +36,11 @@ namespace ET
         public override void Update(ItemComponent self)
         {
             //每10分钟储存一次数据
-            if (self.CurrentTime < 36000)
+            self.CurrentTime += 1;
+            if (self.CurrentTime >= ConstValue.AutoSaveTime)
             {
-                self.CurrentTime += 1;
-                if (self.CurrentTime >= 3600)
-                {
-                    self.SaveData();
-                    self.CurrentTime = 0;
-                }
+                self.SaveData();
+                self.CurrentTime = 0;
             }
         }
     }
@@ -45,6 +49,19 @@ namespace ET
     public static class ItemComponentSystem
     {
 #if SERVER
+
+        public static Item GetChildByConfigId(this ItemComponent self, int configId)
+        {
+            List<Item> items = self.GetChilds<Item>();
+            if (items == null || items.Count == 0)
+            {
+                return null;
+            }
+
+            Item item = items.Find(a => a.ConfigId.Equals(configId));
+            return item;
+        }
+
         public static async ETTask<List<Item>> GetAllItems(this ItemComponent self)
         {
             List<Item> items = self.GetChilds<Item>();

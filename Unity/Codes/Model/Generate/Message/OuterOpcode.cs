@@ -86,8 +86,8 @@ namespace ET
 		 public const ushort M2C_GetAllTroopInfosResponse = 10083;
 		 public const ushort C2M_CreateTroopRequest = 10084;
 		 public const ushort M2C_CreateTroopResponse = 10085;
-		 public const ushort C2M_GetHeroInfosWithTroopIdRequest = 10086;
-		 public const ushort M2C_GetHeroInfosWithTroopIdResponse = 10087;
+		 public const ushort C2M_GetCurrentTroopHeroInfosRequest = 10086;
+		 public const ushort M2C_GetCurrentTroopHeroInfosResponse = 10087;
 		 public const ushort C2M_SetHeroToTroopRequest = 10088;
 		 public const ushort M2C_SetHeroToTroopResponse = 10089;
 		 public const ushort C2M_UnSetHeroToTroopRequest = 10090;
@@ -206,5 +206,9 @@ namespace ET
 		 public const ushort M2C_MatchPVPSuccess = 10203;
 		 public const ushort C2M_ReadyToPVPRoomRequest = 10204;
 		 public const ushort M2C_ReadyToPVPRoomResponse = 10205;
+		 public const ushort C2M_GetCurrentTroopIndexRequest = 10206;
+		 public const ushort M2C_GetCurrentTroopIndexResponse = 10207;
+		 public const ushort C2M_PlayerChooseTroopIndexRequest = 10208;
+		 public const ushort M2C_PlayerChooseTroopIndexResponse = 10209;
 	}
 }
