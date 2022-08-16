@@ -87,9 +87,15 @@ namespace ET
             return heroCards;
         }
 
-        public static Troop GetTroopIdWithIndex(this TroopComponent self, int index)
+        public static async ETTask<Troop> GetTroopIdWithIndexAsync(this TroopComponent self, int index)
         {
-            List<Troop> troops = self.GetChilds<Troop>();
+            // List<Troop> troops = self.GetChilds<Troop>();
+            List<Troop> troops = await self.GetAllTroopAyncs();
+            if (troops == null)
+            {
+                return null;
+            }
+                    
             return troops.Find(a => a.Index.Equals(index));
         }
 
@@ -98,7 +104,7 @@ namespace ET
             var index = await self.GetCurrentTroopIndexAsync();
             //找到herocardcomponent 
 
-            var troop = self.GetTroopIdWithIndex(index);
+            var troop = await self.GetTroopIdWithIndexAsync(index);
 
             HeroCardComponent heroCardComponent = self.Parent.GetComponent<HeroCardComponent>();
 

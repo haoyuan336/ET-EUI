@@ -166,43 +166,9 @@ namespace ET
         public static async ETTask InitPlayerHeroCards(this PVERoom self, Unit unit)
         {
 
-            TroopComponent troopComponent = unit.GetComponent<TroopComponent>();
-            HeroCardComponent heroCardComponent = unit.GetComponent<HeroCardComponent>();
-            Troop troop = await troopComponent.GetCurrentTroopAsync();
-            List<HeroCard> heroCards = await heroCardComponent.GetHeroCardsWithTroopIdAsync(troop.Id);
-            // await ETTask.CompletedTask;
-            List<ETTask> tasks = new List<ETTask>();
-            foreach (var heroCard in heroCards)
-            {
-                unit.AddChild(heroCard);
-                List<Skill> skills = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
-                        .Query<Skill>(a => a.OwnerId.Equals(heroCard.Id));
-                foreach (var skill in skills)
-                {
-                    heroCard.AddChild(skill);
-                }
-
-                List<Weapon> weapons = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
-                        .Query<Weapon>(a => a.OnWeaponHeroId.Equals(heroCard.Id) && a.State == (int)StateType.Active);
-                foreach (var weapon in weapons)
-                {
-                    heroCard.AddChild(weapon);
-                    //取出来，装备的词条
-                    List<WordBar> wordBars = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
-                            .Query<WordBar>(a => a.OwnerId.Equals(weapon.Id) && a.State == (int)StateType.Active);
-                    foreach (var wordBar in wordBars)
-                    {
-                        weapon.AddChild(wordBar);
-                    }
-                }
-
-                HeroConfig heroConfig = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
-                Log.Debug("创建玩家的英雄实力");
-                HeroCardDataComponent heroCardDataComponent = heroCard.AddComponent<HeroCardDataComponent>();
-                heroCardDataComponent.Angry = heroConfig.InitAngry;
-            }
-
-            await ETTaskHelper.WaitAll(tasks);
+            FightComponent fightComponent = self.GetComponent<FightComponent>();
+            await fightComponent.InitPlayerHeroCards(unit);
+            
             //todo sync all player info
             await ETTask.CompletedTask;
         }
@@ -229,16 +195,17 @@ namespace ET
                 index++;
                 heroCard.CampIndex = unit.SeatIndex;
                 HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
-                var skillStrs = config.SkillIdList.Split(',');
-                foreach (var skillStr in skillStrs)
-                {
-                    SkillConfig skillConfig = SkillConfigCategory.Instance.Get(int.Parse(skillStr));
-                    Skill skill = new Skill();
-                    skill.Id = IdGenerater.Instance.GenerateId();
-                    skill.ConfigId = skillConfig.Id;
-                    skill.OwnerId = heroCard.Id;
-                    heroCard.AddChild(skill);
-                }
+                heroCard.AddComponent<SkillComponent>();
+                // var skillStrs = config.SkillIdList.Split(',');
+                // foreach (var skillStr in skillStrs)
+                // {
+                //     SkillConfig skillConfig = SkillConfigCategory.Instance.Get(int.Parse(skillStr));
+                //     Skill skill = new Skill();
+                //     skill.Id = IdGenerater.Instance.GenerateId();
+                //     skill.ConfigId = skillConfig.Id;
+                //     skill.OwnerId = heroCard.Id;
+                //     heroCard.AddChild(skill);
+                // }
 
                 HeroCardDataComponent heroCardDataComponent = heroCard.AddComponent<HeroCardDataComponent>();
                 heroCardDataComponent.Angry = config.InitAngry;

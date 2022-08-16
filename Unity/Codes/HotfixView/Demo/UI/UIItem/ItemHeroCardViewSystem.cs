@@ -15,10 +15,11 @@ namespace ET
         public static async void SetNullStateView(this Scroll_ItemHeroCard self)
         {
             self.E_LevelText.gameObject.SetActive(false);
-            self.E_QualityIconImage.gameObject.SetActive(false);
-            self.E_ElementImage.gameObject.SetActive(false);
+            // self.E_QualityIconImage.gameObject.SetActive(false);
+            // self.E_ElementImage.gameObject.SetActive(false);
             self.E_AddTextText.gameObject.SetActive(true);
             self.E_RankImage.gameObject.SetActive(false);
+            self.E_NameText.gameObject.SetActive(false);
 
             for (int i = 1; i < 6; i++)
             {
@@ -63,11 +64,12 @@ namespace ET
             var config = HeroConfigCategory.Instance.Get(configId);
             self.E_CountText.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Materail);
             self.E_CountText.text = heroCardInfo.Count.ToString();
+            self.E_NameText.text = config.HeroEnName;
 
             self.E_ChooseCountText.gameObject.SetActive(false);
             var spriteAtlas = ConstValue.HeroCardAtlasPath;
 
-            self.E_ElementImage.gameObject.SetActive(true);
+            // self.E_ElementImage.gameObject.SetActive(true);
             // self.E_LevelText.gameObject.SetActive(true);
             // self.E_ElementImage.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
             self.E_LevelText.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
@@ -75,13 +77,13 @@ namespace ET
 
             var elementConfig = ElementConfigCategory.Instance.Get(config.HeroColor);
             var elementImageStr = elementConfig.IconImage;
-            var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elementImageStr);
-            self.E_ElementImage.sprite = sprite;
+            // var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elementImageStr);
+            // self.E_ElementImage.sprite = sprite;
 
             HeroQualityTypeConfig heroQualityTypeConfig = HeroQualityTypeConfigCategory.Instance.Get(config.HeroQuality);
-            var aualityIcon = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, heroQualityTypeConfig.Icon);
-            self.E_QualityIconImage.gameObject.SetActive(true);
-            self.E_QualityIconImage.sprite = aualityIcon;
+            // var aualityIcon = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, heroQualityTypeConfig.Icon);
+            // self.E_QualityIconImage.gameObject.SetActive(true);
+            // self.E_QualityIconImage.sprite = aualityIcon;
             // self.E_QualityIconImage.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
             for (int i = 1; i < 6; i++)
             {

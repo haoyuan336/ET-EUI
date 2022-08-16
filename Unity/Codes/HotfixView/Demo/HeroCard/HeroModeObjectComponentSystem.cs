@@ -198,6 +198,7 @@ namespace ET
             // }
             HeroCard beAttackHeroCards = message.BeAttackHeroCard;
             SkillInfo skill = message.AttackHeroCardDataComponentInfo.CurrentSkillInfo;
+            Log.Debug($"Skill config id {skill.SkillConfigId}");
             SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.SkillConfigId);
             await self.MoveToEnemyTarget(beAttackHeroCards, skillConfig);
             await self.PlayAttackAnim(message, skillConfig);

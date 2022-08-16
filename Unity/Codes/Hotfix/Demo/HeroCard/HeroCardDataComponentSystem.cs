@@ -26,7 +26,7 @@ namespace ET
         {
             Skill skill = null;
 #if SERVER
-            skill = self.GetParent<HeroCard>().GetChild<Skill>(self.CurrentSkillId);
+            skill = self.GetParent<HeroCard>().GetComponent<SkillComponent>().GetChild<Skill>(self.CurrentSkillId);
 #endif
             return new HeroCardDataComponentInfo()
             {
@@ -122,7 +122,7 @@ namespace ET
             }
 
             //确定一下怒气值满的技能
-            List<Skill> skills = self.Parent.GetChilds<Skill>();
+            List<Skill> skills = self.Parent.GetComponent<SkillComponent>().GetChilds<Skill>();
             Skill skill = skills.Find(a =>
             {
                 SkillConfig config = SkillConfigCategory.Instance.Get(a.ConfigId);
@@ -140,16 +140,6 @@ namespace ET
         public static void MakeSureSkill(this HeroCardDataComponent self, int firstCrashCount)
         {
             //todo 确定当前技能
-            // firstCrashCount -= 3;
-            // if (firstCrashCount < 0)
-            // {
-            //     firstCrashCount = 0;
-            // }
-            //
-            // if (firstCrashCount > 3)
-            // {
-            //     firstCrashCount = 3;
-            // }
             SkillType skillType = SkillType.Attack;
             switch (firstCrashCount)
             {
@@ -164,7 +154,12 @@ namespace ET
                     break;
             }
 
-            List<Skill> skills = self.Parent.GetChilds<Skill>();
+            List<Skill> skills = self.Parent.GetComponent<SkillComponent>().GetChilds<Skill>();
+
+            if (skills == null)
+            {
+                Log.Warning("not skill ");
+            }
 
             Skill skill = skills.Find(a =>
             {

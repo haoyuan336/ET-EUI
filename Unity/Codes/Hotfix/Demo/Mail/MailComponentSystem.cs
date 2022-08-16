@@ -74,7 +74,8 @@ namespace ET
                 heroCard.ConfigId = int.Parse(heroConfigId);
                 heroCard.MailId = mailId;
                 // self.AddChild(heroCard);
-                tasks.Add(heroCard.Call(self.DomainZone(), mailId));
+                // tasks.Add(heroCard.Call(self.DomainZone(), mailId));
+                await DBManagerComponent.Instance.GetZoneDB(self.DomainZone()).Save(heroCard);
             }
 
             await ETTaskHelper.WaitAll(tasks);

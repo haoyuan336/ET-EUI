@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using UnityEngine;
+using System.Runtime.Serialization.Formatters.Binary;
 
 // using static ET.Account;
 
@@ -144,9 +143,9 @@ namespace ET
             return heroCard;
         }
 
+        // [Obsolete("Obsolete")]
         public static void SaveData(this HeroCardComponent self)
         {
-            // Log.Warning($"save data hero card {TimeHelper.ServerNow()}");
             List<HeroCard> heroCards = self.GetChilds<HeroCard>();
             if (heroCards != null)
             {
@@ -192,9 +191,11 @@ namespace ET
             // heroConfigs.RemoveAll(a => a.MaterialType == (int)HeroBagType.Materail);
             int randomIndex = RandomHelper.RandomNumber(0, heroConfigs.Count);
             //
+            long accountId = self.GetParent<Unit>().AccountId;
             HeroCard heroCard = new HeroCard();
             heroCard.Id = IdGenerater.Instance.GenerateId();
             heroCard.ConfigId = heroConfigs[randomIndex].Id;
+            heroCard.OwnerId = accountId;
             self.AddChild(heroCard);
             return heroCard;
             // // HeroCard heroCard = unit.AddChild<HeroCard, int>(key);

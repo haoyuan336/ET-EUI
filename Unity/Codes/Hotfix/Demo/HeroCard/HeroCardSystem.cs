@@ -23,6 +23,29 @@ namespace ET
 
     public static class HeroCardSystem
     {
+        public static HeroCard Clone(this HeroCard self)
+        {
+            return new HeroCard()
+            {
+                Id = self.Id,
+                HeroName = self.HeroName,
+                OwnerId = self.OwnerId,
+                ConfigId = self.ConfigId,
+                TroopId = self.TroopId,
+                InTroopIndex = self.InTroopIndex,
+                MailId = self.MailId,
+                CampIndex = self.CampIndex,
+                Level = self.Level,
+                Star = self.Star,
+                Rank = self.Rank,
+                Count = self.Count,
+                State = self.State,
+                CurrentExp = self.CurrentExp,
+                CallTime = self.CallTime,
+                IsLock = self.IsLock
+            };
+        }
+
         public static int GetCriticalHit(this HeroCard self, HeroCard beAttackHeroCard)
         {
             var selfCriticalHit = self.GetWeaponBaseValueByType(WordBarType.CriticalHit);
@@ -124,7 +147,7 @@ namespace ET
             }
 
             //然后找出玩家的必杀技id
-            List<Skill> skills = self.GetChilds<Skill>();
+            List<Skill> skills = self.GetComponent<SkillComponent>().GetChilds<Skill>();
             Skill bigSkill = skills.Find(a =>
             {
                 var skillConfig = SkillConfigCategory.Instance.Get(a.ConfigId);
@@ -249,36 +272,35 @@ namespace ET
         }
 #endif
 
-        public static async ETTask Call(this HeroCard self, int zone, long ownerId)
-        {
-            self.OwnerId = ownerId;
-            self.CallTime = TimeHelper.ServerNow();
-            //todo 先创建继承数据
-            await self.CallSkill(zone);
-#if SERVER
-            await DBManagerComponent.Instance.GetZoneDB(zone).Save(self);
-#endif
-            Log.Debug("hero call complete");
-        }
-
-        public static async ETTask CallSkill(this HeroCard self, int zone)
-        {
-            HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
-            List<string> skillStr = heroConfig.SkillIdList.Split(',').ToList();
-            List<ETTask> tasks = new List<ETTask>();
-            foreach (var skillId in skillStr)
-            {
-                // Skill skill = self.AddChild<Skill, int>(int.Parse(skillId));
-                Skill skill = new Skill();
-                skill.Id = IdGenerater.Instance.GenerateId();
-                skill.ConfigId = int.Parse(skillId);
-                tasks.Add(skill.Call(zone, self.Id));
-            }
-
-            await ETTaskHelper.WaitAll(tasks);
-            Log.Debug("all skill call complete");
-            await ETTask.CompletedTask;
-        }
+        //         public static async ETTask Call(this HeroCard self, int zone, long ownerId)
+        //         {
+        //             self.OwnerId = ownerId;
+        //             self.CallTime = TimeHelper.ServerNow();
+        //             //todo 先创建继承数据
+        //             // await self.CallSkill(zone);
+        // #if SERVER
+        //             await DBManagerComponent.Instance.GetZoneDB(zone).Save(self);
+        // #endif
+        //             Log.Debug("hero call complete");
+        //         }
+        // public static async ETTask CallSkill(this HeroCard self, int zone)
+        // {
+        //     HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
+        //     List<string> skillStr = heroConfig.SkillIdList.Split(',').ToList();
+        //     List<ETTask> tasks = new List<ETTask>();
+        //     foreach (var skillId in skillStr)
+        //     {
+        //         // Skill skill = self.AddChild<Skill, int>(int.Parse(skillId));
+        //         Skill skill = new Skill();
+        //         skill.Id = IdGenerater.Instance.GenerateId();
+        //         skill.ConfigId = int.Parse(skillId);
+        //         tasks.Add(skill.Call(zone, self.Id));
+        //     }
+        //
+        //     await ETTaskHelper.WaitAll(tasks);
+        //     Log.Debug("all skill call complete");
+        //     await ETTask.CompletedTask;
+        // }
 
         public static HeroCardInfo GetMessageInfo(this HeroCard self)
         {
@@ -315,17 +337,6 @@ namespace ET
             self.CurrentExp = heroCardInfo.CurrentExp;
             self.IsLock = heroCardInfo.IsLock;
         }
-
-        // public static float GetTotalHP(this HeroCard self)
-        // {
-        //     if (self.Level == 0)
-        //     {
-        //         self.Level = 1;
-        //     }
-        //
-        //     var TotalHP = HeroConfigCategory.Instance.Get(self.ConfigId).HeroHP + HeroUpdateLevelConfigCategory.Instance.Get(self.Level).BaseHP;
-        //     return TotalHP;
-        // }
 
         public static bool GetIsDead(this HeroCard self)
         {

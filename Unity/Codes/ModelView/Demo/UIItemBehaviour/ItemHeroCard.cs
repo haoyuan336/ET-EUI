@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace ET
 {
-	public partial class Scroll_ItemHeroCard : Entity,IAwake,IDestroy ,IAwake<Transform>
+	public partial class Scroll_ItemHeroCard : Entity,IAwake,IDestroy 
 	{
 		private bool isCacheNode = false;
 		public void SetCacheMode(bool isCache)
@@ -305,6 +305,30 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Text E_NameText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_NameText == null )
+     				{
+		    			this.m_E_NameText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Name");
+     				}
+     				return this.m_E_NameText;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Name");
+     			}
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_E_HeadImage = null;
@@ -319,6 +343,7 @@ namespace ET
 			this.m_E_ChooseToggle = null;
 			this.m_E_CheckmarkImage = null;
 			this.m_E_RankImage = null;
+			this.m_E_NameText = null;
 			this.uiTransform = null;
 		}
 
@@ -334,6 +359,7 @@ namespace ET
 		private UnityEngine.UI.Toggle m_E_ChooseToggle = null;
 		private UnityEngine.UI.Image m_E_CheckmarkImage = null;
 		private UnityEngine.UI.Image m_E_RankImage = null;
+		private UnityEngine.UI.Text m_E_NameText = null;
 		public Transform uiTransform = null;
 	}
 }
