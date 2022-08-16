@@ -1456,16 +1456,12 @@ namespace ET
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
 
-		[ProtoMember(1)]
-		public long TroopId { get; set; }
-
+// int64 TroopId = 1;
 		[ProtoMember(2)]
 		public long HeroId { get; set; }
 
-		[ProtoMember(3)]
-		public long AccountId { get; set; }
-
-// int32 InTroopIndex = 3;
+// int64 AccountId = 3;
+// int32 Index = 3;
 	}
 
 	[Message(OuterOpcode.M2C_SetHeroToTroopResponse)]
@@ -1486,29 +1482,25 @@ namespace ET
 
 	}
 
-	[ResponseType(nameof(M2C_UnSetHeroToTroopResponse))]
-	[Message(OuterOpcode.C2M_UnSetHeroToTroopRequest)]
+	[ResponseType(nameof(M2C_UnSetHeroFromTroopResponse))]
+	[Message(OuterOpcode.C2M_UnSetHeroFromTroopRequest)]
 	[ProtoContract]
-	public partial class C2M_UnSetHeroToTroopRequest: Object, IActorLocationRequest
+	public partial class C2M_UnSetHeroFromTroopRequest: Object, IActorLocationRequest
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
 
-		[ProtoMember(1)]
-		public long TroopId { get; set; }
-
+// int64 TroopId = 1;
 		[ProtoMember(2)]
 		public long HeroId { get; set; }
 
-		[ProtoMember(3)]
-		public long AccountId { get; set; }
-
+// int64 AccountId = 3;
 // int32 InTroopIndex = 3;
 	}
 
-	[Message(OuterOpcode.M2C_UnSetHeroToTroopResponse)]
+	[Message(OuterOpcode.M2C_UnSetHeroFromTroopResponse)]
 	[ProtoContract]
-	public partial class M2C_UnSetHeroToTroopResponse: Object, IActorLocationResponse
+	public partial class M2C_UnSetHeroFromTroopResponse: Object, IActorLocationResponse
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -3583,6 +3575,19 @@ namespace ET
 
 		[ProtoMember(92)]
 		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<HeroCardInfo> HeroCardInfo = new List<HeroCardInfo>();
+
+	}
+
+	[Message(OuterOpcode.M2C_CreateHeroModeMessage)]
+	[ProtoContract]
+	public partial class M2C_CreateHeroModeMessage: Object, IActorMessage
+	{
+//创建英雄模型的消息
+		[ProtoMember(1)]
+		public HeroCardInfo HeroCardInfo { get; set; }
 
 	}
 

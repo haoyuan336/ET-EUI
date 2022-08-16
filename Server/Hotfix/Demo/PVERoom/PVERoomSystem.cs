@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 namespace ET
 {
     public class PVERoomAwakeSystem: AwakeSystem<PVERoom>
@@ -11,6 +12,7 @@ namespace ET
             self.AddComponent<FightComponent>();
         }
     }
+
     public static class PVERoomSystem
     {
         // public static void 
@@ -23,13 +25,15 @@ namespace ET
             // self.LevelConfig = LevelConfigCategory.Instance.Get(levelNum);
             self.GetComponent<FightComponent>().Units.Add(unit);
             self.GetComponent<FightComponent>().Units.Add(self.AddAIUnity());
+
             self.GetComponent<FightComponent>().SetUnitSeatIndex();
             self.AsyncRoomInfo();
             self.InitAIUnitHeroCard();
-            await self.InitPlayerHeroCards(unit.CurrentTroopId);
+            await self.InitPlayerHeroCards(unit);
             self.SyncCreateHeroCardMessage();
             self.InitGameMap(levelNum);
         }
+
         public static void SyncCreateHeroCardMessage(this PVERoom self)
         {
             List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>();
@@ -43,12 +47,14 @@ namespace ET
                     heroCardDataComponentInfos.Add(heroCard.GetComponent<HeroCardDataComponent>().GetInfo());
                 }
             }
+
             foreach (var unit in self.GetComponent<FightComponent>().Units)
             {
                 if (unit.IsAI)
                 {
                     continue;
                 }
+
                 MessageHelper.SendToClient(unit,
                     new M2C_CreateHeroCardInRoom() { HeroCardInfos = heroCardInfos, HeroCardDataComponentInfos = heroCardDataComponentInfos });
             }
@@ -91,12 +97,14 @@ namespace ET
                 }
             }
         }
+
         public static async ETTask<int> GetCurrentPlayerLevelNum(this PVERoom self, Unit unit, long AccountId)
         {
             Account account = await self.GetCurrentAccountInfo(unit, AccountId);
             int levelNum = account.PVELevelNumber == 0? 1 : account.PVELevelNumber;
             return levelNum;
         }
+
         public static Unit AddAIUnity(this PVERoom self)
         {
             Log.Debug("创建一个电脑玩家");
@@ -105,6 +113,7 @@ namespace ET
             Log.Debug($"create unit is ai {unit.IsAI}");
             return unit;
         }
+
         public static void AsyncRoomInfo(this PVERoom self)
         {
             foreach (var unit in self.GetComponent<FightComponent>().Units)
@@ -126,6 +135,7 @@ namespace ET
                     });
             }
         }
+
         public static async ETTask<Account> GetCurrentAccountInfo(this PVERoom self, Unit unit, long AccountId)
         {
             Log.Debug($"unit account id ={AccountId}");
@@ -137,6 +147,7 @@ namespace ET
 
             return null;
         }
+
         public static void InitGameMap(this PVERoom self, int levelNum)
         {
             List<DiamondInfo> diamondInfos = self.GetComponent<DiamondComponent>().InitDiamonds(levelNum);
@@ -150,52 +161,52 @@ namespace ET
                 MessageHelper.SendToClient(entity, new M2C_InitMapData() { DiamondInfo = diamondInfos });
             }
         }
-        //todo 初始化英雄卡
-        public static async ETTask InitPlayerHeroCards(this PVERoom self, long troopId)
-        {
-            List<ETTask> tasks = new List<ETTask>();
-            for (var i = 0; i < self.GetComponent<FightComponent>().Units.Count; i++)
-            {
-                Unit unit = self.GetComponent<FightComponent>().Units[i];
-                if (unit.IsAI)
-                {
-                    continue;
-                }
-                List<HeroCard> heroCards = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
-                        .Query<HeroCard>((a) => a.TroopId.Equals(troopId) && a.State == (int)HeroCardState.Active);
-                foreach (var heroCard in heroCards)
-                {
-                    unit.AddChild(heroCard);
-                    List<Skill> skills = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
-                            .Query<Skill>(a => a.OwnerId.Equals(heroCard.Id));
-                    foreach (var skill in skills)
-                    {
-                        heroCard.AddChild(skill);
-                    }
-                    List<Weapon> weapons = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
-                            .Query<Weapon>(a => a.OnWeaponHeroId.Equals(heroCard.Id) && a.State == (int)StateType.Active);
-                    foreach (var weapon in weapons)
-                    {
-                        heroCard.AddChild(weapon);
-                        //取出来，装备的词条
-                        List<WordBar> wordBars = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
-                                .Query<WordBar>(a => a.OwnerId.Equals(weapon.Id) && a.State == (int)StateType.Active);
-                        foreach (var wordBar in wordBars)
-                        {
-                            weapon.AddChild(wordBar);
-                        }
-                    }
 
-                    HeroConfig heroConfig = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
-                    Log.Debug("创建玩家的英雄实力");
-                    HeroCardDataComponent heroCardDataComponent = heroCard.AddComponent<HeroCardDataComponent>();
-                    heroCardDataComponent.Angry = heroConfig.InitAngry;
+        //todo 初始化英雄卡
+        public static async ETTask InitPlayerHeroCards(this PVERoom self, Unit unit)
+        {
+
+            TroopComponent troopComponent = unit.GetComponent<TroopComponent>();
+            HeroCardComponent heroCardComponent = unit.GetComponent<HeroCardComponent>();
+            Troop troop = await troopComponent.GetCurrentTroopAsync();
+            List<HeroCard> heroCards = await heroCardComponent.GetHeroCardsWithTroopIdAsync(troop.Id);
+            // await ETTask.CompletedTask;
+            List<ETTask> tasks = new List<ETTask>();
+            foreach (var heroCard in heroCards)
+            {
+                unit.AddChild(heroCard);
+                List<Skill> skills = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
+                        .Query<Skill>(a => a.OwnerId.Equals(heroCard.Id));
+                foreach (var skill in skills)
+                {
+                    heroCard.AddChild(skill);
                 }
+
+                List<Weapon> weapons = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
+                        .Query<Weapon>(a => a.OnWeaponHeroId.Equals(heroCard.Id) && a.State == (int)StateType.Active);
+                foreach (var weapon in weapons)
+                {
+                    heroCard.AddChild(weapon);
+                    //取出来，装备的词条
+                    List<WordBar> wordBars = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone())
+                            .Query<WordBar>(a => a.OwnerId.Equals(weapon.Id) && a.State == (int)StateType.Active);
+                    foreach (var wordBar in wordBars)
+                    {
+                        weapon.AddChild(wordBar);
+                    }
+                }
+
+                HeroConfig heroConfig = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
+                Log.Debug("创建玩家的英雄实力");
+                HeroCardDataComponent heroCardDataComponent = heroCard.AddComponent<HeroCardDataComponent>();
+                heroCardDataComponent.Angry = heroConfig.InitAngry;
             }
+
             await ETTaskHelper.WaitAll(tasks);
             //todo sync all player info
             await ETTask.CompletedTask;
         }
+
         public static void CreateHeroIdListInLevelConfig(this PVERoom self, Unit unit)
         {
             string heroIdsstr = self.GetComponent<FightComponent>().LevelConfig.HeroId;
@@ -228,10 +239,12 @@ namespace ET
                     skill.OwnerId = heroCard.Id;
                     heroCard.AddChild(skill);
                 }
+
                 HeroCardDataComponent heroCardDataComponent = heroCard.AddComponent<HeroCardDataComponent>();
                 heroCardDataComponent.Angry = config.InitAngry;
             }
         }
+
         public static async void PlayerScrollScreen(this PVERoom self, C2M_PlayerScrollScreen message)
         {
             // self.GetComponent<FightComponent>().PlayerScrollScreen(message);
@@ -250,7 +263,7 @@ namespace ET
             if (loseUnit != null)
             {
                 m2CSyncDiamondAction.GameLoseResultAction = new GameLoseResultAction() { LoseAccountId = loseUnit.AccountId };
-            
+
                 foreach (var unit in fightComponent.Units)
                 {
                     //todo -----------储存游戏结果---------------
@@ -278,7 +291,7 @@ namespace ET
                             {
                                 level = levelCount;
                             }
-            
+
                             accounts[0].PVELevelNumber = level;
                             //储存当前关卡数
                             await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Save(accounts[0]);
@@ -287,12 +300,14 @@ namespace ET
                     }
                 }
             }
+
             foreach (var unit in fightComponent.Units)
             {
                 if (unit.IsAI)
                 {
                     continue;
                 }
+
                 MessageHelper.SendToClient(unit, m2CSyncDiamondAction);
             }
         }

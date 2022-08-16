@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace ET
 {
@@ -9,7 +10,14 @@ namespace ET
         Action reply)
         {
             TroopComponent troopComponent = unit.GetComponent<TroopComponent>();
-            troopComponent.PlayerChooseTroopIndex(request.Index);
+            List<HeroCard> heroCards = await troopComponent.PlayerChooseTroopIndex(request.Index);
+
+            List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>();
+            foreach (var heroCard in heroCards)
+            {
+                heroCardInfos.Add(heroCard.GetMessageInfo());
+            }
+            response.HeroCardInfo = heroCardInfos;
             response.Error = ErrorCode.ERR_Success;
             reply();
             await ETTask.CompletedTask;

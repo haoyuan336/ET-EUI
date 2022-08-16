@@ -28,9 +28,12 @@ namespace ET
             {
                 if (value)
                 {
-                    var response = await session.Call(new C2M_PlayerChooseTroopIndexRequest() { Index = index });
+                    var response =
+                            await session.Call(new C2M_PlayerChooseTroopIndexRequest() { Index = index }) as M2C_PlayerChooseTroopIndexResponse;
                     if (response.Error == ErrorCode.ERR_Success)
                     {
+                        self.UpdateChooseHeroState(response.HeroCardInfo);
+                        self.SetTroopHeroCardInfo(response.HeroCardInfo);
                     }
                 }
             });
@@ -169,13 +172,13 @@ namespace ET
 
         public static async ETTask<List<HeroCardInfo>> UnSetHeroCardTroopIdRequest(this DlgEditorTroopLayer self, long heroId)
         {
-            long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            // long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
-            C2M_UnSetHeroToTroopRequest request = new C2M_UnSetHeroToTroopRequest()
-            {
-                AccountId = accountId, HeroId = heroId, TroopId = self.CurrentChooseTroopId
-            };
-            M2C_UnSetHeroToTroopResponse response = (M2C_UnSetHeroToTroopResponse)await session.Call(request);
+            // C2M_UnSetHeroFromTroopRequestTroopRequest request = new C2M_UnSetHeroToTroopRequest()
+            // {
+            // AccountId = accountId, HeroId = heroId, TroopId = self.CurrentChooseTroopId
+            // };
+            var response = (M2C_UnSetHeroFromTroopResponse)await session.Call(new C2M_UnSetHeroFromTroopRequest() { HeroId = heroId });
             if (response.Error == ErrorCode.ERR_Success)
             {
                 // self.SetTroopHeroCardInfo(response.HeroCardInfos);
@@ -187,14 +190,10 @@ namespace ET
 
         public static async ETTask<List<HeroCardInfo>> UpdateHeroCardTroopId(this DlgEditorTroopLayer self, long heroId, long troopId)
         {
-            long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            // long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             //更新此英雄到队伍里面
-            C2M_SetHeroToTroopRequest request = new C2M_SetHeroToTroopRequest()
-            {
-                AccountId = account, TroopId = self.CurrentChooseTroopId, HeroId = heroId
-            };
-            M2C_SetHeroToTroopResponse response = (M2C_SetHeroToTroopResponse)await session.Call(request);
+            var response = await session.Call(new C2M_SetHeroToTroopRequest() { HeroId = heroId }) as M2C_SetHeroToTroopResponse;
             if (response.Error == ErrorCode.ERR_Success)
             {
                 return response.HeroCardInfos;
@@ -216,6 +215,8 @@ namespace ET
             {
                 List<HeroCardInfo> heroCardInfos = await self.UnSetHeroCardTroopIdRequest(heroCardInfo.HeroId);
                 self.SetTroopHeroCardInfo(heroCardInfos);
+                self.UpdateChooseHeroState(heroCardInfos);
+
             }
         }
 

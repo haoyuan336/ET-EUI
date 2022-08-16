@@ -12,10 +12,9 @@ namespace ET
             self.View.E_LoopScrollListHeroLoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopListItemRefreshHandler);
             // self.AddUIScrollItems();
             // self.ItemHeroCards
-            self.View.E_BackButton.AddListener(() =>
-            {
-                self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer);
-            }, ConstValue.BackButtonAudioStr);
+            self.View.E_BackButton.AddListener(
+                () => { self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_AllHeroBagLayer); },
+                ConstValue.BackButtonAudioStr);
         }
 
         public static void InitAllToggleEvent(this DlgAllHeroBagLayer self)
@@ -129,7 +128,7 @@ namespace ET
                     var findInfo = self.AllChooseHeroCardInfos.Find(a => a.HeroId.Equals(heroCardInfo.HeroId));
                     if (findInfo != null)
                     {
-                        if (heroConfig.MaterialType == (int) HeroBagType.Hero)
+                        if (heroConfig.MaterialType == (int)HeroBagType.Hero)
                         {
                             itemHeroCard.E_ChooseToggle.isOn = true;
                         }
@@ -142,13 +141,14 @@ namespace ET
                     }
                 }
 
-                if (self.EnabelHeroCardInfos != null)
-                {
-                    //找一下是否包含
+                // if (self.EnabelHeroCardInfos != null)
+                // {
+                //找一下是否包含
+                itemHeroCard.E_ChooseToggle.interactable = true;
+                if (self.EnabelHeroCardInfos != null && self.EnabelHeroCardInfos.Exists(a => a.HeroId.Equals(heroCardInfo.HeroId)))
                     itemHeroCard.E_ChooseToggle.interactable = false;
-                    bool isCon = self.EnabelHeroCardInfos.Exists(a => a.HeroId.Equals(heroCardInfo.HeroId));
-                    itemHeroCard.E_ChooseToggle.interactable = isCon;
-                }
+
+                // }
 
                 if (self.UnableElementHeroCardInfos != null)
                 {
@@ -201,8 +201,6 @@ namespace ET
                     }
                 }
 
-            
-
                 itemHeroCard.E_ChooseToggle.AddListener((value) =>
                 {
                     if (self.OnHeroItemInfoClick != null)
@@ -253,7 +251,7 @@ namespace ET
             // public HeroCardInfo EnabelSameStarCountHeroCardInfo = null; //可用的相同星数目的卡牌信息
         }
 
-        public static  void ShowWindow(this DlgAllHeroBagLayer self, Entity contextData = null)
+        public static void ShowWindow(this DlgAllHeroBagLayer self, Entity contextData = null)
         {
             // self.FilterColor(self.CurrentChooseTypeIndex).Coroutine();
             // var spritePath = ConstValue.HeroCardAtlasPath;
@@ -272,7 +270,7 @@ namespace ET
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             C2M_GetAllItemRequest request = new C2M_GetAllItemRequest();
-            M2C_GetAllItemResponse response = (M2C_GetAllItemResponse) await session.Call(request);
+            M2C_GetAllItemResponse response = (M2C_GetAllItemResponse)await session.Call(request);
             // Log.Debug("获取道具数据成功");
             if (response.Error == ErrorCode.ERR_Success)
             {
@@ -325,9 +323,9 @@ namespace ET
             await self.InitBagCount();
             // Log.Debug("filter color");
             long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
-            M2C_GetAllHeroCardListResponse m2CGetAllHeroCardListResponse = (M2C_GetAllHeroCardListResponse) await self.ZoneScene()
+            M2C_GetAllHeroCardListResponse m2CGetAllHeroCardListResponse = (M2C_GetAllHeroCardListResponse)await self.ZoneScene()
                     .GetComponent<SessionComponent>().Session
-                    .Call(new C2M_GetAllHeroCardListRequest() { Account = AccountId, BagType = (int) self.BagType });
+                    .Call(new C2M_GetAllHeroCardListRequest() { Account = AccountId, BagType = (int)self.BagType });
             Log.Debug($"filter index{index}");
             if (m2CGetAllHeroCardListResponse.Error == ErrorCode.ERR_Success)
             {
@@ -362,7 +360,7 @@ namespace ET
                     self.HeroCardInfos = self.HeroCardInfos.FindAll(a =>
                     {
                         HeroConfig config = HeroConfigCategory.Instance.Get(a.ConfigId);
-                        if (config.HeroColor == (int) type)
+                        if (config.HeroColor == (int)type)
                         {
                             return true;
                         }

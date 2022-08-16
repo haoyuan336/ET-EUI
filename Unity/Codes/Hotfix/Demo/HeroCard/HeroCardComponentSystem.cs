@@ -56,6 +56,13 @@ namespace ET
     {
 #if SERVER
 
+        public static async ETTask<HeroCard> GetHeroCardsWithIdAsync(this HeroCardComponent self, long heroId)
+        {
+            List<HeroCard> heroCards = await self.GetAllHeroCardAsync();
+            HeroCard heroCard = heroCards.Find(a => a.Id.Equals(heroId));
+            return heroCard;
+        }
+
         public static async ETTask<List<HeroCard>> GetHeroCardsWithTroopIdAsync(this HeroCardComponent self, long troopId)
         {
             List<HeroCard> heroCards = await self.GetAllHeroCardAsync();

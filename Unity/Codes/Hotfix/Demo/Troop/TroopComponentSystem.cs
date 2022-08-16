@@ -23,6 +23,70 @@ namespace ET
     {
 #if SERVER
 
+        public static async ETTask<List<HeroCard>> GetCurrentTroopHeroCardsAsync(this TroopComponent self)
+        {
+            Troop troop = await self.GetCurrentTroopAsync();
+            List<HeroCard> heroCards = await self.Parent.GetComponent<HeroCardComponent>().GetHeroCardsWithTroopIdAsync(troop.Id);
+            return heroCards;
+        }
+
+        public static async ETTask<List<HeroCard>> UnSetHeroFormTroop(this TroopComponent self, long heroId)
+        {
+            HeroCard heroCard = await self.Parent.GetComponent<HeroCardComponent>().GetHeroCardsWithIdAsync(heroId);
+            if (heroCard == null)
+            {
+                return null;
+            }
+
+            heroCard.TroopId = 0;
+            Troop troop = await self.GetCurrentTroopAsync();
+            if (troop == null)
+            {
+                return null;
+            }
+
+            List<HeroCard> heroCards = await self.Parent.GetComponent<HeroCardComponent>().GetHeroCardsWithTroopIdAsync(troop.Id);
+            return heroCards;
+        }
+
+        public static async ETTask<List<HeroCard>> SetHeroToTroop(this TroopComponent self, long heroId)
+        {
+            //获取当前选择的队伍
+            Troop troop = await self.GetCurrentTroopAsync();
+            if (troop == null)
+            {
+                return null;
+            }
+
+            List<HeroCard> heroCards = await self.Parent.GetComponent<HeroCardComponent>().GetHeroCardsWithTroopIdAsync(troop.Id);
+
+            int index = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                if (!heroCards.Exists(a => a.InTroopIndex == i))
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (heroCards.Exists(a => a.Id.Equals(heroId)))
+            {
+                HeroCard card = heroCards.Find(a => a.Id.Equals(heroId));
+                card.InTroopIndex = index;
+                return heroCards;
+            }
+
+            HeroCard heroCard = await self.Parent.GetComponent<HeroCardComponent>().GetHeroCardsWithIdAsync(heroId);
+
+            heroCard.TroopId = troop.Id;
+            heroCard.InTroopIndex = index;
+
+            heroCards.Add(heroCard);
+
+            return heroCards;
+        }
+
         public static Troop GetTroopIdWithIndex(this TroopComponent self, int index)
         {
             List<Troop> troops = self.GetChilds<Troop>();
@@ -48,7 +112,7 @@ namespace ET
             return heroCardInfos;
         }
 
-        public static async void PlayerChooseTroopIndex(this TroopComponent self, int index)
+        public static async ETTask<List<HeroCard>> PlayerChooseTroopIndex(this TroopComponent self, int index)
         {
             List<Troop> troops = await self.GetAllTroopAyncs();
             foreach (var tr in troops)
@@ -66,6 +130,23 @@ namespace ET
             }
 
             troop.IsOn = true;
+
+            List<HeroCard> heroCards = await self.Parent.GetComponent<HeroCardComponent>().GetHeroCardsWithTroopIdAsync(troop.Id);
+            return heroCards;
+        }
+
+        public static async ETTask<Troop> GetCurrentTroopAsync(this TroopComponent self)
+        {
+            List<Troop> troops = await self.GetAllTroopAyncs();
+            foreach (var troop in troops)
+            {
+                if (troop.IsOn)
+                {
+                    return troop;
+                }
+            }
+
+            return null;
         }
 
         public static async ETTask<int> GetCurrentTroopIndexAsync(this TroopComponent self)
