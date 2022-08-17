@@ -1630,3 +1630,28 @@ message M2C_CreateHeroModeMessage //IActorMessage
 	//创建英雄模型的消息
 	HeroCardInfo HeroCardInfo = 1;
 }
+//ResponseType M2C_GetCurrentShowHeroCardInfoResponse
+message C2M_GetCurrentShowHeroCardInfoRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+
+}
+message M2C_GetCurrentShowHeroCardInfoResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	HeroCardInfo HeroCardInfo = 1;
+}
+//ResponseType M2C_SetCurrentShowHeroCardInfoResponse
+message C2M_SetCurrentShowHeroCardInfoRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 HeroId = 1;
+}
+message M2C_SetCurrentShowHeroCardInfoResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}

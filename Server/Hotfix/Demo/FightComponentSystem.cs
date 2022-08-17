@@ -12,6 +12,48 @@ namespace ET
 
     public static class FightComponentSystem
     {
+        public static void InitAIUnitHeroCard(this FightComponent self)
+        {
+            for (var i = 0; i < self.Units.Count; i++)
+            {
+                Unit unit = self.Units[i];
+                if (unit.IsAI)
+                {
+                    //todo 首先创建敌人的英雄卡
+                    self.CreateHeroIdListInLevelConfig(unit);
+                    break;
+                }
+            }
+        }
+
+        public static void CreateHeroIdListInLevelConfig(this FightComponent self, Unit unit)
+        {
+            string heroIdsstr = self.LevelConfig.HeroId;
+            string[] strList = heroIdsstr.Split(',').ToArray();
+            int index = 0;
+            foreach (var str in strList)
+            {
+                int configId = int.Parse(str);
+                EnemyHeroConfig enemyHeroConfig = EnemyHeroConfigCategory.Instance.Get(configId);
+                HeroCard heroCard = new HeroCard();
+                Log.Debug("创建ai玩家的英雄");
+                heroCard.Id = IdGenerater.Instance.GenerateId();
+                unit.AddChild(heroCard);
+                heroCard.ConfigId = enemyHeroConfig.ConfigId;
+                heroCard.Level = enemyHeroConfig.Level;
+                heroCard.Star = enemyHeroConfig.Star;
+                heroCard.Rank = enemyHeroConfig.Rank;
+
+                heroCard.InTroopIndex = index;
+                index++;
+                heroCard.CampIndex = unit.SeatIndex;
+                HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
+                heroCard.AddComponent<SkillComponent>();
+                heroCard.AddComponent<BuffComponent>();
+                HeroCardDataComponent heroCardDataComponent = heroCard.AddComponent<HeroCardDataComponent>();
+                heroCardDataComponent.Angry = config.InitAngry;
+            }
+        }
 
         public static async ETTask InitPlayerHeroCards(this FightComponent self, Unit unit)
         {
@@ -54,8 +96,8 @@ namespace ET
             }
 
             await ETTaskHelper.WaitAll(tasks);
-            
         }
+
         public static void SetUnitSeatIndex(this FightComponent self)
         {
             int seatIndex = 0;
@@ -475,6 +517,7 @@ namespace ET
             {
                 return;
             }
+
             var AddRoundAngryItem = new AddRoundAngryItem();
             foreach (var unit in self.Units)
             {

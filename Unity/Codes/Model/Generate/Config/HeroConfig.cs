@@ -115,8 +115,6 @@ namespace ET
 		public int HeroQuality { get; set; }
 		[ProtoMember(23)]
 		public string HeroIconFrameImage { get; set; }
-		[ProtoMember(24)]
-		public int MaterialType { get; set; }
 
 	}
 }

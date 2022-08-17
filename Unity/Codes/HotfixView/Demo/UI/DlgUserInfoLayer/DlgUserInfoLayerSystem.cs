@@ -90,11 +90,11 @@ namespace ET
             long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             // self.View.E_NameText
             self.View.E_EdItorButton.gameObject.SetActive(accountInfo.Account.Equals(accountId));
-            List<HeroConfig> heroConfigs = HeroConfigCategory.Instance.GetAll().Values.ToList().FindAll(a =>
-            {
-                return a.MaterialType == (int)HeroBagType.Hero;
-            });
-            var heroCount = heroConfigs.Count;
+            // List<HeroConfig> heroConfigs = HeroConfigCategory.Instance.GetAll().Values.ToList().FindAll(a =>
+            // {
+            //     return a.MaterialType == (int)HeroBagType.Hero;
+            // });
+            // var heroCount = heroConfigs.Count;
 
             var request = new C2M_GetPlayerOwnHeroTypeCountRequest() { AccountId = accountInfo.Account };
             var session = self.ZoneScene().GetComponent<SessionComponent>().Session;
@@ -103,7 +103,7 @@ namespace ET
             {
                 var count = response.Count;
                 Log.Debug($"拥有的英雄种类数量{count}");
-                float percent = 100 * (float)count / heroCount;
+                float percent = 100 * (float)count / HeroConfigCategory.Instance.GetAll().Count;
                 self.View.E_HeroProgressText.text = $"{percent}%";
             }
 

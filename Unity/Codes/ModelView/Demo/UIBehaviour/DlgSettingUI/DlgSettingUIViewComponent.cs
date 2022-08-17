@@ -226,6 +226,40 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Button E_ChangeShowHeroModeButton
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_ChangeShowHeroModeButton == null )
+     			{
+		    		this.m_E_ChangeShowHeroModeButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_ChangeShowHeroMode");
+     			}
+     			return this.m_E_ChangeShowHeroModeButton;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_ChangeShowHeroModeImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_ChangeShowHeroModeImage == null )
+     			{
+		    		this.m_E_ChangeShowHeroModeImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_ChangeShowHeroMode");
+     			}
+     			return this.m_E_ChangeShowHeroModeImage;
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_E_BGImage = null;
@@ -241,6 +275,8 @@ namespace ET
 			this.m_E_BackGroundImage = null;
 			this.m_E_ShowMenuToggle = null;
 			this.m_E_ShowImage = null;
+			this.m_E_ChangeShowHeroModeButton = null;
+			this.m_E_ChangeShowHeroModeImage = null;
 			this.uiTransform = null;
 		}
 
@@ -257,6 +293,8 @@ namespace ET
 		private UnityEngine.UI.Image m_E_BackGroundImage = null;
 		private UnityEngine.UI.Toggle m_E_ShowMenuToggle = null;
 		private UnityEngine.UI.Image m_E_ShowImage = null;
+		private UnityEngine.UI.Button m_E_ChangeShowHeroModeButton = null;
+		private UnityEngine.UI.Image m_E_ChangeShowHeroModeImage = null;
 		public Transform uiTransform = null;
 	}
 }

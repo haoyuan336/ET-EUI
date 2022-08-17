@@ -122,6 +122,7 @@ namespace ET
 
         public static async void SetTroopHeroCardInfo(this DlgEditorTroopLayer self, List<HeroCardInfo> heroCardInfos)
         {
+            self.TroopHeroCardInfos = heroCardInfos;
             if (self.ItemHeroCards.Count == 0)
             {
                 var itemHeroPrefab = "ItemHeroCard";
@@ -207,6 +208,14 @@ namespace ET
             //
             if (value)
             {
+                Log.Debug($"troop hero card infos count {self.TroopHeroCardInfos.Count}");
+                if (self.TroopHeroCardInfos.Count >= 3)
+                {
+                    heroCard.E_ChooseToggle.isOn = false;
+                    return;
+                }
+                
+                
                 List<HeroCardInfo> heroCardInfos = await self.UpdateHeroCardTroopId(heroCardInfo.HeroId, self.CurrentChooseTroopId);
                 self.SetTroopHeroCardInfo(heroCardInfos);
                 self.UpdateChooseHeroState(heroCardInfos);
@@ -240,7 +249,7 @@ namespace ET
             baseWindow.GetComponent<DlgAllHeroBagLayer>().SetShowHeroType(HeroBagType.Hero);
             rectTransform.anchorMax = new Vector2(1, 1);
             rectTransform.anchorMin = new Vector2(0, 0);
-            rectTransform.offsetMax = new Vector2(0, -700);
+            rectTransform.offsetMax = new Vector2(0, -840);
             rectTransform.offsetMin = new Vector2(0, 0);
 
             await uiComponent.ShowWindow(WindowID.WindowID_BackButton);

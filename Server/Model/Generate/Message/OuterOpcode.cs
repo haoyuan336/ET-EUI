@@ -211,5 +211,9 @@ namespace ET
 		 public const ushort C2M_PlayerChooseTroopIndexRequest = 10208;
 		 public const ushort M2C_PlayerChooseTroopIndexResponse = 10209;
 		 public const ushort M2C_CreateHeroModeMessage = 10210;
+		 public const ushort C2M_GetCurrentShowHeroCardInfoRequest = 10211;
+		 public const ushort M2C_GetCurrentShowHeroCardInfoResponse = 10212;
+		 public const ushort C2M_SetCurrentShowHeroCardInfoRequest = 10213;
+		 public const ushort M2C_SetCurrentShowHeroCardInfoResponse = 10214;
 	}
 }

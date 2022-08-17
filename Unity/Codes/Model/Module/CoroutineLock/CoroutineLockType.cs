@@ -23,6 +23,7 @@ namespace ET
         public const int GiveGiftToFriend = 18; //赠送礼物给好友
         public const int LoadSprite = 19; //加载精灵
         public const int CreatePVPGameRoom = 20; //创建对战房间
+        public const int LoadShowHeroMode = 21; //加载显示英雄
         public const int Max = 100; // 这个必须最大
     }
 }

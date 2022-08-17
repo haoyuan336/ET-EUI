@@ -11,7 +11,7 @@ namespace ET
     {
         public static void RegisterUIEvent(this DlgShowHeroInfoLayer self)
         {
-            self.View.E_BackButton.AddListener(self.BackButtonClick,ConstValue.BackButtonAudioStr);
+            self.View.E_BackButton.AddListener(self.BackButtonClick, ConstValue.BackButtonAudioStr);
             self.View.E_UpdateStarButton.AddListener(self.OnUpStarButtonClick);
             self.View.E_UpdateLevelButton.AddListenerAsync(self.OnUpdateHeroLevelButtonClick);
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
@@ -53,6 +53,8 @@ namespace ET
         /// <param name="self"></param>
         public static async ETTask OnUpdateHeroLevelButtonClick(this DlgShowHeroInfoLayer self)
         {
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+
             if (HeroHelper.CheckIsMaxLevel(self.HeroCardInfo))
             {
                 return;
@@ -62,7 +64,6 @@ namespace ET
             {
                 //需要升阶了，显示升阶页面
 
-                UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
                 await uiComponent.ShowWindow(WindowID.WindowID_UpdateHeroRankLayer);
                 UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_UpdateHeroRankLayer);
                 if (baseWindow != null)
@@ -71,6 +72,16 @@ namespace ET
                     baseWindow.GetComponent<DlgUpdateHeroRankLayer>().UpdateHeroRankSuccessAction = self.OnUpdateHeroRankSuccessAction;
                 }
 
+                return;
+            }
+
+            var currentExp = await self.RequestCurrentExp();
+            var neexExp = HeroHelper.GetNextLevelExp(self.HeroCardInfo);
+            if (currentExp < neexExp)
+            {
+                await uiComponent.ShowWindow(WindowID.WindowID_AlertLayer);
+                UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_AlertLayer);
+                baseWindow.GetComponent<DlgAlertLayer>().SetText("经验值不足");
                 return;
             }
 
@@ -83,7 +94,6 @@ namespace ET
                 AudioComponent.Instance.PlayAudioEffect(ConstValue.UpdateLevelAudioStr);
                 self.SetHeroInfo(response.HeroCardInfo);
 
-                UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
                 UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_GoldInfoUI);
                 if (baseWindow != null)
                 {
@@ -92,9 +102,10 @@ namespace ET
             }
         }
 
-        public static void RegisterAccountInfoDataChangeAction(this DlgShowHeroInfoLayer self)
+        public static async void RegisterAccountInfoDataChangeAction(this DlgShowHeroInfoLayer self)
         {
-            self.RequestCurrentExp();
+            var count = await self.RequestCurrentExp();
+            self.UpdateExpInfoView(count);
         }
 
         public static async void OnWeaponButtonClick(this DlgShowHeroInfoLayer self)
@@ -168,7 +179,9 @@ namespace ET
             self.SethetoStar(heroCardInfo);
             self.SetElementInfo(heroCardInfo);
             self.InitOnWeapon();
-            self.RequestCurrentExp();
+            var expCount = await self.RequestCurrentExp();
+
+            self.UpdateExpInfoView(expCount);
 
             self.View.E_LockToggle.isOn = heroCardInfo.IsLock;
         }
@@ -305,8 +318,7 @@ namespace ET
 
         public static async void ShowWindow(this DlgShowHeroInfoLayer self, Entity contextData = null)
         {
-
-            UIComponent uiComponent =  self.DomainScene().GetComponent<UIComponent>();
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
             await uiComponent.ShowWindow(WindowID.WindowID_GoldInfoUI);
             UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_GoldInfoUI);
             baseWindow.GetComponent<DlgGoldInfoUI>().ShowWidgetWithType(GoldInfoUIType.HeroInfo);
@@ -331,7 +343,7 @@ namespace ET
 
             var rate = (float)expCount / needExp;
             self.View.E_ExpBarImage.fillAmount = rate;
-            self.View.E_UpdateLevelButton.interactable = expCount >= needExp;
+            // self.View.E_UpdateLevelButton.interactable = expCount >= needExp;
             //判断是否可以升级
             // HeroLevelExpConfig config = HeroLevelExpConfigCategory.Instance.Get()
             var updateRank = HeroHelper.CheckIsNeedUpdateRank(self.HeroCardInfo);
@@ -344,17 +356,20 @@ namespace ET
             self.View.E_RankText.text = $"Rank{self.HeroCardInfo.Rank}";
         }
 
-        public static async void RequestCurrentExp(this DlgShowHeroInfoLayer self)
+        public static async ETTask<int> RequestCurrentExp(this DlgShowHeroInfoLayer self)
         {
+            // var needExp = HeroHelper.GetNextLevelExp(self.HeroCardInfo);
             long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
-            C2M_GetItemInfoRequest request = new C2M_GetItemInfoRequest() { AccountId = account, ConfigId = 1008 };
+            C2M_GetItemInfoRequest request = new C2M_GetItemInfoRequest() { AccountId = account, ConfigId = ConstValue.ExpItemConfigId };
             M2C_GetItemInfoResponse response = await session.Call(request) as M2C_GetItemInfoResponse;
             if (response.Error == ErrorCode.ERR_Success)
             {
-                var count = response.ItemInfo.Count;
-                self.UpdateExpInfoView(count);
+                return response.ItemInfo.Count;
+                // var count = response.ItemInfo.Count;
             }
+
+            return 0;
         }
     }
 }

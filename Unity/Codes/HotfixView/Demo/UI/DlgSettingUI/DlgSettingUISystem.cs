@@ -12,6 +12,7 @@ namespace ET
             self.View.E_ShowMenuToggle.GetComponent<Toggle>().onValueChanged.AddListener((value) => { self.ShowMenu(value).Coroutine(); });
             self.View.E_MailButton.AddListenerAsync(self.MailButtonClick);
             self.View.E_FriendButton.AddListener(self.OnFriendButtonClick);
+            self.View.E_ChangeShowHeroModeButton.AddListener(self.ShowAllHeroBag);
         }
 
         public static void SetChatInfos(this DlgSettingUI self, Dictionary<long, ChatInfo> chatInfos)
@@ -28,7 +29,7 @@ namespace ET
             }
 
             self.ChatInfosMap.Add(chatInfo.AccountInfo.Account, chatInfo);
-            
+
             self.ShowNewChatMark(true);
 
             UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
@@ -37,8 +38,7 @@ namespace ET
 
             // self.View.ELoopFriendListLoopVerticalScrollRect.RefreshCells();
         }
-        
-        
+
         public static async void OnFriendButtonClick(this DlgSettingUI self)
         {
             self.ShowNewChatMark(false);
@@ -50,6 +50,7 @@ namespace ET
                 baseWindow.GetComponent<DlgFriendLayer>().SetChatInfoMap(self.ChatInfosMap);
             }
         }
+
         public static async void RequestNewMail(this DlgSettingUI self)
         {
             long account = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
@@ -122,6 +123,74 @@ namespace ET
         public static void ShowWindow(this DlgSettingUI self, Entity contextData = null)
         {
             self.RequestNewMail();
+            self.RequestHeroMode();
+        }
+
+        public static async void RequestHeroMode(this DlgSettingUI self)
+        {
+            // await CoroutineLockComponent.Instance.Wait(CoroutineLockType.LoadShowHeroMode, self.GetHashCode());
+            //获取当前需要显示的英雄
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            var response = await session.Call(new C2M_GetCurrentShowHeroCardInfoRequest()) as M2C_GetCurrentShowHeroCardInfoResponse;
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                HeroCardInfo heroCardInfo = response.HeroCardInfo;
+
+                // self.AddChild<HeroCard, int>(heroCardInfo.ConfigId);
+                self.ShowHeroMode(heroCardInfo);
+            }
+            else
+            {
+                Log.Debug("no show hero mode");
+            }
+        }
+
+        public static void ShowHeroMode(this DlgSettingUI self, HeroCardInfo heroCardInfo)
+        {
+            if (self.HeroMode != null)
+            {
+                GameObjectPoolHelper.ReturnObjectToPool(self.HeroMode);
+            }
+
+            HeroConfig config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
+            GameObject go = GameObjectPoolHelper.GetObjectFromPool(config.HeroMode, true, 1);
+            self.HeroMode = go;
+            go.transform.SetParent(GlobalComponent.Instance.Global);
+        }
+
+        public static async void ShowAllHeroBag(this DlgSettingUI self)
+        {
+            UIComponent uiComponent = self.DomainScene().GetComponent<UIComponent>();
+            await uiComponent.ShowWindow(WindowID.WindowID_AllHeroBagLayer);
+            UIBaseWindow baseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_AllHeroBagLayer);
+            var allHeroBagLayer = baseWindow.GetComponent<DlgAllHeroBagLayer>();
+            allHeroBagLayer.SetShowHeroType(HeroBagType.HeroAndMaterial);
+            allHeroBagLayer.OnHeroItemInfoClick = (HeroCardInfo, ItemHeroCard, value) =>
+            {
+                uiComponent.HideWindow(WindowID.WindowID_AllHeroBagLayer);
+
+                self.SetShowHeroMode(HeroCardInfo);
+            };
+        }
+
+        public static void HideWindow(this DlgSettingUI self)
+        {
+            if (self.HeroMode != null)
+            {
+                GameObjectPoolHelper.ReturnObjectToPool(self.HeroMode);
+            }
+        }
+
+        public static async void SetShowHeroMode(this DlgSettingUI self, HeroCardInfo heroCardInfo)
+        {
+            Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
+            var response =
+                    await session.Call(new C2M_SetCurrentShowHeroCardInfoRequest() { HeroId = heroCardInfo.HeroId }) as
+                            M2C_SetCurrentShowHeroCardInfoResponse;
+            if (response.Error == ErrorCode.ERR_Success)
+            {
+                self.ShowHeroMode(heroCardInfo);
+            }
         }
     }
 }

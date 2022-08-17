@@ -87,27 +87,27 @@ namespace ET
             itemHeroCard.E_ChooseToggle.interactable = true;
             if (index >= self.HeroCardInfos.Count)
             {
-                itemHeroCard.E_LevelText.gameObject.SetActive(false);
-                itemHeroCard.E_ElementImage.gameObject.SetActive(false);
-                itemHeroCard.E_QualityIconImage.gameObject.SetActive(false);
-                itemHeroCard.E_CountText.gameObject.SetActive(false);
-                itemHeroCard.E_ChooseToggle.gameObject.SetActive(false);
-                itemHeroCard.E_RankImage.gameObject.SetActive(false);
-                // var commonAtlas = ConstValue.CommonUIAtlasPath;
+                itemHeroCard.SetNullStateView();
+                // itemHeroCard.E_LevelText.gameObject.SetActive(false);
+                // itemHeroCard.E_ElementImage.gameObject.SetActive(false);
+                // itemHeroCard.E_QualityIconImage.gameObject.SetActive(false);
+                // itemHeroCard.E_CountText.gameObject.SetActive(false);
+                // itemHeroCard.E_ChooseToggle.gameObject.SetActive(false);
+                // itemHeroCard.E_RankImage.gameObject.SetActive(false);
                 // var defaultSprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonAtlas, "bgpic");
                 // itemHeroCard.E_HeadImage.sprite = defaultSprite;
-                for (int i = 0; i < 6; i++)
-                {
-                    // var star    
-                    var starStr = $"Star_{i}";
-                    Transform starObj = UIFindHelper.FindDeepChild(itemHeroCard.uiTransform.gameObject, starStr);
-                    if (starObj != null)
-                    {
-                        starObj.gameObject.SetActive(false);
-                    }
-                }
-
-                itemHeroCard.E_HeadImage.sprite = self.DefaultHeadSprite;
+                // for (int i = 0; i < 6; i++)
+                // {
+                //     // var star    
+                //     var starStr = $"Star_{i}";
+                //     Transform starObj = UIFindHelper.FindDeepChild(itemHeroCard.uiTransform.gameObject, starStr);
+                //     if (starObj != null)
+                //     {
+                //         starObj.gameObject.SetActive(false);
+                //     }
+                // }
+                //
+                // itemHeroCard.E_HeadImage.sprite = self.DefaultHeadSprite;
             }
             else
             {
@@ -128,10 +128,10 @@ namespace ET
                     var findInfo = self.AllChooseHeroCardInfos.Find(a => a.HeroId.Equals(heroCardInfo.HeroId));
                     if (findInfo != null)
                     {
-                        if (heroConfig.MaterialType == (int)HeroBagType.Hero)
-                        {
-                            itemHeroCard.E_ChooseToggle.isOn = true;
-                        }
+                        // if (heroConfig.MaterialType == (int)HeroBagType.Hero)
+                        // {
+                        //     itemHeroCard.E_ChooseToggle.isOn = true;
+                        // }
                         // else if (heroConfig.MaterialType == (int) HeroBagType.Materail)
                         // {
                         //     itemHeroCard.E_ChooseCountText.gameObject.SetActive(true);
@@ -141,14 +141,13 @@ namespace ET
                     }
                 }
 
-                // if (self.EnabelHeroCardInfos != null)
-                // {
-                //找一下是否包含
-                itemHeroCard.E_ChooseToggle.interactable = true;
-                if (self.EnabelHeroCardInfos != null && self.EnabelHeroCardInfos.Exists(a => a.HeroId.Equals(heroCardInfo.HeroId)))
-                    itemHeroCard.E_ChooseToggle.interactable = false;
-
-                // }
+                if (self.EnabelHeroCardInfos != null)
+                {
+                    //找一下是否包含
+                    itemHeroCard.E_ChooseToggle.interactable = true;
+                    if (self.EnabelHeroCardInfos != null && self.EnabelHeroCardInfos.Exists(a => a.HeroId.Equals(heroCardInfo.HeroId)))
+                        itemHeroCard.E_ChooseToggle.interactable = false;
+                }
 
                 if (self.UnableElementHeroCardInfos != null)
                 {

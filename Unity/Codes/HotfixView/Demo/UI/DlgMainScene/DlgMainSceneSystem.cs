@@ -49,8 +49,8 @@ namespace ET
             session.Send(message);
         }
 
-        public static async ETTask<long> GetTroopIdAsync(this DlgMainScene self)
-        {
+        // public static async ETTask<long> GetTroopIdAsync(this DlgMainScene self)
+        // {
             // long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             // Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
             // M2C_GetAllTroopInfosResponse m2CGetAllTroopInfosResponse;
@@ -69,9 +69,9 @@ namespace ET
             //     }
             // }
 
-            await ETTask.CompletedTask;
-            return 0;
-        }
+        //     await ETTask.CompletedTask;
+        //     return 0;
+        // }
 
         // public static async ETTask<HeroCardInfo> GetFirstHeroCardInfoAsync(this DlgMainScene self, long troopId)
         // {
@@ -118,16 +118,21 @@ namespace ET
             await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_SettingUI);
             await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_FormationUI);
             await self.DomainScene().GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MainSceneMenu);
-            long troopId = await self.GetTroopIdAsync();
-            if (troopId != 0)
-            {
+            // long troopId = await self.GetTroopIdAsync();
+            // if (troopId != 0)
+            // {
                 // HeroCardInfo heroCardInfo = await self.GetFirstHeroCardInfoAsync(troopId);
                 // if (heroCardInfo != null)
                 // {
                 //     self.ShowHeroMode(heroCardInfo);
                 // }
-            }
+            // }
         }
+
+        // public static void ShowCurrentHeroMode()
+        // {
+        //     
+        // }
 
         public static async void ShowHeroMode(this DlgMainScene self, HeroCardInfo heroCardInfo)
         {

@@ -12,14 +12,15 @@ namespace ET
 
     public static class ItemHeroCardViewSystem
     {
-        public static async void SetNullStateView(this Scroll_ItemHeroCard self)
+        public static  void SetNullStateView(this Scroll_ItemHeroCard self)
         {
             self.E_LevelText.gameObject.SetActive(false);
             // self.E_QualityIconImage.gameObject.SetActive(false);
             // self.E_ElementImage.gameObject.SetActive(false);
             self.E_AddTextText.gameObject.SetActive(true);
             self.E_RankImage.gameObject.SetActive(false);
-            self.E_NameText.gameObject.SetActive(false);
+            // self.E_NameText.gameObject.SetActive(false);
+            self.E_AddTextText.gameObject.SetActive(false);
 
             for (int i = 1; i < 6; i++)
             {
@@ -33,9 +34,10 @@ namespace ET
             }
             
             
-            var commonPath = ConstValue.CommonUIAtlasPath;
-            var framePath = ConstValue.FrameBgPath;
-            self.E_HeadImage.sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonPath, framePath);
+            // var commonPath = ConstValue.CommonUIAtlasPath;
+            // var framePath = ConstValue.FrameBgPath;
+            // self.E_HeadImage.sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonPath, framePath);
+            self.E_HeadImage.sprite = null;
         }
 
         public static async void InitHeroCard(this Scroll_ItemHeroCard self, HeroCardInfo heroCardInfo)
@@ -62,9 +64,10 @@ namespace ET
 
             var configId = heroCardInfo.ConfigId;
             var config = HeroConfigCategory.Instance.Get(configId);
-            self.E_CountText.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Materail);
+            // self.E_CountText.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Materail);
             self.E_CountText.text = heroCardInfo.Count.ToString();
-            self.E_NameText.text = config.HeroEnName;
+            // self.E_NameText.gameObject.SetActive(true);
+            // self.E_NameText.text = config.HeroEnName;
 
             self.E_ChooseCountText.gameObject.SetActive(false);
             var spriteAtlas = ConstValue.HeroCardAtlasPath;
@@ -72,8 +75,9 @@ namespace ET
             // self.E_ElementImage.gameObject.SetActive(true);
             // self.E_LevelText.gameObject.SetActive(true);
             // self.E_ElementImage.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
-            self.E_LevelText.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
-            self.E_LevelText.text = $"Lv.{heroCardInfo.Level.ToString()}";
+            // self.E_LevelText.gameObject.SetActive(config.MaterialType == (int) HeroBagType.Hero);
+            self.E_LevelText.gameObject.SetActive(true);
+            self.E_LevelText.text = $"{heroCardInfo.Level.ToString()}";
 
             var elementConfig = ElementConfigCategory.Instance.Get(config.HeroColor);
             var elementImageStr = elementConfig.IconImage;

@@ -27,7 +27,7 @@ namespace ET
             UIBaseWindow baseWindow = uiComponent.AllWindowsDic[(int)WindowID.WindowID_AllHeroBagLayer];
             baseWindow.GetComponent<DlgAllHeroBagLayer>().OnHeroItemInfoClick = self.OnClickHeroItem;
             baseWindow.GetComponent<DlgAllHeroBagLayer>().SetShowHeroType(HeroBagType.HeroAndMaterial);
-            baseWindow.uiTransform.GetComponent<RectTransform>().offsetMax = new Vector2(0, -400);
+            baseWindow.uiTransform.GetComponent<RectTransform>().offsetMax = new Vector2(0, -150);
             baseWindow.uiTransform.GetComponent<RectTransform>().offsetMin = new Vector2(0, 200);
 
             UIBaseWindow goldInfoBaseWindow = uiComponent.GetUIBaseWindow(WindowID.WindowID_GoldInfoUI);
@@ -37,16 +37,21 @@ namespace ET
         public static async void OnClickHeroItem(this DlgHeroInfoLayerUI self, HeroCardInfo heroCardInfo, Scroll_ItemHeroCard itemHeroCard,
         bool value)
         {
-            var config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
-            if (config.MaterialType == (int)HeroBagType.Materail)
-            {
-                itemHeroCard.E_ChooseToggle.isOn = false;
-                return;
-            }
+            // var config = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
+            // if (config.MaterialType == (int)HeroBagType.Materail)
+            // {
+            //     itemHeroCard.E_ChooseToggle.isOn = false;
+            //     return;
+            // }
 
             if (value)
             {
-                itemHeroCard.E_ChooseToggle.isOn = false;
+            
+                // itemHeroCard.E_ChooseToggle.isOn = false;
+                // if (self.HeroCardInfos.Count >= 3)
+                // {
+                //     return;
+                // }
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_HeroInfoLayerUI);
                 self.DomainScene().GetComponent<UIComponent>().HideWindow(WindowID.WindowID_MainSceneBg);
                 // Log.Debug($"click hero {heroCard.HeroCardInfo.HeroId}");

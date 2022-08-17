@@ -25,7 +25,11 @@ namespace ET
             List<MailInfo> addFriendMailInfos = mailInfos.FindAll(b => b.MailType == (int) MailType.AddFriendRequest);
 
             UIBaseWindow searchLayer = uiComponent.GetUIBaseWindow(WindowID.WindowID_SearchUserLayer);
+            if (searchLayer != null)
+            {
             searchLayer.GetComponent<DlgSearchUserLayer>().ReceiveAddFriendMessage(addFriendMailInfos);
+                
+            }
 
             await ETTask.CompletedTask;
         }

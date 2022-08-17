@@ -55,6 +55,8 @@ namespace ET
         public const int ERR_SelfFriendCount_IsFull = 200031; //好友个数已经达到上限
 
         public const int ERR_OtherFriendCount_IsFull = 200032; //对方的好友个数已经达到上限
+        public const int ERR_Not_Found_Item = 200033; //对方的好友个数已经达到上限
+
         // 200001以上不抛异常
     }
 }

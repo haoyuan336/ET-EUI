@@ -55,6 +55,29 @@ namespace ET
     {
 #if SERVER
 
+        public static async ETTask<bool> SetHeroCardShowAsync(this HeroCardComponent self, long heroId)
+        {
+            List<HeroCard> heroCards = await self.GetAllHeroCardAsync();
+            foreach (var heroCard in heroCards)
+            {
+                heroCard.IsShow = false;
+            }
+            var targetHeroCard = heroCards.Find(a => a.Id.Equals(heroId));
+            if (targetHeroCard != null)
+            {
+                targetHeroCard.IsShow = true;
+                return true;
+            }
+            return false;
+        }
+
+        public static async ETTask<HeroCard> GetCurrentShowHeroAsync(this HeroCardComponent self)
+        {
+            List<HeroCard> heroCards = await self.GetAllHeroCardAsync();
+            HeroCard heroCard = heroCards.Find(a => a.IsShow);
+            return heroCard;
+        }
+
         public static async ETTask<HeroCard> GetHeroCardsWithIdAsync(this HeroCardComponent self, long heroId)
         {
             List<HeroCard> heroCards = await self.GetAllHeroCardAsync();

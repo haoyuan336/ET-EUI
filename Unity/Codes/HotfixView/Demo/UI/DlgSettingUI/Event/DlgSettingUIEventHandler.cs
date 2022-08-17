@@ -32,6 +32,7 @@ namespace ET
 
         public void OnHideWindow(UIBaseWindow uiBaseWindow)
         {
+            uiBaseWindow.GetComponent<DlgSettingUI>().HideWindow();
         }
 
         public void BeforeUnload(UIBaseWindow uiBaseWindow)
