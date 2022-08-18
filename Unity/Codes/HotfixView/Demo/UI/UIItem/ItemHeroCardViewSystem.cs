@@ -12,7 +12,7 @@ namespace ET
 
     public static class ItemHeroCardViewSystem
     {
-        public static  void SetNullStateView(this Scroll_ItemHeroCard self)
+        public static void SetNullStateView(this Scroll_ItemHeroCard self)
         {
             self.E_LevelText.gameObject.SetActive(false);
             // self.E_QualityIconImage.gameObject.SetActive(false);
@@ -26,14 +26,19 @@ namespace ET
             {
                 // var star    
                 var starStr = $"Star_{i}";
+                var bStarStr = $"BStar_{i}";
                 Transform starObj = UIFindHelper.FindDeepChild(self.uiTransform.gameObject, starStr);
                 if (starObj != null)
                 {
                     starObj.gameObject.SetActive(false);
                 }
+                Transform bStarObj = UIFindHelper.FindDeepChild(self.uiTransform.gameObject, bStarStr);
+                if (bStarObj != null)
+                {
+                    bStarObj.gameObject.SetActive(false);
+                }
             }
-            
-            
+
             // var commonPath = ConstValue.CommonUIAtlasPath;
             // var framePath = ConstValue.FrameBgPath;
             // self.E_HeadImage.sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(commonPath, framePath);
@@ -48,6 +53,7 @@ namespace ET
                 self.SetNullStateView();
                 return;
             }
+
             // for (int i = 0; i < 5; i++)
             // {
             //     // var star    

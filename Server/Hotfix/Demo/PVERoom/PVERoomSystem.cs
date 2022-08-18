@@ -21,16 +21,14 @@ namespace ET
             Log.Debug($"current choose troop id {unit.CurrentTroopId}");
             //todo 取出当前玩家 玩到的关卡数
             int levelNum = await self.GetCurrentPlayerLevelNum(unit, AccountId);
-            self.GetComponent<FightComponent>().LevelConfig = LevelConfigCategory.Instance.Get(levelNum);
-            // self.LevelConfig = LevelConfigCategory.Instance.Get(levelNum);
-            self.GetComponent<FightComponent>().Units.Add(unit);
-            self.GetComponent<FightComponent>().Units.Add(self.AddAIUnity());
-
-            self.GetComponent<FightComponent>().SetUnitSeatIndex();
+            FightComponent fightComponent = self.GetComponent<FightComponent>();
+            fightComponent.LevelConfig = LevelConfigCategory.Instance.Get(levelNum);
+            fightComponent.Units.Add(unit);
+            fightComponent.Units.Add(self.AddAIUnity());
+            fightComponent.SetUnitSeatIndex();
             self.AsyncRoomInfo();
-            // self.InitAIUnitHeroCard();
             self.GetComponent<FightComponent>().InitAIUnitHeroCard();
-            await self.InitPlayerHeroCards(unit);
+            await fightComponent.InitPlayerHeroCards(unit);
             self.SyncCreateHeroCardMessage();
             self.InitGameMap(levelNum);
         }
@@ -84,21 +82,6 @@ namespace ET
                 MessageHelper.SendToClient(unit, new M2C_PlayerChooseAttackHero() { HeroId = heroId });
             }
         }
-
-        //
-        // public static void InitAIUnitHeroCard(this PVERoom self)
-        // {
-        //     for (var i = 0; i < self.GetComponent<FightComponent>().Units.Count; i++)
-        //     {
-        //         Unit unit = self.GetComponent<FightComponent>().Units[i];
-        //         if (unit.IsAI)
-        //         {
-        //             //todo 首先创建敌人的英雄卡
-        //             self.CreateHeroIdListInLevelConfig(unit);
-        //         }
-        //     }
-        // }
-
         public static async ETTask<int> GetCurrentPlayerLevelNum(this PVERoom self, Unit unit, long AccountId)
         {
             Account account = await self.GetCurrentAccountInfo(unit, AccountId);
@@ -164,56 +147,15 @@ namespace ET
         }
 
         //todo 初始化英雄卡
-        public static async ETTask InitPlayerHeroCards(this PVERoom self, Unit unit)
-        {
-
-            FightComponent fightComponent = self.GetComponent<FightComponent>();
-            await fightComponent.InitPlayerHeroCards(unit);
-            
-            //todo sync all player info
-            await ETTask.CompletedTask;
-        }
-
-        // public static void CreateHeroIdListInLevelConfig(this PVERoom self, Unit unit)
+        // public static async ETTask InitPlayerHeroCards(this PVERoom self, Unit unit)
         // {
-        //     string heroIdsstr = self.GetComponent<FightComponent>().LevelConfig.HeroId;
-        //     string[] strList = heroIdsstr.Split(',').ToArray();
-        //     int index = 0;
-        //     foreach (var str in strList)
-        //     {
-        //         int configId = int.Parse(str);
-        //         EnemyHeroConfig enemyHeroConfig = EnemyHeroConfigCategory.Instance.Get(configId);
-        //         HeroCard heroCard = new HeroCard();
-        //         Log.Debug("创建ai玩家的英雄");
-        //         heroCard.Id = IdGenerater.Instance.GenerateId();
-        //         unit.AddChild(heroCard);
-        //         heroCard.ConfigId = enemyHeroConfig.ConfigId;
-        //         heroCard.Level = enemyHeroConfig.Level;
-        //         heroCard.Star = enemyHeroConfig.Star;
-        //         heroCard.Rank = enemyHeroConfig.Rank;
         //
-        //         heroCard.InTroopIndex = index;
-        //         index++;
-        //         heroCard.CampIndex = unit.SeatIndex;
-        //         HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
-        //         heroCard.AddComponent<SkillComponent>();
-        //         // heroCard.AddComponent<>()
-        //         // var skillStrs = config.SkillIdList.Split(',');
-        //         // foreach (var skillStr in skillStrs)
-        //         // {
-        //         //     SkillConfig skillConfig = SkillConfigCategory.Instance.Get(int.Parse(skillStr));
-        //         //     Skill skill = new Skill();
-        //         //     skill.Id = IdGenerater.Instance.GenerateId();
-        //         //     skill.ConfigId = skillConfig.Id;
-        //         //     skill.OwnerId = heroCard.Id;
-        //         //     heroCard.AddChild(skill);
-        //         // }
-        //
-        //         HeroCardDataComponent heroCardDataComponent = heroCard.AddComponent<HeroCardDataComponent>();
-        //         heroCardDataComponent.Angry = config.InitAngry;
-        //     }
+        //     FightComponent fightComponent = self.GetComponent<FightComponent>();
+        //     await fightComponent.InitPlayerHeroCards(unit);
+        //     
+        //     //todo sync all player info
+        //     await ETTask.CompletedTask;
         // }
-
         public static async void PlayerScrollScreen(this PVERoom self, C2M_PlayerScrollScreen message)
         {
             // self.GetComponent<FightComponent>().PlayerScrollScreen(message);
@@ -227,6 +169,7 @@ namespace ET
             fightComponent.CurrentBeAttackHeroCard = null;
             fightComponent.ProcessReBackAttackLogic(m2CSyncDiamondAction);
             fightComponent.ProcessAddRoundAngry(m2CSyncDiamondAction);
+
             Unit loseUnit = fightComponent.CheckGameEndResult();
             //
             if (loseUnit != null)

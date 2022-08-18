@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-
 namespace ET
 {
     public class HeroCardDataComponentAwakeSystem1: AwakeSystem<HeroCardDataComponent>

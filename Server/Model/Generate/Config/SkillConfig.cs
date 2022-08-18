@@ -101,6 +101,10 @@ namespace ET
 		public string BeAttackBoneName { get; set; }
 		[ProtoMember(16)]
 		public int RangeType { get; set; }
+		[ProtoMember(17)]
+		public int BuggConfigId { get; set; }
+		[ProtoMember(18)]
+		public int BuffRoundCount { get; set; }
 
 	}
 }

@@ -148,13 +148,15 @@ namespace ET
             // self.GetComponent<FightComponent>().PlayerScrollScreen(message);
             self.GetComponent<FightComponent>().DiamondActionItems = new List<DiamondActionItem>();
             M2C_SyncDiamondAction m2CSyncDiamondAction = self.GetComponent<DiamondComponent>().ScrollDiamond(message);
+
             fightComponent.MakeSureAttackHeros(m2CSyncDiamondAction);
             fightComponent.ProcessAddHeroCardAngryLogic(m2CSyncDiamondAction.DiamondActionItems);
             fightComponent.ProcessComboResult(m2CSyncDiamondAction);
             fightComponent.ProcessAttackLogic(m2CSyncDiamondAction); //处理攻击逻辑
+            fightComponent.ProcessAddRoundAngry(m2CSyncDiamondAction);
             fightComponent.CurrentBeAttackHeroCard = null;
             // fightComponent.ProcessReBackAttackLogic(m2CSyncDiamondAction);
-            fightComponent.ProcessAddRoundAngry(m2CSyncDiamondAction);
+            // fightComponent.ProcessAddRoundAngry(m2CSyncDiamondAction);
             Unit loseUnit = fightComponent.CheckGameEndResult();
             //
             if (loseUnit != null)

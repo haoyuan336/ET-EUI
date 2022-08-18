@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using ET.Account;
 using ET.EventType;
-using UnityEngine;
 
 namespace ET
 {
@@ -23,6 +20,9 @@ namespace ET
             await Game.EventSystem.PublishAsync(
                 new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene(), IsLockTouch = true });
 
+            
+           
+            
             bool isContainsCrash = false;
             var comboCount = 0;
             // bool isContainsAttackHero = false;
@@ -62,24 +62,6 @@ namespace ET
                 }
 
                 List<ETTask> sunTaskList = new List<ETTask>();
-                // DiamondAction speialDiamondAction = null
-                // if (diamondActionItem.CrashType == (int)CrashType.Special)
-                // {
-                //     //找到特殊珠
-                //     // DiamondInfo diamondInfo
-                //
-                //     DiamondAction diamondAction = diamondActionItem.DiamondActions.Find(a =>
-                //     {
-                //         DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(a.DiamondInfo.ConfigId);
-                //         if (config.BoomType != (int)BoomType.Invalide)
-                //         {
-                //             return true;
-                //         }
-                //
-                //         return false;
-                //     });
-                //     // Game.EventSystem.PublishAsync()
-                // }
 
                 foreach (var diamondAction in diamondActionItem.DiamondActions)
                 {
@@ -170,7 +152,6 @@ namespace ET
             await ETTaskHelper.WaitAll(animTaskList);
             List<HeroCard> heroCards = heroCardComponent.GetChilds<HeroCard>();
             Game.EventSystem.Publish(new EventType.GameAroundOver() { HeroCards = heroCards });
-
             if (message.AddRoundAngryItem != null)
             {
                 foreach (var heroCardDataComponentInfo in message.AddRoundAngryItem.HeroCardDataComponentInfos)

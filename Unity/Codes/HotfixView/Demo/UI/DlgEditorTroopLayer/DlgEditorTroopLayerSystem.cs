@@ -267,7 +267,6 @@ namespace ET
         public static async ETTask<List<HeroCardInfo>> RequestCurrentTroopInfo(this DlgEditorTroopLayer self, int index)
         {
             Session session = self.ZoneScene().GetComponent<SessionComponent>().Session;
-
             var getHeroInfosWithTroopIdResponse =
                     await session.Call(new C2M_GetCurrentTroopHeroInfosRequest()) as M2C_GetCurrentTroopHeroInfosResponse;
             if (getHeroInfosWithTroopIdResponse.Error == ErrorCode.ERR_Success)

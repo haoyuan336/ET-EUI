@@ -22,8 +22,8 @@ namespace ET
         public const int MaxHeroStarCount = 5;  //最大的英雄星的个数
 
 #if !SERVER
-        public const string LoginAddress = "59.110.220.207:10007";
-        // public const string LoginAddress = "192.168.100.8:10007";
+        // public const string LoginAddress = "59.110.220.207:10007";
+        public const string LoginAddress = "192.168.100.8:10007";
 
         // public const string LoginAddress = "127.0.0.1:10007";
         public const float Distance = 0.6f;

@@ -124,19 +124,6 @@ namespace ET
 
             return baseValue;
         }
-
-        // public static int GetWeaponDefence(this HeroCard self)
-        // {
-        //     List<Weapon> weapons = self.GetChilds<Weapon>();
-        //     var baseValue = 0;
-        //     foreach (var weapon in weapons)
-        //     {
-        //         baseValue += weapon.GetWeaponWordBarValueByType(WordBarType.Defecnce);
-        //     }
-        //
-        //     return baseValue;
-        // }
-
         public static AttackAction AngryAttack(this HeroCard self, HeroCard tatgetHeroCard)
         {
             //首先确定，玩家是否已经满怒气
@@ -172,25 +159,15 @@ namespace ET
         public static AttackAction AttackTarget(this HeroCard self, HeroCard targetHeroCard, int comboAddition)
         {
             HeroConfig config = HeroConfigCategory.Instance.Get(self.ConfigId);
-            Log.Debug($"name {config.HeroName}");
             HeroCardDataComponent attackCom = self.GetComponent<HeroCardDataComponent>();
             HeroCardDataComponent beAttackCom = targetHeroCard.GetComponent<HeroCardDataComponent>();
             var baseAttack = attackCom.GetHeroBaseAttack(); //角色的基础攻击
-            // Log.Debug($"base attack{baseAttack}");
             var weaponAttack = self.GetWeaponBaseValueByType(WordBarType.Attack); // 装备的基础攻击
-            // Log.Debug($"base weaponAttack {weaponAttack}");
             var weaponAttackAddition = self.GetWeaponBaseValueByType(WordBarType.AttackAddition); //装备的攻击力加成
-            // Log.Debug($"weaponAttackAddition{weaponAttackAddition}");
             var planeAttack = (baseAttack + weaponAttack) * (1 + weaponAttackAddition / 10000); //面板攻击力
-
             //取出消除宝石combo加成
-            // var comboAddition = self.GetComponent<HeroCardDataComponent>().DiamondAttackAddition;
             planeAttack += (int)(planeAttack * comboAddition / 100.0f);
-
-            // Log.Debug($"planeAttack{planeAttack}");
             var domineeringValue = self.GetDomineering(); //霸气值
-            // Log.Debug($"domineeringValue{domineeringValue}");
-
             float baseDefence = beAttackCom.GetHeroBaseDefence(); //被攻击对象的基础攻击力
             float weaponDefence = targetHeroCard.GetWeaponBaseValueByType(WordBarType.Defecnce); //被攻击对象的装备防御力
             float weaponDefecceAddition = targetHeroCard.GetWeaponBaseValueByType(WordBarType.DefenceAddition); //被攻击对象的装备防御力加成
