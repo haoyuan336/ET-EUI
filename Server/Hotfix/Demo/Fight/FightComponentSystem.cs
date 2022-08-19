@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -67,6 +68,7 @@ namespace ET
             {
                 unit.AddChild(heroCard);
                 heroCard.AddComponent<SkillComponent>();
+                heroCard.AddComponent<BuffComponent>();
                 // heroCard.AddComponent<WeaponComponent>();
                 List<Weapon> weapons = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
                         .Query<Weapon>(a => a.OnWeaponHeroId.Equals(heroCard.Id) && a.State == (int)StateType.Active);
@@ -377,49 +379,64 @@ namespace ET
             return false;
         }
 
+
+        public static void ProcessReBackNormalAttackLogic(this FightComponent self, M2C_SyncDiamondAction m2CSyncDiamondAction, Unit attackUnit, Unit beUnit)
+        {
+            
+            //找到轮流攻击的英雄
+            HeroCard attackHero = self.GetTurnAttackHero(attackUnit);
+            if (attackHero == null)
+            {
+                return;
+            }
+
+            Skill skill = attackHero.GetComponent<HeroCardDataComponent>().MakeSureSkill(3);
+            List<HeroCard> beAttackHeroCards = self.GetBeAttackHeroCards(beUnit,attackUnit , attackHero, skill);
+            AttackAction attackAction = new AttackAction();
+
+            List<HeroCardDataComponentInfo> beHeroCardDataComponentInfos = new List<HeroCardDataComponentInfo>();
+            foreach (var beAttackHeroCard in beAttackHeroCards)
+            {
+                attackHero.AttackTarget(beAttackHeroCard, 0);
+                beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
+            }
+
+            attackAction.AttackHeroCardDataComponentInfo = attackHero.GetComponent<HeroCardDataComponent>().GetInfo();
+            attackAction.BeAttackHeroCardDataComponentInfos = beHeroCardDataComponentInfos;
+            AttackActionItem attackActionItem = new AttackActionItem();
+            attackActionItem.AttackActions.Add(attackAction);
+            m2CSyncDiamondAction.AttackActionItems.Add(attackActionItem);
+        }
+
+        public static void ProcessBuffLogic(this FightComponent self, HeroCard beAttackHeroCard, SkillConfig skillConfig)
+        {
+            //todo 处理buff逻辑, 被攻击的卡牌
+            //取出来技能包含的buff
+            BuffComponent buffComponent = beAttackHeroCard.GetComponent<BuffComponent>();
+            
+
+
+        }
         public static void ProcessReBackAttackLogic(this FightComponent self, M2C_SyncDiamondAction m2CSyncDiamondAction)
         {
-            Log.Debug($"attack action items {m2CSyncDiamondAction.AttackActionItems[0].AttackActions.Count}");
-            //todo 处理反击逻辑
-            //产看动作队列里面是否存在消除动作
             bool isHaveCreash = self.CheckIsHaveCrash(m2CSyncDiamondAction);
 
             if (!isHaveCreash)
             {
                 //没有消除宝石，那么也没有攻击逻辑
                 return;
-            }
+            } 
+            
+            Unit unit = self.GetCurrentAttackUnit();
+            Unit beUnit = self.GetBeAttackUnit(unit);
+            self.ProcessAngryAttackLogic(m2CSyncDiamondAction, beUnit, unit);
+            self.ProcessReBackNormalAttackLogic(m2CSyncDiamondAction, beUnit, unit);
+           
+            //todo 处理反击逻辑
+            //产看动作队列里面是否存在消除动作
+           
 
-            Unit attackUnit = self.GetBeAttackUnit(self.Units[self.CurrentTurnIndex]); //todo 首先找到发起攻击的玩家
-            Unit beAttacUnit = self.GetBeAttackUnit(attackUnit);
-            HeroCard attackHero = self.GetTurnAttackHero(attackUnit); //todo 找到发起攻击的英雄
-            if (attackHero == null)
-            {
-                //todo 英雄都死光了，不能在发起反击了
-                return;
-            }
-
-            HeroCard beAttackHero = self.GetBeAttackHeroCard(attackHero, beAttacUnit); //todo 找到被攻击的英雄
-            if (beAttackHero == null)
-            {
-                Log.Debug("未找到被攻击英雄");
-                //rodo 英雄都死光了，
-                return;
-            }
-            else
-            {
-                Log.Debug($"找到被攻击英雄{attackHero.InTroopIndex},{beAttackHero.InTroopIndex}");
-            }
-
-            AttackActionItem attackActionItem = new AttackActionItem(); //todo 创建攻击actionitem
-            Log.Debug("处理反攻的逻辑");
-            attackHero.GetComponent<HeroCardDataComponent>().MakeSureSkill(3);
-
-            attackHero.GetComponent<HeroCardDataComponent>().MakeSureAngrySkill();
-
-            var attackAction = attackHero.AttackTarget(beAttackHero, 0);
-            attackActionItem.AttackActions.Add(attackAction);
-            m2CSyncDiamondAction.AttackActionItems.Add(attackActionItem);
+           
         }
 
         public static HeroCard GetTurnAttackHero(this FightComponent self, Unit unit)
@@ -469,21 +486,40 @@ namespace ET
             AttackActionItem attackActionItem = new AttackActionItem();
             List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
             heroCards.RemoveAll(a => !a.GetComponent<HeroCardDataComponent>().IsAngryFull());
+            if (heroCards.Count == 0)
+            {
+                return;
+            }
             heroCards.Sort((a, b) => { return a.InTroopIndex - b.InTroopIndex; });
+           
             foreach (var heroCard in heroCards)
             {
-                HeroCard beHeroCard = self.GetBeAttackHeroCard(heroCard, beUnit);
-                if (self.CurrentBeAttackHeroCard != null && !self.CurrentBeAttackHeroCard.GetIsDead())
+                Skill skill = heroCard.GetComponent<HeroCardDataComponent>().MakeSureAngrySkill();
+                List<HeroCard> beAttackHeroCards = self.GetBeAttackHeroCards(beUnit, unit, heroCard, skill);
+                SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
+                if (skillConfig.RangeType == (int)SkillRangeType.EnemySingle)
                 {
-                    //集火功能
-                    beHeroCard = self.CurrentBeAttackHeroCard;
+                    //集火功能生效
+                    if (self.CurrentBeAttackHeroCard != null && !self.CurrentBeAttackHeroCard.GetIsDead())
+                    {
+                        beAttackHeroCards.RemoveAt(0);
+                        beAttackHeroCards.Add(self.CurrentBeAttackHeroCard);
+                    }
                 }
 
-                if (beHeroCard != null)
+                //todo 发动攻击
+                AttackAction attackAction = new AttackAction();
+                List<HeroCardDataComponentInfo> beHeroCardDataComponentInfos = new List<HeroCardDataComponentInfo>();
+                foreach (var beAttackHeroCard in beAttackHeroCards)
                 {
-                    var attackAction = heroCard.AngryAttack(beHeroCard);
-                    attackActionItem.AttackActions.Add(attackAction);
+                    self.ProcessBuffLogic(beAttackHeroCard, skillConfig);
+                    heroCard.AttackTarget(beAttackHeroCard, heroCard.GetComponent<HeroCardDataComponent>().DiamondAttackAddition);
+                    beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
                 }
+
+                attackAction.AttackHeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo();
+                attackAction.BeAttackHeroCardDataComponentInfos = beHeroCardDataComponentInfos;
+                attackActionItem.AttackActions.Add(attackAction);
             }
 
             m2CSyncDiamondAction.AttackActionItems.Add(attackActionItem);
@@ -511,6 +547,7 @@ namespace ET
 
         public static void ProcessNormalAttackLogic(this FightComponent self, M2C_SyncDiamondAction m2CSyncDiamondAction, Unit unit, Unit beUnit)
         {
+            Log.Warning("process normal attack logic");
             AttackActionItem attackActionItem = new AttackActionItem();
             //处理正常攻击的逻辑
             //todo 找到需要发动攻击的英雄
@@ -525,8 +562,14 @@ namespace ET
                     heroCards.Add(heroCard);
                 }
             }
+            Log.Warning($"确定攻击技能, {heroCards.Count}");
 
-            Log.Debug("确定攻击技能");
+            if (heroCards.Count == 0)
+            {
+                return;
+            }
+
+            Log.Warning("确定攻击技能");
             //todo 找到了发动攻击的英雄，开始寻找被攻击的英雄
             //todo 从左往右排序
             heroCards.Sort((a, b) => { return a.InTroopIndex - b.InTroopIndex; });
@@ -534,22 +577,34 @@ namespace ET
             foreach (var heroCard in heroCards)
             {
                 // AttackAction attackAction = new AttackAction();
-                HeroCard beAttackHeroCard = self.GetBeAttackHeroCard(heroCard, beUnit);
+
+                Skill skill = heroCard.GetComponent<HeroCardDataComponent>().MakeSureSkill(self.GetFirstCrashCount(m2CSyncDiamondAction));
+                List<HeroCard> beAttackHeroCards = self.GetBeAttackHeroCards(beUnit, unit, heroCard, skill);
                 if (self.CurrentBeAttackHeroCard != null && !self.CurrentBeAttackHeroCard.GetIsDead())
                 {
+                    SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
+                    if (skillConfig.RangeType == (int)SkillRangeType.EnemySingle)
+                    {
+                        beAttackHeroCards[0] = self.CurrentBeAttackHeroCard;
+                    }
                     //集火功能
-                    beAttackHeroCard = self.CurrentBeAttackHeroCard;
                 }
-                heroCard.GetComponent<HeroCardDataComponent>().MakeSureSkill(self.GetFirstCrashCount(m2CSyncDiamondAction));
 
-                if (beAttackHeroCard != null)
+                AttackAction attackAction = new AttackAction();
+
+                List<HeroCardDataComponentInfo> beHeroCardDataComponentInfos = new List<HeroCardDataComponentInfo>();
+                foreach (var beAttackHeroCard in beAttackHeroCards)
                 {
-                    var attackAction = heroCard.AttackTarget(beAttackHeroCard, heroCard.GetComponent<HeroCardDataComponent>().DiamondAttackAddition);
-                    attackActionItem.AttackActions.Add(attackAction);
+                    heroCard.AttackTarget(beAttackHeroCard, heroCard.GetComponent<HeroCardDataComponent>().DiamondAttackAddition);
+                    beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
                 }
+
+                attackAction.AttackHeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo();
+                attackAction.BeAttackHeroCardDataComponentInfos = beHeroCardDataComponentInfos;
+                attackActionItem.AttackActions.Add(attackAction);
             }
 
-            Log.Debug($"找到被攻击对象，并且进行攻击 {attackActionItem.AttackActions.Count}");
+            Log.Warning($"找到被攻击对象，并且进行攻击 {attackActionItem.AttackActions.Count}");
             m2CSyncDiamondAction.AttackActionItems.Add(attackActionItem);
         }
 
@@ -579,10 +634,11 @@ namespace ET
             return targetUnit;
         }
 
-        public static HeroCard GetBeAttackHeroCard(this FightComponent self, HeroCard heroCard, Unit unit)
+        /**
+         *查找一个单体攻击的英雄
+         */
+        public static HeroCard GetSingleAttackHeroCard(this FightComponent self, HeroCard heroCard, Unit unit)
         {
-            //todo 找到需要攻击的玩家之后，开始寻找被攻击的牌
-            //todo 找到与自己位置一致的牌
             var index = heroCard.InTroopIndex;
             int whileCount = 0;
             while (whileCount < 10)
@@ -606,8 +662,56 @@ namespace ET
                 whileCount++;
             }
 
-            Log.Debug($"not found beattack herocard {index}");
             return null;
+        }
+
+        public static List<HeroCard> GetBeAttackUnitAllLiveHeroCards(this FightComponent self, Unit beUnit)
+        {
+            List<HeroCard> heroCards = beUnit.GetChilds<HeroCard>();
+            heroCards.RemoveAll(a => a.GetIsDead()); //删掉死掉的英雄
+            return heroCards;
+        }
+
+        public static List<HeroCard> GetAllLiveHeroCard(this FightComponent self)
+        {
+            List<HeroCard> heroCards = new List<HeroCard>();
+            foreach (var unit in self.Units)
+            {
+                List<HeroCard> list = unit.GetChilds<HeroCard>();
+                list.RemoveAll(a => a.GetIsDead());
+                heroCards = heroCards.Concat(list).ToList();
+            }
+
+            return heroCards;
+        }
+
+        public static List<HeroCard> GetBeAttackHeroCards(this FightComponent self, Unit beUnit, Unit attactUnit, HeroCard heroCard, Skill skill)
+        {
+            //todo 找到需要攻击的玩家之后，开始寻找被攻击的牌
+            //todo 找到与自己位置一致的牌
+            List<HeroCard> heroCards = new List<HeroCard>();
+            //根据技能的攻击范围类型，寻找被攻击的英雄
+            SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
+            switch (skillConfig.RangeType)
+            {
+                case (int)SkillRangeType.EnemySingle:
+                    heroCards.Add(self.GetSingleAttackHeroCard(heroCard, beUnit));
+                    break;
+                case (int)SkillRangeType.EnemyGroup:
+                    heroCards = self.GetBeAttackUnitAllLiveHeroCards(beUnit);
+                    break;
+                case (int)SkillRangeType.FriendSingle:
+                    heroCards.Add(self.GetSingleAttackHeroCard(heroCard, attactUnit));
+                    break;
+                case (int)SkillRangeType.FriendGroup:
+                    heroCards = self.GetBeAttackUnitAllLiveHeroCards(attactUnit);
+                    break;
+                case (int)SkillRangeType.All:
+                    heroCards = self.GetAllLiveHeroCard();
+                    break;
+            }
+
+            return heroCards;
         }
 
         public static Unit GetCurrentAttackUnit(this FightComponent self)

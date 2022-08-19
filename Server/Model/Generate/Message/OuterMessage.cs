@@ -1102,11 +1102,23 @@ namespace ET
 	{
 // HeroCardInfo AttackHeroCardInfo = 1;
 // HeroCardInfo BeAttackHeroCardInfo = 2;
+		[ProtoMember(2)]
+		public List<HeroBufferInfo> HeroBufferInfos = new List<HeroBufferInfo>();
+
 		[ProtoMember(3)]
-		public HeroCardDataComponentInfo BeAttackHeroCardDataComponentInfo { get; set; }
+		public List<HeroCardDataComponentInfo> BeAttackHeroCardDataComponentInfos = new List<HeroCardDataComponentInfo>();
 
 		[ProtoMember(4)]
 		public HeroCardDataComponentInfo AttackHeroCardDataComponentInfo { get; set; }
+
+	}
+
+	[Message(OuterOpcode.HeroBufferInfo)]
+	[ProtoContract]
+	public partial class HeroBufferInfo: Object
+	{
+		[ProtoMember(1)]
+		public List<BuffInfo> BuffInfos = new List<BuffInfo>();
 
 	}
 
@@ -3644,6 +3656,21 @@ namespace ET
 
 		[ProtoMember(92)]
 		public string Message { get; set; }
+
+	}
+
+	[Message(OuterOpcode.BuffInfo)]
+	[ProtoContract]
+	public partial class BuffInfo: Object
+	{
+		[ProtoMember(1)]
+		public long BuffId { get; set; }
+
+		[ProtoMember(2)]
+		public int ConfigId { get; set; }
+
+		[ProtoMember(3)]
+		public int RoundCount { get; set; }
 
 	}
 

@@ -124,41 +124,18 @@ namespace ET
 
             return baseValue;
         }
-        public static AttackAction AngryAttack(this HeroCard self, HeroCard tatgetHeroCard)
+
+     
+        
+        // public static AttackAction AngryAttack(this HeroCard self, HeroCard tatgetHeroCard)
+        // {
+        //  
+        //     AttackAction attackAction = self.AttackTarget(tatgetHeroCard, 0);
+        //     return attackAction;
+        // }
+
+        public static void AttackTarget(this HeroCard self, HeroCard targetHeroCard, int comboAddition)
         {
-            //首先确定，玩家是否已经满怒气
-            HeroCardDataComponent heroCardDataComponent = self.GetComponent<HeroCardDataComponent>();
-            if (!heroCardDataComponent.IsAngryFull())
-            {
-                return null;
-            }
-
-            //然后找出玩家的必杀技id
-            List<Skill> skills = self.GetComponent<SkillComponent>().GetChilds<Skill>();
-            Skill bigSkill = skills.Find(a =>
-            {
-                var skillConfig = SkillConfigCategory.Instance.Get(a.ConfigId);
-                if (skillConfig.SkillType == (int)SkillType.BigSkill)
-                {
-                    return true;
-                }
-
-                return false;
-            });
-            if (bigSkill == null)
-            {
-                return null;
-            }
-
-            heroCardDataComponent.CurrentSkillId = bigSkill.Id;
-            heroCardDataComponent.Angry = 0;
-            AttackAction attackAction = self.AttackTarget(tatgetHeroCard, 0);
-            return attackAction;
-        }
-
-        public static AttackAction AttackTarget(this HeroCard self, HeroCard targetHeroCard, int comboAddition)
-        {
-            HeroConfig config = HeroConfigCategory.Instance.Get(self.ConfigId);
             HeroCardDataComponent attackCom = self.GetComponent<HeroCardDataComponent>();
             HeroCardDataComponent beAttackCom = targetHeroCard.GetComponent<HeroCardDataComponent>();
             var baseAttack = attackCom.GetHeroBaseAttack(); //角色的基础攻击
@@ -215,38 +192,37 @@ namespace ET
             //     //todo 如果施放的是大招技能，那么需要将怒气值归零
             //     attackCom.Angry = 0;
             // }
-
-            var attackAction = new AttackAction()
-            {
-                AttackHeroCardDataComponentInfo = attackCom.GetInfo(), BeAttackHeroCardDataComponentInfo = beAttackCom.GetInfo()
-            };
-            return attackAction;
+            // var attackAction = new AttackAction()
+            // {
+            //     AttackHeroCardDataComponentInfo = attackCom.GetInfo(), BeAttackHeroCardDataComponentInfo = beAttackCom.GetInfo()
+            // };
+            // return attackAction;
         }
 #if !SERVER
-        public static async ETTask PlayHeroCardAttackAnimAsync(this HeroCard self, AttackAction action)
-        {
-            // Log.Debug("PlayHeroCardAttackAnimAsync");
-            // HeroCard attackHeroCard = self.GetChild<HeroCard>(action.AttackHeroCardInfo.HeroId);
-            // self.Angry = action.AttackHeroCardDataComponentInfo.Angry;
-            // self.CurrentSkillId = action.AttackHeroCardDataComponentInfo.CurrentSkillId;
-            // List<HeroCard> beAttackHeroCards = new List<HeroCard>();
-            // foreach (var cardInfo in action.BeAttackHeroCardInfo)
-            // {
-            //     beAttackHeroCards.Add(self.Parent.GetChild<HeroCard>(cardInfo.HeroId));
-            // }
-            // beAttackHeroCard.GetHP() = action.BeAttackHeroCardInfo[0].HP;
-            // beAttackHeroCard.Angry = action.BeAttackHeroCardInfo[0].Angry;
-            Log.Debug($"be attack hero id {action.BeAttackHeroCardDataComponentInfo.HeroId}");
-            HeroCard beAttackHeroCard = self.Parent.GetChild<HeroCard>(action.BeAttackHeroCardDataComponentInfo.HeroId);
-            await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim()
-            {
-                AttackHeroCard = self,
-                BeAttackHeroCard = beAttackHeroCard,
-                BeAttackHeroCardDataComponentInfo = action.BeAttackHeroCardDataComponentInfo,
-                AttackHeroCardDataComponentInfo = action.AttackHeroCardDataComponentInfo
-            });
-            await ETTask.CompletedTask;
-        }
+        // public static async ETTask PlayHeroCardAttackAnimAsync(this HeroCard self, AttackAction action)
+        // {
+        //     // Log.Debug("PlayHeroCardAttackAnimAsync");
+        //     // HeroCard attackHeroCard = self.GetChild<HeroCard>(action.AttackHeroCardInfo.HeroId);
+        //     // self.Angry = action.AttackHeroCardDataComponentInfo.Angry;
+        //     // self.CurrentSkillId = action.AttackHeroCardDataComponentInfo.CurrentSkillId;
+        //     // List<HeroCard> beAttackHeroCards = new List<HeroCard>();
+        //     // foreach (var cardInfo in action.BeAttackHeroCardInfo)
+        //     // {
+        //     //     beAttackHeroCards.Add(self.Parent.GetChild<HeroCard>(cardInfo.HeroId));
+        //     // }
+        //     // beAttackHeroCard.GetHP() = action.BeAttackHeroCardInfo[0].HP;
+        //     // beAttackHeroCard.Angry = action.BeAttackHeroCardInfo[0].Angry;
+        //     // Log.Debug($"be attack hero id {action.BeAttackHeroCardDataComponentInfo.HeroId}");
+        //     // HeroCard beAttackHeroCard = self.Parent.GetChild<HeroCard>(action.BeAttackHeroCardDataComponentInfo.HeroId);
+        //     await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim()
+        //     {
+        //         AttackHeroCard = self,
+        //         BeAttackHeroCard = beAttackHeroCard,
+        //         BeAttackHeroCardDataComponentInfo = action.BeAttackHeroCardDataComponentInfo,
+        //         AttackHeroCardDataComponentInfo = action.AttackHeroCardDataComponentInfo
+        //     });
+        //     await ETTask.CompletedTask;
+        // }
 #endif
 
         //         public static async ETTask Call(this HeroCard self, int zone, long ownerId)

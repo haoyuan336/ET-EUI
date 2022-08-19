@@ -85,12 +85,12 @@ namespace ET
             self.E_LevelText.gameObject.SetActive(true);
             self.E_LevelText.text = $"{heroCardInfo.Level.ToString()}";
 
-            var elementConfig = ElementConfigCategory.Instance.Get(config.HeroColor);
-            var elementImageStr = elementConfig.IconImage;
+            // var elementConfig = ElementConfigCategory.Instance.Get(config.HeroColor);
+            // var elementImageStr = elementConfig.IconImage;
             // var sprite = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(ConstValue.HeroCardAtlasPath, elementImageStr);
             // self.E_ElementImage.sprite = sprite;
 
-            HeroQualityTypeConfig heroQualityTypeConfig = HeroQualityTypeConfigCategory.Instance.Get(config.HeroQuality);
+            // HeroQualityTypeConfig heroQualityTypeConfig = HeroQualityTypeConfigCategory.Instance.Get(config.HeroQuality);
             // var aualityIcon = await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(spriteAtlas, heroQualityTypeConfig.Icon);
             // self.E_QualityIconImage.gameObject.SetActive(true);
             // self.E_QualityIconImage.sprite = aualityIcon;
@@ -103,6 +103,12 @@ namespace ET
                 if (starObj != null)
                 {
                     starObj.gameObject.SetActive(i <= heroCardInfo.Star);
+                }
+                var bStarStr = $"BStar_{i}";
+                Transform bStarObj = UIFindHelper.FindDeepChild(self.uiTransform.gameObject, bStarStr);
+                if (bStarObj != null)
+                {
+                    bStarObj.gameObject.SetActive(true);
                 }
             }
 

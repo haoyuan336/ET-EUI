@@ -191,21 +191,57 @@ namespace ET
 
         public static async ETTask PlayAttackAnimLogic(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message)
         {
+            HeroCardComponent heroCardComponent = message.HeroCardComponent;
+
             Log.Debug("play attack anim logic");
-            // if (self.ChooseMark != null)
-            // {
-            //     GameObject.Destroy(self.ChooseMark);
-            // }
-            HeroCard beAttackHeroCards = message.BeAttackHeroCard;
-            SkillInfo skill = message.AttackHeroCardDataComponentInfo.CurrentSkillInfo;
-            Log.Debug($"Skill config id {skill.SkillConfigId}");
-            SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.SkillConfigId);
-            await self.MoveToEnemyTarget(beAttackHeroCards, skillConfig);
-            await self.PlayAttackAnim(message, skillConfig);
+            SkillInfo skillInfo = message.AttackAction.AttackHeroCardDataComponentInfo.CurrentSkillInfo;
+            SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skillInfo.SkillConfigId);
+
+            var attackHeroCardDataComponerntInfo = message.AttackAction.AttackHeroCardDataComponentInfo;
+            var beHeroCardDataComponentInfos = message.AttackAction.BeAttackHeroCardDataComponentInfos;
+
+            Log.Debug($"range type {skillConfig.RangeType}");
+
+            switch (skillConfig.RangeType)
+            {
+                case (int)SkillRangeType.EnemySingle:
+                    await self.PlaySingleAttackAnim(message, skillConfig);
+                    break;
+                case (int)SkillRangeType.EnemyGroup:
+                    // await self.PlayGroupAttackAnim(message, skillConfig);
+                    await self.PlayAttackGroupAnim(heroCardComponent, attackHeroCardDataComponerntInfo, beHeroCardDataComponentInfos, skillConfig);
+                    break;
+            }
+        }
+
+        // public static async ETTask PlayGroupAttackAnim(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message,
+        // SkillConfig skillConfig)
+        // {
+        //     HeroCardComponent heroCardComponent = message.HeroCardComponent;
+        //     List<HeroCardDataComponentInfo> beHeroCardDataComponentInfos = message.AttackAction.BeAttackHeroCardDataComponentInfos;
+        //
+        //     HeroCardDataComponentInfo attackHeroCardDataComponerntInfo = message.AttackAction.AttackHeroCardDataComponentInfo;
+        //
+        //     await self.PlayAttackGroupAnim(heroCardComponent, attackHeroCardDataComponerntInfo, beHeroCardDataComponentInfos, skillConfig);
+        //
+        //     // int campIndex = message.AttackHeroCard.CampIndex;
+        //     // bool isCamp = self.GetParent<HeroCard>().OwnerId.Equals(self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId);
+        //     // await self.TurnTargetAnim((isCamp? Vector3.back : Vector3.forward) + self.HeroMode.transform.position);
+        //     await ETTask.CompletedTask;
+        // }
+
+        public static async ETTask PlaySingleAttackAnim(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message,
+        SkillConfig skillConfig)
+        {
+            HeroCardComponent heroCardComponent = message.HeroCardComponent;
+            HeroCardDataComponentInfo beHeroCardDataComponentInfo = message.AttackAction.BeAttackHeroCardDataComponentInfos[0];
+            HeroCard beAttackHeroCard = heroCardComponent.GetChild<HeroCard>(beHeroCardDataComponentInfo.HeroId);
+            HeroCardDataComponentInfo attackHeroCardDataComponerntInfo = message.AttackAction.AttackHeroCardDataComponentInfo;
+            await self.MoveToEnemyTarget(beAttackHeroCard, skillConfig);
+            await self.PlayAttackAnim(beAttackHeroCard, beHeroCardDataComponentInfo, attackHeroCardDataComponerntInfo, skillConfig);
             await self.BackMoveToInitPos(skillConfig);
             // int campIndex = message.AttackHeroCard.CampIndex;
-
-            bool isCamp = message.AttackHeroCard.OwnerId.Equals(self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId);
+            bool isCamp = self.GetParent<HeroCard>().OwnerId.Equals(self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId);
             await self.TurnTargetAnim((isCamp? Vector3.back : Vector3.forward) + self.HeroMode.transform.position);
             await ETTask.CompletedTask;
         }
@@ -256,7 +292,8 @@ namespace ET
                 return;
             }
 
-            GameObject effect = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(skillConfig.BeAttackEffect);
+            GameObject effect = GameObjectPoolHelper.GetObjectFromPool(skillConfig.BeAttackEffect, true, 3);
+            // GameObject effect = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(skillConfig.BeAttackEffect);
             effect.transform.SetParent(self.HeroMode.transform);
             Log.Debug($"be attack bone name {skillConfig.BeAttackBoneName}");
             if (skillConfig.BeAttackBoneName == "")
@@ -280,13 +317,14 @@ namespace ET
                 }
             }
 
-            await TimerComponent.Instance.WaitAsync(5000);
-            GameObject.Destroy(effect);
+            await TimerComponent.Instance.WaitAsync(skillConfig.BeAttackEffectTime);
+            // GameObject.Destroy(effect);
             // self.LoadPrefab(skillcon)
+            GameObjectPoolHelper.ReturnObjectToPool(effect);
         }
 
         public static async ETTask PlayBeAttackAnim(this HeroModeObjectCompoent self, HeroCardDataComponentInfo componentInfo,
-        SkillConfig skillConfig, CrashCommonInfo commonInfo)
+        SkillConfig skillConfig)
         {
             int beAttackTime = skillConfig.BeAttackTime;
             await TimerComponent.Instance.WaitAsync(beAttackTime);
@@ -295,7 +333,7 @@ namespace ET
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().UpdateHPView(componentInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(componentInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowDamageViewAnim(componentInfo);
-            self.PlayBeHitedEffect(skillConfig).Coroutine();
+            await self.PlayBeHitedEffect(skillConfig);
             if (componentInfo.HP <= 0)
             {
                 self.HeroMode.GetComponent<Animator>().SetBool("Dead", true);
@@ -304,26 +342,57 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
-        public static async ETTask PlayAttackAnim(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message, SkillConfig skillConfig)
+        public static async ETTask PlayAttackAnim(this HeroModeObjectCompoent self, HeroCard beAttackHeroCard,
+        HeroCardDataComponentInfo beAttackHeroCardDataComponentInfo, HeroCardDataComponentInfo attackHeroCardDataComponentInfo,
+        SkillConfig skillConfig)
         {
             if (self.AttackMark != null)
             {
                 self.AttackMark.SetActive(false);
             }
 
-            HeroCard beAttackCard = message.BeAttackHeroCard;
-            self.PlaySkillEffect(skillConfig);
-            self.PlayFlyEffect(skillConfig, beAttackCard);
-            beAttackCard.GetComponent<HeroModeObjectCompoent>()
-                    .PlayBeAttackAnim(message.BeAttackHeroCardDataComponentInfo, skillConfig, message.CommonInfo).Coroutine();
+            self.PlaySkillEffect(skillConfig).Coroutine();
+            self.PlayFlyEffect(skillConfig, beAttackHeroCard);
+            beAttackHeroCard.GetComponent<HeroModeObjectCompoent>()
+                    .PlayBeAttackAnim(beAttackHeroCardDataComponentInfo, skillConfig).Coroutine();
 
             string skillAnimStr = skillConfig.SkillAnimName;
             // self.UpdateShowDataView(message.AttackHeroCardDataComponentInfo, message.CommonInfo);
             self.HeroMode.GetComponent<Animator>().SetTrigger(skillAnimStr);
             var skillTime = skillConfig.SkillTime;
             await TimerComponent.Instance.WaitAsync(skillTime);
-            await self.Parent.GetComponent<HeroCardInfoObjectComponent>().InitAttackAdditionView(message.AttackHeroCardDataComponentInfo);
-            self.Parent.GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(message.AttackHeroCardDataComponentInfo);
+            await self.Parent.GetComponent<HeroCardInfoObjectComponent>().InitAttackAdditionView(attackHeroCardDataComponentInfo);
+            self.Parent.GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(attackHeroCardDataComponentInfo);
+        }
+
+        public static async ETTask PlayAttackGroupAnim(this HeroModeObjectCompoent self, HeroCardComponent heroCardComponent,
+        HeroCardDataComponentInfo attackHeroCardDataComponentInfo, List<HeroCardDataComponentInfo> beAttaclHeroCardDataComponentInfos,
+        SkillConfig skillConfig)
+        {
+            if (self.AttackMark != null)
+            {
+                self.AttackMark.SetActive(false);
+            }
+            string skillAnimStr = skillConfig.SkillAnimName;
+            self.HeroMode.GetComponent<Animator>().SetTrigger(skillAnimStr);
+            self.PlaySkillEffect(skillConfig).Coroutine();
+            List<ETTask> tasks = new List<ETTask>();
+            for (var i = 0; i < beAttaclHeroCardDataComponentInfos.Count; i++)
+            {
+                var info = beAttaclHeroCardDataComponentInfos[i];
+                var heroCard = heroCardComponent.GetChild<HeroCard>(info.HeroId);
+                heroCard.GetComponent<HeroModeObjectCompoent>()
+                        .PlayBeAttackAnim(info, skillConfig).Coroutine();
+            }
+
+            await ETTaskHelper.WaitAll(tasks);
+            // self.UpdateShowDataView(message.AttackHeroCardDataComponentInfo, message.CommonInfo);
+            var skillTime = skillConfig.SkillTime;
+            await TimerComponent.Instance.WaitAsync(skillTime);
+            await self.Parent.GetComponent<HeroCardInfoObjectComponent>().InitAttackAdditionView(attackHeroCardDataComponentInfo);
+            self.Parent.GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(attackHeroCardDataComponentInfo);
+
+            await ETTask.CompletedTask;
         }
 
         public static async void PlayFlyEffect(this HeroModeObjectCompoent self, SkillConfig config, HeroCard beAttackHeroCard)
@@ -356,17 +425,20 @@ namespace ET
             GameObject.Destroy(effect);
         }
 
-        public static async void PlaySkillEffect(this HeroModeObjectCompoent self, SkillConfig config)
+        public static async ETTask PlaySkillEffect(this HeroModeObjectCompoent self, SkillConfig config)
         {
             if (config.SkillEffect != "")
             {
-                GameObject pre = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(config.SkillEffect);
+                // GameObject pre = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(config.SkillEffect);
+                GameObject obj = GameObjectPoolHelper.GetObjectFromPool(config.SkillEffect, false, 1);
                 await TimerComponent.Instance.WaitAsync(config.EffectStartTime);
-                GameObject obj = GameObject.Instantiate(pre);
+                // GameObject obj = GameObject.Instantiate(pre);
+                obj.SetActive(true);
                 obj.transform.forward = self.HeroMode.transform.forward;
                 obj.transform.position = self.HeroMode.transform.position;
-                await TimerComponent.Instance.WaitAsync(5000);
-                GameObject.Destroy(obj);
+                await TimerComponent.Instance.WaitAsync(config.SkillEffectTime);
+                // GameObject.Destroy(obj);
+                GameObjectPoolHelper.ReturnObjectToPool(obj);
             }
         }
 

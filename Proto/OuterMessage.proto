@@ -518,10 +518,14 @@ message AttackAction
 {
 	// HeroCardInfo AttackHeroCardInfo = 1;
 	// HeroCardInfo BeAttackHeroCardInfo = 2;
-	HeroCardDataComponentInfo BeAttackHeroCardDataComponentInfo = 3;
+	repeated HeroBufferInfo HeroBufferInfos = 2;
+	repeated HeroCardDataComponentInfo BeAttackHeroCardDataComponentInfos = 3;
 	HeroCardDataComponentInfo AttackHeroCardDataComponentInfo = 4;
 
-
+}
+message HeroBufferInfo
+{
+	repeated BuffInfo BuffInfos = 1;
 }
 message AttackActionItem
 {
@@ -1654,4 +1658,10 @@ message M2C_SetCurrentShowHeroCardInfoResponse //IActorLocationResponse
 	int32 RpcId = 90;
 	int32 Error = 91;
 	string Message = 92;
+}
+message BuffInfo
+{
+	int64 BuffId = 1;
+	int32 ConfigId = 2;
+	int32 RoundCount = 3;	//剩余回合数
 }

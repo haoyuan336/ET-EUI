@@ -20,9 +20,6 @@ namespace ET
             await Game.EventSystem.PublishAsync(
                 new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene(), IsLockTouch = true });
 
-            
-           
-            
             bool isContainsCrash = false;
             var comboCount = 0;
             // bool isContainsAttackHero = false;
@@ -125,15 +122,13 @@ namespace ET
             await ETTaskHelper.WaitAll(animTasks);
             foreach (var attackActionItem in attackActionItems)
             {
-                List<ETTask> tasks = new List<ETTask>();
                 foreach (var attackAction in attackActionItem.AttackActions)
                 {
-                    // Log.Debug("play attack action");
-                    HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(attackAction.AttackHeroCardDataComponentInfo.HeroId);
-                    await heroCard.PlayHeroCardAttackAnimAsync(attackAction);
+                    await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim()
+                    {
+                        HeroCardComponent = heroCardComponent, AttackAction = attackAction
+                    });
                 }
-
-                await ETTaskHelper.WaitAll(tasks);
             }
 
             List<ETTask> animTaskList = new List<ETTask>();

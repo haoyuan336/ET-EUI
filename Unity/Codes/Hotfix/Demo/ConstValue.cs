@@ -19,7 +19,8 @@ namespace ET
 
         public const int ExpItemConfigId = 1008; //经验值道具的configid；
         public const int AutoSaveTime = 360000; //自动保存事件
-        public const int MaxHeroStarCount = 5;  //最大的英雄星的个数
+        public const int MaxHeroStarCount = 5; //最大的英雄星的个数
+        public const float Wan = 10000.0f; //一万 配置表数值需要除次值
 
 #if !SERVER
         // public const string LoginAddress = "59.110.220.207:10007";

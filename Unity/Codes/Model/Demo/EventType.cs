@@ -264,11 +264,13 @@ namespace ET
 
         public struct PlayHeroCardAttackAnim
         {
-            public HeroCard AttackHeroCard;
-            public HeroCard BeAttackHeroCard;
-            public HeroCardDataComponentInfo AttackHeroCardDataComponentInfo;
-            public HeroCardDataComponentInfo BeAttackHeroCardDataComponentInfo;
-            public CrashCommonInfo CommonInfo;
+            // public HeroCard AttackHeroCard;
+            // public HeroCard BeAttackHeroCard;
+            // public HeroCardDataComponentInfo AttackHeroCardDataComponentInfo;
+            // public HeroCardDataComponentInfo BeAttackHeroCardDataComponentInfo;
+            // public CrashCommonInfo CommonInfo;
+            public HeroCardComponent HeroCardComponent;
+            public AttackAction AttackAction;
         }
 
         public struct PlayAddAttackViewAnim

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+
 namespace ET
 {
     public class HeroCardDataComponentAwakeSystem1: AwakeSystem<HeroCardDataComponent>
@@ -113,11 +114,11 @@ namespace ET
             return self.Angry >= heroConfig.TotalAngry;
         }
 
-        public static void MakeSureAngrySkill(this HeroCardDataComponent self)
+        public static Skill MakeSureAngrySkill(this HeroCardDataComponent self)
         {
             if (!self.IsAngryFull())
             {
-                return;
+                return null;
             }
 
             //确定一下怒气值满的技能
@@ -125,7 +126,7 @@ namespace ET
             Skill skill = skills.Find(a =>
             {
                 SkillConfig config = SkillConfigCategory.Instance.Get(a.ConfigId);
-                if (config.SkillType == 4)
+                if (config.SkillType == (int)SkillType.BigSkill)
                 {
                     return true;
                 }
@@ -134,9 +135,34 @@ namespace ET
             });
             self.CurrentSkillId = skill.Id;
             self.Angry = 0;
+            return skill;
         }
+        // public static Skill MakeSureAngrySkill(this HeroCard self)
+        // {
+        //     //todo 确定怒气技能
+        //     //然后找出玩家的必杀技id
+        //     List<Skill> skills = self.GetComponent<SkillComponent>().GetChilds<Skill>();
+        //     Skill bigSkill = skills.Find(a =>
+        //     {
+        //         var skillConfig = SkillConfigCategory.Instance.Get(a.ConfigId);
+        //         if (skillConfig.SkillType == (int)SkillType.BigSkill)
+        //         {
+        //             return true;
+        //         }
+        //
+        //         return false;
+        //     });
+        //     if (bigSkill == null)
+        //     {
+        //         return null;
+        //     }
+        //
+        //     self.GetComponent<HeroCardDataComponent>().CurrentSkillId = bigSkill.Id;
+        //     self.GetComponent<HeroCardDataComponent>().Angry = 0;
+        //     return bigSkill;
+        // }
 
-        public static void MakeSureSkill(this HeroCardDataComponent self, int firstCrashCount)
+        public static Skill MakeSureSkill(this HeroCardDataComponent self, int firstCrashCount)
         {
             //todo 确定当前技能
             SkillType skillType = SkillType.Attack;
@@ -175,6 +201,8 @@ namespace ET
             {
                 self.CurrentSkillId = skill.Id;
             }
+
+            return skill;
         }
     }
 }

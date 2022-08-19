@@ -78,6 +78,10 @@ namespace ET
             // await diamond.DestoryWithAnim(destoryIndex, diamondAction);
             // return;
             // }
+            if (diamond.IsDisposed)
+            {
+                return;
+            }
 
             await diamond.Destroy(destoryIndex, diamondAction, diamondActionItem);
             // await TimerComponent.Instance.WaitAsync(1000);
@@ -196,6 +200,13 @@ namespace ET
                         continue;
                     }
 
+                    DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamond.ConfigId);
+                    if (config.BoomType != (int)BoomType.Invalide)
+                    {
+                        //排除特殊珠
+                        continue;
+                    }
+
                     if (self.CheckIsContainInListList(crashListList, diamond))
                     {
                         continue;
@@ -281,7 +292,13 @@ namespace ET
                     {
                         continue;
                     }
-
+                    DiamondTypeConfig config = DiamondTypeConfigCategory.Instance.Get(diamond.ConfigId);
+                    if (config.BoomType != (int)BoomType.Invalide)
+                    {
+                        //排除特殊珠
+                        continue;
+                    }
+                    
                     if (self.CheckIsContainInListList(crashListList, diamond))
                     {
                         continue;
@@ -307,7 +324,6 @@ namespace ET
             Queue<Diamond> checkQueue = new Queue<Diamond>();
             checkQueue.Enqueue(currentDiamond);
             sameList.Add(currentDiamond);
-
             List<Diamond> alCheckList = new List<Diamond>();
             while (checkQueue.Count > 0)
             {
@@ -316,9 +332,7 @@ namespace ET
                 {
                     continue;
                 }
-
                 alCheckList.Add(diamond);
-
                 ScrollDirType[] scrollDirTypes = new ScrollDirType[2] { ScrollDirType.Left, ScrollDirType.Right };
                 for (var h = 0; h < scrollDirTypes.Length; h++)
                 {
