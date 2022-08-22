@@ -83,6 +83,10 @@ namespace ET
 		public string ImageStr { get; set; }
 		[ProtoMember(7)]
 		public string SpriteAtlas { get; set; }
+		[ProtoMember(8)]
+		public int RoundOverActiveBuff { get; set; }
+		[ProtoMember(9)]
+		public int MaxOverlabCount { get; set; }
 
 	}
 }

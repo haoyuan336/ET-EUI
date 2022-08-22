@@ -134,7 +134,7 @@ namespace ET
         //     return attackAction;
         // }
 
-        public static void AttackTarget(this HeroCard self, HeroCard targetHeroCard, int comboAddition)
+        public static void AttackTarget(this HeroCard self, HeroCard targetHeroCard, int comboAddition, SkillConfig skillConfig)
         {
             HeroCardDataComponent attackCom = self.GetComponent<HeroCardDataComponent>();
             HeroCardDataComponent beAttackCom = targetHeroCard.GetComponent<HeroCardDataComponent>();
@@ -163,7 +163,12 @@ namespace ET
                 damageAddition = 0;
             }
 
+            
             damage += damage * damageAddition / 10000;
+            
+            
+            //技能加成
+            
             var critical = self.GetCriticalHit(targetHeroCard); //暴击概率
             var isCritical = RandomHelper.RandomNumber(0, 10000) < critical;
             if (isCritical)
@@ -187,73 +192,8 @@ namespace ET
             beAttackCom.Damage = (int)damage;
             beAttackCom.IsCritical = isCritical;
             attackCom.DiamondAttackAddition = 0;
-            // if (attackCom.IsAngryFull())
-            // {
-            //     //todo 如果施放的是大招技能，那么需要将怒气值归零
-            //     attackCom.Angry = 0;
-            // }
-            // var attackAction = new AttackAction()
-            // {
-            //     AttackHeroCardDataComponentInfo = attackCom.GetInfo(), BeAttackHeroCardDataComponentInfo = beAttackCom.GetInfo()
-            // };
-            // return attackAction;
+          
         }
-#if !SERVER
-        // public static async ETTask PlayHeroCardAttackAnimAsync(this HeroCard self, AttackAction action)
-        // {
-        //     // Log.Debug("PlayHeroCardAttackAnimAsync");
-        //     // HeroCard attackHeroCard = self.GetChild<HeroCard>(action.AttackHeroCardInfo.HeroId);
-        //     // self.Angry = action.AttackHeroCardDataComponentInfo.Angry;
-        //     // self.CurrentSkillId = action.AttackHeroCardDataComponentInfo.CurrentSkillId;
-        //     // List<HeroCard> beAttackHeroCards = new List<HeroCard>();
-        //     // foreach (var cardInfo in action.BeAttackHeroCardInfo)
-        //     // {
-        //     //     beAttackHeroCards.Add(self.Parent.GetChild<HeroCard>(cardInfo.HeroId));
-        //     // }
-        //     // beAttackHeroCard.GetHP() = action.BeAttackHeroCardInfo[0].HP;
-        //     // beAttackHeroCard.Angry = action.BeAttackHeroCardInfo[0].Angry;
-        //     // Log.Debug($"be attack hero id {action.BeAttackHeroCardDataComponentInfo.HeroId}");
-        //     // HeroCard beAttackHeroCard = self.Parent.GetChild<HeroCard>(action.BeAttackHeroCardDataComponentInfo.HeroId);
-        //     await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim()
-        //     {
-        //         AttackHeroCard = self,
-        //         BeAttackHeroCard = beAttackHeroCard,
-        //         BeAttackHeroCardDataComponentInfo = action.BeAttackHeroCardDataComponentInfo,
-        //         AttackHeroCardDataComponentInfo = action.AttackHeroCardDataComponentInfo
-        //     });
-        //     await ETTask.CompletedTask;
-        // }
-#endif
-
-        //         public static async ETTask Call(this HeroCard self, int zone, long ownerId)
-        //         {
-        //             self.OwnerId = ownerId;
-        //             self.CallTime = TimeHelper.ServerNow();
-        //             //todo 先创建继承数据
-        //             // await self.CallSkill(zone);
-        // #if SERVER
-        //             await DBManagerComponent.Instance.GetZoneDB(zone).Save(self);
-        // #endif
-        //             Log.Debug("hero call complete");
-        //         }
-        // public static async ETTask CallSkill(this HeroCard self, int zone)
-        // {
-        //     HeroConfig heroConfig = HeroConfigCategory.Instance.Get(self.ConfigId);
-        //     List<string> skillStr = heroConfig.SkillIdList.Split(',').ToList();
-        //     List<ETTask> tasks = new List<ETTask>();
-        //     foreach (var skillId in skillStr)
-        //     {
-        //         // Skill skill = self.AddChild<Skill, int>(int.Parse(skillId));
-        //         Skill skill = new Skill();
-        //         skill.Id = IdGenerater.Instance.GenerateId();
-        //         skill.ConfigId = int.Parse(skillId);
-        //         tasks.Add(skill.Call(zone, self.Id));
-        //     }
-        //
-        //     await ETTaskHelper.WaitAll(tasks);
-        //     Log.Debug("all skill call complete");
-        //     await ETTask.CompletedTask;
-        // }
 
         public static HeroCardInfo GetMessageInfo(this HeroCard self)
         {

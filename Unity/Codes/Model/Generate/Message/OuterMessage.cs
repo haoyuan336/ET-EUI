@@ -3661,7 +3661,7 @@ namespace ET
 
 	[Message(OuterOpcode.BuffInfo)]
 	[ProtoContract]
-	public partial class BuffInfo: Object
+	public partial class BuffInfo: Object, IAwake
 	{
 		[ProtoMember(1)]
 		public long BuffId { get; set; }

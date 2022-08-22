@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,7 +23,7 @@ namespace ET
             self.ESHeroCardInfoUI = self.AddChildWithId<ESHeroCardInfoUI, Transform>(IdGenerater.Instance.GenerateId(), self.GameObject.transform);
             self.ESHeroCardInfoUI.SetInfo(heroCardInfo, heroCardDataComponentInfo);
 
-            self.ESHeroCardInfoUI.E_AttackBarImage.fillAmount = heroCardDataComponentInfo.DiamondAttackAddition; 
+            self.ESHeroCardInfoUI.E_AttackBarImage.fillAmount = heroCardDataComponentInfo.DiamondAttackAddition;
             self.UpdateAngryView(heroCardDataComponentInfo);
         }
     }
@@ -59,6 +60,12 @@ namespace ET
 
     public static class HeroCardInfoObjectComponentSystem
     {
+        public static async void ShowBuffView(this HeroCardInfoObjectComponent self, List<BuffInfo> buffInfos)
+        {
+            self.ESHeroCardInfoUI.SetBuffInfos(buffInfos);
+            await ETTask.CompletedTask;
+        }
+
         public static async void ShowDamageViewAnim(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo component)
         {
             Log.Debug($"damage {component.Damage}");
@@ -81,6 +88,7 @@ namespace ET
                 time += Time.deltaTime;
                 await TimerComponent.Instance.WaitFrameAsync();
             }
+
             GameObject.Destroy(text);
         }
 
@@ -88,21 +96,20 @@ namespace ET
         {
             Log.Debug($"update hp view {componentInfo.HP}");
             Log.Debug($"total hp {componentInfo.TotalHP}");
-            float percent = (float) componentInfo.HP / componentInfo.TotalHP;
+            float percent = (float)componentInfo.HP / componentInfo.TotalHP;
             self.ESHeroCardInfoUI.E_HpBarImage.GetComponent<Image>().fillAmount = percent;
             await ETTask.CompletedTask;
         }
 
         public static void UpdateAngryView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo info)
         {
-            
-            self.ESHeroCardInfoUI.E_AngryBarImage.GetComponent<Image>().fillAmount = (float) info.Angry / self.HeroConfig.TotalAngry;
+            self.ESHeroCardInfoUI.E_AngryBarImage.GetComponent<Image>().fillAmount = (float)info.Angry / self.HeroConfig.TotalAngry;
         }
 
         public static async ETTask InitAttackAdditionView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo info)
         {
-            self.ESHeroCardInfoUI.E_CommonText.GetComponent<Text>().text = "";
-            self.ESHeroCardInfoUI.E_AttackBarImage.GetComponent<Image>().fillAmount = (float) info.DiamondAttackAddition / 200;
+            // self.ESHeroCardInfoUI.E_CommonText.GetComponent<Text>().text = "";
+            self.ESHeroCardInfoUI.E_AttackBarImage.GetComponent<Image>().fillAmount = (float)info.DiamondAttackAddition / 200;
             await ETTask.CompletedTask;
         }
 
@@ -112,8 +119,7 @@ namespace ET
             var addition = addItemAction.HeroCardDataComponentInfo.DiamondAttackAddition;
             // var common = addItemAction.CrashCommonInfo;
             // self.ESHeroCardInfoUI.E_CommonText.GetComponent<Text>().text = $"CommonX{common.CommonCount}";
-            self.ESHeroCardInfoUI.E_AttackBarImage.GetComponent<Image>().fillAmount = (float) addition / 100;
-            
+            self.ESHeroCardInfoUI.E_AttackBarImage.GetComponent<Image>().fillAmount = (float)addition / 100;
         }
 
         // public static void UpdateAngryView(this HeroCardInfoObjectComponent self, HeroCardDataComponent)

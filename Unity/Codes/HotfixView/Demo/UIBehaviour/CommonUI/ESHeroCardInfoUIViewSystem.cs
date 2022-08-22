@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace ET
 {
 	[ObjectSystem]
-	public class ESHeroCardInfoUIAwakeSystem : AwakeSystem<ESHeroCardInfoUI,Transform> 
+	public   class ESHeroCardInfoUIAwakeSystem : AwakeSystem<ESHeroCardInfoUI,Transform> 
 	{
 		public override void Awake(ESHeroCardInfoUI self,Transform transform)
 		{

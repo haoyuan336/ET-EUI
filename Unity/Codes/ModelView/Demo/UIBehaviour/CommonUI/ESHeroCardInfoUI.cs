@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace ET
 {
-	public  class ESHeroCardInfoUI : Entity,ET.IAwake<UnityEngine.Transform>,IDestroy 
+	public partial class ESHeroCardInfoUI : Entity,ET.IAwake<UnityEngine.Transform>,IDestroy 
 	{
 		public UnityEngine.UI.Image E_AngryBarImage
      	{
@@ -73,7 +73,7 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Text E_CommonText
+		public UnityEngine.UI.Image E_BufferContentImage
      	{
      		get
      		{
@@ -82,11 +82,11 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_CommonText == null )
+     			if( this.m_E_BufferContentImage == null )
      			{
-		    		this.m_E_CommonText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_Common");
+		    		this.m_E_BufferContentImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_BufferContent");
      			}
-     			return this.m_E_CommonText;
+     			return this.m_E_BufferContentImage;
      		}
      	}
 
@@ -96,7 +96,7 @@ namespace ET
 			this.m_E_HpBarImage = null;
 			this.m_E_AttackBarImage = null;
 			this.m_E_HeroElementIconImage = null;
-			this.m_E_CommonText = null;
+			this.m_E_BufferContentImage = null;
 			this.uiTransform = null;
 		}
 
@@ -104,7 +104,7 @@ namespace ET
 		private UnityEngine.UI.Image m_E_HpBarImage = null;
 		private UnityEngine.UI.Image m_E_AttackBarImage = null;
 		private UnityEngine.UI.Image m_E_HeroElementIconImage = null;
-		private UnityEngine.UI.Text m_E_CommonText = null;
+		private UnityEngine.UI.Image m_E_BufferContentImage = null;
 		public Transform uiTransform = null;
 	}
 }

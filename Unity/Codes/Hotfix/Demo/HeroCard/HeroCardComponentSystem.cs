@@ -220,6 +220,7 @@ namespace ET
             heroCard.ConfigId = heroConfigs[randomIndex].Id;
             heroCard.OwnerId = accountId;
             self.AddChild(heroCard);
+            //存储技能  基础技能
             return heroCard;
             // // HeroCard heroCard = unit.AddChild<HeroCard, int>(key);
             // await heroCard.Call(unit.DomainZone(), request.Account);

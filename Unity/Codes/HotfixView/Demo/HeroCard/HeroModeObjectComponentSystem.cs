@@ -199,9 +199,9 @@ namespace ET
 
             var attackHeroCardDataComponerntInfo = message.AttackAction.AttackHeroCardDataComponentInfo;
             var beHeroCardDataComponentInfos = message.AttackAction.BeAttackHeroCardDataComponentInfos;
-
+            var heroBuffInfos = message.AttackAction.HeroBufferInfos;
             Log.Debug($"range type {skillConfig.RangeType}");
-
+        
             switch (skillConfig.RangeType)
             {
                 case (int)SkillRangeType.EnemySingle:
@@ -209,7 +209,8 @@ namespace ET
                     break;
                 case (int)SkillRangeType.EnemyGroup:
                     // await self.PlayGroupAttackAnim(message, skillConfig);
-                    await self.PlayAttackGroupAnim(heroCardComponent, attackHeroCardDataComponerntInfo, beHeroCardDataComponentInfos, skillConfig);
+                    Log.Debug($"hero buff info s {heroBuffInfos.Count}");
+                    await self.PlayAttackGroupAnim(heroCardComponent, attackHeroCardDataComponerntInfo, beHeroCardDataComponentInfos, skillConfig, heroBuffInfos);
                     break;
             }
         }
@@ -238,7 +239,7 @@ namespace ET
             HeroCard beAttackHeroCard = heroCardComponent.GetChild<HeroCard>(beHeroCardDataComponentInfo.HeroId);
             HeroCardDataComponentInfo attackHeroCardDataComponerntInfo = message.AttackAction.AttackHeroCardDataComponentInfo;
             await self.MoveToEnemyTarget(beAttackHeroCard, skillConfig);
-            await self.PlayAttackAnim(beAttackHeroCard, beHeroCardDataComponentInfo, attackHeroCardDataComponerntInfo, skillConfig);
+            await self.PlayAttackAnim(beAttackHeroCard, beHeroCardDataComponentInfo, attackHeroCardDataComponerntInfo, skillConfig, message.AttackAction.HeroBufferInfos[0].BuffInfos);
             await self.BackMoveToInitPos(skillConfig);
             // int campIndex = message.AttackHeroCard.CampIndex;
             bool isCamp = self.GetParent<HeroCard>().OwnerId.Equals(self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId);
@@ -324,7 +325,7 @@ namespace ET
         }
 
         public static async ETTask PlayBeAttackAnim(this HeroModeObjectCompoent self, HeroCardDataComponentInfo componentInfo,
-        SkillConfig skillConfig)
+        SkillConfig skillConfig, List<BuffInfo> buffInfos)
         {
             int beAttackTime = skillConfig.BeAttackTime;
             await TimerComponent.Instance.WaitAsync(beAttackTime);
@@ -333,6 +334,7 @@ namespace ET
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().UpdateHPView(componentInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(componentInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowDamageViewAnim(componentInfo);
+            self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowBuffView(buffInfos);
             await self.PlayBeHitedEffect(skillConfig);
             if (componentInfo.HP <= 0)
             {
@@ -344,7 +346,7 @@ namespace ET
 
         public static async ETTask PlayAttackAnim(this HeroModeObjectCompoent self, HeroCard beAttackHeroCard,
         HeroCardDataComponentInfo beAttackHeroCardDataComponentInfo, HeroCardDataComponentInfo attackHeroCardDataComponentInfo,
-        SkillConfig skillConfig)
+        SkillConfig skillConfig, List<BuffInfo> buffInfos)
         {
             if (self.AttackMark != null)
             {
@@ -354,7 +356,7 @@ namespace ET
             self.PlaySkillEffect(skillConfig).Coroutine();
             self.PlayFlyEffect(skillConfig, beAttackHeroCard);
             beAttackHeroCard.GetComponent<HeroModeObjectCompoent>()
-                    .PlayBeAttackAnim(beAttackHeroCardDataComponentInfo, skillConfig).Coroutine();
+                    .PlayBeAttackAnim(beAttackHeroCardDataComponentInfo, skillConfig, buffInfos).Coroutine();
 
             string skillAnimStr = skillConfig.SkillAnimName;
             // self.UpdateShowDataView(message.AttackHeroCardDataComponentInfo, message.CommonInfo);
@@ -367,7 +369,7 @@ namespace ET
 
         public static async ETTask PlayAttackGroupAnim(this HeroModeObjectCompoent self, HeroCardComponent heroCardComponent,
         HeroCardDataComponentInfo attackHeroCardDataComponentInfo, List<HeroCardDataComponentInfo> beAttaclHeroCardDataComponentInfos,
-        SkillConfig skillConfig)
+        SkillConfig skillConfig, List<HeroBufferInfo> heroBufferInfos)
         {
             if (self.AttackMark != null)
             {
@@ -382,7 +384,8 @@ namespace ET
                 var info = beAttaclHeroCardDataComponentInfos[i];
                 var heroCard = heroCardComponent.GetChild<HeroCard>(info.HeroId);
                 heroCard.GetComponent<HeroModeObjectCompoent>()
-                        .PlayBeAttackAnim(info, skillConfig).Coroutine();
+                        .PlayBeAttackAnim(info, skillConfig, heroBufferInfos[i].BuffInfos).Coroutine();
+                
             }
 
             await ETTaskHelper.WaitAll(tasks);

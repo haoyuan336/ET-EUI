@@ -75,6 +75,14 @@ namespace ET
 		public int EXP { get; set; }
 		[ProtoMember(3)]
 		public int NeedRank { get; set; }
+		[ProtoMember(4)]
+		public int SkillLevel1 { get; set; }
+		[ProtoMember(5)]
+		public int SkillLevel2 { get; set; }
+		[ProtoMember(6)]
+		public int SkillLevel3 { get; set; }
+		[ProtoMember(7)]
+		public int SkillLevel4 { get; set; }
 
 	}
 }

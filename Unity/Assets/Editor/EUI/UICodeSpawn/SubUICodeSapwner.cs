@@ -44,7 +44,7 @@ public partial class UICodeSpawner
         strBuilder.AppendLine("namespace ET");
         strBuilder.AppendLine("{");
         strBuilder.AppendLine("\t[ObjectSystem]");
-        strBuilder.AppendFormat("\tpublic class {0}AwakeSystem : AwakeSystem<{1},Transform> \r\n", strDlgName, strDlgName);
+        strBuilder.AppendFormat("\tpublic   class {0}AwakeSystem : AwakeSystem<{1},Transform> \r\n", strDlgName, strDlgName);
         strBuilder.AppendLine("\t{");
         strBuilder.AppendFormat("\t\tpublic override void Awake({0} self,Transform transform)\n",strDlgName);
         strBuilder.AppendLine("\t\t{");
@@ -95,7 +95,7 @@ public partial class UICodeSpawner
         strBuilder.AppendLine("using UnityEngine.UI;");
         strBuilder.AppendLine("namespace ET");
         strBuilder.AppendLine("{");
-        strBuilder.AppendFormat("\tpublic  class {0} : Entity,ET.IAwake<UnityEngine.Transform>,IDestroy \r\n", strDlgName)
+        strBuilder.AppendFormat("\tpublic partial class {0} : Entity,ET.IAwake<UnityEngine.Transform>,IDestroy \r\n", strDlgName)
             .AppendLine("\t{");
         
        

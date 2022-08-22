@@ -133,6 +133,11 @@ namespace ET
 
                 return false;
             });
+            if (skill == null)
+            {
+                skill = skills[skills.Count - 1];
+            }
+
             self.CurrentSkillId = skill.Id;
             self.Angry = 0;
             return skill;
@@ -197,10 +202,12 @@ namespace ET
 
                 return false;
             });
-            if (skill != null)
+            if (skill == null)
             {
-                self.CurrentSkillId = skill.Id;
+                skill = skills[skills.Count - 1];
             }
+
+            self.CurrentSkillId = skill.Id;
 
             return skill;
         }
