@@ -80,36 +80,38 @@ namespace ET
 		[ProtoMember(6)]
 		public int HeroColor { get; set; }
 		[ProtoMember(7)]
-		public int DomineeringValue { get; set; }
+		public string HeroElementName { get; set; }
 		[ProtoMember(8)]
-		public int DefenceGrowthCoefficient { get; set; }
+		public int DomineeringValue { get; set; }
 		[ProtoMember(9)]
-		public int AttackGrowthCoefficient { get; set; }
+		public int DefenceGrowthCoefficient { get; set; }
 		[ProtoMember(10)]
-		public int HPGrowthCoefficient { get; set; }
+		public int AttackGrowthCoefficient { get; set; }
 		[ProtoMember(11)]
-		public int HeroHP { get; set; }
+		public int HPGrowthCoefficient { get; set; }
 		[ProtoMember(12)]
-		public int BaseAttack { get; set; }
+		public int HeroHP { get; set; }
 		[ProtoMember(13)]
-		public int BaseDefence { get; set; }
+		public int BaseAttack { get; set; }
 		[ProtoMember(14)]
-		public string AddAngryRate { get; set; }
+		public int BaseDefence { get; set; }
 		[ProtoMember(15)]
-		public string CritRate { get; set; }
+		public string AddAngryRate { get; set; }
 		[ProtoMember(16)]
-		public string AddAttackRate { get; set; }
+		public string CritRate { get; set; }
 		[ProtoMember(17)]
-		public int RoundAddAngry { get; set; }
+		public string AddAttackRate { get; set; }
 		[ProtoMember(18)]
-		public int InitAngry { get; set; }
+		public int RoundAddAngry { get; set; }
 		[ProtoMember(19)]
-		public int TotalAngry { get; set; }
+		public int InitAngry { get; set; }
 		[ProtoMember(20)]
+		public int TotalAngry { get; set; }
+		[ProtoMember(21)]
 		public int[] SkillIdList { get; set; }
-		[ProtoMember(22)]
-		public int HeroQuality { get; set; }
 		[ProtoMember(23)]
+		public int HeroQuality { get; set; }
+		[ProtoMember(24)]
 		public string HeroIconFrameImage { get; set; }
 
 	}

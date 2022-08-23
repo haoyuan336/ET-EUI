@@ -125,16 +125,28 @@ namespace ET
             return baseValue;
         }
 
-     
-        
         // public static AttackAction AngryAttack(this HeroCard self, HeroCard tatgetHeroCard)
         // {
         //  
         //     AttackAction attackAction = self.AttackTarget(tatgetHeroCard, 0);
         //     return attackAction;
         // }
+        public static float ProcessSkillDamageValue(this HeroCard self, Skill skill, float baseDamage)
+        {
+            SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
 
-        public static void AttackTarget(this HeroCard self, HeroCard targetHeroCard, int comboAddition, SkillConfig skillConfig)
+            int[] damageRate = skillConfig.LevelDamages;
+
+            if (skill.Level - 1 < damageRate.Length)
+            {
+                var rate = damageRate[skill.Level - 1] / 100.0f;
+                baseDamage += baseDamage * (rate);
+            }
+
+            return baseDamage;
+        }
+
+        public static void AttackTarget(this HeroCard self, HeroCard targetHeroCard, int comboAddition, Skill skill)
         {
             HeroCardDataComponent attackCom = self.GetComponent<HeroCardDataComponent>();
             HeroCardDataComponent beAttackCom = targetHeroCard.GetComponent<HeroCardDataComponent>();
@@ -163,12 +175,12 @@ namespace ET
                 damageAddition = 0;
             }
 
-            
             damage += damage * damageAddition / 10000;
-            
-            
+
             //技能加成
-            
+
+            damage += self.ProcessSkillDamageValue(skill, damage);
+
             var critical = self.GetCriticalHit(targetHeroCard); //暴击概率
             var isCritical = RandomHelper.RandomNumber(0, 10000) < critical;
             if (isCritical)
@@ -192,7 +204,6 @@ namespace ET
             beAttackCom.Damage = (int)damage;
             beAttackCom.IsCritical = isCritical;
             attackCom.DiamondAttackAddition = 0;
-          
         }
 
         public static HeroCardInfo GetMessageInfo(this HeroCard self)

@@ -47,6 +47,7 @@
 
     public enum MoveActionType
     {
+        Invalide = -1,
         Normal = 1, //普通移动
         Jump = 2, //跳动
         CircleToPoint = 3, //转圈到某一点
@@ -68,5 +69,4 @@
 
         // #攻击类型,#范围类型 RangeType， 1，敌方单体，2地方群体3，我方个体4我方群体5，全体
     }
-
 }

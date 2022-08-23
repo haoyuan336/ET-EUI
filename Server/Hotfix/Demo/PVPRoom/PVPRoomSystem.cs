@@ -105,12 +105,12 @@ namespace ET
                 {
                     // heroCard.OwnerId
                     unit.AddChild(heroCard);
-                    List<Skill> skills = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
-                            .Query<Skill>(a => a.OwnerId.Equals(heroCard.Id));
-                    foreach (var skill in skills)
-                    {
-                        heroCard.AddChild(skill);
-                    }
+                    // List<Skill> skills = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
+                    //         .Query<Skill>(a => a.OwnerId.Equals(heroCard.Id));
+                    // foreach (var skill in skills)
+                    // {
+                    //     heroCard.AddChild(skill);
+                    // }
 
                     List<Weapon> weapons = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
                             .Query<Weapon>(a => a.OnWeaponHeroId.Equals(heroCard.Id) && a.State == (int)StateType.Active);

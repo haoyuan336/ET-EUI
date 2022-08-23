@@ -72,50 +72,54 @@ namespace ET
 		[ProtoMember(1)]
 		public int Id { get; set; }
 		[ProtoMember(2)]
-		public int[] LevelDamages { get; set; }
+		public int[] CareHealths { get; set; }
 		[ProtoMember(3)]
-		public int[] LevelBuffRoundCount { get; set; }
+		public int[] LevelDamages { get; set; }
 		[ProtoMember(4)]
-		public int[] BuffRoundCounts { get; set; }
+		public int[] LevelBuffRoundCount { get; set; }
 		[ProtoMember(5)]
-		public int[] BuffConfigIds { get; set; }
+		public int[] BuffRoundCounts { get; set; }
 		[ProtoMember(6)]
-		public int[] DeBuffRoundCounts { get; set; }
+		public int[] BuffConfigIds { get; set; }
 		[ProtoMember(7)]
-		public int[] DeBuffConfigIds { get; set; }
+		public int[] DeBuffRoundCounts { get; set; }
 		[ProtoMember(8)]
-		public int RangeType { get; set; }
+		public int[] DeBuffConfigIds { get; set; }
 		[ProtoMember(9)]
-		public string OwnerHeroName { get; set; }
+		public int RangeType { get; set; }
 		[ProtoMember(10)]
-		public int SkillType { get; set; }
+		public string OwnerHeroName { get; set; }
 		[ProtoMember(11)]
-		public string SkillName { get; set; }
+		public int SkillType { get; set; }
 		[ProtoMember(12)]
-		public string SkillAnimName { get; set; }
+		public string SkillName { get; set; }
 		[ProtoMember(13)]
-		public int SkillTime { get; set; }
+		public string SkillAnimName { get; set; }
 		[ProtoMember(14)]
-		public int BeAttackTime { get; set; }
+		public int SkillTime { get; set; }
 		[ProtoMember(15)]
-		public string SkillEffect { get; set; }
+		public int BeAttackAnimPlayTime { get; set; }
 		[ProtoMember(16)]
-		public int SkillEffectTime { get; set; }
+		public string SkillEffect { get; set; }
 		[ProtoMember(17)]
-		public int EffectStartTime { get; set; }
+		public int SkillEffectTime { get; set; }
 		[ProtoMember(18)]
-		public string BeAttackEffect { get; set; }
+		public int EffectStartTime { get; set; }
 		[ProtoMember(19)]
-		public int BeAttackEffectTime { get; set; }
+		public string BeAttackEffect { get; set; }
 		[ProtoMember(20)]
-		public int FlyEffectStartTime { get; set; }
+		public int BeAttackEffectStartTime { get; set; }
 		[ProtoMember(21)]
-		public string FlyEffect { get; set; }
+		public int BeAttackEffectTime { get; set; }
 		[ProtoMember(22)]
-		public int MoveType { get; set; }
+		public int FlyEffectStartTime { get; set; }
 		[ProtoMember(23)]
-		public int TargetPosType { get; set; }
+		public string FlyEffect { get; set; }
 		[ProtoMember(24)]
+		public int MoveType { get; set; }
+		[ProtoMember(25)]
+		public int TargetPosType { get; set; }
+		[ProtoMember(26)]
 		public string BeAttackBoneName { get; set; }
 
 	}

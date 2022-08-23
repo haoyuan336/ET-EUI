@@ -25,6 +25,7 @@ public class SkillConfig
     public GameObject effectPrefab;
     public float EffectStartTime;
     public GameObject BeAttacckEffectPrefab;
+    public float BeAttackEffectPlayTime;
     public float FlyEffectStartTime;
     public GameObject FlyEffectPrefab;
     public MoveType MoveType = MoveType.Move;

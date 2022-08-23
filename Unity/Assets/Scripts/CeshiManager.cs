@@ -88,6 +88,7 @@ public class CeshiManager: MonoBehaviour
         StartCoroutine(this.PlayFlySkillEffect(config));
         StartCoroutine(PlaySkillEffect(config));
         StartCoroutine(this.PlayEnemyBeAttackAnim(config));
+        StartCoroutine(this.PlayEnemyBeAttackEffect(config));
         this.currentShowMode.GetComponent<Animator>().SetTrigger(map[custom]);
         // float time = 
         yield return new WaitForSeconds(config.SkillTime);
@@ -146,6 +147,12 @@ public class CeshiManager: MonoBehaviour
         yield return new WaitForSeconds(config.ShouJiTime);
 
         this.TargetHeroMode.GetComponent<Animator>().SetTrigger("BeAttack");
+       
+    }
+
+    IEnumerator PlayEnemyBeAttackEffect(SkillConfig config)
+    {
+        yield return new WaitForSeconds(config.BeAttackEffectPlayTime);
         if (config.BeAttacckEffectPrefab != null)
         {
             GameObject skillPrefab = config.BeAttacckEffectPrefab;

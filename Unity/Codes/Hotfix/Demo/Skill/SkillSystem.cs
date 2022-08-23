@@ -28,19 +28,19 @@
 
     public static class SkillSystem
     {
-        public static async ETTask Call(this Skill self, int zone, long ownerId)
-        {
-            self.OwnerId = ownerId;
-#if SERVER
-            await DBManagerComponent.Instance.GetZoneDB(zone).Save(self);
-#endif
-            await ETTask.CompletedTask;
-        }
+//         public static async ETTask Call(this Skill self, int zone, long ownerId)
+//         {
+//             self.OwnerId = ownerId;
+// #if SERVER
+//             await DBManagerComponent.Instance.GetZoneDB(zone).Save(self);
+// #endif
+//             await ETTask.CompletedTask;
+//         }
 
 
         public static SkillInfo GetMessageInfo(this Skill self)
         {
-            return new SkillInfo() { SkillConfigId = self.ConfigId, OwnerId = self.OwnerId, SkillId = self.Id };
+            return new SkillInfo() { SkillConfigId = self.ConfigId, SkillId = self.Id };
         }
     }
 }

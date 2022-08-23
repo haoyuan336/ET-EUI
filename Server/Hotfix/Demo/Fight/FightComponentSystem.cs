@@ -397,10 +397,15 @@ namespace ET
             List<HeroBufferInfo> heroBufferInfos = new List<HeroBufferInfo>();
             foreach (var beAttackHeroCard in beAttackHeroCards)
             {
-                List<BuffInfo> buffInfos = self.ProcessBuffLogic(beAttackHeroCard, skillConfig);
-                heroBufferInfos.Add(new HeroBufferInfo(){BuffInfos = buffInfos});
+                if (beAttackHeroCard == null)
+                {
+                    continue;
+                }
 
-                attackHero.AttackTarget(beAttackHeroCard, 0, skillConfig);
+                List<BuffInfo> buffInfos = self.ProcessBuffLogic(beAttackHeroCard, skillConfig);
+                heroBufferInfos.Add(new HeroBufferInfo() { BuffInfos = buffInfos });
+
+                attackHero.AttackTarget(beAttackHeroCard, 0, skill);
                 beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
             }
 
@@ -522,18 +527,22 @@ namespace ET
                 List<HeroBufferInfo> heroBufferInfos = new List<HeroBufferInfo>();
                 foreach (var beAttackHeroCard in beAttackHeroCards)
                 {
+                    if (beAttackHeroCard == null)
+                    {
+                        continue;
+                    }
+
                     List<BuffInfo> buffInfos = self.ProcessBuffLogic(beAttackHeroCard, skillConfig);
-                    heroBufferInfos.Add(new HeroBufferInfo(){BuffInfos = buffInfos});
-                    heroCard.AttackTarget(beAttackHeroCard, heroCard.GetComponent<HeroCardDataComponent>().DiamondAttackAddition, skillConfig);
+                    heroBufferInfos.Add(new HeroBufferInfo() { BuffInfos = buffInfos });
+                    heroCard.AttackTarget(beAttackHeroCard, heroCard.GetComponent<HeroCardDataComponent>().DiamondAttackAddition, skill);
                     beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
                     // buffInfos.Add(self.getbu);
-                    
                 }
 
                 // attackAction.HeroBufferInfos
                 attackAction.AttackHeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo();
                 attackAction.BeAttackHeroCardDataComponentInfos = beHeroCardDataComponentInfos;
-                Log.Warning($"hero buff info {heroBufferInfos.Count}");
+                // Log.Warning($"hero buff info {heroBufferInfos.Count}");
                 attackAction.HeroBufferInfos = heroBufferInfos;
                 attackActionItem.AttackActions.Add(attackAction);
             }
@@ -613,9 +622,14 @@ namespace ET
                 List<HeroBufferInfo> heroBufferInfos = new List<HeroBufferInfo>();
                 foreach (var beAttackHeroCard in beAttackHeroCards)
                 {
+                    if (beAttackHeroCard == null)
+                    {
+                        continue;
+                    }
+
                     List<BuffInfo> buffInfos = self.ProcessBuffLogic(beAttackHeroCard, skillConfig);
-                    heroBufferInfos.Add(new HeroBufferInfo(){BuffInfos = buffInfos});
-                    heroCard.AttackTarget(beAttackHeroCard, heroCard.GetComponent<HeroCardDataComponent>().DiamondAttackAddition, skillConfig);
+                    heroBufferInfos.Add(new HeroBufferInfo() { BuffInfos = buffInfos });
+                    heroCard.AttackTarget(beAttackHeroCard, heroCard.GetComponent<HeroCardDataComponent>().DiamondAttackAddition, skill);
                     beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
                 }
 
@@ -716,18 +730,27 @@ namespace ET
             switch (skillConfig.RangeType)
             {
                 case (int)SkillRangeType.EnemySingle:
+                    Log.Debug("EnemySingle");
                     heroCards.Add(self.GetSingleAttackHeroCard(heroCard, beUnit));
                     break;
                 case (int)SkillRangeType.EnemyGroup:
+                    Log.Debug("EnemyGroup");
+
                     heroCards = self.GetBeAttackUnitAllLiveHeroCards(beUnit);
                     break;
                 case (int)SkillRangeType.FriendSingle:
+                    Log.Debug("FriendSingle");
+
                     heroCards.Add(self.GetSingleAttackHeroCard(heroCard, attactUnit));
                     break;
                 case (int)SkillRangeType.FriendGroup:
+                    Log.Debug("FriendGroup");
+
                     heroCards = self.GetBeAttackUnitAllLiveHeroCards(attactUnit);
                     break;
                 case (int)SkillRangeType.All:
+                    Log.Debug("All");
+
                     heroCards = self.GetAllLiveHeroCard();
                     break;
             }
