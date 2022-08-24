@@ -131,6 +131,11 @@ namespace ET
                 }
             }
 
+            await Game.EventSystem.PublishAsync(new EventType.UpdateHeroBuffInfo()
+            {
+                UpdateHeroBuffInfoItem = message.UpdateHeroBuffInfoItem, HeroCardComponent = heroCardComponent
+            });
+
             List<ETTask> animTaskList = new List<ETTask>();
 
             if (isContainsCrash)

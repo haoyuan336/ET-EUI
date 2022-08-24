@@ -62,7 +62,9 @@ namespace ET
     {
         public static async void ShowBuffView(this HeroCardInfoObjectComponent self, List<BuffInfo> buffInfos)
         {
+            
             self.ESHeroCardInfoUI.SetBuffInfos(buffInfos);
+
             await ETTask.CompletedTask;
         }
 

@@ -1117,6 +1117,9 @@ namespace ET
 	[ProtoContract]
 	public partial class HeroBufferInfo: Object
 	{
+		[ProtoMember(2)]
+		public long HeroId { get; set; }
+
 		[ProtoMember(1)]
 		public List<BuffInfo> BuffInfos = new List<BuffInfo>();
 
@@ -1178,6 +1181,15 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.UpdateHeroBuffInfoItem)]
+	[ProtoContract]
+	public partial class UpdateHeroBuffInfoItem: Object
+	{
+		[ProtoMember(1)]
+		public List<HeroBufferInfo> HeroBufferInfos = new List<HeroBufferInfo>();
+
+	}
+
 	[Message(OuterOpcode.M2C_SyncDiamondAction)]
 	[ProtoContract]
 	public partial class M2C_SyncDiamondAction: Object, IActorMessage
@@ -1200,6 +1212,9 @@ namespace ET
 
 		[ProtoMember(6)]
 		public AddRoundAngryItem AddRoundAngryItem { get; set; }
+
+		[ProtoMember(7)]
+		public UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem { get; set; }
 
 // repeated AddItemAction AddAttackItemActions = 4;
 // repeated AddItemAction AddAngryItemActions = 5;

@@ -15,5 +15,8 @@ namespace ET
         // public bool IsClickSelf = false;
         
         public List<MoveActionItem> MoveActionItems = new List<MoveActionItem>();
+
+
+        public List<GameObject> BuffEffectList = new List<GameObject>();
     }
 }

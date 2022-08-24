@@ -148,6 +148,9 @@ namespace ET
 
         public static void AttackTarget(this HeroCard self, HeroCard targetHeroCard, int comboAddition, Skill skill)
         {
+
+            
+            
             HeroCardDataComponent attackCom = self.GetComponent<HeroCardDataComponent>();
             HeroCardDataComponent beAttackCom = targetHeroCard.GetComponent<HeroCardDataComponent>();
             var baseAttack = attackCom.GetHeroBaseAttack(); //角色的基础攻击
@@ -204,6 +207,9 @@ namespace ET
             beAttackCom.Damage = (int)damage;
             beAttackCom.IsCritical = isCritical;
             attackCom.DiamondAttackAddition = 0;
+#if SERVER
+            // targetHeroCard.GetComponent<BuffComponent>().ProcessRoundLogic();
+#endif
         }
 
         public static HeroCardInfo GetMessageInfo(this HeroCard self)

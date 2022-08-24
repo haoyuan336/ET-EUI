@@ -525,6 +525,7 @@ message AttackAction
 }
 message HeroBufferInfo
 {
+	int64 HeroId = 2;
 	repeated BuffInfo BuffInfos = 1;
 }
 message AttackActionItem
@@ -553,6 +554,10 @@ message AddRoundAngryItem
 	//增加每回合的怒气值
 	repeated HeroCardDataComponentInfo HeroCardDataComponentInfos = 1;
 }
+message UpdateHeroBuffInfoItem 
+{
+	repeated HeroBufferInfo HeroBufferInfos = 1;
+}
 message M2C_SyncDiamondAction //IActorMessage
 {
 	int32 RpcId = 90;
@@ -562,6 +567,7 @@ message M2C_SyncDiamondAction //IActorMessage
 	GameLoseResultAction GameLoseResultAction = 4;
 	ComboActionItem ComboActionItem = 5;
 	AddRoundAngryItem AddRoundAngryItem = 6;
+	UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem = 7;
 	// repeated AddItemAction AddAttackItemActions = 4;
 	// repeated AddItemAction AddAngryItemActions = 5;
 

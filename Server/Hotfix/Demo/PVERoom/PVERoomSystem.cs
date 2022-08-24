@@ -168,6 +168,7 @@ namespace ET
             fightComponent.ProcessAttackLogic(m2CSyncDiamondAction); //处理攻击逻辑
             fightComponent.CurrentBeAttackHeroCard = null;
             fightComponent.ProcessReBackAttackLogic(m2CSyncDiamondAction);
+            fightComponent.ProcessAddBuffInfo(m2CSyncDiamondAction);
             fightComponent.ProcessAddRoundAngry(m2CSyncDiamondAction);
 
             Unit loseUnit = fightComponent.CheckGameEndResult();

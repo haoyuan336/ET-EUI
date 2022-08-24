@@ -393,5 +393,13 @@ namespace ET
             public Scene Scene;
             public long RoomId;
         }
+
+        public struct UpdateHeroBuffInfo
+        {
+            public Scene Scene;
+            public HeroCardComponent HeroCardComponent;
+            public UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem;
+
+        }
     }
 }

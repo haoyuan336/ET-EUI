@@ -76,50 +76,46 @@ namespace ET
 		[ProtoMember(3)]
 		public int[] LevelDamages { get; set; }
 		[ProtoMember(4)]
-		public int[] LevelBuffRoundCount { get; set; }
+		public int[] LevelBuffRoundCounts { get; set; }
 		[ProtoMember(5)]
-		public int[] BuffRoundCounts { get; set; }
-		[ProtoMember(6)]
 		public int[] BuffConfigIds { get; set; }
+		[ProtoMember(6)]
+		public int ActiveBuffCondition { get; set; }
 		[ProtoMember(7)]
-		public int[] DeBuffRoundCounts { get; set; }
-		[ProtoMember(8)]
-		public int[] DeBuffConfigIds { get; set; }
-		[ProtoMember(9)]
 		public int RangeType { get; set; }
-		[ProtoMember(10)]
+		[ProtoMember(8)]
 		public string OwnerHeroName { get; set; }
-		[ProtoMember(11)]
+		[ProtoMember(9)]
 		public int SkillType { get; set; }
-		[ProtoMember(12)]
+		[ProtoMember(10)]
 		public string SkillName { get; set; }
-		[ProtoMember(13)]
+		[ProtoMember(11)]
 		public string SkillAnimName { get; set; }
-		[ProtoMember(14)]
+		[ProtoMember(12)]
 		public int SkillTime { get; set; }
-		[ProtoMember(15)]
+		[ProtoMember(13)]
 		public int BeAttackAnimPlayTime { get; set; }
-		[ProtoMember(16)]
+		[ProtoMember(14)]
 		public string SkillEffect { get; set; }
-		[ProtoMember(17)]
+		[ProtoMember(15)]
 		public int SkillEffectTime { get; set; }
-		[ProtoMember(18)]
+		[ProtoMember(16)]
 		public int EffectStartTime { get; set; }
-		[ProtoMember(19)]
+		[ProtoMember(17)]
 		public string BeAttackEffect { get; set; }
-		[ProtoMember(20)]
+		[ProtoMember(18)]
 		public int BeAttackEffectStartTime { get; set; }
-		[ProtoMember(21)]
+		[ProtoMember(19)]
 		public int BeAttackEffectTime { get; set; }
-		[ProtoMember(22)]
+		[ProtoMember(20)]
 		public int FlyEffectStartTime { get; set; }
-		[ProtoMember(23)]
+		[ProtoMember(21)]
 		public string FlyEffect { get; set; }
-		[ProtoMember(24)]
+		[ProtoMember(22)]
 		public int MoveType { get; set; }
-		[ProtoMember(25)]
+		[ProtoMember(23)]
 		public int TargetPosType { get; set; }
-		[ProtoMember(26)]
+		[ProtoMember(24)]
 		public string BeAttackBoneName { get; set; }
 
 	}

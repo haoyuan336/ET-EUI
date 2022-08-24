@@ -214,20 +214,6 @@ namespace ET
             }
 
             self.HeroMode.transform.rotation = targetQuaternion;
-
-            // ETTask task = ETTask.Create();
-            // self.MoveActionItems.Add(new MoveActionItem()
-            // {
-            //     Time = Mathf.PI * 0.5f,
-            //     CurrentQuat = self.HeroMode.transform.rotation,
-            //     EndQuat = targetQuaternion,
-            //     Speed = 2,
-            //     GameObject = self.HeroMode,
-            //     MoveActionType = MoveActionType.CircleToPoint,
-            //     Task = task
-            // });
-            //
-            // await task.GetAwaiter();
             //转身到目标角度
             await ETTask.CompletedTask;
         }
@@ -259,22 +245,6 @@ namespace ET
             }
         }
 
-        // public static async ETTask PlayGroupAttackAnim(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message,
-        // SkillConfig skillConfig)
-        // {
-        //     HeroCardComponent heroCardComponent = message.HeroCardComponent;
-        //     List<HeroCardDataComponentInfo> beHeroCardDataComponentInfos = message.AttackAction.BeAttackHeroCardDataComponentInfos;
-        //
-        //     HeroCardDataComponentInfo attackHeroCardDataComponerntInfo = message.AttackAction.AttackHeroCardDataComponentInfo;
-        //
-        //     await self.PlayAttackGroupAnim(heroCardComponent, attackHeroCardDataComponerntInfo, beHeroCardDataComponentInfos, skillConfig);
-        //
-        //     // int campIndex = message.AttackHeroCard.CampIndex;
-        //     // bool isCamp = self.GetParent<HeroCard>().OwnerId.Equals(self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId);
-        //     // await self.TurnTargetAnim((isCamp? Vector3.back : Vector3.forward) + self.HeroMode.transform.position);
-        //     await ETTask.CompletedTask;
-        // }
-
         public static async ETTask PlaySingleAttackAnim(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message,
         SkillConfig skillConfig)
         {
@@ -283,8 +253,10 @@ namespace ET
             HeroCard beAttackHeroCard = heroCardComponent.GetChild<HeroCard>(beHeroCardDataComponentInfo.HeroId);
             HeroCardDataComponentInfo attackHeroCardDataComponerntInfo = message.AttackAction.AttackHeroCardDataComponentInfo;
             await self.MoveToEnemyTarget(beAttackHeroCard, skillConfig);
+
+            List<HeroBufferInfo> heroBufferInfo = message.AttackAction.HeroBufferInfos;
             await self.PlayAttackAnim(beAttackHeroCard, beHeroCardDataComponentInfo, attackHeroCardDataComponerntInfo, skillConfig,
-                message.AttackAction.HeroBufferInfos[0].BuffInfos);
+                heroBufferInfo[0].BuffInfos);
             await self.BackMoveToInitPos(skillConfig);
             // int campIndex = message.AttackHeroCard.CampIndex;
             bool isCamp = self.GetParent<HeroCard>().OwnerId.Equals(self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId);
@@ -372,13 +344,43 @@ namespace ET
             GameObjectPoolHelper.ReturnObjectToPool(effect);
         }
 
-        // public static async ETTask PlayBeAttackEffect(this HeroModeObjectCompoent self, SkillConfig skillConfig)
-        // {
-        //     var playTime = skillConfig.BeAttackEffectStartTime;
-        //     await TimerComponent.Instance.WaitAsync(playTime);
-        //     
-        //     await self.PlayBeHitedEffect(skillConfig);
-        // }
+        public static async void ShowBuffEffect(this HeroModeObjectCompoent self, List<BuffInfo> buffInfos)
+        {
+            //展示buff 特效
+
+            foreach (var effect in self.BuffEffectList)
+            {
+                GameObjectPoolHelper.ReturnObjectToPool(effect);
+            }
+
+            self.BuffEffectList.Clear();
+
+            if (buffInfos == null)
+            {
+                return;
+            }
+
+            foreach (var buffInfo in buffInfos)
+            {
+                Log.Debug($"buff info round count {buffInfo.RoundCount}");
+                if (buffInfo.RoundCount == 0)
+                {
+                    continue;
+                }
+
+                BuffConfig config = BuffConfigCategory.Instance.Get(buffInfo.ConfigId);
+                var effectPath = config.EffectPath;
+                if (!string.IsNullOrEmpty(effectPath))
+                {
+                    GameObject gameObject = GameObjectPoolHelper.GetObjectFromPool(effectPath, true, 1);
+                    gameObject.transform.SetParent(self.HeroMode.transform);
+                    gameObject.transform.localPosition = self.HeroMode.GetComponent<CapsuleCollider>().center;
+                    self.BuffEffectList.Add(gameObject);
+                }
+            }
+
+            await ETTask.CompletedTask;
+        }
 
         public static async ETTask PlayBeAttackAnim(this HeroModeObjectCompoent self, HeroCardDataComponentInfo componentInfo,
         SkillConfig skillConfig, List<BuffInfo> buffInfos)
@@ -391,25 +393,37 @@ namespace ET
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(componentInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowDamageViewAnim(componentInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowBuffView(buffInfos);
+            self.ShowBuffEffect(buffInfos);
 
             if (componentInfo.HP <= 0)
             {
                 self.HeroMode.GetComponent<Animator>().SetBool("Dead", true);
+                self.SetDeadState();
             }
 
             await ETTask.CompletedTask;
         }
 
+        public static void SetDeadState(this HeroModeObjectCompoent self)
+        {
+            // await TimerComponent.Instance.WaitAsync(1000);
+            foreach (var buff in self.BuffEffectList)
+            {
+                GameObjectPoolHelper.ReturnObjectToPool(buff);
+            }
+
+            self.BuffEffectList.Clear();
+        }
+
         public static async ETTask PlayAttackAnim(this HeroModeObjectCompoent self, HeroCard beAttackHeroCard,
         HeroCardDataComponentInfo beAttackHeroCardDataComponentInfo, HeroCardDataComponentInfo attackHeroCardDataComponentInfo,
-        SkillConfig skillConfig, List<BuffInfo> buffInfos)
+        SkillConfig skillConfig, List<BuffInfo> buffInfos = null)
         {
             if (self.AttackMark != null)
             {
                 self.AttackMark.SetActive(false);
             }
 
-            Log.Warning($"player attack anim {skillConfig}");
             self.PlaySkillEffect(skillConfig).Coroutine();
             self.PlayFlyEffect(skillConfig, beAttackHeroCard);
             beAttackHeroCard.GetComponent<HeroModeObjectCompoent>()

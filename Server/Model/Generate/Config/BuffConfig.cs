@@ -80,13 +80,17 @@ namespace ET
 		[ProtoMember(5)]
 		public int value { get; set; }
 		[ProtoMember(6)]
-		public string ImageStr { get; set; }
+		public int IsCanAttack { get; set; }
 		[ProtoMember(7)]
-		public string SpriteAtlas { get; set; }
+		public string ImageStr { get; set; }
 		[ProtoMember(8)]
-		public int RoundOverActiveBuff { get; set; }
+		public string SpriteAtlas { get; set; }
 		[ProtoMember(9)]
+		public int RoundOverActiveBuff { get; set; }
+		[ProtoMember(10)]
 		public int MaxOverlabCount { get; set; }
+		[ProtoMember(11)]
+		public string EffectPath { get; set; }
 
 	}
 }

@@ -35,6 +35,11 @@ namespace ET
                 BuffConfig buffConfig = BuffConfigCategory.Instance.Get(self.ConfigId);
                 self.GetParent<BuffComponent>().ActiveBuff(buffConfig);
                 //todo 回合结束的时候，查看检查自己是否存在
+                // self.Dispose();
+            }
+
+            if (self.RoundCount == -1)
+            {
                 self.Dispose();
             }
         }

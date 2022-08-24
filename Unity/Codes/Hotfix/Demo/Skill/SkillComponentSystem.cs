@@ -47,7 +47,7 @@ namespace ET
 
             // return new Skill() { ConfigId = 1000025, Level = 1 };
 
-            // skill.ConfigId = 1000027;
+            // skill.ConfigId = 1000018;
             return skill;
         }
 

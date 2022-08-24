@@ -32,9 +32,20 @@ namespace ET
                 }
             }
 
+            if (buffInfos == null)
+            {
+                return;
+            }
+
+            Log.Debug($"SetBuffInfos buff info {buffInfos.Count}");
             //然后创建
             foreach (var buffInfo in buffInfos)
             {
+                if (buffInfo.RoundCount == 0)
+                {
+                    continue;
+                }
+
                 self.AddChild<Scroll_ItemBuff, BuffInfo, Transform>(buffInfo, self.E_BufferContentImage.transform);
             }
 
