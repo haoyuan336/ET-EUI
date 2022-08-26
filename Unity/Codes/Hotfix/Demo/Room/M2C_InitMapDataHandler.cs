@@ -9,6 +9,7 @@
             //     session.DomainScene().GetComponent<DiamondComponent>().CreateDiamoneWithMessage(diamondInfo);
             // }
             DiamondComponent diamondComponent = session.ZoneScene().CurrentScene().AddComponent<DiamondComponent>();
+            session.ZoneScene().CurrentScene().AddComponent<RoomComponent>();
             diamondComponent.InitMapWithMessage(message);
             await ETTask.CompletedTask;
         }

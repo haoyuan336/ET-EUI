@@ -563,12 +563,16 @@ message M2C_SyncDiamondAction //IActorMessage
 	GameLoseResultAction GameLoseResultAction = 4;
 	ComboActionItem ComboActionItem = 5;
 	AddRoundAngryItem AddRoundAngryItem = 6;
-	repeated ActionMessage ActionMessages = 7;
+	ActionMessage ActionMessage = 7;
+	// repeated ActionMessage ActionMessages = 7;
 	// UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem = 7;
 	// repeated AddItemAction AddAttackItemActions = 4;
 	// repeated AddItemAction AddAngryItemActions = 5;
 }
-
+// message MakeSureAttackHeroAction
+// {
+// 	repeated int64 HeroIds = 1;
+// }
 message ActionMessage	
 {
 	// int32 ActionType = 1;	//动作类型
@@ -579,6 +583,10 @@ message ActionMessage
 	// ComboActionItem ComboActionItem = 5;	//连击特效
 	// AddRoundAngryItem AddRoundAngryItem = 6;	//增加怒气
 	DiamondAction DiamondAction = 2;	//宝石动作
+	AttackAction AttackAction = 3;	//攻击动作
+	MakeSureAttackHeroAction MakeSureAttackHeroAction = 4;	//确定攻击英雄
+
+
 
 	repeated ActionMessage ActionMessages = 7;
 }

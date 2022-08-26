@@ -147,8 +147,8 @@ namespace ET
 
             // self.GetComponent<FightComponent>().PlayerScrollScreen(message);
             self.GetComponent<FightComponent>().DiamondActionItems = new List<DiamondActionItem>();
-            M2C_SyncDiamondAction m2CSyncDiamondAction = self.GetComponent<DiamondComponent>().ScrollDiamond(message);
-
+            M2C_SyncDiamondAction m2CSyncDiamondAction = new M2C_SyncDiamondAction();
+            self.GetComponent<DiamondComponent>().ScrollDiamond(message, m2CSyncDiamondAction);
             fightComponent.MakeSureAttackHeros(m2CSyncDiamondAction);
             fightComponent.ProcessAddHeroCardAngryLogic(m2CSyncDiamondAction.DiamondActionItems);
             fightComponent.ProcessComboResult(m2CSyncDiamondAction);

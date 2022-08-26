@@ -1209,13 +1209,18 @@ namespace ET
 		public AddRoundAngryItem AddRoundAngryItem { get; set; }
 
 		[ProtoMember(7)]
-		public List<ActionMessage> ActionMessages = new List<ActionMessage>();
+		public ActionMessage ActionMessage { get; set; }
 
+// repeated ActionMessage ActionMessages = 7;
 // UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem = 7;
 // repeated AddItemAction AddAttackItemActions = 4;
 // repeated AddItemAction AddAngryItemActions = 5;
 	}
 
+// message MakeSureAttackHeroAction
+// {
+// 	repeated int64 HeroIds = 1;
+// }
 	[Message(OuterOpcode.ActionMessage)]
 	[ProtoContract]
 	public partial class ActionMessage: Object
@@ -1231,6 +1236,12 @@ namespace ET
 // AddRoundAngryItem AddRoundAngryItem = 6;	//增加怒气
 		[ProtoMember(2)]
 		public DiamondAction DiamondAction { get; set; }
+
+		[ProtoMember(3)]
+		public AttackAction AttackAction { get; set; }
+
+		[ProtoMember(4)]
+		public MakeSureAttackHeroAction MakeSureAttackHeroAction { get; set; }
 
 		[ProtoMember(7)]
 		public List<ActionMessage> ActionMessages = new List<ActionMessage>();

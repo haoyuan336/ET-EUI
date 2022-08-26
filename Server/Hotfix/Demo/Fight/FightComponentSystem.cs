@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ET.EventType;
+using OfficeOpenXml;
 
 namespace ET
 {
@@ -211,60 +212,96 @@ namespace ET
             }
         }
 
-        /**
-         * 确定攻击英雄
-         */
         public static void MakeSureAttackHeros(this FightComponent self, M2C_SyncDiamondAction m2CSyncDiamondAction)
         {
-            DiamondActionItem diamondActionItem = null;
-            foreach (var item in m2CSyncDiamondAction.DiamondActionItems)
+            ActionMessage actionMessage = m2CSyncDiamondAction.ActionMessage;
+            Stack<ActionMessage> stack = new Stack<ActionMessage>();
+            stack.Push(actionMessage);
+            DiamondInfo diamondInfo = null;
+            int count = actionMessage.ActionMessages.Count;
+            while (stack.Count != 0 && diamondInfo == null)
             {
-                if (item.DiamondActions.Count == 0)
+                ActionMessage action = stack.Pop();
+                if (action.ActionMessages == null)
                 {
                     continue;
                 }
 
-                if (item.CrashType != (int)CrashType.Normal)
+                foreach (var value in action.ActionMessages)
                 {
-                    continue;
-                }
-
-                diamondActionItem = item;
-                Log.Debug($"找到了，第一次消除的action{diamondActionItem.DiamondActions.Count}");
-                break;
-            }
-
-            if (diamondActionItem != null)
-            {
-                Unit unit = self.GetCurrentAttackUnit();
-                //取出与宝石的颜色相同的英雄
-                List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
-                heroCards = heroCards.FindAll(a =>
-                {
-                    HeroConfig heroConfig = HeroConfigCategory.Instance.Get(a.ConfigId);
-                    Log.Debug($"herocolor {heroConfig.HeroColor}");
-                    if (heroConfig.HeroColor == diamondActionItem.DiamondActions[0].DiamondInfo.DiamondType && !a.GetIsDead())
+                    if (value.DiamondAction != null && value.DiamondAction.ActionType == (int)DiamondActionType.Destory ||
+                        value.DiamondAction.ActionType == (int)DiamondActionType.SpecialDestry)
                     {
-                        return true;
+                        diamondInfo = value.DiamondAction.DiamondInfo;
+                        count = action.ActionMessages.Count;
+                        Log.Warning($"count {count}");
+                        Log.Warning($"crash hero config {diamondInfo.ConfigId}");
                     }
 
-                    return false;
-                });
-                List<MakeSureAttackHeroAction> actions = new List<MakeSureAttackHeroAction>();
-                foreach (var heroCard in heroCards)
-                {
-                    // Log.Warning("处理攻击逻辑");
-                    // heroCard.GetComponent<HeroCardDataComponent>().MakeSureSkill(diamondActionItem.DiamondActions.Count);
-                    MakeSureAttackHeroAction action = new MakeSureAttackHeroAction()
-                    {
-                        HeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo()
-                    };
-                    actions.Add(action);
+                    stack.Push(value);
                 }
+            }
 
-                diamondActionItem.MakeSureAttackHeroActions = actions;
+            if (diamondInfo != null)
+            {
+                Log.Warning($"找到了，第一个消除的宝石, 消除的个数是 {count} ,{diamondInfo.ConfigId}");
             }
         }
+
+        // /**
+        //  * 确定攻击英雄
+        //  */
+        // public static void MakeSureAttackHeros(this FightComponent self, M2C_SyncDiamondAction m2CSyncDiamondAction)
+        // {
+        //     DiamondActionItem diamondActionItem = null;
+        //     foreach (var item in m2CSyncDiamondAction.DiamondActionItems)
+        //     {
+        //         if (item.DiamondActions.Count == 0)
+        //         {
+        //             continue;
+        //         }
+        //
+        //         if (item.CrashType != (int)CrashType.Normal)
+        //         {
+        //             continue;
+        //         }
+        //
+        //         diamondActionItem = item;
+        //         Log.Debug($"找到了，第一次消除的action{diamondActionItem.DiamondActions.Count}");
+        //         break;
+        //     }
+        //
+        //     if (diamondActionItem != null)
+        //     {
+        //         Unit unit = self.GetCurrentAttackUnit();
+        //         //取出与宝石的颜色相同的英雄
+        //         List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
+        //         heroCards = heroCards.FindAll(a =>
+        //         {
+        //             HeroConfig heroConfig = HeroConfigCategory.Instance.Get(a.ConfigId);
+        //             Log.Debug($"herocolor {heroConfig.HeroColor}");
+        //             if (heroConfig.HeroColor == diamondActionItem.DiamondActions[0].DiamondInfo.DiamondType && !a.GetIsDead())
+        //             {
+        //                 return true;
+        //             }
+        //
+        //             return false;
+        //         });
+        //         List<MakeSureAttackHeroAction> actions = new List<MakeSureAttackHeroAction>();
+        //         foreach (var heroCard in heroCards)
+        //         {
+        //             // Log.Warning("处理攻击逻辑");
+        //             // heroCard.GetComponent<HeroCardDataComponent>().MakeSureSkill(diamondActionItem.DiamondActions.Count);
+        //             MakeSureAttackHeroAction action = new MakeSureAttackHeroAction()
+        //             {
+        //                 HeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo()
+        //             };
+        //             actions.Add(action);
+        //         }
+        //
+        //         diamondActionItem.MakeSureAttackHeroActions = actions;
+        //     }
+        // }
 
         public static void ProcessComboResult(this FightComponent self, M2C_SyncDiamondAction message)
 
@@ -515,8 +552,6 @@ namespace ET
             Log.Debug("处理攻击逻辑");
         }
 
-        
-
         public static void ProcessAngryAttackLogic(this FightComponent self, M2C_SyncDiamondAction m2CSyncDiamondAction, Unit unit, Unit beUnit)
         {
             //处理怒气值攻击的逻辑
@@ -622,11 +657,13 @@ namespace ET
                     heroCards.Add(heroCard);
                 }
             }
+
             Log.Debug($"确定攻击技能, {heroCards.Count}");
             if (heroCards.Count == 0)
             {
                 return;
             }
+
             Log.Debug("确定攻击技能");
             //todo 找到了发动攻击的英雄，开始寻找被攻击的英雄
             //todo 从左往右排序

@@ -82,6 +82,7 @@ namespace ET
                 MessageHelper.SendToClient(unit, new M2C_PlayerChooseAttackHero() { HeroId = heroId });
             }
         }
+
         public static async ETTask<int> GetCurrentPlayerLevelNum(this PVERoom self, Unit unit, long AccountId)
         {
             Account account = await self.GetCurrentAccountInfo(unit, AccountId);
@@ -158,10 +159,11 @@ namespace ET
         // }
         public static async void PlayerScrollScreen(this PVERoom self, C2M_PlayerScrollScreen message)
         {
-
             FightComponent fightComponent = self.GetComponent<FightComponent>();
             self.GetComponent<FightComponent>().DiamondActionItems = new List<DiamondActionItem>();
-            M2C_SyncDiamondAction m2CSyncDiamondAction = self.GetComponent<DiamondComponent>().ScrollDiamond(message);
+            M2C_SyncDiamondAction m2CSyncDiamondAction = new M2C_SyncDiamondAction();
+            self.GetComponent<DiamondComponent>().ScrollDiamond(message,m2CSyncDiamondAction);
+
             fightComponent.MakeSureAttackHeros(m2CSyncDiamondAction);
             fightComponent.ProcessAddHeroCardAngryLogic(m2CSyncDiamondAction.DiamondActionItems);
             fightComponent.ProcessComboResult(m2CSyncDiamondAction);

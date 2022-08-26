@@ -162,23 +162,23 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
-        public static async ETTask Destroy(this Diamond self, int index, DiamondAction diamondAction, DiamondActionItem diamondActionItem)
-        {
-#if !SERVER
-
-            // Scene scene = self.ZoneScene().CurrentScene();
-            // HeroCardComponent heroCardComponent = scene.GetComponent<HeroCardComponent>();
-            var DesEvent = new EventType.DestoryDiamondView();
-            DesEvent.Diamond = self;
-            DesEvent.Index = index;
-            DesEvent.DiamondAction = diamondAction;
-            DesEvent.Scene = self.ZoneScene().CurrentScene();
-            DesEvent.DiamondActionItem = diamondActionItem;
-            await Game.EventSystem.PublishAsync(DesEvent);
-#endif
-            self.Dispose();
-            await ETTask.CompletedTask;
-        }
+//         public static async ETTask Destroy(this Diamond self, DiamondAction diamondAction)
+//         {
+// #if !SERVER
+//
+//             // Scene scene = self.ZoneScene().CurrentScene();
+//             // HeroCardComponent heroCardComponent = scene.GetComponent<HeroCardComponent>();
+//             var DesEvent = new EventType.DestoryDiamondView();
+//             DesEvent.Diamond = self;
+//             // DesEvent.Index = index;
+//             DesEvent.DiamondAction = diamondAction;
+//             DesEvent.Scene = self.ZoneScene().CurrentScene();
+//             // DesEvent.DiamondActionItem = diamondActionItem;
+//             await Game.EventSystem.PublishAsync(DesEvent);
+// #endif
+//             self.Dispose();
+//             await ETTask.CompletedTask;
+//         }
 
         //         public static void InitWithMessageInfo(this Diamond self, DiamondInfo diamondInfo)
         //         {

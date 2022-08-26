@@ -8,6 +8,10 @@ namespace ET
     {
         protected override async ETTask Run(DestoryDiamondView a)
         {
+            if (a.Diamond.IsDisposed)
+            {
+                return;
+            }
             DiamondAction diamondAction = a.DiamondAction;
             Scene scene = a.Scene;
             Diamond diamond = a.Diamond;

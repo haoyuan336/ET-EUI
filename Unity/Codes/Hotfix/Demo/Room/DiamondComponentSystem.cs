@@ -70,22 +70,21 @@ namespace ET
             self.Diamonds[index] = diamond;
         }
 
-        public static async ETTask RemoveChild(this DiamondComponent self, Diamond diamond, int destoryIndex, DiamondAction diamondAction,
-        DiamondActionItem diamondActionItem)
-        {
-            // if (diamondActionItem.CrashType == (int)CrashType.Special)
-            // {
-            // await diamond.DestoryWithAnim(destoryIndex, diamondAction);
-            // return;
-            // }
-            if (diamond.IsDisposed)
-            {
-                return;
-            }
-
-            await diamond.Destroy(destoryIndex, diamondAction, diamondActionItem);
-            // await TimerComponent.Instance.WaitAsync(1000);
-        }
+        // public static async ETTask RemoveChild(this DiamondComponent self, Diamond diamond, DiamondAction diamondAction)
+        // {
+        //     // if (diamondActionItem.CrashType == (int)CrashType.Special)
+        //     // {
+        //     // await diamond.DestoryWithAnim(destoryIndex, diamondAction);
+        //     // return;
+        //     // }
+        //     if (diamond.IsDisposed)
+        //     {
+        //         return;
+        //     }
+        //
+        //     await diamond.Destroy(diamondAction);
+        //     // await TimerComponent.Instance.WaitAsync(1000);
+        // }
 
         public static Diamond CreateOneDiamond(this DiamondComponent self, int colorType, int boomType)
         {
@@ -166,11 +165,8 @@ namespace ET
             DiamondActionItem diamondActionItem = new DiamondActionItem();
             int LieIndex1 = diamond1.LieIndex;
             int HangIndex1 = diamond1.HangIndex;
-
             int LieIndex2 = diamond2.LieIndex;
             int HangIndex2 = diamond2.HangIndex;
-            Log.Warning($"diamond 1 {LieIndex1},{HangIndex2}");
-            Log.Warning($"diamond 2 {LieIndex2},{HangIndex2}");
             self.SetDiamondToList(LieIndex1, HangIndex1, diamond2);
             diamond2.SetIndex(LieIndex1, HangIndex1);
             DiamondAction diamondAction1 = new DiamondAction() { DiamondInfo = diamond2.GetMessageInfo(), ActionType = (int)DiamondActionType.Move };
@@ -378,7 +374,7 @@ namespace ET
 
         public static bool CheckCrash(this DiamondComponent self, List<DiamondActionItem> diamondActionItems, Diamond touchDiamond,
         Diamond swapDiamond,
-        List<Diamond> specialDiamonds, bool isFirstCastSpecial)
+        List<Diamond> specialDiamonds, bool isFirstCastSpecial, ActionMessage actionMessage)
         {
             var isContainerCrash = false;
             List<List<Diamond>> lieCrashListList = self.GetLieCrashListList();
@@ -439,6 +435,8 @@ namespace ET
 
             // Dictionary<int, Diamond> diamondMap = endListList.ToDictionary(a=>a.ty)
 
+            ActionMessage diamondActionMessage =
+                    new ActionMessage() { PlayType = (int)ActionMessagePlayType.Sync, ActionMessages = new List<ActionMessage>() };
             Log.Debug("組裝action");
             foreach (var crashList in endListList)
             {
@@ -453,13 +451,18 @@ namespace ET
                     self.SetDiamondToList(diamond.LieIndex, diamond.HangIndex, null);
                     diamond.Dispose();
                     diamondActionItem.DiamondActions.Add(diamondAction);
+
+                    // actionMessage.ActionMessages.Add(new ActionMessage() { DiamondAction = diamondAction });
+                    diamondActionMessage.ActionMessages.Add(new ActionMessage(){DiamondAction = diamondAction});
                     isContainerCrash = true;
                 }
 
                 diamondActionItems.Add(diamondActionItem);
             }
-
+            actionMessage.ActionMessages.Add(diamondActionMessage);
             DiamondActionItem specialActionItem = new DiamondActionItem();
+            ActionMessage addSpecialActionMessage =
+                    new ActionMessage() { PlayType = (int)ActionMessagePlayType.Sync, ActionMessages = new List<ActionMessage>() };
             Log.Debug("特殊宝石");
             if (!isFirstCastSpecial)
             {
@@ -471,44 +474,42 @@ namespace ET
                     {
                         // diamondActionItem.DiamondActions.Add(diamondAction);
                         specialActionItem.DiamondActions.Add(diamondAction);
+                        addSpecialActionMessage.ActionMessages.Add(new ActionMessage(){DiamondAction = diamondAction});
+                        
                         Log.Debug("增加特殊宝石");
                     }
                 }
             }
 
-            // var value = false;
-            // if (diamondActionItem.DiamondActions.Count > 0)
-            // {
-            //     diamondActionItems.Add(diamondActionItem);
-            //     // return true; 
-            //     value = true;
-            // }
-
             if (specialActionItem.DiamondActions.Count > 0)
             {
                 diamondActionItems.Add(specialActionItem);
+                actionMessage.ActionMessages.Add(addSpecialActionMessage);
             }
 
             // return value;
             return isContainerCrash;
         }
 
-        public static M2C_SyncDiamondAction ScrollDiamond(this DiamondComponent self, C2M_PlayerScrollScreen message)
+        public static M2C_SyncDiamondAction ScrollDiamond(this DiamondComponent self, C2M_PlayerScrollScreen message, M2C_SyncDiamondAction m2CSyncDiamondAction)
         {
             //todo 滑动钻石
             int LieIndex = message.StartX;
             int HangIndex = message.StartY;
-            M2C_SyncDiamondAction m2CSyncDiamondAction = new M2C_SyncDiamondAction();
+            // = new M2C_SyncDiamondAction();
+            m2CSyncDiamondAction.ActionMessage = new ActionMessage()
+            {
+                PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>()
+            };
 
-            List<ActionMessage> actionMessages = new List<ActionMessage>();
-            m2CSyncDiamondAction.ActionMessages = actionMessages;
+            // List<ActionMessage> actionMessages = new List<ActionMessage>();
 
             Diamond diamond = self.GetDiamond(LieIndex, HangIndex);
             Diamond nextDiamond = self.GetDiamondWithDir(diamond, message.DirType);
             if (diamond != null && nextDiamond != null)
             {
                 ActionMessage swapActionMessage = new ActionMessage();
-                m2CSyncDiamondAction.ActionMessages.Add(swapActionMessage);
+                m2CSyncDiamondAction.ActionMessage.ActionMessages.Add(swapActionMessage);
                 DiamondActionItem diamondActionItem = self.SwapDiamondPos(diamond, nextDiamond, swapActionMessage);
                 m2CSyncDiamondAction.DiamondActionItems.Add(diamondActionItem);
                 bool isCrash = true;
@@ -520,25 +521,45 @@ namespace ET
 
                 while (isCrash || isMoveDown)
                 {
-                    isCrash = self.CheckCrash(m2CSyncDiamondAction.DiamondActionItems, diamond, nextDiamond, specialDiamonds, isFirstCastSpecial);
+                    ActionMessage checkActionMessage =
+                            new ActionMessage() { PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>() };
+                    isCrash = self.CheckCrash(m2CSyncDiamondAction.DiamondActionItems, diamond, nextDiamond, specialDiamonds, isFirstCastSpecial,
+                        checkActionMessage);
+                    m2CSyncDiamondAction.ActionMessage.ActionMessages.Add(checkActionMessage);
 
                     Log.Debug($"is crash {isCrash}");
                     Log.Debug("下落");
-                    isMoveDown = self.MoveDownAllDiamond(m2CSyncDiamondAction.DiamondActionItems);
+
+                    ActionMessage moveDownActionmessage =
+                            new ActionMessage() { PlayType = (int)ActionMessagePlayType.Sync, ActionMessages = new List<ActionMessage>() };
+                    isMoveDown = self.MoveDownAllDiamond(m2CSyncDiamondAction.DiamondActionItems, moveDownActionmessage);
+                    m2CSyncDiamondAction.ActionMessage.ActionMessages.Add(moveDownActionmessage);
+
                     Log.Debug($"is move down {isMoveDown}");
+
                     if (isCrashSuccess == false && isCrash)
                     {
                         isCrashSuccess = true;
                     }
 
-                    isCrash = self.CheckCrash(m2CSyncDiamondAction.DiamondActionItems, diamond, nextDiamond, specialDiamonds, isFirstCastSpecial);
+                    ActionMessage checkActionMessage1 =
+                            new ActionMessage() { PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>() };
+                    isCrash = self.CheckCrash(m2CSyncDiamondAction.DiamondActionItems, diamond, nextDiamond, specialDiamonds, isFirstCastSpecial,
+                        checkActionMessage1);
+                    m2CSyncDiamondAction.ActionMessage.ActionMessages.Add(checkActionMessage1);
 
                     if (!isCrash)
                     {
                         // Diamond specialDiamond = specialDiamonds.Dequeue();
                         Log.Debug("消除特殊宝石");
+                        ActionMessage specialActionMessage = new ActionMessage()
+                        {
+                            PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>()
+                        };
                         isFirstCastSpecial =
-                                self.AutoCastSpecialDiamond(m2CSyncDiamondAction.DiamondActionItems);
+                                self.AutoCastSpecialDiamond(m2CSyncDiamondAction.DiamondActionItems, specialActionMessage);
+                        
+                        m2CSyncDiamondAction.ActionMessage.ActionMessages.Add(specialActionMessage);
                     }
 
                     Log.Debug($"special diamond {specialDiamonds.Count}");
@@ -559,7 +580,7 @@ namespace ET
             return m2CSyncDiamondAction;
         }
 
-        public static bool MoveDownAllDiamond(this DiamondComponent self, List<DiamondActionItem> diamondActionItems)
+        public static bool MoveDownAllDiamond(this DiamondComponent self, List<DiamondActionItem> diamondActionItems, ActionMessage actionMessage)
         {
             bool isMoveDown = false;
             //todo 将宝石都向下移动
@@ -594,6 +615,7 @@ namespace ET
                             action.ActionType = (int)DiamondActionType.MoveDown;
                             action.DiamondInfo = diamond.GetMessageInfo();
                             moveActionItem.DiamondActions.Add(action);
+                            actionMessage.ActionMessages.Add(new ActionMessage() { DiamondAction = action });
                         }
                     }
                     else
@@ -608,6 +630,7 @@ namespace ET
                         action.ActionType = (int)DiamondActionType.Create;
                         action.DiamondInfo = diamond.GetMessageInfo();
                         createActionItem.DiamondActions.Add(action);
+                        actionMessage.ActionMessages.Add(new ActionMessage() { DiamondAction = action });
                     }
                 }
             }
@@ -863,7 +886,7 @@ namespace ET
         }
 
         // public static bool 
-        public static bool AutoCastSpecialDiamond(this DiamondComponent self, List<DiamondActionItem> diamondActionItems)
+        public static bool AutoCastSpecialDiamond(this DiamondComponent self, List<DiamondActionItem> diamondActionItems, ActionMessage actionMessage)
         {
             List<Diamond> specialDiamondList = self.Diamonds.ToList().FindAll(a =>
             {
@@ -933,6 +956,8 @@ namespace ET
             foreach (var list in endListList)
             {
                 DiamondActionItem diamondActionItem = new DiamondActionItem();
+                ActionMessage diamondActionMessage =
+                        new ActionMessage() { PlayType = (int)ActionMessagePlayType.Sync, ActionMessages = new List<ActionMessage>() };
                 foreach (var diamond in list)
                 {
                     if (diamond != null && !diamond.IsDisposed)
@@ -944,10 +969,12 @@ namespace ET
                         diamond.Dispose();
                         diamondActionItem.CrashType = (int)CrashType.Special;
                         diamondActionItem.DiamondActions.Add(diamondAction);
+                        diamondActionMessage.ActionMessages.Add(new ActionMessage() { DiamondAction = diamondAction });
                     }
                 }
 
                 diamondActionItems.Add(diamondActionItem);
+                actionMessage.ActionMessages.Add(diamondActionMessage);
             }
 
             return true;
