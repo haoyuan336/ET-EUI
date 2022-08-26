@@ -150,6 +150,17 @@ namespace ET
                 return buffConfig.IsCanAttack == 0;
             });
         }
+        
+        public static bool IsExistsBuff(this BuffComponent self, int configId)
+        {
+            List<Buff> buffs = self.GetChilds<Buff>();
+            if (buffs != null)
+            {
+                return buffs.Exists(a => a.ConfigId.Equals(configId) && a.RoundCount > 0);
+            }
+
+            return false;
+        }
     }
 #endif
 }

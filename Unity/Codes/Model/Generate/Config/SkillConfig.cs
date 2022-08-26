@@ -82,40 +82,44 @@ namespace ET
 		[ProtoMember(6)]
 		public int ActiveBuffCondition { get; set; }
 		[ProtoMember(7)]
-		public int RangeType { get; set; }
+		public int[] BuffDamageAdditions { get; set; }
 		[ProtoMember(8)]
-		public string OwnerHeroName { get; set; }
+		public int BuffDamageAdditionCondition { get; set; }
 		[ProtoMember(9)]
-		public int SkillType { get; set; }
+		public int RangeType { get; set; }
 		[ProtoMember(10)]
-		public string SkillName { get; set; }
+		public string OwnerHeroName { get; set; }
 		[ProtoMember(11)]
-		public string SkillAnimName { get; set; }
+		public int SkillType { get; set; }
 		[ProtoMember(12)]
-		public int SkillTime { get; set; }
+		public string SkillName { get; set; }
 		[ProtoMember(13)]
-		public int BeAttackAnimPlayTime { get; set; }
+		public string SkillAnimName { get; set; }
 		[ProtoMember(14)]
-		public string SkillEffect { get; set; }
+		public int SkillTime { get; set; }
 		[ProtoMember(15)]
-		public int SkillEffectTime { get; set; }
+		public int BeAttackAnimPlayTime { get; set; }
 		[ProtoMember(16)]
-		public int EffectStartTime { get; set; }
+		public string SkillEffect { get; set; }
 		[ProtoMember(17)]
-		public string BeAttackEffect { get; set; }
+		public int SkillEffectTime { get; set; }
 		[ProtoMember(18)]
-		public int BeAttackEffectStartTime { get; set; }
+		public int EffectStartTime { get; set; }
 		[ProtoMember(19)]
-		public int BeAttackEffectTime { get; set; }
+		public string BeAttackEffect { get; set; }
 		[ProtoMember(20)]
-		public int FlyEffectStartTime { get; set; }
+		public int BeAttackEffectStartTime { get; set; }
 		[ProtoMember(21)]
-		public string FlyEffect { get; set; }
+		public int BeAttackEffectTime { get; set; }
 		[ProtoMember(22)]
-		public int MoveType { get; set; }
+		public int FlyEffectStartTime { get; set; }
 		[ProtoMember(23)]
-		public int TargetPosType { get; set; }
+		public string FlyEffect { get; set; }
 		[ProtoMember(24)]
+		public int MoveType { get; set; }
+		[ProtoMember(25)]
+		public int TargetPosType { get; set; }
+		[ProtoMember(26)]
 		public string BeAttackBoneName { get; set; }
 
 	}

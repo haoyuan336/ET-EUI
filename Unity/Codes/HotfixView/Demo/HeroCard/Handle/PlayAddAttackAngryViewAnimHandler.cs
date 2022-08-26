@@ -19,7 +19,7 @@ namespace ET
             //
             var endPos = heroCard.GetComponent<HeroModeObjectCompoent>().HeroMode.transform.position + Vector3.up;
             AddAngryEffect effect = heroCard.AddChild<AddAngryEffect, Vector3, DiamondInfo, Vector3>(startPos, diamondInfo, endPos);
-            await effect.PlayAnim(); 
+            await effect.PlayAnim();
             heroCard.GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(addItemAction.HeroCardDataComponentInfo);
             await ETTask.CompletedTask;
         }
@@ -29,17 +29,18 @@ namespace ET
     {
         protected override async ETTask Run(UpdateHeroAttackInfo a)
         {
-            HeroCard heroCard = a.HeroCard;
-            AddItemAction addItemAction = a.AddItemAction;
-            HeroCardDataComponentInfo heroCardDataComponent = addItemAction.HeroCardDataComponentInfo;
+            HeroCardComponent heroCardComponent = a.HeroCardComponent;
+            ComboActionItem comboActionItem = a.ComboActionItem;
+            foreach (var addItemAction in comboActionItem.AddAttackActions)
+            {
+                HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(addItemAction.HeroCardDataComponentInfo.HeroId);
+                heroCard.GetComponent<HeroCardInfoObjectComponent>().UpdateAttackAdditionView(addItemAction);
+            }
 
-            // var addition = heroCardDataComponent.DiamondAttackAddition;
-
-            HeroCardInfoObjectComponent heroCardInfoObjectComponent = heroCard.GetComponent<HeroCardInfoObjectComponent>();
-
-
-            heroCardInfoObjectComponent.UpdateAttackAdditionView(addItemAction);
-            
+            // HeroCard heroCard = a.HeroCard;
+            // AddItemAction addItemAction = a.AddItemAction;
+            // HeroCardInfoObjectComponent heroCardInfoObjectComponent = heroCard.GetComponent<HeroCardInfoObjectComponent>();
+            // heroCardInfoObjectComponent.UpdateAttackAdditionView(addItemAction);
             await ETTask.CompletedTask;
         }
     }
@@ -48,10 +49,15 @@ namespace ET
     {
         protected override async ETTask Run(UpdateHeroAngryInfo a)
         {
-            HeroCard heroCard = a.HeroCard;
-            HeroCardDataComponentInfo heroCardDataComponentInfo = a.HeroCardDataComponentInfo;
-            HeroCardInfoObjectComponent heroCardInfoObjectComponent = heroCard.GetComponent<HeroCardInfoObjectComponent>();
-            heroCardInfoObjectComponent.UpdateAngryView(heroCardDataComponentInfo);
+            HeroCardComponent heroCardComponent = a.HeroCardComponent;
+            List<HeroCardDataComponentInfo> heroCardDataComponentInfos = a.HeroCardDataComponentInfos;
+            foreach (var heroCardDataComponentInfo in heroCardDataComponentInfos)
+            {
+                HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(heroCardDataComponentInfo.HeroId);
+                HeroCardInfoObjectComponent heroCardInfoObjectComponent = heroCard.GetComponent<HeroCardInfoObjectComponent>();
+                heroCardInfoObjectComponent.UpdateAngryView(heroCardDataComponentInfo);
+            }
+
             await ETTask.CompletedTask;
         }
     }

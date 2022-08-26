@@ -131,16 +131,23 @@ namespace ET
         //     AttackAction attackAction = self.AttackTarget(tatgetHeroCard, 0);
         //     return attackAction;
         // }
-        public static float ProcessSkillDamageValue(this HeroCard self, Skill skill, float baseDamage)
+        public static float ProcessSkillDamageValue(this HeroCard self, Skill skill, float baseDamage, List<Buff> buffs)
         {
             SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
-
             int[] damageRate = skillConfig.LevelDamages;
-
             if (skill.Level - 1 < damageRate.Length)
             {
                 var rate = damageRate[skill.Level - 1] / 100.0f;
                 baseDamage += baseDamage * (rate);
+            }
+
+            int buffDamageAdditionCondition = skillConfig.BuffDamageAdditionCondition;
+
+            if (buffs != null && buffs.Exists(a => a.ConfigId.Equals(buffDamageAdditionCondition)))
+            {
+                int[] buffDamageAdditions = skillConfig.BuffDamageAdditions;
+                var addition = buffDamageAdditions[skill.Level - 1] / 100.0f;
+                baseDamage += baseDamage * addition;
             }
 
             return baseDamage;
@@ -148,11 +155,10 @@ namespace ET
 
         public static void AttackTarget(this HeroCard self, HeroCard targetHeroCard, int comboAddition, Skill skill)
         {
-
-            
-            
             HeroCardDataComponent attackCom = self.GetComponent<HeroCardDataComponent>();
             HeroCardDataComponent beAttackCom = targetHeroCard.GetComponent<HeroCardDataComponent>();
+            BuffComponent buffComponent = targetHeroCard.GetComponent<BuffComponent>();
+            List<Buff> buffs = buffComponent.GetChilds<Buff>();
             var baseAttack = attackCom.GetHeroBaseAttack(); //角色的基础攻击
             var weaponAttack = self.GetWeaponBaseValueByType(WordBarType.Attack); // 装备的基础攻击
             var weaponAttackAddition = self.GetWeaponBaseValueByType(WordBarType.AttackAddition); //装备的攻击力加成
@@ -182,7 +188,7 @@ namespace ET
 
             //技能加成
 
-            damage += self.ProcessSkillDamageValue(skill, damage);
+            damage += self.ProcessSkillDamageValue(skill, damage, buffs);
 
             var critical = self.GetCriticalHit(targetHeroCard); //暴击概率
             var isCritical = RandomHelper.RandomNumber(0, 10000) < critical;
@@ -193,12 +199,30 @@ namespace ET
                 damage *= 1 + 0.5f + (float)critialDamage / 10000;
             }
 
+            if (buffs != null)
+            {
+                damage += self.GetBuffDamageValue(buffs, damage);
+            }
+
             var oldHp = beAttackCom.HP;
             Log.Debug($"old hp {oldHp}");
-            beAttackCom.HP -= (int)damage;
-            if (beAttackCom.HP < 0)
+            Buff buff = buffs?.Find(a => a.ConfigId == 102);
+            if (buff != null && beAttackCom.HP / (float)beAttackCom.TotalHP > BuffConfigCategory.Instance.Get(buff.ConfigId).value / 100.0f)
             {
-                beAttackCom.HP = 0;
+                //todo 英雄具有根性buff  死不了
+                beAttackCom.HP -= (int)damage;
+                if (beAttackCom.HP < 0)
+                {
+                    beAttackCom.HP = 1;
+                }
+            }
+            else
+            {
+                beAttackCom.HP -= (int)damage;
+                if (beAttackCom.HP < 0)
+                {
+                    beAttackCom.HP = 0;
+                }
             }
 
             beAttackCom.Angry += 5;
@@ -210,6 +234,23 @@ namespace ET
 #if SERVER
             // targetHeroCard.GetComponent<BuffComponent>().ProcessRoundLogic();
 #endif
+        }
+
+        public static float GetBuffDamageValue(this HeroCard self, List<Buff> buffs, float damage)
+        {
+            var value = 0.0f;
+            foreach (var buff in buffs)
+            {
+                BuffConfig config = BuffConfigCategory.Instance.Get(buff.ConfigId);
+                switch (config.Id)
+                {
+                    case 106:
+                        value = damage * config.value;
+                        break;
+                }
+            }
+
+            return value;
         }
 
         public static HeroCardInfo GetMessageInfo(this HeroCard self)

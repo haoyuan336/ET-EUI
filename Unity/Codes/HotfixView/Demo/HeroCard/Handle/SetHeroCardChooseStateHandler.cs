@@ -12,8 +12,10 @@ namespace ET
                 {
                     card.GetComponent<HeroModeObjectCompoent>().ShowChooseMark(false);
                 }
+
                 return;
             }
+
             HeroCard heroCard = a.HeroCard;
 
             foreach (var card in a.AllHeroCard)
@@ -36,8 +38,19 @@ namespace ET
     {
         protected override async ETTask Run(ShowAttackMark a)
         {
-            HeroCard heroCard = a.HeroCard;
-            heroCard.GetComponent<HeroModeObjectCompoent>().ShowAttackMark(a.IsShow);
+            // HeroCard heroCard = a.HeroCard;
+            // heroCard.GetComponent<HeroModeObjectCompoent>().ShowAttackMark(a.IsShow);
+
+            HeroCardComponent heroCardComponent = a.HeroCardComponent;
+            DiamondActionItem diamondActionItem = a.DiamondActionItem;
+            bool isShow = a.IsShow;
+
+            foreach (var makeSureAttackHeroAction in diamondActionItem.MakeSureAttackHeroActions)
+            {
+                HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(makeSureAttackHeroAction.HeroCardDataComponentInfo.HeroId);
+                heroCard.GetComponent<HeroModeObjectCompoent>().ShowAttackMark(isShow);
+            }
+
             await ETTask.CompletedTask;
         }
     }

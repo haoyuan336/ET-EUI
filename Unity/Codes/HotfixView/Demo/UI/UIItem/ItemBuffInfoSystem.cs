@@ -21,8 +21,9 @@ namespace ET
             GameObject gameObject = GameObjectPoolHelper.GetObjectFromPool("ItemBuff", true, 5);
             gameObject.transform.localScale = Vector2.one;
             self.uiTransform = gameObject.transform;
-            self.E_CountText.text = $"X{info.RoundCount}";
+            // self.E_CountText.text = $"X{info.RoundCount}";
 
+            self.E_CountText.text = buffConfig.buffName;
             self.uiTransform.GetComponent<Image>().sprite =
                     await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(buffConfig.SpriteAtlas, buffConfig.ImageStr);
             gameObject.transform.SetParent(parent);

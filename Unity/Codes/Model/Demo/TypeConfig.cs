@@ -69,4 +69,20 @@
 
         // #攻击类型,#范围类型 RangeType， 1，敌方单体，2地方群体3，我方个体4我方群体5，全体
     }
+
+    public enum ActionMessagePlayType
+    {
+        Async = 1, //异步
+        Sync = 2, //同步
+    }
+
+    public enum ActionMessageType
+    {
+        CrashDiamond = 1, //消除宝石
+        MoveDiamond = 2, //下降宝石
+        CreateDiamond = 3, //创建宝石
+        HeroAttack = 4, //英雄攻击
+        UpdateBuffInfo = 5, //更新Buff
+        GameProcess = 6, //游戏结算
+    }
 }

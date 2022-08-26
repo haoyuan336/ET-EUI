@@ -161,8 +161,8 @@ public class CeshiManager: MonoBehaviour
             skill.transform.position = this.TargetHeroMode.transform.position;
             if (config.BeHitedBoneName != "")
             {
-                GameObject obj = GameObject.Find($"TargetHero001/{config.BeHitedBoneName}");
-                skill.transform.position = obj.transform.position;
+                // GameObject obj = GameObject.Find($"{this.TargetHeroMode.name}/{config.BeHitedBoneName}");
+                // skill.transform.position = obj.transform.position;
             }
 
             yield return new WaitForSeconds(2);

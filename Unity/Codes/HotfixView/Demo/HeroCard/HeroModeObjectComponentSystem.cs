@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Tracing;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace ET
 {
@@ -218,45 +215,39 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
-        public static async ETTask PlayAttackAnimLogic(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message)
+        public static async ETTask PlayAttackAnimLogic(this HeroModeObjectCompoent self, HeroCardComponent heroCardComponent,
+        AttackAction attackAction)
         {
-            HeroCardComponent heroCardComponent = message.HeroCardComponent;
-
-            Log.Debug("play attack anim logic");
-            SkillInfo skillInfo = message.AttackAction.AttackHeroCardDataComponentInfo.CurrentSkillInfo;
+            SkillInfo skillInfo = attackAction.AttackHeroCardDataComponentInfo.CurrentSkillInfo;
             SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skillInfo.SkillConfigId);
-
-            var attackHeroCardDataComponerntInfo = message.AttackAction.AttackHeroCardDataComponentInfo;
-            var beHeroCardDataComponentInfos = message.AttackAction.BeAttackHeroCardDataComponentInfos;
-            var heroBuffInfos = message.AttackAction.HeroBufferInfos;
-            Log.Debug($"range type {skillConfig.RangeType}");
-
+            var attackHeroCardDataComponerntInfo = attackAction.AttackHeroCardDataComponentInfo;
+            var beHeroCardDataComponentInfos = attackAction.BeAttackHeroCardDataComponentInfos;
+            var heroBuffInfos = attackAction.HeroBuffInfos;
             switch (skillConfig.RangeType)
             {
                 case (int)SkillRangeType.EnemySingle:
-                    await self.PlaySingleAttackAnim(message, skillConfig);
+                    await self.PlaySingleAttackAnim(heroCardComponent, attackAction, skillConfig);
                     break;
                 case (int)SkillRangeType.EnemyGroup:
-                    // await self.PlayGroupAttackAnim(message, skillConfig);
-                    Log.Debug($"hero buff info s {heroBuffInfos.Count}");
                     await self.PlayAttackGroupAnim(heroCardComponent, attackHeroCardDataComponerntInfo, beHeroCardDataComponentInfos, skillConfig,
                         heroBuffInfos);
                     break;
             }
         }
 
-        public static async ETTask PlaySingleAttackAnim(this HeroModeObjectCompoent self, EventType.PlayHeroCardAttackAnim message,
+        public static async ETTask PlaySingleAttackAnim(this HeroModeObjectCompoent self, HeroCardComponent heroCardComponent,
+        AttackAction attackAction,
         SkillConfig skillConfig)
         {
-            HeroCardComponent heroCardComponent = message.HeroCardComponent;
-            HeroCardDataComponentInfo beHeroCardDataComponentInfo = message.AttackAction.BeAttackHeroCardDataComponentInfos[0];
+            // HeroCardComponent heroCardComponent = message.HeroCardComponent;
+            HeroCardDataComponentInfo beHeroCardDataComponentInfo = attackAction.BeAttackHeroCardDataComponentInfos[0];
             HeroCard beAttackHeroCard = heroCardComponent.GetChild<HeroCard>(beHeroCardDataComponentInfo.HeroId);
-            HeroCardDataComponentInfo attackHeroCardDataComponerntInfo = message.AttackAction.AttackHeroCardDataComponentInfo;
+            HeroCardDataComponentInfo attackHeroCardDataComponerntInfo = attackAction.AttackHeroCardDataComponentInfo;
             await self.MoveToEnemyTarget(beAttackHeroCard, skillConfig);
 
-            List<HeroBufferInfo> heroBufferInfo = message.AttackAction.HeroBufferInfos;
+            List<HeroBuffInfo> heroBufferInfo = attackAction.HeroBuffInfos;
             await self.PlayAttackAnim(beAttackHeroCard, beHeroCardDataComponentInfo, attackHeroCardDataComponerntInfo, skillConfig,
-                heroBufferInfo[0].BuffInfos);
+                heroBufferInfo[0]?.BuffInfos);
             await self.BackMoveToInitPos(skillConfig);
             // int campIndex = message.AttackHeroCard.CampIndex;
             bool isCamp = self.GetParent<HeroCard>().OwnerId.Equals(self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId);
@@ -324,11 +315,12 @@ namespace ET
             else
             {
                 // Transform bone = UIFindHelper.FindDeepChild(self.HeroMode, skillConfig.BeAttackBoneName);
-                GameObject bone = GameObject.Find($"{self.HeroMode.name}/{skillConfig.BeAttackBoneName}");
+                Transform bone = UIFindHelper.FindDeepChild(self.HeroMode, skillConfig.BeAttackBoneName);
+                // GameObject bone = GameObject.Find($"{self.HeroMode.name}/{skillConfig.BeAttackBoneName}");
                 if (bone != null)
                 {
                     Log.Debug("找到了 被攻击的骨骼位置");
-                    effect.transform.localPosition = bone.transform.localPosition;
+                    effect.transform.position = bone.position;
                 }
                 else
                 {
@@ -354,7 +346,7 @@ namespace ET
             }
 
             self.BuffEffectList.Clear();
-
+            self.ClearBuffState();
             if (buffInfos == null)
             {
                 return;
@@ -377,13 +369,30 @@ namespace ET
                     gameObject.transform.localPosition = self.HeroMode.GetComponent<CapsuleCollider>().center;
                     self.BuffEffectList.Add(gameObject);
                 }
+
+                self.PlayBuffState(buffInfo);
             }
 
             await ETTask.CompletedTask;
         }
 
+        public static void ClearBuffState(this HeroModeObjectCompoent self)
+        {
+        }
+
+        public static void PlayBuffState(this HeroModeObjectCompoent self, BuffInfo buffInfo)
+        {
+            BuffConfig config = BuffConfigCategory.Instance.Get(buffInfo.ConfigId);
+
+            switch (config.AnimationState)
+            {
+                case "Frozen":
+                    break;
+            }
+        }
+
         public static async ETTask PlayBeAttackAnim(this HeroModeObjectCompoent self, HeroCardDataComponentInfo componentInfo,
-        SkillConfig skillConfig, List<BuffInfo> buffInfos)
+        SkillConfig skillConfig, List<BuffInfo> buffInfos = null)
         {
             int beAttackTime = skillConfig.BeAttackAnimPlayTime;
             await TimerComponent.Instance.WaitAsync(beAttackTime);
@@ -392,7 +401,7 @@ namespace ET
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().UpdateHPView(componentInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(componentInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowDamageViewAnim(componentInfo);
-            self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowBuffView(buffInfos);
+            self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowBuffViewInfo(buffInfos);
             self.ShowBuffEffect(buffInfos);
 
             if (componentInfo.HP <= 0)
@@ -441,7 +450,7 @@ namespace ET
 
         public static async ETTask PlayAttackGroupAnim(this HeroModeObjectCompoent self, HeroCardComponent heroCardComponent,
         HeroCardDataComponentInfo attackHeroCardDataComponentInfo, List<HeroCardDataComponentInfo> beAttaclHeroCardDataComponentInfos,
-        SkillConfig skillConfig, List<HeroBufferInfo> heroBufferInfos)
+        SkillConfig skillConfig, List<HeroBuffInfo> heroBufferInfos)
         {
             if (self.AttackMark != null)
             {
@@ -457,7 +466,7 @@ namespace ET
                 var info = beAttaclHeroCardDataComponentInfos[i];
                 var heroCard = heroCardComponent.GetChild<HeroCard>(info.HeroId);
                 heroCard.GetComponent<HeroModeObjectCompoent>()
-                        .PlayBeAttackAnim(info, skillConfig, heroBufferInfos[i].BuffInfos).Coroutine();
+                        .PlayBeAttackAnim(info, skillConfig, heroBufferInfos?[i].BuffInfos).Coroutine();
                 // heroCard.GetComponent<HeroModeObjectCompoent>().PlayBeHitedEffect(skillConfig).Coroutine();
             }
 
@@ -494,9 +503,6 @@ namespace ET
 
         public static async void PlayFlyEffect(this HeroModeObjectCompoent self, SkillConfig config, HeroCard beAttackHeroCard)
         {
-            // Log.Warning($"skill effect {config.SkillEffect}");
-            // Log.Warning($"anim {config.SkillAnimName}");
-            // Log.Warning($"fiy effect {config.FlyEffect}");
             if (config.FlyEffect == "")
             {
                 return;

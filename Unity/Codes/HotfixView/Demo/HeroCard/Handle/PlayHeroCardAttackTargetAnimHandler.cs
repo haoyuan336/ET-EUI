@@ -1,28 +1,25 @@
-﻿using ET.EventType;
+﻿using System.Collections.Generic;
+using ET.EventType;
+
 namespace ET
 {
     public class PlayHeroCardAttackTargetAnimHandler: AEvent<EventType.PlayHeroCardAttackAnim>
     {
         protected override async ETTask Run(PlayHeroCardAttackAnim a)
         {
-            Log.Warning("play hero card attack anim");
-            
-            
             HeroCardComponent heroCardComponent = a.HeroCardComponent;
-            AttackAction attackAction = a.AttackAction;
+            List<AttackActionItem> attackActionItems = a.AttackActionItems;
+            foreach (var attackActionItem in attackActionItems)
+            {
+                foreach (var attackAction in attackActionItem.AttackActions)
+                {
+                    HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(attackAction.AttackHeroCardDataComponentInfo.HeroId);
+                    await heroCard.GetComponent<HeroModeObjectCompoent>().PlayAttackAnimLogic(heroCardComponent, attackAction);
+                }
 
-            HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(attackAction.AttackHeroCardDataComponentInfo.HeroId);
-            
-
-            // Log.Debug("PlayHeroCardAttackTargetAnimHandler");
-            // HeroCard heroCard = a.AttackHeroCard;
-            // if (heroCard == null)
-            // {
-            //     Log.Debug("未找到herocard");
-            // }
-            // // await heroCard.GetComponent<HeroCardView>().PlayAttackAnimLogic(a);
-            await heroCard.GetComponent<HeroModeObjectCompoent>().PlayAttackAnimLogic(a);
-            // await ETTask.CompletedTask;
+                // List<HeroBuffInfo> heroBuffInfos = attackActionItem.HeroBuffInfos;
+                //todo 更新英雄的buff信息
+            }
         }
     }
 }

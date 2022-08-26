@@ -91,6 +91,8 @@ namespace ET
 		public int MaxOverlabCount { get; set; }
 		[ProtoMember(11)]
 		public string EffectPath { get; set; }
+		[ProtoMember(12)]
+		public string AnimationState { get; set; }
 
 	}
 }

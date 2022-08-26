@@ -60,9 +60,8 @@ namespace ET
 
     public static class HeroCardInfoObjectComponentSystem
     {
-        public static async void ShowBuffView(this HeroCardInfoObjectComponent self, List<BuffInfo> buffInfos)
+        public static async void ShowBuffViewInfo(this HeroCardInfoObjectComponent self, List<BuffInfo> buffInfos)
         {
-            
             self.ESHeroCardInfoUI.SetBuffInfos(buffInfos);
 
             await ETTask.CompletedTask;

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace ET
 {
@@ -8,7 +9,6 @@ namespace ET
         public override void Awake(Buff self, int configId)
         {
             self.ConfigId = configId;
-            
         }
     }
 
@@ -26,7 +26,8 @@ namespace ET
             return new BuffInfo() { BuffId = self.Id, ConfigId = self.ConfigId, RoundCount = self.RoundCount };
         }
 
-        public static void ProcessRound(this  Buff self)
+
+        public static void ProcessRound(this Buff self)
         {
             self.RoundCount--;
 
@@ -43,8 +44,6 @@ namespace ET
                 self.Dispose();
             }
         }
-
-        
     }
 #endif
 }

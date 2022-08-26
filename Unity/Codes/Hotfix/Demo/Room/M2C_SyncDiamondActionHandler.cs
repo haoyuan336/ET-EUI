@@ -11,55 +11,28 @@ namespace ET
             //todo 开始处理action
             DiamondComponent diamondComponent = session.ZoneScene().CurrentScene().GetComponent<DiamondComponent>();
             HeroCardComponent heroCardComponent = session.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>();
-            List<DiamondActionItem> diamondActionItems = message.DiamondActionItems;
-            List<AttackActionItem> attackActionItems = message.AttackActionItems;
             GameLoseResultAction gameLoseResultAction = message.GameLoseResultAction;
-            ComboActionItem comboActionItem = message.ComboActionItem;
-
             //开始处理的时候 锁定触摸
-            await Game.EventSystem.PublishAsync(
-                new EventType.UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene(), IsLockTouch = true });
-
+            await Game.EventSystem.PublishAsync(new UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene(), IsLockTouch = true });
             bool isContainsCrash = false;
             var comboCount = 0;
-            // bool isContainsAttackHero = false;
-            foreach (var diamondActionItem in diamondActionItems)
+            foreach (var diamondActionItem in message.DiamondActionItems)
             {
-                List<ETTask> tasks = new List<ETTask>();
-
-                List<MakeSureAttackHeroAction> makeSureAttackHeroActions = diamondActionItem.MakeSureAttackHeroActions;
-                // if (makeSureAttackHeroActions.Count > 0)
-                // {
-                //     isContainsAttackHero = true;
-                // }
-
-                foreach (var makeSureAttackHeroAction in makeSureAttackHeroActions)
+                Game.EventSystem.Publish(new ShowAttackMark()
                 {
-                    Game.EventSystem.Publish(new EventType.ShowAttackMark()
-                    {
-                        IsShow = true,
-                        HeroCard = heroCardComponent.GetChild<HeroCard>(makeSureAttackHeroAction.HeroCardDataComponentInfo.HeroId)
-                    });
-                }
-
-                // int count = 0;
-
+                    HeroCardComponent = heroCardComponent, IsShow = true, DiamondActionItem = diamondActionItem
+                });
                 var destoryIndex = 0;
                 if (diamondActionItem.CrashType == (int)CrashType.Normal)
                 {
-                    Log.Debug($"combo count {comboCount}");
-                    // if (comboCount != 0)
-                    // {
                     comboCount++;
-                    Game.EventSystem.Publish(new EventType.ShowComobAnim()
+                    Game.EventSystem.Publish(new ShowComobAnim()
                     {
                         Scene = session.ZoneScene(), ComboCount = comboCount, CrashCount = diamondActionItem.DiamondActions.Count
                     });
-                    // }
                 }
-
                 List<ETTask> sunTaskList = new List<ETTask>();
-
+                List<ETTask> tasks = new List<ETTask>();
                 foreach (var diamondAction in diamondActionItem.DiamondActions)
                 {
                     DiamondInfo diamondInfo = diamondAction.DiamondInfo;
@@ -69,27 +42,21 @@ namespace ET
                     {
                         case (int)DiamondActionType.MoveDown:
                             diamond.SetIndex(diamondInfo.LieIndex, diamondInfo.HangIndex);
-                            tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex()
+                            tasks.Add(Game.EventSystem.PublishAsync(new UpdateDiamondIndex()
                             {
                                 Diamond = diamond, DiamondActionType = DiamondActionType.MoveDown
                             }));
                             break;
                         case (int)DiamondActionType.Move:
                             diamond.SetIndex(diamondInfo.LieIndex, diamondInfo.HangIndex);
-                            // count++;
-                            // Log.Debug($"count {count}");
-                            tasks.Add(Game.EventSystem.PublishAsync(new EventType.UpdateDiamondIndex()
+                            tasks.Add(Game.EventSystem.PublishAsync(new UpdateDiamondIndex()
                             {
                                 Diamond = diamond, DiamondActionType = DiamondActionType.Move
                             }));
                             break;
                         case (int)DiamondActionType.Destory:
                         case (int)DiamondActionType.SpecialDestry:
-                            // tasks.Add(diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction));
-                            // destoryIndex++;
                             sunTaskList.Add(diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction, diamondActionItem));
-                            // await diamondComponent.RemoveChild(diamond, destoryIndex, diamondAction);
-
                             isContainsCrash = true;
                             break;
                         case (int)DiamondActionType.Create:
@@ -98,70 +65,44 @@ namespace ET
                     }
                 }
 
-                // sunTaskList.Add(TimerComponent.Instance.WaitAsync(100));
                 await TimerComponent.Instance.WaitAsync(ConstValue.CrashItemWaitTime);
                 await ETTaskHelper.WaitAll(sunTaskList);
                 await ETTaskHelper.WaitAll(tasks);
             }
 
-            foreach (var addAttackAction in comboActionItem.AddAttackActions)
+            Game.EventSystem.Publish(new UpdateHeroAttackInfo()
             {
-                HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(addAttackAction.HeroCardDataComponentInfo.HeroId);
-                await Game.EventSystem.PublishAsync(new ET.EventType.UpdateHeroAttackInfo() { AddItemAction = addAttackAction, HeroCard = heroCard });
-            }
-
-            Game.EventSystem.Publish(new HideCombo() { Scene = session.ZoneScene() });
-
-            List<ETTask> animTasks = new List<ETTask>();
-            if (isContainsCrash)
-            {
-                animTasks.Add(Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook() { ZoneScene = session.ZoneScene(), Value = true }));
-                animTasks.Add(Game.EventSystem.PublishAsync(new EventType.PlayDiamondContentAnim() { Value = false }));
-            }
-
-            await ETTaskHelper.WaitAll(animTasks);
-            foreach (var attackActionItem in attackActionItems)
-            {
-                foreach (var attackAction in attackActionItem.AttackActions)
-                {
-                    await Game.EventSystem.PublishAsync(new EventType.PlayHeroCardAttackAnim()
-                    {
-                        HeroCardComponent = heroCardComponent, AttackAction = attackAction
-                    });
-                }
-            }
-
-            await Game.EventSystem.PublishAsync(new EventType.UpdateHeroBuffInfo()
-            {
-                UpdateHeroBuffInfoItem = message.UpdateHeroBuffInfoItem, HeroCardComponent = heroCardComponent
+                HeroCardComponent = heroCardComponent, ComboActionItem = message.ComboActionItem,
             });
-
-            List<ETTask> animTaskList = new List<ETTask>();
+            Game.EventSystem.Publish(new HideCombo() { Scene = session.ZoneScene() });
+            if (isContainsCrash)
+            {
+                await Game.EventSystem.PublishAsync(new ChangeFightCameraLook() { ZoneScene = session.ZoneScene(), Value = true });
+                Game.EventSystem.Publish(new PlayDiamondContentAnim() { Value = false });
+            }
+            await Game.EventSystem.PublishAsync(new PlayHeroCardAttackAnim()
+            {
+                HeroCardComponent = heroCardComponent, AttackActionItems = message.AttackActionItems
+            });
+            // await Game.EventSystem.PublishAsync(new UpdateHeroBuffInfo()
+            // {
+            //     UpdateHeroBuffInfoItem = message.UpdateHeroBuffInfoItem, HeroCardComponent = heroCardComponent
+            // });
 
             if (isContainsCrash)
             {
-                animTaskList.Add(Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook()
-                {
-                    ZoneScene = session.ZoneScene(), Value = false
-                }));
-                animTaskList.Add(Game.EventSystem.PublishAsync(new EventType.PlayDiamondContentAnim() { Value = true }));
+                await Game.EventSystem.PublishAsync(new ChangeFightCameraLook() { ZoneScene = session.ZoneScene(), Value = false });
+                Game.EventSystem.Publish(new PlayDiamondContentAnim() { Value = true });
             }
 
-            // await Game.EventSystem.PublishAsync(new EventType.PlayDiamondContentAnim() { Value = true });
-            // await Game.EventSystem.PublishAsync(new EventType.ChangeFightCameraLook() { Value = false });
-            await ETTaskHelper.WaitAll(animTaskList);
             List<HeroCard> heroCards = heroCardComponent.GetChilds<HeroCard>();
-            Game.EventSystem.Publish(new EventType.GameAroundOver() { HeroCards = heroCards });
+            Game.EventSystem.Publish(new GameAroundOver() { HeroCards = heroCards });
             if (message.AddRoundAngryItem != null)
             {
-                foreach (var heroCardDataComponentInfo in message.AddRoundAngryItem.HeroCardDataComponentInfos)
+                Game.EventSystem.Publish(new UpdateHeroAngryInfo()
                 {
-                    HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(heroCardDataComponentInfo.HeroId);
-                    Game.EventSystem.Publish(new UpdateHeroAngryInfo()
-                    {
-                        HeroCard = heroCard, HeroCardDataComponentInfo = heroCardDataComponentInfo
-                    });
-                }
+                    HeroCardComponent = heroCardComponent, HeroCardDataComponentInfos = message.AddRoundAngryItem.HeroCardDataComponentInfos
+                });
             }
 
             //
@@ -170,26 +111,19 @@ namespace ET
             if (gameLoseResultAction == null)
             {
                 Log.Debug("一回合结束了");
-                await Game.EventSystem.PublishAsync(new EventType.UnLockTouchLock()
-                {
-                    ZoneScene = session.ZoneScene().CurrentScene(), IsLockTouch = false
-                });
+                await Game.EventSystem.PublishAsync(new UnLockTouchLock() { ZoneScene = session.ZoneScene().CurrentScene(), IsLockTouch = false });
             }
             else
             {
-                Log.Debug($"lose id{gameLoseResultAction.LoseAccountId}");
-                Log.Debug($"self id {AccountId}");
-
                 if (!AccountId.Equals(gameLoseResultAction.LoseAccountId))
                 {
                     Log.Debug("game win");
-                    Game.EventSystem.Publish(new EventType.ShowGameWinUI() { ZondScene = session.ZoneScene() });
+                    Game.EventSystem.Publish(new ShowGameWinUI() { ZondScene = session.ZoneScene() });
                 }
                 else
                 {
                     Log.Debug("game lose");
-                    // Game.EventSystem.Publish(new EventType.Show);
-                    Game.EventSystem.Publish(new EventType.ShowGameLoaseUI() { ZoneScene = session.ZoneScene() });
+                    Game.EventSystem.Publish(new ShowGameLoaseUI() { ZoneScene = session.ZoneScene() });
                 }
             }
 

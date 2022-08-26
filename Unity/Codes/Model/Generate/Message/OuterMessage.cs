@@ -1035,19 +1035,11 @@ namespace ET
 
 	}
 
-// message M2C_SyncDiamondUpdatePos	//IActorMessage
-// {
-// 	int RpcId = 90;
-// 	repeated DiamondInfo DiamondInfos = 1;
-// }
 	[Message(OuterOpcode.DiamondAction)]
 	[ProtoContract]
 	public partial class DiamondAction: Object
 	{
 //宝石的action
-		[ProtoMember(90)]
-		public int PpcId { get; set; }
-
 		[ProtoMember(1)]
 		public int ActionType { get; set; }
 
@@ -1103,7 +1095,7 @@ namespace ET
 // HeroCardInfo AttackHeroCardInfo = 1;
 // HeroCardInfo BeAttackHeroCardInfo = 2;
 		[ProtoMember(2)]
-		public List<HeroBufferInfo> HeroBufferInfos = new List<HeroBufferInfo>();
+		public List<HeroBuffInfo> HeroBuffInfos = new List<HeroBuffInfo>();
 
 		[ProtoMember(3)]
 		public List<HeroCardDataComponentInfo> BeAttackHeroCardDataComponentInfos = new List<HeroCardDataComponentInfo>();
@@ -1113,9 +1105,9 @@ namespace ET
 
 	}
 
-	[Message(OuterOpcode.HeroBufferInfo)]
+	[Message(OuterOpcode.HeroBuffInfo)]
 	[ProtoContract]
-	public partial class HeroBufferInfo: Object
+	public partial class HeroBuffInfo: Object
 	{
 		[ProtoMember(2)]
 		public long HeroId { get; set; }
@@ -1131,6 +1123,9 @@ namespace ET
 	{
 		[ProtoMember(1)]
 		public List<AttackAction> AttackActions = new List<AttackAction>();
+
+		[ProtoMember(2)]
+		public List<HeroBuffInfo> HeroBuffInfos = new List<HeroBuffInfo>();
 
 	}
 
@@ -1186,7 +1181,7 @@ namespace ET
 	public partial class UpdateHeroBuffInfoItem: Object
 	{
 		[ProtoMember(1)]
-		public List<HeroBufferInfo> HeroBufferInfos = new List<HeroBufferInfo>();
+		public List<HeroBuffInfo> HeroBuffInfos = new List<HeroBuffInfo>();
 
 	}
 
@@ -1214,10 +1209,32 @@ namespace ET
 		public AddRoundAngryItem AddRoundAngryItem { get; set; }
 
 		[ProtoMember(7)]
-		public UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem { get; set; }
+		public List<ActionMessage> ActionMessages = new List<ActionMessage>();
 
+// UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem = 7;
 // repeated AddItemAction AddAttackItemActions = 4;
 // repeated AddItemAction AddAngryItemActions = 5;
+	}
+
+	[Message(OuterOpcode.ActionMessage)]
+	[ProtoContract]
+	public partial class ActionMessage: Object
+	{
+// int32 ActionType = 1;	//动作类型
+		[ProtoMember(1)]
+		public int PlayType { get; set; }
+
+// DiamondActionItem DiamondActionItem = 2; //宝石动作
+// AttackActionItem AttackActionItems = 3;	//攻击动作
+// GameLoseResultAction GameLoseResultAction = 4;	//游戏结果
+// ComboActionItem ComboActionItem = 5;	//连击特效
+// AddRoundAngryItem AddRoundAngryItem = 6;	//增加怒气
+		[ProtoMember(2)]
+		public DiamondAction DiamondAction { get; set; }
+
+		[ProtoMember(7)]
+		public List<ActionMessage> ActionMessages = new List<ActionMessage>();
+
 	}
 
 	[Message(OuterOpcode.SkillInfo)]

@@ -389,6 +389,7 @@ namespace ET
             {
                 return;
             }
+
             if (!self.GetIsCanAttack(attackHero))
             {
                 return;
@@ -399,7 +400,7 @@ namespace ET
             AttackAction attackAction = new AttackAction();
             SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
             List<HeroCardDataComponentInfo> beHeroCardDataComponentInfos = new List<HeroCardDataComponentInfo>();
-            List<HeroBufferInfo> heroBufferInfos = new List<HeroBufferInfo>();
+            List<HeroBuffInfo> heroBufferInfos = new List<HeroBuffInfo>();
             foreach (var beAttackHeroCard in beAttackHeroCards)
             {
                 if (beAttackHeroCard == null)
@@ -407,20 +408,17 @@ namespace ET
                     continue;
                 }
 
-               
-
                 self.ProcessBuffLogic(beAttackHeroCard, skillConfig);
                 List<BuffInfo> buffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos();
 
-                heroBufferInfos.Add(new HeroBufferInfo() { BuffInfos = buffInfos });
-
+                heroBufferInfos.Add(new HeroBuffInfo() { BuffInfos = buffInfos });
                 attackHero.AttackTarget(beAttackHeroCard, 0, skill);
                 beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
             }
 
             attackAction.AttackHeroCardDataComponentInfo = attackHero.GetComponent<HeroCardDataComponent>().GetInfo();
             attackAction.BeAttackHeroCardDataComponentInfos = beHeroCardDataComponentInfos;
-            attackAction.HeroBufferInfos = heroBufferInfos;
+            attackAction.HeroBuffInfos = heroBufferInfos;
             AttackActionItem attackActionItem = new AttackActionItem();
             attackActionItem.AttackActions.Add(attackAction);
             m2CSyncDiamondAction.AttackActionItems.Add(attackActionItem);
@@ -435,27 +433,27 @@ namespace ET
             buffComponent.AddBuffWithSkillConfig(skillConfig);
         }
 
-        public static void ProcessAddBuffInfo(this FightComponent self, M2C_SyncDiamondAction m2CSyncDiamondAction)
-        {
-            List<HeroBufferInfo> heroBufferInfos = new List<HeroBufferInfo>();
-            foreach (var unit in self.Units)
-            {
-                List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
-
-                foreach (var heroCard in heroCards)
-                {
-                    List<BuffInfo> buffInfos = heroCard.GetComponent<BuffComponent>().GetBuffInfos();
-
-                    if (buffInfos != null)
-                    {
-                        HeroBufferInfo heroBufferInfo = new HeroBufferInfo() { HeroId = heroCard.Id, BuffInfos = buffInfos };
-                        heroBufferInfos.Add(heroBufferInfo);
-                    }
-                }
-            }
-
-            m2CSyncDiamondAction.UpdateHeroBuffInfoItem = new UpdateHeroBuffInfoItem() { HeroBufferInfos = heroBufferInfos };
-        }
+        // public static void ProcessAddBuffInfo(this FightComponent self, M2C_SyncDiamondAction m2CSyncDiamondAction)
+        // {
+        //     List<HeroBufferInfo> heroBufferInfos = new List<HeroBufferInfo>();
+        //     foreach (var unit in self.Units)
+        //     {
+        //         List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
+        //
+        //         foreach (var heroCard in heroCards)
+        //         {
+        //             List<BuffInfo> buffInfos = heroCard.GetComponent<BuffComponent>().GetBuffInfos();
+        //
+        //             if (buffInfos != null)
+        //             {
+        //                 HeroBufferInfo heroBufferInfo = new HeroBufferInfo() { HeroId = heroCard.Id, BuffInfos = buffInfos };
+        //                 heroBufferInfos.Add(heroBufferInfo);
+        //             }
+        //         }
+        //     }
+        //
+        //     m2CSyncDiamondAction.UpdateHeroBuffInfoItem = new UpdateHeroBuffInfoItem() { HeroBufferInfos = heroBufferInfos };
+        // }
 
         public static void ProcessReBackAttackLogic(this FightComponent self, M2C_SyncDiamondAction m2CSyncDiamondAction)
         {
@@ -471,7 +469,6 @@ namespace ET
             Unit beUnit = self.GetBeAttackUnit(unit);
             self.ProcessAngryAttackLogic(m2CSyncDiamondAction, beUnit, unit);
             self.ProcessReBackNormalAttackLogic(m2CSyncDiamondAction, beUnit, unit);
-            self.ProcessBuffRoundLogic(unit);
             //todo 处理反击逻辑
             //产看动作队列里面是否存在消除动作
         }
@@ -514,22 +511,11 @@ namespace ET
 
             self.ProcessAngryAttackLogic(m2CSyncDiamondAction, unit, beUnit);
             self.ProcessNormalAttackLogic(m2CSyncDiamondAction, unit, beUnit);
-            self.ProcessBuffRoundLogic(beUnit);
+            // self.ProcessBuffRoundLogic(beUnit);
             Log.Debug("处理攻击逻辑");
         }
 
-        public static void ProcessBuffRoundLogic(this FightComponent self, Unit unit)
-        {
-            //todo 
-            List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
-            foreach (var heroCard in heroCards)
-            {
-                heroCard.GetComponent<BuffComponent>().ProcessRoundLogic();
-            }
-            // Log.Debug($"hero buff info  {heroBufferInfos.Count}");
-            //
-            // m2CSyncDiamondAction.UpdateHeroBuffInfoItem = new UpdateHeroBuffInfoItem() { HeroBufferInfos = heroBufferInfos };
-        }
+        
 
         public static void ProcessAngryAttackLogic(this FightComponent self, M2C_SyncDiamondAction m2CSyncDiamondAction, Unit unit, Unit beUnit)
         {
@@ -546,20 +532,20 @@ namespace ET
 
             foreach (var heroCard in heroCards)
             {
-                
                 //检查英雄是否存在 眩晕等等buff，存在则不发动攻击
                 if (!self.GetIsCanAttack(heroCard))
                 {
                     continue;
                 }
-                
+
                 Skill skill = heroCard.GetComponent<HeroCardDataComponent>().MakeSureAngrySkill();
                 List<HeroCard> beAttackHeroCards = self.GetBeAttackHeroCards(beUnit, unit, heroCard, skill);
                 SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
                 if (skillConfig.RangeType == (int)SkillRangeType.EnemySingle)
                 {
-                    //集火功能生效
-                    if (self.CurrentBeAttackHeroCard != null && !self.CurrentBeAttackHeroCard.GetIsDead())
+                    BuffComponent buffComponent = heroCard.GetComponent<BuffComponent>();
+                    //todo 集火功能生效 激活功能在炫目buff下无效
+                    if (self.CurrentBeAttackHeroCard != null && !self.CurrentBeAttackHeroCard.GetIsDead() && !buffComponent.IsExistsBuff(117))
                     {
                         beAttackHeroCards.RemoveAt(0);
                         beAttackHeroCards.Add(self.CurrentBeAttackHeroCard);
@@ -569,7 +555,7 @@ namespace ET
                 //todo 发动攻击
                 AttackAction attackAction = new AttackAction();
                 List<HeroCardDataComponentInfo> beHeroCardDataComponentInfos = new List<HeroCardDataComponentInfo>();
-                List<HeroBufferInfo> heroBufferInfos = new List<HeroBufferInfo>();
+                List<HeroBuffInfo> heroBufferInfos = new List<HeroBuffInfo>();
                 foreach (var beAttackHeroCard in beAttackHeroCards)
                 {
                     if (beAttackHeroCard == null)
@@ -577,22 +563,16 @@ namespace ET
                         continue;
                     }
 
-                   
-
                     self.ProcessBuffLogic(beAttackHeroCard, skillConfig);
                     List<BuffInfo> buffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos();
-                    if (buffInfos != null)
-                    {
-                        heroBufferInfos.Add(new HeroBufferInfo() { HeroId = beAttackHeroCard.Id, BuffInfos = buffInfos });
-                    }
-
+                    heroBufferInfos.Add(new HeroBuffInfo() { HeroId = beAttackHeroCard.Id, BuffInfos = buffInfos });
                     heroCard.AttackTarget(beAttackHeroCard, heroCard.GetComponent<HeroCardDataComponent>().DiamondAttackAddition, skill);
                     beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
                 }
 
                 attackAction.AttackHeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo();
                 attackAction.BeAttackHeroCardDataComponentInfos = beHeroCardDataComponentInfos;
-                attackAction.HeroBufferInfos = heroBufferInfos;
+                attackAction.HeroBuffInfos = heroBufferInfos;
                 attackActionItem.AttackActions.Add(attackAction);
             }
 
@@ -602,7 +582,6 @@ namespace ET
         public static bool GetIsCanAttack(this FightComponent self, HeroCard heroCard)
         {
             bool isCanAttack = heroCard.GetComponent<BuffComponent>().GetIsCanAttack();
-            Log.Warning($"is can attack {isCanAttack}");
             return isCanAttack;
         }
 
@@ -643,14 +622,11 @@ namespace ET
                     heroCards.Add(heroCard);
                 }
             }
-
             Log.Debug($"确定攻击技能, {heroCards.Count}");
-
             if (heroCards.Count == 0)
             {
                 return;
             }
-
             Log.Debug("确定攻击技能");
             //todo 找到了发动攻击的英雄，开始寻找被攻击的英雄
             //todo 从左往右排序
@@ -668,7 +644,9 @@ namespace ET
                 Skill skill = heroCard.GetComponent<HeroCardDataComponent>().MakeSureSkill(self.GetFirstCrashCount(m2CSyncDiamondAction));
                 SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
                 List<HeroCard> beAttackHeroCards = self.GetBeAttackHeroCards(beUnit, unit, heroCard, skill);
-                if (self.CurrentBeAttackHeroCard != null && !self.CurrentBeAttackHeroCard.GetIsDead())
+                BuffComponent buffComponent = heroCard.GetComponent<BuffComponent>();
+
+                if (self.CurrentBeAttackHeroCard != null && !self.CurrentBeAttackHeroCard.GetIsDead() && !buffComponent.IsExistsBuff(117))
                 {
                     if (skillConfig.RangeType == (int)SkillRangeType.EnemySingle)
                     {
@@ -680,7 +658,7 @@ namespace ET
                 AttackAction attackAction = new AttackAction();
 
                 List<HeroCardDataComponentInfo> beHeroCardDataComponentInfos = new List<HeroCardDataComponentInfo>();
-                List<HeroBufferInfo> heroBufferInfos = new List<HeroBufferInfo>();
+                List<HeroBuffInfo> heroBuffInfos = new List<HeroBuffInfo>();
                 foreach (var beAttackHeroCard in beAttackHeroCards)
                 {
                     if (beAttackHeroCard == null)
@@ -690,14 +668,14 @@ namespace ET
 
                     self.ProcessBuffLogic(beAttackHeroCard, skillConfig);
                     List<BuffInfo> buffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos();
-                    heroBufferInfos.Add(new HeroBufferInfo() { BuffInfos = buffInfos });
+                    heroBuffInfos.Add(new HeroBuffInfo() { HeroId = beAttackHeroCard.Id, BuffInfos = buffInfos });
                     heroCard.AttackTarget(beAttackHeroCard, heroCard.GetComponent<HeroCardDataComponent>().DiamondAttackAddition, skill);
                     beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
                 }
 
                 attackAction.AttackHeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo();
                 attackAction.BeAttackHeroCardDataComponentInfos = beHeroCardDataComponentInfos;
-                attackAction.HeroBufferInfos = heroBufferInfos;
+                attackAction.HeroBuffInfos = heroBuffInfos;
                 attackActionItem.AttackActions.Add(attackAction);
             }
 

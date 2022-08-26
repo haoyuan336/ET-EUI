@@ -33,8 +33,9 @@ namespace ET
 
         public struct ShowAttackMark
         {
-            public HeroCard HeroCard;
-
+            // public HeroCard HeroCard;
+            public HeroCardComponent HeroCardComponent;
+            public DiamondActionItem DiamondActionItem;
             //显示攻击标记
             public bool IsShow;
         }
@@ -269,8 +270,9 @@ namespace ET
             // public HeroCardDataComponentInfo AttackHeroCardDataComponentInfo;
             // public HeroCardDataComponentInfo BeAttackHeroCardDataComponentInfo;
             // public CrashCommonInfo CommonInfo;
+            public List<AttackActionItem> AttackActionItems;
             public HeroCardComponent HeroCardComponent;
-            public AttackAction AttackAction;
+            // public AttackAction AttackAction;
         }
 
         public struct PlayAddAttackViewAnim
@@ -378,14 +380,16 @@ namespace ET
 
         public struct UpdateHeroAttackInfo
         {
-            public AddItemAction AddItemAction;
-            public HeroCard HeroCard;
+            public HeroCardComponent HeroCardComponent;
+            public ComboActionItem ComboActionItem;
+            // public AddItemAction AddItemAction;
+            // public HeroCard HeroCard;
         }
 
         public struct UpdateHeroAngryInfo
         {
-            public HeroCard HeroCard;
-            public HeroCardDataComponentInfo HeroCardDataComponentInfo;
+            public HeroCardComponent HeroCardComponent;
+            public List<HeroCardDataComponentInfo> HeroCardDataComponentInfos;
         }
 
         public struct ShowMatchPVPRoomSuccessAnim

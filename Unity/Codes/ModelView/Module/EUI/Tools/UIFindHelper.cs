@@ -34,8 +34,11 @@ public class UIFindHelper
                     return resultTrs;
             }
         }
+
         return resultTrs;
     }
+
+    
 
     /// <summary>
     /// 根据泛型查找子节点

@@ -158,7 +158,7 @@ namespace ET
         // }
         public static async void PlayerScrollScreen(this PVERoom self, C2M_PlayerScrollScreen message)
         {
-            // self.GetComponent<FightComponent>().PlayerScrollScreen(message);
+
             FightComponent fightComponent = self.GetComponent<FightComponent>();
             self.GetComponent<FightComponent>().DiamondActionItems = new List<DiamondActionItem>();
             M2C_SyncDiamondAction m2CSyncDiamondAction = self.GetComponent<DiamondComponent>().ScrollDiamond(message);
@@ -168,7 +168,7 @@ namespace ET
             fightComponent.ProcessAttackLogic(m2CSyncDiamondAction); //处理攻击逻辑
             fightComponent.CurrentBeAttackHeroCard = null;
             fightComponent.ProcessReBackAttackLogic(m2CSyncDiamondAction);
-            fightComponent.ProcessAddBuffInfo(m2CSyncDiamondAction);
+            // fightComponent.ProcessAddBuffInfo(m2CSyncDiamondAction);
             fightComponent.ProcessAddRoundAngry(m2CSyncDiamondAction);
 
             Unit loseUnit = fightComponent.CheckGameEndResult();

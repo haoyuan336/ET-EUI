@@ -22,7 +22,7 @@ Category {
             #pragma multi_compile_particles
             #pragma multi_compile_fog
             #pragma target 3.0
-            // #pragma only_renderers gles gles3 d3d9 d3d11 glcore
+           // #pragma only_renderers gles gles3 d3d9 d3d11 glcore
             #include "UnityCG.cginc"
 
             sampler2D _MainTex;
