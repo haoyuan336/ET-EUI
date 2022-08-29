@@ -11,5 +11,7 @@
         // public DiamondStruct[] Diamonds;
         public Diamond[] Diamonds;
         public LevelConfig LevelConfig;
+
+        public int ComboTime = 0;
     }
 }

@@ -35,7 +35,9 @@ namespace ET
         {
             // public HeroCard HeroCard;
             public HeroCardComponent HeroCardComponent;
-            public DiamondActionItem DiamondActionItem;
+
+            public HeroCardDataComponentInfo HeroCardDataComponentInfo;
+
             //显示攻击标记
             public bool IsShow;
         }
@@ -271,6 +273,7 @@ namespace ET
             // public HeroCardDataComponentInfo BeAttackHeroCardDataComponentInfo;
             // public CrashCommonInfo CommonInfo;
             public List<AttackActionItem> AttackActionItems;
+
             public HeroCardComponent HeroCardComponent;
             // public AttackAction AttackAction;
         }
@@ -381,15 +384,22 @@ namespace ET
         public struct UpdateHeroAttackInfo
         {
             public HeroCardComponent HeroCardComponent;
+
             public ComboActionItem ComboActionItem;
             // public AddItemAction AddItemAction;
             // public HeroCard HeroCard;
         }
 
-        public struct UpdateHeroAngryInfo
+        public struct UpdateHeroInfoEvent
         {
             public HeroCardComponent HeroCardComponent;
-            public List<HeroCardDataComponentInfo> HeroCardDataComponentInfos;
+            public HeroCardDataComponentInfo HeroCardDataComponentInfo;
+        }
+
+        public struct UpdateHeroAngryInfoEvent
+        {
+            public HeroCardComponent HeroCardComponent;
+            public HeroCardDataComponentInfo HeroCardDataComponentInfo;
         }
 
         public struct ShowMatchPVPRoomSuccessAnim
@@ -403,7 +413,6 @@ namespace ET
             public Scene Scene;
             public HeroCardComponent HeroCardComponent;
             public UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem;
-
         }
     }
 }

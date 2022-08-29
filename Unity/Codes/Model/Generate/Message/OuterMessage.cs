@@ -1211,6 +1211,7 @@ namespace ET
 		[ProtoMember(7)]
 		public ActionMessage ActionMessage { get; set; }
 
+// UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem = 8;	//更新英雄信息
 // repeated ActionMessage ActionMessages = 7;
 // UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem = 7;
 // repeated AddItemAction AddAttackItemActions = 4;
@@ -1221,6 +1222,27 @@ namespace ET
 // {
 // 	repeated int64 HeroIds = 1;
 // }
+	[Message(OuterOpcode.CombeAction)]
+	[ProtoContract]
+	public partial class CombeAction: Object
+	{
+		[ProtoMember(1)]
+		public int CombeTime { get; set; }
+
+		[ProtoMember(2)]
+		public int CrashCount { get; set; }
+
+	}
+
+	[Message(OuterOpcode.UpdateHeroInfoAction)]
+	[ProtoContract]
+	public partial class UpdateHeroInfoAction: Object
+	{
+		[ProtoMember(1)]
+		public HeroCardDataComponentInfo HeroCardDataComponentInfo { get; set; }
+
+	}
+
 	[Message(OuterOpcode.ActionMessage)]
 	[ProtoContract]
 	public partial class ActionMessage: Object
@@ -1242,6 +1264,12 @@ namespace ET
 
 		[ProtoMember(4)]
 		public MakeSureAttackHeroAction MakeSureAttackHeroAction { get; set; }
+
+		[ProtoMember(5)]
+		public CombeAction CombeAction { get; set; }
+
+		[ProtoMember(6)]
+		public UpdateHeroInfoAction UpdateHeroInfoAction { get; set; }
 
 		[ProtoMember(7)]
 		public List<ActionMessage> ActionMessages = new List<ActionMessage>();

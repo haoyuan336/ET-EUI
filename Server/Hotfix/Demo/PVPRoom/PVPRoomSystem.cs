@@ -149,10 +149,10 @@ namespace ET
             self.GetComponent<FightComponent>().DiamondActionItems = new List<DiamondActionItem>();
             M2C_SyncDiamondAction m2CSyncDiamondAction = new M2C_SyncDiamondAction();
             self.GetComponent<DiamondComponent>().ScrollDiamond(message, m2CSyncDiamondAction);
-            fightComponent.MakeSureAttackHeros(m2CSyncDiamondAction);
+            ActionMessage makeSureMessage = fightComponent.MakeSureAttackHeros(m2CSyncDiamondAction.ActionMessage);
             fightComponent.ProcessAddHeroCardAngryLogic(m2CSyncDiamondAction.DiamondActionItems);
-            fightComponent.ProcessComboResult(m2CSyncDiamondAction);
-            fightComponent.ProcessAttackLogic(m2CSyncDiamondAction); //处理攻击逻辑
+            fightComponent.ProcessComboResult(m2CSyncDiamondAction.ActionMessage, makeSureMessage);
+            fightComponent.ProcessAttackLogic(m2CSyncDiamondAction.ActionMessage); //处理攻击逻辑
             fightComponent.ProcessAddRoundAngry(m2CSyncDiamondAction);
             fightComponent.CurrentBeAttackHeroCard = null;
             // fightComponent.ProcessReBackAttackLogic(m2CSyncDiamondAction);

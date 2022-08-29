@@ -34,7 +34,7 @@ namespace ET
             foreach (var addItemAction in comboActionItem.AddAttackActions)
             {
                 HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(addItemAction.HeroCardDataComponentInfo.HeroId);
-                heroCard.GetComponent<HeroCardInfoObjectComponent>().UpdateAttackAdditionView(addItemAction);
+                heroCard.GetComponent<HeroCardInfoObjectComponent>().UpdateAttackAdditionView(addItemAction.HeroCardDataComponentInfo);
             }
 
             // HeroCard heroCard = a.HeroCard;
@@ -45,18 +45,30 @@ namespace ET
         }
     }
 
-    public class UpdateHeroDataInfo: AEvent<EventType.UpdateHeroAngryInfo>
+    public class UpdateHeroDataInfo: AEvent<EventType.UpdateHeroAngryInfoEvent>
     {
-        protected override async ETTask Run(UpdateHeroAngryInfo a)
+        // protected override async ETTask Run(UpdateHeroAngryInfo a)
+        // {
+        //     // HeroCardComponent heroCardComponent = a.HeroCardComponent;
+        //     // List<HeroCardDataComponentInfo> heroCardDataComponentInfos = a.HeroCardDataComponentInfos;
+        //     // foreach (var heroCardDataComponentInfo in heroCardDataComponentInfos)
+        //     // {
+        //     //     HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(heroCardDataComponentInfo.HeroId);
+        //     //     HeroCardInfoObjectComponent heroCardInfoObjectComponent = heroCard.GetComponent<HeroCardInfoObjectComponent>();
+        //     //     heroCardInfoObjectComponent.UpdateAngryView(heroCardDataComponentInfo);
+        //     // }
+        //
+        //     await ETTask.CompletedTask;
+        // }
+        protected override async ETTask Run(EventType.UpdateHeroAngryInfoEvent a)
         {
+            // {
             HeroCardComponent heroCardComponent = a.HeroCardComponent;
-            List<HeroCardDataComponentInfo> heroCardDataComponentInfos = a.HeroCardDataComponentInfos;
-            foreach (var heroCardDataComponentInfo in heroCardDataComponentInfos)
-            {
-                HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(heroCardDataComponentInfo.HeroId);
-                HeroCardInfoObjectComponent heroCardInfoObjectComponent = heroCard.GetComponent<HeroCardInfoObjectComponent>();
-                heroCardInfoObjectComponent.UpdateAngryView(heroCardDataComponentInfo);
-            }
+            HeroCardDataComponentInfo heroCardDataComponentInfo = a.HeroCardDataComponentInfo;
+
+            HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(heroCardDataComponentInfo.HeroId);
+            HeroCardInfoObjectComponent heroCardInfoObjectComponent = heroCard.GetComponent<HeroCardInfoObjectComponent>();
+            heroCardInfoObjectComponent.UpdateAngryView(heroCardDataComponentInfo);
 
             await ETTask.CompletedTask;
         }

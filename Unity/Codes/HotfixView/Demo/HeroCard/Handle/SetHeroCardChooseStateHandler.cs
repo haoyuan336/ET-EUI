@@ -42,14 +42,11 @@ namespace ET
             // heroCard.GetComponent<HeroModeObjectCompoent>().ShowAttackMark(a.IsShow);
 
             HeroCardComponent heroCardComponent = a.HeroCardComponent;
-            DiamondActionItem diamondActionItem = a.DiamondActionItem;
+            HeroCardDataComponentInfo heroCardDataComponentInfo = a.HeroCardDataComponentInfo;
             bool isShow = a.IsShow;
 
-            foreach (var makeSureAttackHeroAction in diamondActionItem.MakeSureAttackHeroActions)
-            {
-                HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(makeSureAttackHeroAction.HeroCardDataComponentInfo.HeroId);
-                heroCard.GetComponent<HeroModeObjectCompoent>().ShowAttackMark(isShow);
-            }
+            HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(heroCardDataComponentInfo.HeroId);
+            heroCard.GetComponent<HeroModeObjectCompoent>().ShowAttackMark(isShow);
 
             await ETTask.CompletedTask;
         }

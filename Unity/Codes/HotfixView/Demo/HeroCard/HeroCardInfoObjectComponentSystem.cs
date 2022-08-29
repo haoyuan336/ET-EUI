@@ -115,9 +115,9 @@ namespace ET
         }
 
         //todo 更新显示增加的攻击力加成
-        public static void UpdateAttackAdditionView(this HeroCardInfoObjectComponent self, AddItemAction addItemAction)
+        public static void UpdateAttackAdditionView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo heroCardDataComponentInfo)
         {
-            var addition = addItemAction.HeroCardDataComponentInfo.DiamondAttackAddition;
+            var addition = heroCardDataComponentInfo.DiamondAttackAddition;
             // var common = addItemAction.CrashCommonInfo;
             // self.ESHeroCardInfoUI.E_CommonText.GetComponent<Text>().text = $"CommonX{common.CommonCount}";
             self.ESHeroCardInfoUI.E_AttackBarImage.GetComponent<Image>().fillAmount = (float)addition / 100;

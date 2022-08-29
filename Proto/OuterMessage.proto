@@ -564,6 +564,7 @@ message M2C_SyncDiamondAction //IActorMessage
 	ComboActionItem ComboActionItem = 5;
 	AddRoundAngryItem AddRoundAngryItem = 6;
 	ActionMessage ActionMessage = 7;
+	// UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem = 8;	//更新英雄信息
 	// repeated ActionMessage ActionMessages = 7;
 	// UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem = 7;
 	// repeated AddItemAction AddAttackItemActions = 4;
@@ -573,6 +574,15 @@ message M2C_SyncDiamondAction //IActorMessage
 // {
 // 	repeated int64 HeroIds = 1;
 // }
+message CombeAction 
+{
+	int32 CombeTime = 1;
+	int32 CrashCount = 2;
+}
+message UpdateHeroInfoAction
+{
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
+}
 message ActionMessage	
 {
 	// int32 ActionType = 1;	//动作类型
@@ -585,10 +595,10 @@ message ActionMessage
 	DiamondAction DiamondAction = 2;	//宝石动作
 	AttackAction AttackAction = 3;	//攻击动作
 	MakeSureAttackHeroAction MakeSureAttackHeroAction = 4;	//确定攻击英雄
-
-
-
+	CombeAction CombeAction = 5;	//连击动作
+	UpdateHeroInfoAction UpdateHeroInfoAction = 6;//更新英雄信息
 	repeated ActionMessage ActionMessages = 7;
+	
 }
 
 message SkillInfo

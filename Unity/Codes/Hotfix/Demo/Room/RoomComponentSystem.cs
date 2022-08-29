@@ -23,12 +23,14 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
-        public static async ETTask ProcessDiamondAction(this RoomComponent self, DiamondAction diamondAction)
+        public static async ETTask ProcessDiamondAction(this RoomComponent self, ActionMessage actionMessage)
         {
+            var diamondAction = actionMessage.DiamondAction;
             if (diamondAction == null)
             {
                 return;
             }
+
             DiamondComponent diamondComponent = self.DomainScene().GetComponent<DiamondComponent>();
             DiamondInfo diamondInfo = diamondAction.DiamondInfo;
             Diamond diamond = diamondComponent.GetChild<Diamond>(diamondInfo.Id);
@@ -63,10 +65,66 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
+        public static async ETTask ProcessMakeSureAttackHeroEvent(this RoomComponent self, ActionMessage actionMessage)
+        {
+            MakeSureAttackHeroAction makeSureAttackHeroAction = actionMessage.MakeSureAttackHeroAction;
+            if (makeSureAttackHeroAction == null)
+            {
+                return;
+            }
+
+            HeroCardComponent heroCardComponent = self.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>();
+            Game.EventSystem.Publish(new ShowAttackMark()
+            {
+                HeroCardComponent = heroCardComponent,
+                IsShow = true,
+                HeroCardDataComponentInfo = makeSureAttackHeroAction.HeroCardDataComponentInfo
+            });
+
+            await ETTask.CompletedTask;
+        }
+
+        public static async ETTask ProcessComboActionMessageEvent(this RoomComponent self, ActionMessage actionMessage)
+        {
+            var comboAction = actionMessage.CombeAction;
+            if (comboAction == null)
+            {
+                return;
+            }
+
+            
+            await Game.EventSystem.PublishAsync(new EventType.ShowComobAnim()
+            {
+                Scene = self.ZoneScene(), ComboCount = comboAction.CombeTime, CrashCount = comboAction.CrashCount
+            });
+
+            await ETTask.CompletedTask;
+        }
+
+        public static async ETTask ProcessUpdateHeroInfoAction(this RoomComponent self, ActionMessage actionMessage)
+        {
+            UpdateHeroInfoAction updateHeroInfoAction = actionMessage.UpdateHeroInfoAction;
+            if (updateHeroInfoAction == null)
+            {
+                return;
+            }
+
+            HeroCardComponent heroCardComponent = self.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>();
+            await Game.EventSystem.PublishAsync(new EventType.UpdateHeroInfoEvent()
+            {
+                HeroCardComponent = heroCardComponent, HeroCardDataComponentInfo = updateHeroInfoAction.HeroCardDataComponentInfo,
+            });
+
+            await ETTask.CompletedTask;
+        }
+
         public static async ETTask ProcessActionMessageEvent(this RoomComponent self, ActionMessage actionMessage)
         {
-            await self.ProcessDiamondAction(actionMessage.DiamondAction);
+            await self.ProcessDiamondAction(actionMessage);
+            await self.ProcessMakeSureAttackHeroEvent(actionMessage);
             await self.ProcessActionMessage(actionMessage);
+            await self.ProcessUpdateHeroInfoAction(actionMessage);
+            await self.ProcessComboActionMessageEvent(actionMessage);
             await ETTask.CompletedTask;
         }
 

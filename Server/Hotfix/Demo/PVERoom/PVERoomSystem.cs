@@ -162,12 +162,12 @@ namespace ET
             FightComponent fightComponent = self.GetComponent<FightComponent>();
             self.GetComponent<FightComponent>().DiamondActionItems = new List<DiamondActionItem>();
             M2C_SyncDiamondAction m2CSyncDiamondAction = new M2C_SyncDiamondAction();
-            self.GetComponent<DiamondComponent>().ScrollDiamond(message,m2CSyncDiamondAction);
+            self.GetComponent<DiamondComponent>().ScrollDiamond(message, m2CSyncDiamondAction);
 
-            fightComponent.MakeSureAttackHeros(m2CSyncDiamondAction);
-            fightComponent.ProcessAddHeroCardAngryLogic(m2CSyncDiamondAction.DiamondActionItems);
-            fightComponent.ProcessComboResult(m2CSyncDiamondAction);
-            fightComponent.ProcessAttackLogic(m2CSyncDiamondAction); //处理攻击逻辑
+            ActionMessage makeSureAttackMessage = fightComponent.MakeSureAttackHeros(m2CSyncDiamondAction.ActionMessage);
+            fightComponent.ProcessAddHeroCardAngryLogic(m2CSyncDiamondAction.ActionMessage);
+            fightComponent.ProcessComboResult(m2CSyncDiamondAction.ActionMessage, makeSureAttackMessage);
+            fightComponent.ProcessAttackLogic(m2CSyncDiamondAction.ActionMessage); //处理攻击逻辑
             fightComponent.CurrentBeAttackHeroCard = null;
             fightComponent.ProcessReBackAttackLogic(m2CSyncDiamondAction);
             // fightComponent.ProcessAddBuffInfo(m2CSyncDiamondAction);
