@@ -557,12 +557,12 @@ message UpdateHeroBuffInfoItem
 message M2C_SyncDiamondAction //IActorMessage
 {
 	int32 RpcId = 90;
-	repeated DiamondActionItem DiamondActionItems = 1;
-	repeated AttackActionItem AttackActionItems = 2;
-	// repeated InitHeroCardDataActionItem InitHeroCardDataActionItems = 3;
-	GameLoseResultAction GameLoseResultAction = 4;
-	ComboActionItem ComboActionItem = 5;
-	AddRoundAngryItem AddRoundAngryItem = 6;
+	// repeated DiamondActionItem DiamondActionItems = 1;
+	// repeated AttackActionItem AttackActionItems = 2;
+	// // repeated InitHeroCardDataActionItem InitHeroCardDataActionItems = 3;
+	// GameLoseResultAction GameLoseResultAction = 4;
+	// ComboActionItem ComboActionItem = 5;
+	// AddRoundAngryItem AddRoundAngryItem = 6;
 	ActionMessage ActionMessage = 7;
 	// UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem = 8;	//更新英雄信息
 	// repeated ActionMessage ActionMessages = 7;
@@ -582,6 +582,16 @@ message CombeAction
 message UpdateHeroInfoAction
 {
 	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
+	// repeated BuffInfo BuffInfos = 2;
+}
+message UpdateHeroBuffInfo
+{
+	int64 HeroId = 1;
+	repeated BuffInfo BuffInfos = 2;
+}
+message HideAttackMarkAction
+{
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
 }
 message ActionMessage	
 {
@@ -598,6 +608,9 @@ message ActionMessage
 	CombeAction CombeAction = 5;	//连击动作
 	UpdateHeroInfoAction UpdateHeroInfoAction = 6;//更新英雄信息
 	repeated ActionMessage ActionMessages = 7;
+	GameLoseResultAction GameLoseResultAction = 8;	//游戏结果
+	UpdateHeroBuffInfo UpdateHeroBuffInfo = 9; //更新buff信息
+	HideAttackMarkAction HideAttackMarkAction = 10;	//隐藏攻击标记动作
 	
 }
 

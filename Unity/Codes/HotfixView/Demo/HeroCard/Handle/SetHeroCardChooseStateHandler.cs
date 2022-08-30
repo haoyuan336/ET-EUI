@@ -1,4 +1,6 @@
-﻿using ET.EventType;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using ET.EventType;
 
 namespace ET
 {
@@ -6,30 +8,21 @@ namespace ET
     {
         protected override async ETTask Run(SetHeroCardChooseState a)
         {
-            if (!a.Show)
+            HeroCardComponent heroCardComponent = a.HeroCardComponent;
+            List<HeroCard> heroCards = heroCardComponent.GetChilds<HeroCard>();
+
+            foreach (var card in heroCards)
             {
-                foreach (var card in a.AllHeroCard)
-                {
-                    card.GetComponent<HeroModeObjectCompoent>().ShowChooseMark(false);
-                }
-
-                return;
-            }
-
-            HeroCard heroCard = a.HeroCard;
-
-            foreach (var card in a.AllHeroCard)
-            {
-                if (card.Equals(heroCard))
-                {
-                    continue;
-                }
-
                 card.GetComponent<HeroModeObjectCompoent>().ShowChooseMark(false);
             }
 
-            heroCard.GetComponent<HeroModeObjectCompoent>().ShowChooseMark(a.Show);
+            if (!a.IsShow)
+            {
+                return;
+            }
 
+            HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(a.HeroId);
+            heroCard.GetComponent<HeroModeObjectCompoent>().ShowChooseMark(a.IsShow);
             await ETTask.CompletedTask;
         }
     }
@@ -41,12 +34,16 @@ namespace ET
             // HeroCard heroCard = a.HeroCard;
             // heroCard.GetComponent<HeroModeObjectCompoent>().ShowAttackMark(a.IsShow);
 
+            Log.Debug($"ShowAttackMarkHandler {a.IsShow}");
             HeroCardComponent heroCardComponent = a.HeroCardComponent;
             HeroCardDataComponentInfo heroCardDataComponentInfo = a.HeroCardDataComponentInfo;
             bool isShow = a.IsShow;
 
-            HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(heroCardDataComponentInfo.HeroId);
-            heroCard.GetComponent<HeroModeObjectCompoent>().ShowAttackMark(isShow);
+            if (isShow)
+            {
+                HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(heroCardDataComponentInfo.HeroId);
+                heroCard.GetComponent<HeroModeObjectCompoent>().ShowAttackMark(isShow);
+            }
 
             await ETTask.CompletedTask;
         }

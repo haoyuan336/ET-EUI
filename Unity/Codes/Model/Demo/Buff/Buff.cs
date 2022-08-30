@@ -6,5 +6,7 @@ namespace ET
         public int RoundCount = 1;
         public int OverlabCount = 1; //叠加次数
         public int Damage = 0;  //伤害值  
+        public int HealthShield = 0;  //生命值护盾
+        
     }
 }

@@ -1192,22 +1192,12 @@ namespace ET
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
 
-		[ProtoMember(1)]
-		public List<DiamondActionItem> DiamondActionItems = new List<DiamondActionItem>();
-
-		[ProtoMember(2)]
-		public List<AttackActionItem> AttackActionItems = new List<AttackActionItem>();
-
-// repeated InitHeroCardDataActionItem InitHeroCardDataActionItems = 3;
-		[ProtoMember(4)]
-		public GameLoseResultAction GameLoseResultAction { get; set; }
-
-		[ProtoMember(5)]
-		public ComboActionItem ComboActionItem { get; set; }
-
-		[ProtoMember(6)]
-		public AddRoundAngryItem AddRoundAngryItem { get; set; }
-
+// repeated DiamondActionItem DiamondActionItems = 1;
+// repeated AttackActionItem AttackActionItems = 2;
+// // repeated InitHeroCardDataActionItem InitHeroCardDataActionItems = 3;
+// GameLoseResultAction GameLoseResultAction = 4;
+// ComboActionItem ComboActionItem = 5;
+// AddRoundAngryItem AddRoundAngryItem = 6;
 		[ProtoMember(7)]
 		public ActionMessage ActionMessage { get; set; }
 
@@ -1237,6 +1227,28 @@ namespace ET
 	[Message(OuterOpcode.UpdateHeroInfoAction)]
 	[ProtoContract]
 	public partial class UpdateHeroInfoAction: Object
+	{
+		[ProtoMember(1)]
+		public HeroCardDataComponentInfo HeroCardDataComponentInfo { get; set; }
+
+// repeated BuffInfo BuffInfos = 2;
+	}
+
+	[Message(OuterOpcode.UpdateHeroBuffInfo)]
+	[ProtoContract]
+	public partial class UpdateHeroBuffInfo: Object
+	{
+		[ProtoMember(1)]
+		public long HeroId { get; set; }
+
+		[ProtoMember(2)]
+		public List<BuffInfo> BuffInfos = new List<BuffInfo>();
+
+	}
+
+	[Message(OuterOpcode.HideAttackMarkAction)]
+	[ProtoContract]
+	public partial class HideAttackMarkAction: Object
 	{
 		[ProtoMember(1)]
 		public HeroCardDataComponentInfo HeroCardDataComponentInfo { get; set; }
@@ -1273,6 +1285,15 @@ namespace ET
 
 		[ProtoMember(7)]
 		public List<ActionMessage> ActionMessages = new List<ActionMessage>();
+
+		[ProtoMember(8)]
+		public GameLoseResultAction GameLoseResultAction { get; set; }
+
+		[ProtoMember(9)]
+		public UpdateHeroBuffInfo UpdateHeroBuffInfo { get; set; }
+
+		[ProtoMember(10)]
+		public HideAttackMarkAction HideAttackMarkAction { get; set; }
 
 	}
 

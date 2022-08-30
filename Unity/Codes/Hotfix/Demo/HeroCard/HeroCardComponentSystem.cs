@@ -35,8 +35,8 @@ namespace ET
     {
         public override void BeforeDestroy(HeroCardComponent self)
         {
-            // Log.Warning("销毁钱调用");
 #if SERVER
+            // Log.Warning("销毁钱调用");
             self.SaveData();
 #endif
         }
@@ -62,12 +62,14 @@ namespace ET
             {
                 heroCard.IsShow = false;
             }
+
             var targetHeroCard = heroCards.Find(a => a.Id.Equals(heroId));
             if (targetHeroCard != null)
             {
                 targetHeroCard.IsShow = true;
                 return true;
             }
+
             return false;
         }
 
@@ -88,7 +90,6 @@ namespace ET
         public static async ETTask<List<HeroCard>> GetHeroCardsWithTroopIdAsync(this HeroCardComponent self, long troopId)
         {
             List<HeroCard> heroCards = await self.GetAllHeroCardAsync();
-
             List<HeroCard> newHeroCards = heroCards.FindAll(a => a.TroopId.Equals(troopId));
             return newHeroCards;
         }

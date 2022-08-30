@@ -6,12 +6,12 @@ namespace ET
     {
         protected override async ETTask Run(Session session, M2C_PlayerChooseAttackHero message)
         {
-            var heroId = message.HeroId;
-            List<HeroCard> allHeroCards = session.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>().GetChilds<HeroCard>();
-            HeroCard heroCard = session.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>().GetChild<HeroCard>(heroId);
+            HeroCardComponent heroCardComponent = session.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>();
             await Game.EventSystem.PublishAsync(new EventType.SetHeroCardChooseState()
             {
-                AllHeroCard = allHeroCards, HeroCard = heroCard, Show = true
+                HeroCardComponent =  heroCardComponent,
+                IsShow = true,
+                HeroId = message.HeroId
             });
             // await ETTask.CompletedTask;
         }

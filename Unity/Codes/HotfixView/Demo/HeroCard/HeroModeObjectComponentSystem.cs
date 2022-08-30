@@ -232,14 +232,20 @@ namespace ET
                     await self.PlayAttackGroupAnim(heroCardComponent, attackHeroCardDataComponerntInfo, beHeroCardDataComponentInfos, skillConfig,
                         heroBuffInfos);
                     break;
+                case (int)SkillRangeType.FriendSingle:
+                    break;
+                case (int)SkillRangeType.FriendGroup:
+                    break;
             }
         }
+        // public static async ETTask P
 
         public static async ETTask PlaySingleAttackAnim(this HeroModeObjectCompoent self, HeroCardComponent heroCardComponent,
         AttackAction attackAction,
         SkillConfig skillConfig)
         {
             // HeroCardComponent heroCardComponent = message.HeroCardComponent;
+            Log.Warning($"BeAttackHeroCardDataComponentInfos {attackAction.BeAttackHeroCardDataComponentInfos.Count}");
             HeroCardDataComponentInfo beHeroCardDataComponentInfo = attackAction.BeAttackHeroCardDataComponentInfos[0];
             HeroCard beAttackHeroCard = heroCardComponent.GetChild<HeroCard>(beHeroCardDataComponentInfo.HeroId);
             HeroCardDataComponentInfo attackHeroCardDataComponerntInfo = attackAction.AttackHeroCardDataComponentInfo;
@@ -569,6 +575,8 @@ namespace ET
             }
             else
             {
+                Log.Debug($"is show {isShow}");
+                Log.Debug($"attack mark {self.AttackMark}");
                 if (self.AttackMark != null)
                 {
                     self.AttackMark.SetActive(false);

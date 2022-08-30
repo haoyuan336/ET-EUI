@@ -49,50 +49,51 @@ namespace ET
             return buffInfos;
         }
 
-        public static void AddBuffWithSkillConfig(this BuffComponent self, SkillConfig skillConfig)
+        public static void AddBuffWithSkillConfig(this BuffComponent self, Skill skill)
         {
-            //找到buff
-            int[] buffConfigIds = skillConfig.BuffConfigIds;
-            int[] buffRounds = skillConfig.LevelBuffRoundCounts;
-
-            if (buffConfigIds == null)
-            {
-                return;
-            }
-
-            List<Buff> currentBuffs = self.GetChilds<Buff>();
-            if (currentBuffs != null)
-            {
-                currentBuffs.RemoveAll(a => a.RoundCount <= 0);
-            }
-
-            //检查过滤条件
-            int activeBuffCondition = skillConfig.ActiveBuffCondition;
-            if (activeBuffCondition != 0)
-            {
-                //检查是否符合条件，不符合 直接返回
-                if (currentBuffs == null)
-                {
-                    return;
-                }
-
-                Buff findBuff = currentBuffs.Find(a => a.ConfigId.Equals(activeBuffCondition));
-                if (findBuff == null)
-                {
-                    return;
-                }
-
-                findBuff.RoundCount = 0;
-                //条件符合，
-            }
-
-            for (int i = 0; i < buffConfigIds.Length; i++)
-            {
-                self.AddBuff(buffConfigIds[i], buffRounds[i]);
-            }
+            // SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
+            // //找到buff
+            // int[] buffConfigIds = skillConfig.BuffConfigIds;
+            // int[] buffRounds = skillConfig.LevelBuffRoundCounts;
+            //
+            // if (buffConfigIds == null)
+            // {
+            //     return;
+            // }
+            //
+            // List<Buff> currentBuffs = self.GetChilds<Buff>();
+            // if (currentBuffs != null)
+            // {
+            //     currentBuffs.RemoveAll(a => a.RoundCount <= 0);
+            // }
+            //
+            // //检查过滤条件
+            // int activeBuffCondition = skillConfig.ActiveBuffCondition;
+            // if (activeBuffCondition != 0)
+            // {
+            //     //检查是否符合条件，不符合 直接返回
+            //     if (currentBuffs == null)
+            //     {
+            //         return;
+            //     }
+            //
+            //     Buff findBuff = currentBuffs.Find(a => a.ConfigId.Equals(activeBuffCondition));
+            //     if (findBuff == null)
+            //     {
+            //         return;
+            //     }
+            //
+            //     findBuff.RoundCount = 0;
+            //     //条件符合，
+            // }
+            //
+            // for (int i = 0; i < buffConfigIds.Length; i++)
+            // {
+            //     self.AddBuff(buffConfigIds[i], buffRounds[i]);
+            // }
         }
 
-        public static void AddBuff(this BuffComponent self, int configId, int count)
+        public static Buff AddBuff(this BuffComponent self, int configId, int count)
         {
             BuffConfig addBuffConfig = BuffConfigCategory.Instance.Get(configId);
             //取出原有buff ，检查是否相克
@@ -112,6 +113,7 @@ namespace ET
             }
 
             targetBuff.RoundCount = count; //回合数另算
+            return targetBuff;
         }
 
         public static void ProcessRoundLogic(this BuffComponent self)

@@ -79,7 +79,7 @@ namespace ET
                         List<Weapon> items = await DBManagerComponent.Instance.GetZoneDB(unit.DomainZone()).Query<Weapon>(a =>
                                 a.OwnerId.Equals(accountId) && a.State.Equals(StateType.Active) && a.ConfigId.Equals(itemConfig.Id));
                         //todo 道具属于叠加道具，需要在原有道具基础上增加数目
-                        Log.Warning($"items {items.Count}");
+                        // Log.Warning($"items {items.Count}");
                         if (items.Count > 0)
                         {
                             items[0].Count += count;

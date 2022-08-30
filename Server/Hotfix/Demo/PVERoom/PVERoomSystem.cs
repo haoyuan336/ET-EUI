@@ -147,38 +147,31 @@ namespace ET
             }
         }
 
-        //todo 初始化英雄卡
-        // public static async ETTask InitPlayerHeroCards(this PVERoom self, Unit unit)
-        // {
-        //
-        //     FightComponent fightComponent = self.GetComponent<FightComponent>();
-        //     await fightComponent.InitPlayerHeroCards(unit);
-        //     
-        //     //todo sync all player info
-        //     await ETTask.CompletedTask;
-        // }
+        
         public static async void PlayerScrollScreen(this PVERoom self, C2M_PlayerScrollScreen message)
         {
             FightComponent fightComponent = self.GetComponent<FightComponent>();
             self.GetComponent<FightComponent>().DiamondActionItems = new List<DiamondActionItem>();
             M2C_SyncDiamondAction m2CSyncDiamondAction = new M2C_SyncDiamondAction();
             self.GetComponent<DiamondComponent>().ScrollDiamond(message, m2CSyncDiamondAction);
-
             ActionMessage makeSureAttackMessage = fightComponent.MakeSureAttackHeros(m2CSyncDiamondAction.ActionMessage);
             fightComponent.ProcessAddHeroCardAngryLogic(m2CSyncDiamondAction.ActionMessage);
             fightComponent.ProcessComboResult(m2CSyncDiamondAction.ActionMessage, makeSureAttackMessage);
-            fightComponent.ProcessAttackLogic(m2CSyncDiamondAction.ActionMessage); //处理攻击逻辑
-            fightComponent.CurrentBeAttackHeroCard = null;
-            fightComponent.ProcessReBackAttackLogic(m2CSyncDiamondAction);
+            fightComponent.ProcessAttackLogic(m2CSyncDiamondAction.ActionMessage, makeSureAttackMessage); //处理攻击逻辑
+            fightComponent.HideAttackTargetMark(m2CSyncDiamondAction.ActionMessage);
+            fightComponent.ProcessReBackAttackLogic(m2CSyncDiamondAction.ActionMessage);
             // fightComponent.ProcessAddBuffInfo(m2CSyncDiamondAction);
-            fightComponent.ProcessAddRoundAngry(m2CSyncDiamondAction);
+            fightComponent.ProcessAddRoundAngry(m2CSyncDiamondAction.ActionMessage);
 
             Unit loseUnit = fightComponent.CheckGameEndResult();
             //
             if (loseUnit != null)
             {
-                m2CSyncDiamondAction.GameLoseResultAction = new GameLoseResultAction() { LoseAccountId = loseUnit.AccountId };
+                // m2CSyncDiamondAction.GameLoseResultAction
+                GameLoseResultAction resultAction = new GameLoseResultAction() { LoseAccountId = loseUnit.AccountId };
 
+                ActionMessage resultMessage = new ActionMessage() { GameLoseResultAction = resultAction };
+                m2CSyncDiamondAction.ActionMessage.ActionMessages.Add(resultMessage);
                 foreach (var unit in fightComponent.Units)
                 {
                     //todo -----------储存游戏结果---------------

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace ET
@@ -151,6 +150,90 @@ namespace ET
             }
 
             return baseDamage;
+        }
+
+        public static void ProcessBuffLogic(this HeroCard self, HeroCard targetHeroCard, Skill skill)
+        {
+#if SERVER
+            BuffComponent buffComponent = targetHeroCard.GetComponent<BuffComponent>();
+            //     // todo 给收攻击的英雄增加buff
+            // buffComponent.AddBuffWithSkillConfig(skill);
+
+            SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
+            //找到buff
+            int[] buffConfigIds = skillConfig.BuffConfigIds;
+            int[] buffRounds = skillConfig.LevelBuffRoundCounts;
+
+            if (buffConfigIds == null)
+            {
+                return;
+            }
+
+            List<Buff> currentBuffs = buffComponent.GetChilds<Buff>();
+            if (currentBuffs != null)
+            {
+                currentBuffs.RemoveAll(a => a.RoundCount <= 0); //删掉0回合buff
+            }
+
+            //检查过滤条件
+            int activeBuffCondition = skillConfig.ActiveBuffCondition; //激活新buff需要的条件
+            if (activeBuffCondition != 0)
+            {
+                //检查是否符合条件，不符合 直接返回
+                if (currentBuffs == null)
+                {
+                    return;
+                }
+
+                Buff findBuff = currentBuffs.Find(a => a.ConfigId.Equals(activeBuffCondition));
+                if (findBuff == null)
+                {
+                    return;
+                }
+
+                findBuff.RoundCount = 0;
+                //条件符合，
+            }
+
+            for (int i = 0; i < buffConfigIds.Length; i++)
+            {
+                Buff buff = buffComponent.AddBuff(buffConfigIds[i], buffRounds[i]);
+                switch (buffConfigIds[i])
+                {
+                    case 110:
+                        //增加护盾 buff 原来英雄的血量的加成值 
+                        var healthShield = skillConfig.HealthShieldAdditions[skill.Level - 1] / 100.0f;
+                        buff.HealthShield = (int)healthShield;
+                        break;
+                }
+            }
+#endif
+        }
+
+        public static void ProcessMainFightLogic(this HeroCard self, HeroCard targetHeroCard, Skill skill)
+        {
+            SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
+            switch (skillConfig.RangeType)
+            {
+                case (int)SkillRangeType.EnemySingle:
+                case (int)SkillRangeType.EnemyGroup:
+                    self.AttackTarget(targetHeroCard, self.GetComponent<HeroCardDataComponent>().DiamondAttackAddition, skill);
+                    break;
+                case (int)SkillRangeType.FriendSingle:
+                case (int)SkillRangeType.FriendGroup:
+                    self.CareTarget(targetHeroCard, skill);
+                    break;
+            }
+        }
+
+        public static void CareTarget(this HeroCard self, HeroCard targetHeroCard, Skill skill)
+        {
+            SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
+            int[] careHealehs = skillConfig.CareHealths;
+            float rate = careHealehs[skill.Level - 1] / 100.0f;
+
+            float endHp = targetHeroCard.GetComponent<HeroCardDataComponent>().HP * (1 + rate);
+            targetHeroCard.GetComponent<HeroCardDataComponent>().HP = (int)endHp;
         }
 
         public static void AttackTarget(this HeroCard self, HeroCard targetHeroCard, int comboAddition, Skill skill)

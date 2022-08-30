@@ -92,7 +92,6 @@ namespace ET
                 return;
             }
 
-            
             await Game.EventSystem.PublishAsync(new EventType.ShowComobAnim()
             {
                 Scene = self.ZoneScene(), ComboCount = comboAction.CombeTime, CrashCount = comboAction.CrashCount
@@ -109,13 +108,88 @@ namespace ET
                 return;
             }
 
+            Game.EventSystem.Publish(new EventType.HideCombo() { Scene = self.ZoneScene() });
+
             HeroCardComponent heroCardComponent = self.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>();
             await Game.EventSystem.PublishAsync(new EventType.UpdateHeroInfoEvent()
             {
-                HeroCardComponent = heroCardComponent, HeroCardDataComponentInfo = updateHeroInfoAction.HeroCardDataComponentInfo,
+                HeroCardComponent = heroCardComponent, HeroCardDataComponentInfo = updateHeroInfoAction.HeroCardDataComponentInfo
             });
 
             await ETTask.CompletedTask;
+        }
+
+        public static async ETTask ProcessAttackAction(this RoomComponent self, ActionMessage actionMessage)
+        {
+            //攻击逻辑
+            AttackAction attackAction = actionMessage.AttackAction;
+
+            if (attackAction == null)
+            {
+                return;
+            }
+
+            HeroCardComponent heroCardComponent = self.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>();
+            await Game.EventSystem.PublishAsync(new PlayHeroCardAttackAnim() { HeroCardComponent = heroCardComponent, AttackAction = attackAction });
+            await ETTask.CompletedTask;
+        }
+
+        public static async ETTask ProcessGameResult(this RoomComponent self, ActionMessage actionMessage)
+        {
+            GameLoseResultAction action = actionMessage.GameLoseResultAction;
+            if (action == null)
+            {
+                return;
+            }
+
+            long AccountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
+            //
+            if (!AccountId.Equals(action.LoseAccountId))
+            {
+                Log.Debug("game win");
+                Game.EventSystem.Publish(new ShowGameWinUI() { ZondScene = self.ZoneScene() });
+            }
+            else
+            {
+                Log.Debug("game lose");
+                Game.EventSystem.Publish(new ShowGameLoaseUI() { ZoneScene = self.ZoneScene() });
+            }
+
+            await ETTask.CompletedTask;
+        }
+
+        public static async ETTask ProcessBuffStateEvent(this RoomComponent self, ActionMessage actionMessage)
+        {
+            UpdateHeroBuffInfo updateHeroBuffInfo = actionMessage.UpdateHeroBuffInfo;
+            if (updateHeroBuffInfo == null)
+            {
+                return;
+            }
+
+            HeroCardComponent heroCardComponent = self.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>();
+            await Game.EventSystem.PublishAsync(new EventType.UpdateHeroBuffInfoEvent()
+            {
+                HeroId = updateHeroBuffInfo.HeroId, BuffInfos = updateHeroBuffInfo.BuffInfos, HeroCardComponent = heroCardComponent
+            });
+
+            await ETTask.CompletedTask;
+        }
+
+        public static async ETTask ProcessHideAttackMarkEvent(this RoomComponent self, ActionMessage actionMessage)
+        {
+            HideAttackMarkAction hideAttackMarkAction = actionMessage.HideAttackMarkAction;
+            if (hideAttackMarkAction == null)
+            {
+                return;
+            }
+
+            HeroCardComponent heroCardComponent = self.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>();
+            await Game.EventSystem.PublishAsync(new EventType.SetHeroCardChooseState()
+            {
+                HeroCardComponent =  heroCardComponent,
+                HeroId = hideAttackMarkAction.HeroCardDataComponentInfo.HeroId,
+                IsShow = false
+            });
         }
 
         public static async ETTask ProcessActionMessageEvent(this RoomComponent self, ActionMessage actionMessage)
@@ -124,6 +198,10 @@ namespace ET
             await self.ProcessMakeSureAttackHeroEvent(actionMessage);
             await self.ProcessActionMessage(actionMessage);
             await self.ProcessUpdateHeroInfoAction(actionMessage);
+            await self.ProcessAttackAction(actionMessage);
+            await self.ProcessGameResult(actionMessage);
+            await self.ProcessBuffStateEvent(actionMessage);
+            await self.ProcessHideAttackMarkEvent(actionMessage);
             await self.ProcessComboActionMessageEvent(actionMessage);
             await ETTask.CompletedTask;
         }

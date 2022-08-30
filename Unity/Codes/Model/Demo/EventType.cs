@@ -272,7 +272,9 @@ namespace ET
             // public HeroCardDataComponentInfo AttackHeroCardDataComponentInfo;
             // public HeroCardDataComponentInfo BeAttackHeroCardDataComponentInfo;
             // public CrashCommonInfo CommonInfo;
-            public List<AttackActionItem> AttackActionItems;
+            // public List<AttackActionItem> AttackActionItems;
+
+            public AttackAction AttackAction;
 
             public HeroCardComponent HeroCardComponent;
             // public AttackAction AttackAction;
@@ -333,9 +335,10 @@ namespace ET
         /// </summary>
         public struct SetHeroCardChooseState
         {
-            public List<HeroCard> AllHeroCard;
-            public HeroCard HeroCard;
-            public bool Show;
+
+            public HeroCardComponent HeroCardComponent;
+            public long HeroId;
+            public bool IsShow;
         }
 
         /// <summary>
@@ -396,6 +399,13 @@ namespace ET
             public HeroCardDataComponentInfo HeroCardDataComponentInfo;
         }
 
+        public struct UpdateHeroBuffInfoEvent
+        {
+            public HeroCardComponent HeroCardComponent;
+            public long HeroId;
+            public List<BuffInfo> BuffInfos;
+        }
+
         public struct UpdateHeroAngryInfoEvent
         {
             public HeroCardComponent HeroCardComponent;
@@ -408,11 +418,11 @@ namespace ET
             public long RoomId;
         }
 
-        public struct UpdateHeroBuffInfo
-        {
-            public Scene Scene;
-            public HeroCardComponent HeroCardComponent;
-            public UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem;
-        }
+        // public struct UpdateHeroBuffInfo
+        // {
+        //     public Scene Scene;
+        //     public HeroCardComponent HeroCardComponent;
+        //     public UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem;
+        // }
     }
 }

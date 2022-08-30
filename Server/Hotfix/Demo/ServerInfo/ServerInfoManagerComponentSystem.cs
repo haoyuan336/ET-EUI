@@ -43,7 +43,7 @@ namespace ET
                 }
                 
                 
-                Log.Error("server info count is zero");
+                // Log.Error("server info count is zero");
                 return;
             }
             self.ServerInfos.Clear();

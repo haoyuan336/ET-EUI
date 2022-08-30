@@ -11,7 +11,6 @@ namespace ET
             self.GetComponent<FightComponent>().LevelConfig = LevelConfigCategory.Instance.Get(ConstValue.PVPLevelConfigId);
         }
     }
-
     public static class PvPRoomSystem
     {
         public static void PlayerGameReady(this PVPRoom self, Unit unit)
@@ -103,15 +102,7 @@ namespace ET
                                 .Query<HeroCard>(a => a.TroopId.Equals(troopId) && a.State == (int)HeroCardState.Active);
                 foreach (var heroCard in heroCards)
                 {
-                    // heroCard.OwnerId
                     unit.AddChild(heroCard);
-                    // List<Skill> skills = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
-                    //         .Query<Skill>(a => a.OwnerId.Equals(heroCard.Id));
-                    // foreach (var skill in skills)
-                    // {
-                    //     heroCard.AddChild(skill);
-                    // }
-
                     List<Weapon> weapons = await DBManagerComponent.Instance.GetZoneDB(self.DomainZone())
                             .Query<Weapon>(a => a.OnWeaponHeroId.Equals(heroCard.Id) && a.State == (int)StateType.Active);
                     foreach (var weapon in weapons)
@@ -150,10 +141,10 @@ namespace ET
             M2C_SyncDiamondAction m2CSyncDiamondAction = new M2C_SyncDiamondAction();
             self.GetComponent<DiamondComponent>().ScrollDiamond(message, m2CSyncDiamondAction);
             ActionMessage makeSureMessage = fightComponent.MakeSureAttackHeros(m2CSyncDiamondAction.ActionMessage);
-            fightComponent.ProcessAddHeroCardAngryLogic(m2CSyncDiamondAction.DiamondActionItems);
+            fightComponent.ProcessAddHeroCardAngryLogic(m2CSyncDiamondAction.ActionMessage);
             fightComponent.ProcessComboResult(m2CSyncDiamondAction.ActionMessage, makeSureMessage);
-            fightComponent.ProcessAttackLogic(m2CSyncDiamondAction.ActionMessage); //处理攻击逻辑
-            fightComponent.ProcessAddRoundAngry(m2CSyncDiamondAction);
+            fightComponent.ProcessAttackLogic(m2CSyncDiamondAction.ActionMessage, makeSureMessage); //处理攻击逻辑
+            fightComponent.ProcessAddRoundAngry(m2CSyncDiamondAction.ActionMessage);
             fightComponent.CurrentBeAttackHeroCard = null;
             // fightComponent.ProcessReBackAttackLogic(m2CSyncDiamondAction);
             // fightComponent.ProcessAddRoundAngry(m2CSyncDiamondAction);
@@ -161,7 +152,10 @@ namespace ET
             //
             if (loseUnit != null)
             {
-                m2CSyncDiamondAction.GameLoseResultAction = new GameLoseResultAction() { LoseAccountId = loseUnit.AccountId };
+                var gameLoseResultAction = new GameLoseResultAction() { LoseAccountId = loseUnit.AccountId };
+
+                var actionMessage = new ActionMessage() { GameLoseResultAction = gameLoseResultAction };
+                m2CSyncDiamondAction.ActionMessage.ActionMessages.Add(actionMessage);
 
                 foreach (var unit in fightComponent.Units)
                 {
@@ -210,7 +204,7 @@ namespace ET
                 MessageHelper.SendToClient(unit, m2CSyncDiamondAction);
             }
 
-            if (fightComponent.CheckIsHaveCrash(m2CSyncDiamondAction))
+            if (fightComponent.CheckIsHaveCrash(m2CSyncDiamondAction.ActionMessage))
             {
                 fightComponent.CurrentTurnIndex++;
                 if (fightComponent.CurrentTurnIndex == fightComponent.Units.Count)

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ET.EventType;
 
 namespace ET
@@ -9,10 +10,10 @@ namespace ET
             HeroCardComponent heroCardComponent = a.HeroCardComponent;
             HeroCardDataComponentInfo heroCardDataComponentInfo = a.HeroCardDataComponentInfo;
             HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(heroCardDataComponentInfo.HeroId);
-
             HeroCardInfoObjectComponent objectComponent = heroCard.GetComponent<HeroCardInfoObjectComponent>();
             objectComponent.UpdateAngryView(heroCardDataComponentInfo);
             objectComponent.UpdateAttackAdditionView(heroCardDataComponentInfo);
+
             await ETTask.CompletedTask;
         }
     }

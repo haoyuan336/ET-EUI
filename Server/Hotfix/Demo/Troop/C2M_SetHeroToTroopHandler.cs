@@ -14,6 +14,7 @@ namespace ET
             TroopComponent troopComponent = unit.GetComponent<TroopComponent>();
             List<HeroCard> heroCards = await troopComponent.SetHeroToTroop(heroId);
 
+            // Log.Warning($"hero card {heroCards}");
 
             List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>();
             foreach (var heroCard in heroCards)

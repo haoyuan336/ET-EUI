@@ -53,10 +53,6 @@ namespace ET
         {
             //获取当前选择的队伍
             Troop troop = await self.GetCurrentTroopAsync();
-            if (troop == null)
-            {
-                return null;
-            }
 
             List<HeroCard> heroCards = await self.Parent.GetComponent<HeroCardComponent>().GetHeroCardsWithTroopIdAsync(troop.Id);
 
@@ -91,12 +87,16 @@ namespace ET
         {
             // List<Troop> troops = self.GetChilds<Troop>();
             List<Troop> troops = await self.GetAllTroopAyncs();
-            if (troops == null)
+            Troop findTroop = troops.Find(a => a.Index.Equals(index));
+            if (findTroop == null)
             {
-                return null;
+                findTroop = self.AddChild<Troop>();
+                findTroop.OnwerId = self.GetParent<Unit>().AccountId;
+                findTroop.Index = index;
+                // Log.Warning($"troop {findTroop}");
             }
-                    
-            return troops.Find(a => a.Index.Equals(index));
+
+            return findTroop;
         }
 
         public static async ETTask<List<HeroCardInfo>> GetHeroCardInfosByIndexAsync(this TroopComponent self)
@@ -107,8 +107,10 @@ namespace ET
             var troop = await self.GetTroopIdWithIndexAsync(index);
 
             HeroCardComponent heroCardComponent = self.Parent.GetComponent<HeroCardComponent>();
-
+            // Log.Debug($"hero card component {heroCardComponent}");
+            // Log.Warning($"troop {troop}");
             List<HeroCard> heroCards = await heroCardComponent.GetHeroCardsWithTroopIdAsync(troop.Id);
+            // Log.Warning($"hero card count {heroCards.Count}");
             List<HeroCardInfo> heroCardInfos = new List<HeroCardInfo>();
             foreach (var heroCard in heroCards)
             {
@@ -152,7 +154,7 @@ namespace ET
                 }
             }
 
-            return null;
+            return troops[0];
         }
 
         public static async ETTask<int> GetCurrentTroopIndexAsync(this TroopComponent self)
@@ -191,6 +193,14 @@ namespace ET
                 {
                     newTroops.Add(troop);
                 }
+            }
+
+            if (newTroops.Count == 0)
+            {
+                Troop troop = self.AddChild<Troop>();
+                troop.Index = 1;
+                troop.IsOn = true;
+                troop.OnwerId = self.GetParent<Unit>().AccountId;
             }
 
             return newTroops;
