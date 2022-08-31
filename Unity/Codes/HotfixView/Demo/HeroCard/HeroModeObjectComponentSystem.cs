@@ -407,10 +407,11 @@ namespace ET
         {
             int beAttackTime = skillConfig.BeAttackAnimPlayTime;
             await TimerComponent.Instance.WaitAsync(beAttackTime);
-            // if (skillConfig.RangeType == (int)SkillRangeType.EnemySingle || skillConfig.RangeType == (int)SkillRangeType.EnemyGroup)
-            // {
-            self.HeroMode.GetComponent<Animator>().SetTrigger("BeAttack");
-            // }
+            if (skillConfig.RangeType == (int)SkillRangeType.EnemySingle || skillConfig.RangeType == (int)SkillRangeType.EnemyGroup)
+            {
+                self.HeroMode.GetComponent<Animator>().SetTrigger("BeAttack");
+            }
+
             // self.Parent.GetComponent<HeroCardObjectComponent>().UpdateHeroCardTextView(message.BeAttackHeroCardDataComponentInfo, message.CommonInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().UpdateHPView(componentInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(componentInfo);
@@ -447,7 +448,7 @@ namespace ET
                 self.AttackMark.SetActive(false);
             }
 
-            self.PlaySkillEffect(skillConfig).Coroutine();
+            self.PlaySkillEffectWithConfig(skillConfig).Coroutine();
             self.PlayFlyEffect(skillConfig, beAttackHeroCard);
             beAttackHeroCard.GetComponent<HeroModeObjectCompoent>()
                     .PlayBeAttackAnim(beAttackHeroCardDataComponentInfo, skillConfig, buffInfos).Coroutine();
@@ -473,7 +474,7 @@ namespace ET
 
             string skillAnimStr = skillConfig.SkillAnimName;
             self.HeroMode.GetComponent<Animator>().SetTrigger(skillAnimStr);
-            self.PlaySkillEffect(skillConfig).Coroutine();
+            self.PlaySkillEffectWithConfig(skillConfig).Coroutine();
             List<ETTask> tasks = new List<ETTask>();
             for (var i = 0; i < beAttaclHeroCardDataComponentInfos.Count; i++)
             {
@@ -546,22 +547,46 @@ namespace ET
             GameObject.Destroy(effect);
         }
 
-        public static async ETTask PlaySkillEffect(this HeroModeObjectCompoent self, SkillConfig config)
+        public static async ETTask PlaySkillEffect(this HeroModeObjectCompoent self, string skillEffect, string bone, int startTime, int showTime)
         {
-            Log.Warning($"skill effect {config.SkillEffect}");
-            if (config.SkillEffect != "")
+            GameObject obj = GameObjectPoolHelper.GetObjectFromPool(skillEffect, false, 1);
+            await TimerComponent.Instance.WaitAsync(startTime);
+            Log.Debug($"play skill effect {startTime}");
+            obj.SetActive(true);
+            obj.transform.forward = self.HeroMode.transform.forward;
+            obj.transform.position = self.HeroMode.transform.position;
+            if (!string.IsNullOrEmpty(bone))
             {
-                // GameObject pre = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(config.SkillEffect);
-                GameObject obj = GameObjectPoolHelper.GetObjectFromPool(config.SkillEffect, false, 1);
-                await TimerComponent.Instance.WaitAsync(config.EffectStartTime);
-                // GameObject obj = GameObject.Instantiate(pre);
-                obj.SetActive(true);
-                obj.transform.forward = self.HeroMode.transform.forward;
-                obj.transform.position = self.HeroMode.transform.position;
-                await TimerComponent.Instance.WaitAsync(config.SkillEffectTime);
-                // GameObject.Destroy(obj);
-                GameObjectPoolHelper.ReturnObjectToPool(obj);
+                var parent = UIFindHelper.FindDeepChild(self.HeroMode, bone);
+                if (parent != null)
+                {
+                    obj.transform.SetParent(parent);
+                    obj.transform.localPosition = Vector3.zero;
+                }
+                else
+                {
+                    Log.Warning($"not fount bone  {bone}");
+                }
             }
+
+            Log.Debug($"show time {showTime}");
+            await TimerComponent.Instance.WaitAsync(showTime);
+            GameObjectPoolHelper.ReturnObjectToPool(obj);
+        }
+
+        public static async ETTask PlaySkillEffectWithConfig(this HeroModeObjectCompoent self, SkillConfig config)
+        {
+            if (!string.IsNullOrEmpty(config.SkillEffect))
+            {
+                self.PlaySkillEffect(config.SkillEffect, config.SkillEffectBoneName, config.EffectStartTime, config.SkillTime).Coroutine();
+            }
+
+            if (!string.IsNullOrEmpty(config.SkillEffect2))
+            {
+                self.PlaySkillEffect(config.SkillEffect2, config.SkillEffectBioneName2, config.EffectStartTime, config.SkillTime).Coroutine();
+            }
+
+            await ETTask.CompletedTask;
         }
 
         public static async void ShowAttackMark(this HeroModeObjectCompoent self, bool isShow)

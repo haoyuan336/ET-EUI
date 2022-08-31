@@ -157,12 +157,12 @@ namespace ET
             ActionMessage makeSureAttackMessage = fightComponent.MakeSureAttackHeros(m2CSyncDiamondAction.ActionMessage);
             fightComponent.ProcessAddHeroCardAngryLogic(m2CSyncDiamondAction.ActionMessage);
             fightComponent.ProcessComboResult(m2CSyncDiamondAction.ActionMessage, makeSureAttackMessage);
+            m2CSyncDiamondAction.ActionMessage.ActionMessages.Add(new ActionMessage(){AttackBeganAction = new AttackBeganAction()});
             fightComponent.ProcessAttackLogic(m2CSyncDiamondAction.ActionMessage, makeSureAttackMessage); //处理攻击逻辑
             fightComponent.HideAttackTargetMark(m2CSyncDiamondAction.ActionMessage);
             fightComponent.ProcessReBackAttackLogic(m2CSyncDiamondAction.ActionMessage);
-            // fightComponent.ProcessAddBuffInfo(m2CSyncDiamondAction);
             fightComponent.ProcessAddRoundAngry(m2CSyncDiamondAction.ActionMessage);
-
+            m2CSyncDiamondAction.ActionMessage.ActionMessages.Add(new ActionMessage(){AttackEndAction = new AttackEndAction()});
             Unit loseUnit = fightComponent.CheckGameEndResult();
             //
             if (loseUnit != null)

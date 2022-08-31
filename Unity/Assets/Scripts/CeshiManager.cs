@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
+using DefaultNamespace;
 using UnityEngine;
 
 public class CeshiManager: MonoBehaviour
@@ -87,6 +88,7 @@ public class CeshiManager: MonoBehaviour
         yield return PlayMove(Vector3.zero, taregtPos, library, config);
         StartCoroutine(this.PlayFlySkillEffect(config));
         StartCoroutine(PlaySkillEffect(config));
+        StartCoroutine(PlaySkillEffect2(config));
         StartCoroutine(this.PlayEnemyBeAttackAnim(config));
         StartCoroutine(this.PlayEnemyBeAttackEffect(config));
         this.currentShowMode.GetComponent<Animator>().SetTrigger(map[custom]);
@@ -110,6 +112,45 @@ public class CeshiManager: MonoBehaviour
             GameObject skillPrefab = config.effectPrefab;
             var skill = Instantiate(skillPrefab);
             skill.transform.position = this.currentShowMode.transform.position;
+            if (!string.IsNullOrEmpty(config.skill1BoneName))
+            {
+                var tr = GameObjectFindHelper.Find(this.currentShowMode, config.skill1BoneName);
+                if (tr != null)
+                {
+                    skill.transform.SetParent(tr);
+                    skill.transform.localPosition = Vector3.zero;
+
+                }
+                else
+                {
+                    Debug.Log($"not found gameobject {config.skill1BoneName}");
+                }
+            }
+
+            yield return new WaitForSeconds(5);
+            Destroy(skill);
+        }
+    }
+
+    IEnumerator PlaySkillEffect2(SkillConfig config)
+    {
+        yield return new WaitForSeconds(config.EffectStartTime2);
+        if (config.effectPrefab1 != null)
+        {
+            GameObject skillPrefab = config.effectPrefab1;
+            var skill = Instantiate(skillPrefab);
+            skill.transform.position = this.currentShowMode.transform.position;
+            if (!string.IsNullOrEmpty(config.skill2BoneName))
+            {
+                var tr = GameObjectFindHelper.Find(this.currentShowMode, config.skill2BoneName);
+                if (tr != null)
+                {
+                    skill.transform.SetParent(tr);
+                    skill.transform.localPosition = Vector3.zero;
+
+                }
+            }
+
             yield return new WaitForSeconds(5);
             Destroy(skill);
         }
@@ -147,7 +188,6 @@ public class CeshiManager: MonoBehaviour
         yield return new WaitForSeconds(config.ShouJiTime);
 
         this.TargetHeroMode.GetComponent<Animator>().SetTrigger("BeAttack");
-       
     }
 
     IEnumerator PlayEnemyBeAttackEffect(SkillConfig config)
@@ -161,6 +201,11 @@ public class CeshiManager: MonoBehaviour
             skill.transform.position = this.TargetHeroMode.transform.position;
             if (config.BeHitedBoneName != "")
             {
+                // var tr = GameObjectFindHelper.Find(this.TargetHeroMode, config.BeHitedBoneName);
+                // if (tr != null)
+                // {
+                //     skill.transform.position = tr.position;
+                // }
                 // GameObject obj = GameObject.Find($"{this.TargetHeroMode.name}/{config.BeHitedBoneName}");
                 // skill.transform.position = obj.transform.position;
             }

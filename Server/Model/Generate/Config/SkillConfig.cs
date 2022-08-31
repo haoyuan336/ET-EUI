@@ -104,24 +104,30 @@ namespace ET
 		[ProtoMember(17)]
 		public string SkillEffect { get; set; }
 		[ProtoMember(18)]
-		public int SkillEffectTime { get; set; }
+		public string SkillEffectBoneName { get; set; }
 		[ProtoMember(19)]
-		public int EffectStartTime { get; set; }
+		public string SkillEffect2 { get; set; }
 		[ProtoMember(20)]
-		public string BeAttackEffect { get; set; }
+		public string SkillEffectBioneName2 { get; set; }
 		[ProtoMember(21)]
-		public int BeAttackEffectStartTime { get; set; }
+		public int SkillEffectTime { get; set; }
 		[ProtoMember(22)]
-		public int BeAttackEffectTime { get; set; }
+		public int EffectStartTime { get; set; }
 		[ProtoMember(23)]
-		public int FlyEffectStartTime { get; set; }
+		public string BeAttackEffect { get; set; }
 		[ProtoMember(24)]
-		public string FlyEffect { get; set; }
+		public int BeAttackEffectStartTime { get; set; }
 		[ProtoMember(25)]
-		public int MoveType { get; set; }
+		public int BeAttackEffectTime { get; set; }
 		[ProtoMember(26)]
-		public int TargetPosType { get; set; }
+		public int FlyEffectStartTime { get; set; }
 		[ProtoMember(27)]
+		public string FlyEffect { get; set; }
+		[ProtoMember(28)]
+		public int MoveType { get; set; }
+		[ProtoMember(29)]
+		public int TargetPosType { get; set; }
+		[ProtoMember(30)]
 		public string BeAttackBoneName { get; set; }
 
 	}

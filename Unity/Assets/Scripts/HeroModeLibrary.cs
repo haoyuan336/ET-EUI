@@ -23,7 +23,11 @@ public class SkillConfig
     public float SkillTime;
     public float ShouJiTime;
     public GameObject effectPrefab;
+    public string skill1BoneName;
+    public string skill2BoneName;
+    public GameObject effectPrefab1;
     public float EffectStartTime;
+    public float EffectStartTime2;
     public GameObject BeAttacckEffectPrefab;
     public float BeAttackEffectPlayTime;
     public float FlyEffectStartTime;

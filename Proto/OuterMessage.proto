@@ -594,6 +594,14 @@ message HideAttackMarkAction
 {
 	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
 }
+message AttackBeganAction
+{
+
+}
+message AttackEndAction
+{
+
+}
 message ActionMessage	
 {
 	// int32 ActionType = 1;	//动作类型
@@ -612,6 +620,8 @@ message ActionMessage
 	GameLoseResultAction GameLoseResultAction = 8;	//游戏结果
 	UpdateHeroBuffInfo UpdateHeroBuffInfo = 9; //更新buff信息
 	HideAttackMarkAction HideAttackMarkAction = 10;	//隐藏攻击标记动作
+	AttackBeganAction AttackBeganAction = 11;	//战斗开始
+	AttackEndAction AttackEndAction = 12;	//战斗结束
 	
 }
 

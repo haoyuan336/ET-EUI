@@ -1258,6 +1258,18 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.AttackBeganAction)]
+	[ProtoContract]
+	public partial class AttackBeganAction: Object
+	{
+	}
+
+	[Message(OuterOpcode.AttackEndAction)]
+	[ProtoContract]
+	public partial class AttackEndAction: Object
+	{
+	}
+
 	[Message(OuterOpcode.ActionMessage)]
 	[ProtoContract]
 	public partial class ActionMessage: Object
@@ -1297,6 +1309,12 @@ namespace ET
 
 		[ProtoMember(10)]
 		public HideAttackMarkAction HideAttackMarkAction { get; set; }
+
+		[ProtoMember(11)]
+		public AttackBeganAction AttackBeganAction { get; set; }
+
+		[ProtoMember(12)]
+		public AttackEndAction AttackEndAction { get; set; }
 
 	}
 

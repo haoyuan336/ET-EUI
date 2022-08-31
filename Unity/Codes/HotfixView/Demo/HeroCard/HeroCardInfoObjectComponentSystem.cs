@@ -78,10 +78,6 @@ namespace ET
                 switch (buffInfo.ConfigId)
                 {
                     case 110:
-                        Log.Debug($"buffInfo health shileld{buffInfo.RoundCount}");
-
-                        // self.ESHeroCardInfoUI.E_HpShieldBarImage.fillAmount = 0.5f;
-                        Log.Debug($"buffInfo health shileld{(float)buffInfo.HealthShield}");
                         self.ESHeroCardInfoUI.E_HpShieldBarImage.fillAmount = (float)buffInfo.HealthShield / heroCardDataComponentInfo.TotalHP;
                         break;
                 }

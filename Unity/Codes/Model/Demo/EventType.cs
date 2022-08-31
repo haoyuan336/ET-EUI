@@ -364,7 +364,7 @@ namespace ET
 
         public struct PlayDiamondContentAnim
         {
-            public bool Value; //播放隐藏显示
+            public bool IShow; //播放隐藏显示
         }
 
         public struct DestroyHeroCard

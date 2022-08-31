@@ -194,17 +194,41 @@ namespace ET
             });
         }
 
+        public static async ETTask ProcessAttackBeganEvent(this RoomComponent self, ActionMessage actionMessage)
+        {
+            AttackBeganAction action = actionMessage.AttackBeganAction;
+            if (action == null)
+            {
+                return;
+            }
+
+            await Game.EventSystem.PublishAsync(new EventType.PlayDiamondContentAnim() { IShow = false });
+        }
+
+        public static async ETTask ProcessAttackEndEvent(this RoomComponent self, ActionMessage actionMessage)
+        {
+            AttackEndAction action = actionMessage.AttackEndAction;
+            if (action == null)
+            {
+                return;
+            }
+
+            await Game.EventSystem.PublishAsync(new EventType.PlayDiamondContentAnim() { IShow = true });
+        }
+
         public static async ETTask ProcessActionMessageEvent(this RoomComponent self, ActionMessage actionMessage)
         {
             await self.ProcessDiamondAction(actionMessage);
             await self.ProcessMakeSureAttackHeroEvent(actionMessage);
-            await self.ProcessActionMessage(actionMessage);
             await self.ProcessUpdateHeroInfoAction(actionMessage);
             await self.ProcessAttackAction(actionMessage);
             await self.ProcessGameResult(actionMessage);
             await self.ProcessBuffStateEvent(actionMessage);
             await self.ProcessHideAttackMarkEvent(actionMessage);
+            await self.ProcessAttackBeganEvent(actionMessage);
+            await self.ProcessAttackEndEvent(actionMessage);
             await self.ProcessComboActionMessageEvent(actionMessage);
+            await self.ProcessActionMessage(actionMessage);
             await ETTask.CompletedTask;
         }
 

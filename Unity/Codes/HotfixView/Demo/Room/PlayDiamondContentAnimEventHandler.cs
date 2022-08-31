@@ -8,7 +8,7 @@ namespace ET
         protected override async ETTask Run(PlayDiamondContentAnim a)
         {
             // Log.Debug($"移动宝石位置{a.Value}");
-            var value = a.Value;
+            var value = a.IShow;
             Transform diamondContent = GlobalComponent.Instance.DiamondContent;
             float time = 0;
 
