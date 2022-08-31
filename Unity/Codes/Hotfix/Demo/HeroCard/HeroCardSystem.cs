@@ -197,13 +197,16 @@ namespace ET
 
             for (int i = 0; i < buffConfigIds.Length; i++)
             {
+                // Log.Warning($"buffconfig id {buffConfigIds[i]}");
                 Buff buff = buffComponent.AddBuff(buffConfigIds[i], buffRounds[i]);
                 switch (buffConfigIds[i])
                 {
                     case 110:
+                        // Log.Warning("增加的是 护盾 buff");
                         //增加护盾 buff 原来英雄的血量的加成值 
-                        var healthShield = skillConfig.HealthShieldAdditions[skill.Level - 1] / 100.0f;
-                        buff.HealthShield = (int)healthShield;
+                        var healthShield = skillConfig.HealthShieldAdditions[skill.Level - 1] / 100.0f *
+                                self.GetComponent<HeroCardDataComponent>().TotalHP;
+                        buff.HealthShield = (int)healthShield; //增加血量护盾
                         break;
                 }
             }
@@ -234,6 +237,18 @@ namespace ET
 
             float endHp = targetHeroCard.GetComponent<HeroCardDataComponent>().HP * (1 + rate);
             targetHeroCard.GetComponent<HeroCardDataComponent>().HP = (int)endHp;
+        }
+
+        public static void ProcessBuffDamage(this HeroCard self, List<Buff> buffs, float dmage)
+        {
+            foreach (var buff in buffs)
+            {
+                //血量护盾
+                if (buff.ConfigId == 110)
+                {
+                }
+            }
+            // List<Buff> buffs = self.GetComponent<>()
         }
 
         public static void AttackTarget(this HeroCard self, HeroCard targetHeroCard, int comboAddition, Skill skill)
@@ -282,30 +297,47 @@ namespace ET
                 damage *= 1 + 0.5f + (float)critialDamage / 10000;
             }
 
-            if (buffs != null)
-            {
-                damage += self.GetBuffDamageValue(buffs, damage);
-            }
+            // if (buffs != null)
+            // {
+            //     damage += self.GetBuffDamageValue(buffs, damage);
+            // }
 
             var oldHp = beAttackCom.HP;
             Log.Debug($"old hp {oldHp}");
-            Buff buff = buffs?.Find(a => a.ConfigId == 102);
-            if (buff != null && beAttackCom.HP / (float)beAttackCom.TotalHP > BuffConfigCategory.Instance.Get(buff.ConfigId).value / 100.0f)
+
+            // self.ProcessBuffDamage(damage);
+            // Buff buff = buffs?.Find(a => a.ConfigId == 102);
+            // if (buff != null && beAttackCom.HP / (float)beAttackCom.TotalHP > BuffConfigCategory.Instance.Get(buff.ConfigId).value / 100.0f)
+            // {
+            //     //todo 英雄具有根性buff  死不了
+            //     beAttackCom.HP -= (int)damage;
+            //     if (beAttackCom.HP < 0)
+            //     {
+            //         beAttackCom.HP = 1;
+            //     }
+            // }
+            // else
+            // {
+            //     beAttackCom.HP -= (int)damage;
+            //     if (beAttackCom.HP < 0)
+            //     {
+            //         beAttackCom.HP = 0;
+            //     }
+            // }
+
+            damage = self.HuDunBuffDamage(buffs, damage);
+            
+            Log.Debug($"hudun damage {damage}");
+            
+            beAttackCom.HP -= (int)damage;
+            if (beAttackCom.HP < 0)
             {
-                //todo 英雄具有根性buff  死不了
-                beAttackCom.HP -= (int)damage;
-                if (beAttackCom.HP < 0)
-                {
-                    beAttackCom.HP = 1;
-                }
+                beAttackCom.HP = 0;
             }
-            else
+
+            if (beAttackCom.HP <= 0 && self.GenXingBuff(buffs))
             {
-                beAttackCom.HP -= (int)damage;
-                if (beAttackCom.HP < 0)
-                {
-                    beAttackCom.HP = 0;
-                }
+                beAttackCom.HP = 1;
             }
 
             beAttackCom.Angry += 5;
@@ -319,22 +351,70 @@ namespace ET
 #endif
         }
 
-        public static float GetBuffDamageValue(this HeroCard self, List<Buff> buffs, float damage)
+        public static float HuDunBuffDamage(this HeroCard self, List<Buff> buffs, float damage)
         {
-            var value = 0.0f;
-            foreach (var buff in buffs)
+            if (buffs == null)
             {
-                BuffConfig config = BuffConfigCategory.Instance.Get(buff.ConfigId);
-                switch (config.Id)
-                {
-                    case 106:
-                        value = damage * config.value;
-                        break;
-                }
+                return damage;
             }
 
-            return value;
+            Buff buff = buffs.Find(a => a.ConfigId.Equals(110));
+            if (buff == null)
+            {
+                return damage;
+            }
+
+            if (buff.RoundCount == 0)
+            {
+                return damage;
+            }
+
+            float endDamage = damage - buff.HealthShield;
+
+            if (endDamage < 0)
+            {
+                endDamage = 0;
+            }
+            Log.Debug($"damage {damage}");
+            Log.Debug($"HealthShield {buff.HealthShield}");
+
+            buff.HealthShield = (int)(buff.HealthShield - damage);
+            Log.Debug($"health shield {buff.HealthShield}");
+            if (buff.HealthShield < 0)
+            {
+                buff.HealthShield = 0;
+                buff.RoundCount = 0;
+            }
+
+            return endDamage;
         }
+
+        public static bool GenXingBuff(this HeroCard self, List<Buff> buffs)
+        {
+            if (buffs != null && buffs.Exists(a => a.ConfigId.Equals(102)))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        // public static float GetBuffDamageValue(this HeroCard self, List<Buff> buffs, float damage)
+        // {
+        //     var value = 0.0f;
+        //     foreach (var buff in buffs)
+        //     {
+        //         BuffConfig config = BuffConfigCategory.Instance.Get(buff.ConfigId);
+        //         switch (config.Id)
+        //         {
+        //             case 106:
+        //                 value = damage * config.value;
+        //                 break;
+        //         }
+        //     }
+        //
+        //     return value;
+        // }
 
         public static HeroCardInfo GetMessageInfo(this HeroCard self)
         {

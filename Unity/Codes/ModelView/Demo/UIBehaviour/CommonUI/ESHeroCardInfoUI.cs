@@ -90,6 +90,23 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Image E_HpShieldBarImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_HpShieldBarImage == null )
+     			{
+		    		this.m_E_HpShieldBarImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"HPShield/E_HpShieldBar");
+     			}
+     			return this.m_E_HpShieldBarImage;
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_E_AngryBarImage = null;
@@ -97,6 +114,7 @@ namespace ET
 			this.m_E_AttackBarImage = null;
 			this.m_E_HeroElementIconImage = null;
 			this.m_E_BufferContentImage = null;
+			this.m_E_HpShieldBarImage = null;
 			this.uiTransform = null;
 		}
 
@@ -105,6 +123,7 @@ namespace ET
 		private UnityEngine.UI.Image m_E_AttackBarImage = null;
 		private UnityEngine.UI.Image m_E_HeroElementIconImage = null;
 		private UnityEngine.UI.Image m_E_BufferContentImage = null;
+		private UnityEngine.UI.Image m_E_HpShieldBarImage = null;
 		public Transform uiTransform = null;
 	}
 }

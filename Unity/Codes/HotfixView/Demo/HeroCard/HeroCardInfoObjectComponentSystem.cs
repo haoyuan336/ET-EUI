@@ -60,9 +60,32 @@ namespace ET
 
     public static class HeroCardInfoObjectComponentSystem
     {
-        public static async void ShowBuffViewInfo(this HeroCardInfoObjectComponent self, List<BuffInfo> buffInfos)
+        public static async void ShowBuffViewInfo(this HeroCardInfoObjectComponent self, List<BuffInfo> buffInfos,
+        HeroCardDataComponentInfo heroCardDataComponentInfo)
         {
             self.ESHeroCardInfoUI.SetBuffInfos(buffInfos);
+            self.ESHeroCardInfoUI.E_HpShieldBarImage.fillAmount = 0;
+            if (buffInfos == null)
+            {
+                return;
+            }
+            foreach (var buffInfo in buffInfos)
+            {
+                if (buffInfo.RoundCount ==0)
+                {
+                    continue;
+                }
+                switch (buffInfo.ConfigId)
+                {
+                    case 110:
+                        Log.Debug($"buffInfo health shileld{buffInfo.RoundCount}");
+
+                        // self.ESHeroCardInfoUI.E_HpShieldBarImage.fillAmount = 0.5f;
+                        Log.Debug($"buffInfo health shileld{(float)buffInfo.HealthShield}");
+                        self.ESHeroCardInfoUI.E_HpShieldBarImage.fillAmount = (float)buffInfo.HealthShield / heroCardDataComponentInfo.TotalHP;
+                        break;
+                }
+            }
 
             await ETTask.CompletedTask;
         }
@@ -109,7 +132,6 @@ namespace ET
 
         public static async ETTask InitAttackAdditionView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo info)
         {
-            // self.ESHeroCardInfoUI.E_CommonText.GetComponent<Text>().text = "";
             self.ESHeroCardInfoUI.E_AttackBarImage.GetComponent<Image>().fillAmount = (float)info.DiamondAttackAddition / 200;
             await ETTask.CompletedTask;
         }
@@ -118,14 +140,7 @@ namespace ET
         public static void UpdateAttackAdditionView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo heroCardDataComponentInfo)
         {
             var addition = heroCardDataComponentInfo.DiamondAttackAddition;
-            // var common = addItemAction.CrashCommonInfo;
-            // self.ESHeroCardInfoUI.E_CommonText.GetComponent<Text>().text = $"CommonX{common.CommonCount}";
             self.ESHeroCardInfoUI.E_AttackBarImage.GetComponent<Image>().fillAmount = (float)addition / 100;
         }
-
-        // public static void UpdateAngryView(this HeroCardInfoObjectComponent self, HeroCardDataComponent)
-        // {
-        //     
-        // }
     }
 }

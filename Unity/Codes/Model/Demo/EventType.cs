@@ -404,6 +404,7 @@ namespace ET
             public HeroCardComponent HeroCardComponent;
             public long HeroId;
             public List<BuffInfo> BuffInfos;
+            public HeroCardDataComponentInfo HeroCardDataComponentInfo;
         }
 
         public struct UpdateHeroAngryInfoEvent

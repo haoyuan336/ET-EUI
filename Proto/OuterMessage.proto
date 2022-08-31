@@ -587,6 +587,7 @@ message UpdateHeroInfoAction
 message UpdateHeroBuffInfo
 {
 	int64 HeroId = 1;
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 3;
 	repeated BuffInfo BuffInfos = 2;
 }
 message HideAttackMarkAction
@@ -1712,4 +1713,5 @@ message BuffInfo
 	int64 BuffId = 1;
 	int32 ConfigId = 2;
 	int32 RoundCount = 3;	//剩余回合数
+	int32 HealthShield = 4;	//血量护盾
 }

@@ -13,7 +13,7 @@ namespace ET
 
             HeroCard heroCard = heroCardComponent.GetChild<HeroCard>(heroId);
             heroCard.GetComponent<HeroModeObjectCompoent>().ShowBuffEffect(buffInfos);
-            heroCard.GetComponent<HeroCardInfoObjectComponent>().ShowBuffViewInfo(buffInfos);
+            heroCard.GetComponent<HeroCardInfoObjectComponent>().ShowBuffViewInfo(buffInfos, a.HeroCardDataComponentInfo);
 
             await ETTask.CompletedTask;
         }

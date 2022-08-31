@@ -161,6 +161,7 @@ namespace ET
         public static async ETTask ProcessBuffStateEvent(this RoomComponent self, ActionMessage actionMessage)
         {
             UpdateHeroBuffInfo updateHeroBuffInfo = actionMessage.UpdateHeroBuffInfo;
+
             if (updateHeroBuffInfo == null)
             {
                 return;
@@ -169,7 +170,10 @@ namespace ET
             HeroCardComponent heroCardComponent = self.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>();
             await Game.EventSystem.PublishAsync(new EventType.UpdateHeroBuffInfoEvent()
             {
-                HeroId = updateHeroBuffInfo.HeroId, BuffInfos = updateHeroBuffInfo.BuffInfos, HeroCardComponent = heroCardComponent
+                HeroId = updateHeroBuffInfo.HeroId,
+                BuffInfos = updateHeroBuffInfo.BuffInfos,
+                HeroCardComponent = heroCardComponent,
+                HeroCardDataComponentInfo = updateHeroBuffInfo.HeroCardDataComponentInfo
             });
 
             await ETTask.CompletedTask;
@@ -186,9 +190,7 @@ namespace ET
             HeroCardComponent heroCardComponent = self.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>();
             await Game.EventSystem.PublishAsync(new EventType.SetHeroCardChooseState()
             {
-                HeroCardComponent =  heroCardComponent,
-                HeroId = hideAttackMarkAction.HeroCardDataComponentInfo.HeroId,
-                IsShow = false
+                HeroCardComponent = heroCardComponent, HeroId = hideAttackMarkAction.HeroCardDataComponentInfo.HeroId, IsShow = false
             });
         }
 

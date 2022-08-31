@@ -23,9 +23,8 @@ namespace ET
     {
         public static BuffInfo GetBuffInfo(this Buff self)
         {
-            return new BuffInfo() { BuffId = self.Id, ConfigId = self.ConfigId, RoundCount = self.RoundCount };
+            return new BuffInfo() { BuffId = self.Id, ConfigId = self.ConfigId, RoundCount = self.RoundCount, HealthShield = self.HealthShield };
         }
-
 
         public static void ProcessRound(this Buff self)
         {

@@ -471,11 +471,10 @@ namespace ET
 
                 // self.ProcessBuffLogic(beAttackHeroCard, skill);
                 attackHero.ProcessBuffLogic(beAttackHeroCard, skill);
-                List<BuffInfo> buffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos();
-
-                heroBufferInfos.Add(new HeroBuffInfo() { BuffInfos = buffInfos });
                 // attackHero.AttackTarget(beAttackHeroCard, 0, skill);
                 attackHero.ProcessMainFightLogic(beAttackHeroCard, skill);
+                List<BuffInfo> buffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos();
+                heroBufferInfos.Add(new HeroBuffInfo() { BuffInfos = buffInfos });
                 beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
             }
 
@@ -592,7 +591,12 @@ namespace ET
                 buffComponent.ProcessRoundLogic();
                 var message = new ActionMessage()
                 {
-                    UpdateHeroBuffInfo = new UpdateHeroBuffInfo() { HeroId = heroCard.Id, BuffInfos = buffComponent.GetBuffInfos() }
+                    UpdateHeroBuffInfo = new UpdateHeroBuffInfo()
+                    {
+                        HeroId = heroCard.Id,
+                        BuffInfos = buffComponent.GetBuffInfos(),
+                        HeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo()
+                    }
                 };
                 actionMessage.ActionMessages.Add(message);
             }
@@ -755,7 +759,7 @@ namespace ET
 
                     // self.ProcessBuffLogic(beAttackHeroCard, skill);
                     // self.ProcessBuffLogic()
-                    heroCard.ProcessBuffLogic(beAttackHeroCard,skill);
+                    heroCard.ProcessBuffLogic(beAttackHeroCard, skill);
                     List<BuffInfo> buffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos();
                     heroBuffInfos.Add(new HeroBuffInfo() { HeroId = beAttackHeroCard.Id, BuffInfos = buffInfos });
                     heroCard.ProcessMainFightLogic(beAttackHeroCard, skill);

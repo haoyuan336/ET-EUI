@@ -235,10 +235,15 @@ namespace ET
                 case (int)SkillRangeType.FriendSingle:
                     break;
                 case (int)SkillRangeType.FriendGroup:
+                    Log.Debug("所有队友技能");
+                    await self.PlayAttackGroupAnim(heroCardComponent, attackHeroCardDataComponerntInfo, beHeroCardDataComponentInfos,
+                        skillConfig, heroBuffInfos);
                     break;
             }
         }
         // public static async ETTask P
+
+        // public static async ETTask PlayGroupA
 
         public static async ETTask PlaySingleAttackAnim(this HeroModeObjectCompoent self, HeroCardComponent heroCardComponent,
         AttackAction attackAction,
@@ -402,12 +407,15 @@ namespace ET
         {
             int beAttackTime = skillConfig.BeAttackAnimPlayTime;
             await TimerComponent.Instance.WaitAsync(beAttackTime);
+            // if (skillConfig.RangeType == (int)SkillRangeType.EnemySingle || skillConfig.RangeType == (int)SkillRangeType.EnemyGroup)
+            // {
             self.HeroMode.GetComponent<Animator>().SetTrigger("BeAttack");
+            // }
             // self.Parent.GetComponent<HeroCardObjectComponent>().UpdateHeroCardTextView(message.BeAttackHeroCardDataComponentInfo, message.CommonInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().UpdateHPView(componentInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(componentInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowDamageViewAnim(componentInfo);
-            self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowBuffViewInfo(buffInfos);
+            self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowBuffViewInfo(buffInfos, componentInfo);
             self.ShowBuffEffect(buffInfos);
 
             if (componentInfo.HP <= 0)

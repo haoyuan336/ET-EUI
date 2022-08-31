@@ -120,98 +120,16 @@ namespace ET
             {
                 return null;
             }
-
-            // //确定一下怒气值满的技能
-            // List<Skill> skills = self.Parent.GetComponent<SkillComponent>().GetChilds<Skill>();
-            // Skill skill = skills.Find(a =>
-            // {
-            //     SkillConfig config = SkillConfigCategory.Instance.Get(a.ConfigId);
-            //     if (config.SkillType == (int)SkillType.BigSkill)
-            //     {
-            //         return true;
-            //     }
-            //
-            //     return false;
-            // });
-            // if (skill == null)
-            // {
-            //     skill = skills[skills.Count - 1];
-            // }
-
             Skill skill = self.Parent.GetComponent<SkillComponent>().MakeSureAngrySkill();
-
             self.CurrentSkillId = skill.Id;
             self.Angry = 0;
             return skill;
         }
-        // public static Skill MakeSureAngrySkill(this HeroCard self)
-        // {
-        //     //todo 确定怒气技能
-        //     //然后找出玩家的必杀技id
-        //     List<Skill> skills = self.GetComponent<SkillComponent>().GetChilds<Skill>();
-        //     Skill bigSkill = skills.Find(a =>
-        //     {
-        //         var skillConfig = SkillConfigCategory.Instance.Get(a.ConfigId);
-        //         if (skillConfig.SkillType == (int)SkillType.BigSkill)
-        //         {
-        //             return true;
-        //         }
-        //
-        //         return false;
-        //     });
-        //     if (bigSkill == null)
-        //     {
-        //         return null;
-        //     }
-        //
-        //     self.GetComponent<HeroCardDataComponent>().CurrentSkillId = bigSkill.Id;
-        //     self.GetComponent<HeroCardDataComponent>().Angry = 0;
-        //     return bigSkill;
-        // }
-
         public static Skill MakeSureSkill(this HeroCardDataComponent self, int firstCrashCount)
         {
             Skill skill = self.Parent.GetComponent<SkillComponent>().MakeSureSkill(firstCrashCount);
             //todo 确定当前技能
-            // SkillType skillType = SkillType.Attack;
-            // switch (firstCrashCount)
-            // {
-            //     case 3:
-            //         skillType = SkillType.Attack;
-            //         break;
-            //     case 4:
-            //         skillType = SkillType.Skill1;
-            //         break;
-            //     case 5:
-            //         skillType = SkillType.Skill2;
-            //         break;
-            // }
-            //
-            // List<Skill> skills = self.Parent.GetComponent<SkillComponent>().GetChilds<Skill>();
-            //
-            // if (skills == null)
-            // {
-            //     Log.Warning("not skill ");
-            // }
-            //
-            // Skill skill = skills.Find(a =>
-            // {
-            //     SkillConfig config = SkillConfigCategory.Instance.Get(a.ConfigId);
-            //     if (config.SkillType == (int)skillType)
-            //     {
-            //         Log.Debug($"确定的技能type {config.SkillType}");
-            //         return true;
-            //     }
-            //
-            //     return false;
-            // });
-            // if (skill == null)
-            // {
-            //     skill = skills[skills.Count - 1];
-            // }
-
             self.CurrentSkillId = skill.Id;
-
             return skill;
         }
     }

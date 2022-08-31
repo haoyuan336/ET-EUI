@@ -1241,6 +1241,9 @@ namespace ET
 		[ProtoMember(1)]
 		public long HeroId { get; set; }
 
+		[ProtoMember(3)]
+		public HeroCardDataComponentInfo HeroCardDataComponentInfo { get; set; }
+
 		[ProtoMember(2)]
 		public List<BuffInfo> BuffInfos = new List<BuffInfo>();
 
@@ -3763,6 +3766,9 @@ namespace ET
 
 		[ProtoMember(3)]
 		public int RoundCount { get; set; }
+
+		[ProtoMember(4)]
+		public int HealthShield { get; set; }
 
 	}
 
