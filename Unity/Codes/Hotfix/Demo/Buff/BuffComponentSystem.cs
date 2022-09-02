@@ -49,8 +49,8 @@ namespace ET
             return buffInfos;
         }
 
-        public static void AddBuffWithSkillConfig(this BuffComponent self, Skill skill)
-        {
+        // public static void AddBuffWithSkillConfig(this BuffComponent self, Skill skill)
+        // {
             // SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
             // //找到buff
             // int[] buffConfigIds = skillConfig.BuffConfigIds;
@@ -91,50 +91,78 @@ namespace ET
             // {
             //     self.AddBuff(buffConfigIds[i], buffRounds[i]);
             // }
-        }
+        // }
 
-        public static Buff AddBuff(this BuffComponent self, int configId, int count)
+        /*
+         * round count 回合数
+         * overCount 叠加层数
+         */
+        public static Buff AddBuff(this BuffComponent self, int configId, int roundCount, int overCount, long heroId)
         {
             BuffConfig addBuffConfig = BuffConfigCategory.Instance.Get(configId);
             //取出原有buff ，检查是否相克
             List<Buff> buffs = self.GetChilds<Buff>();
             buffs?.RemoveAll(a => a.RoundCount <= 0);
-            Buff targetBuff = buffs?.Find(a => a.ConfigId.Equals(configId));
-            if (targetBuff != null)
+            Buff targetBuff = null;
+            if (addBuffConfig.IsCanCover == (int)BuffIsCanCover.Can)
             {
-                if (targetBuff.OverlabCount < addBuffConfig.MaxOverlabCount)
+                targetBuff = buffs?.Find(a => a.ConfigId.Equals(configId));
+                if (targetBuff == null)
                 {
-                    targetBuff.OverlabCount++;
+                    targetBuff = self.AddChild<Buff, int>(configId);
                 }
+
+                targetBuff.OverlabCount = overCount; //层数
+                targetBuff.AttachHeroId = heroId;
             }
             else
             {
-                targetBuff = self.AddChild<Buff, int>(configId);
-            }
+                //todo 不可覆盖的buff，查找是否存在同一个施法者的buff
+                targetBuff = buffs?.Find(a => a.AttachHeroId.Equals(heroId));
+                if (targetBuff == null)
+                {
+                    //todo未找到了buff
+                    targetBuff = self.AddChild<Buff, int>(configId);
+                }
 
-            targetBuff.RoundCount = count; //回合数另算
+                targetBuff.AttachHeroId = heroId;
+                targetBuff.OverlabCount += overCount;
+                if (targetBuff.OverlabCount > addBuffConfig.MaxOverlabCount)
+                {
+                    targetBuff.OverlabCount = addBuffConfig.MaxOverlabCount;
+                }
+            }
+            targetBuff.RoundCount = roundCount; //回合数另算
             return targetBuff;
         }
 
-        public static void ProcessRoundLogic(this BuffComponent self)
+        public static ActionMessage ProcessRoundLogic(this BuffComponent self, HeroCard heroCard)
         {
+            ActionMessage actionMessage = new ActionMessage()
+            {
+                PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>()
+            };
             List<Buff> buffs = self.GetChilds<Buff>();
             if (buffs != null)
             {
                 foreach (var buff in buffs)
                 {
-                    buff.ProcessRound();
+                    ActionMessage message = buff.ProcessRound(heroCard);
+                    actionMessage.ActionMessages.Add(message);
                 }
             }
+
+            return actionMessage;
         }
 
-        public static void ActiveBuff(this BuffComponent self, BuffConfig buffConfig)
+        public static void ActiveBuff(this BuffComponent self, BuffConfig buffConfig,int roundCount, int overCount, long heroId)
         {
-            int activeBuffIds = buffConfig.RoundOverActiveBuff;
+            int activeBuffIds = buffConfig.RoundFullActiveBuff;
             //激活新buff
             if (activeBuffIds != 0)
             {
-                self.AddBuff(activeBuffIds, 1);
+                // int configId, int roundCount, int overCount, long heroId
+                self.AddBuff(activeBuffIds,roundCount, overCount, heroId);
             }
         }
 
@@ -152,7 +180,7 @@ namespace ET
                 return buffConfig.IsCanAttack == 0;
             });
         }
-        
+
         public static bool IsExistsBuff(this BuffComponent self, int configId)
         {
             List<Buff> buffs = self.GetChilds<Buff>();

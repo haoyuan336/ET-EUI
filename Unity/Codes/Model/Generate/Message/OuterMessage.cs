@@ -1270,6 +1270,21 @@ namespace ET
 	{
 	}
 
+	[Message(OuterOpcode.BuffDamageAction)]
+	[ProtoContract]
+	public partial class BuffDamageAction: Object
+	{
+		[ProtoMember(1)]
+		public BuffInfo BuffInfo { get; set; }
+
+		[ProtoMember(2)]
+		public HeroCardDataComponentInfo HeroCardDataComponentInfo { get; set; }
+
+		[ProtoMember(3)]
+		public int DamageCount { get; set; }
+
+	}
+
 	[Message(OuterOpcode.ActionMessage)]
 	[ProtoContract]
 	public partial class ActionMessage: Object
@@ -1315,6 +1330,9 @@ namespace ET
 
 		[ProtoMember(12)]
 		public AttackEndAction AttackEndAction { get; set; }
+
+		[ProtoMember(13)]
+		public BuffDamageAction BuffDamageAction { get; set; }
 
 	}
 

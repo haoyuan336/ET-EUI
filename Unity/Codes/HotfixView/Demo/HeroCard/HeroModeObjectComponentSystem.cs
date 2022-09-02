@@ -215,6 +215,55 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
+        public static async ETTask PlayBuffBeAttackEffect(this HeroModeObjectCompoent self, BuffInfo buffInfo)
+        {
+            BuffConfig buffConfig = BuffConfigCategory.Instance.Get(buffInfo.ConfigId);
+            if (string.IsNullOrEmpty(buffConfig.BeAttackEffect))
+            {
+                return;
+            }
+
+            GameObject obj = GameObjectPoolHelper.GetObjectFromPool(buffConfig.BeAttackEffect, true, 1);
+            obj.transform.SetParent(self.HeroMode.transform);
+            obj.transform.localPosition = self.HeroMode.GetComponent<CapsuleCollider>().center;
+            await TimerComponent.Instance.WaitAsync(1000);
+            GameObjectPoolHelper.ReturnObjectToPool(obj);
+            await ETTask.CompletedTask;
+        }
+
+        public static async ETTask PlayBuffDamageAnimator(this HeroModeObjectCompoent self, BuffInfo buffInfo, HeroCardDataComponentInfo heroCardDataComponentInfo)
+        {
+            BuffConfig buffConfig = BuffConfigCategory.Instance.Get(buffInfo.ConfigId);
+            self.PlayBuffBeAttackEffect(buffInfo).Coroutine();
+            if (string.IsNullOrEmpty(buffConfig.BeAttackAnim))
+            {
+                return;
+            }
+
+            Log.Debug($"play anim {buffConfig.BeAttackAnim}");
+            self.HeroMode.GetComponent<Animator>().SetTrigger(buffConfig.BeAttackAnim);
+            HeroCardInfoObjectComponent heroCardInfoObjectComponent = self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>();
+            heroCardInfoObjectComponent.ShowDamageViewAnim(heroCardDataComponentInfo);
+            heroCardInfoObjectComponent.UpdateHPView(heroCardDataComponentInfo);
+            await ETTask.CompletedTask;
+        }
+
+        public static async ETTask PlayBuffDamageAnim(this HeroModeObjectCompoent self, HeroCardDataComponentInfo heroCardDataComponentInfo,
+        int damageBuff, BuffInfo buffInfo)
+        {
+            Log.Debug($"damage buff count {damageBuff}");
+            if (damageBuff <= 0)
+            {
+                return;
+            }
+            heroCardDataComponentInfo.Damage = damageBuff;
+
+            self.PlayBuffBeAttackEffect(buffInfo).Coroutine();
+            self.PlayBuffDamageAnimator(buffInfo, heroCardDataComponentInfo).Coroutine();
+
+            await TimerComponent.Instance.WaitAsync(1000);
+        }
+
         public static async ETTask PlayAttackAnimLogic(this HeroModeObjectCompoent self, HeroCardComponent heroCardComponent,
         AttackAction attackAction)
         {
@@ -239,7 +288,18 @@ namespace ET
                     await self.PlayAttackGroupAnim(heroCardComponent, attackHeroCardDataComponerntInfo, beHeroCardDataComponentInfos,
                         skillConfig, heroBuffInfos);
                     break;
+                case (int)SkillRangeType.SingleSelf:
+                    await self.PlayAttackGroupAnim(heroCardComponent, attackHeroCardDataComponerntInfo, beHeroCardDataComponentInfos, skillConfig,
+                        heroBuffInfos);
+
+                    break;
             }
+        }
+
+        public static async ETTask PlayCareSelfAnim(this HeroModeObjectCompoent self, HeroCardComponent heroCardComponent,
+        HeroCardDataComponentInfo attHeroCardDataComponentInfo, List<HeroCardDataComponentInfo> beCardDataComponentInfos)
+        {
+            await ETTask.CompletedTask;
         }
         // public static async ETTask P
 
@@ -506,9 +566,6 @@ namespace ET
             var playTime = skillConfig.BeAttackEffectStartTime;
             await TimerComponent.Instance.WaitAsync(playTime);
             GameObject effect = GameObjectPoolHelper.GetObjectFromPool(skillConfig.BeAttackEffect, true, 3);
-            // GameObject effect = await AddressableComponent.Instance.LoadGameObjectAndInstantiateByPath(skillConfig.BeAttackEffect);
-            // effect.transform.SetParent(self.HeroMode.transform);
-            // effect.transform.
             effect.transform.forward = self.HeroMode.transform.forward;
             effect.transform.position = new Vector3(0, 0, self.HeroMode.transform.position.z) + effect.transform.forward * 3;
             Log.Debug($"be attack bone name {skillConfig.BeAttackBoneName}");

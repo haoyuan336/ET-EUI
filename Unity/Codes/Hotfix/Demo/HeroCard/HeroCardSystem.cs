@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ET
@@ -142,6 +143,7 @@ namespace ET
 
             int buffDamageAdditionCondition = skillConfig.BuffDamageAdditionCondition;
 
+            //todo 是否存在 buff伤害的额外条件，是否满足，满足的话，直接造成额外百分比伤害
             if (buffs != null && buffs.Exists(a => a.ConfigId.Equals(buffDamageAdditionCondition)))
             {
                 int[] buffDamageAdditions = skillConfig.BuffDamageAdditions;
@@ -151,8 +153,53 @@ namespace ET
 
             return baseDamage;
         }
+#if SERVER
+        public static ActionMessage ProcessBuffRoundLogic(this HeroCard self)
+        {
+            var actionMessage = new ActionMessage() { PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>() };
+            var buffComponent = self.GetComponent<BuffComponent>();
+            List<Buff> buffs = buffComponent.GetChilds<Buff>();
+            if (buffs == null)
+            {
+                return null;
+            }
 
-        public static void ProcessBuffLogic(this HeroCard self, HeroCard targetHeroCard, Skill skill)
+            foreach (var buff in buffs)
+            {
+                // DeductionSelfTotalHealthRate
+                actionMessage.ActionMessages.Add(buff.ProcessRound(self));
+            }
+
+            return actionMessage;
+        }
+#endif
+
+        //检查激活buff是否需要条件
+        public static bool AttackNewBuffWithCondition(this HeroCard self, HeroCard targetHeroCard, List<Buff> buffs, Skill skill)
+        {
+
+            SkillConfig config = SkillConfigCategory.Instance.Get(skill.ConfigId);
+            //检查过滤条件
+            int activeBuffCondition = config.ActiveBuffCondition; //激活新buff需要的条件
+            if (activeBuffCondition != 0)
+            {
+                //检查是否符合条件，不符合 直接返回
+                Buff findBuff = buffs?.Find(a => a.ConfigId.Equals(activeBuffCondition));
+                if (findBuff == null)
+                {
+                    return false;
+                }
+
+                //知道的buff 回合数直接归0；
+                findBuff.RoundCount = 0;
+                Log.Warning("找到了 条件机会，需要将原来buff剩余回合数归零");
+                //条件符合，
+            }
+
+            return true;
+        }
+
+        public static void ProcessAttachBuffLogic(this HeroCard self, HeroCard targetHeroCard, Skill skill)
         {
 #if SERVER
             BuffComponent buffComponent = targetHeroCard.GetComponent<BuffComponent>();
@@ -175,43 +222,32 @@ namespace ET
                 currentBuffs.RemoveAll(a => a.RoundCount <= 0); //删掉0回合buff
             }
 
-            //检查过滤条件
-            int activeBuffCondition = skillConfig.ActiveBuffCondition; //激活新buff需要的条件
-            if (activeBuffCondition != 0)
+            bool isCondition = self.AttackNewBuffWithCondition(targetHeroCard, currentBuffs, skill);
+            Log.Debug($"is condition {isCondition}");
+            if (!isCondition)
             {
-                //检查是否符合条件，不符合 直接返回
-                if (currentBuffs == null)
-                {
-                    return;
-                }
-
-                Buff findBuff = currentBuffs.Find(a => a.ConfigId.Equals(activeBuffCondition));
-                if (findBuff == null)
-                {
-                    return;
-                }
-
-                findBuff.RoundCount = 0;
-                //条件符合，
+                //不符合buff条件，直接返回
+                return;
             }
 
             for (int i = 0; i < buffConfigIds.Length; i++)
             {
                 // Log.Warning($"buffconfig id {buffConfigIds[i]}");
-                Buff buff = buffComponent.AddBuff(buffConfigIds[i], buffRounds[i]);
-                switch (buffConfigIds[i])
-                {
-                    case 110:
-                        // Log.Warning("增加的是 护盾 buff");
-                        //增加护盾 buff 原来英雄的血量的加成值 
-                        var healthShield = skillConfig.HealthShieldAdditions[skill.Level - 1] / 100.0f *
-                                self.GetComponent<HeroCardDataComponent>().TotalHP;
-                        buff.HealthShield = (int)healthShield; //增加血量护盾
-                        break;
-                }
+                Buff buff = buffComponent.AddBuff(buffConfigIds[i], buffRounds[skill.Level - 1], skillConfig.BuffOverCount, self.Id);
+                // Log.Warning($"add buff success {buff}");
             }
 #endif
         }
+
+        // public static void CoverOldBuff(this HeroCard self, BuffConfig buffConfig, List<Buff> buffs,int round)
+        // {
+        //     // buff.RoundCount = round;
+        //     Buff buff = buffs.Find(a => a.ConfigId.Equals(buffConfig.Id));
+        //     if (buff == null)
+        //     {
+        //         
+        //     }
+        // }
 
         public static void ProcessMainFightLogic(this HeroCard self, HeroCard targetHeroCard, Skill skill)
         {
@@ -224,6 +260,9 @@ namespace ET
                     break;
                 case (int)SkillRangeType.FriendSingle:
                 case (int)SkillRangeType.FriendGroup:
+                    self.CareTarget(targetHeroCard, skill);
+                    break;
+                case (int)SkillRangeType.SingleSelf:
                     self.CareTarget(targetHeroCard, skill);
                     break;
             }
@@ -239,17 +278,14 @@ namespace ET
             targetHeroCard.GetComponent<HeroCardDataComponent>().HP = (int)endHp;
         }
 
-        public static void ProcessBuffDamage(this HeroCard self, List<Buff> buffs, float dmage)
-        {
-            foreach (var buff in buffs)
-            {
-                //血量护盾
-                if (buff.ConfigId == 110)
-                {
-                }
-            }
-            // List<Buff> buffs = self.GetComponent<>()
-        }
+        // public static void ProcessBuffDamage(this HeroCard self, List<Buff> buffs, float dmage)
+        // {
+        //     foreach (var buff in buffs)
+        //     {
+        //         BuffConfig buffConfig = BuffConfigCategory.Instance.Get(buff.ConfigId);
+        //         
+        //     }
+        // }
 
         public static void AttackTarget(this HeroCard self, HeroCard targetHeroCard, int comboAddition, Skill skill)
         {
@@ -297,38 +333,11 @@ namespace ET
                 damage *= 1 + 0.5f + (float)critialDamage / 10000;
             }
 
-            // if (buffs != null)
-            // {
-            //     damage += self.GetBuffDamageValue(buffs, damage);
-            // }
-
             var oldHp = beAttackCom.HP;
             Log.Debug($"old hp {oldHp}");
-
-            // self.ProcessBuffDamage(damage);
-            // Buff buff = buffs?.Find(a => a.ConfigId == 102);
-            // if (buff != null && beAttackCom.HP / (float)beAttackCom.TotalHP > BuffConfigCategory.Instance.Get(buff.ConfigId).value / 100.0f)
-            // {
-            //     //todo 英雄具有根性buff  死不了
-            //     beAttackCom.HP -= (int)damage;
-            //     if (beAttackCom.HP < 0)
-            //     {
-            //         beAttackCom.HP = 1;
-            //     }
-            // }
-            // else
-            // {
-            //     beAttackCom.HP -= (int)damage;
-            //     if (beAttackCom.HP < 0)
-            //     {
-            //         beAttackCom.HP = 0;
-            //     }
-            // }
-
+            // self.ProcessBuffDamage(buffs, damage);
             damage = self.HuDunBuffDamage(buffs, damage);
-            
             Log.Debug($"hudun damage {damage}");
-            
             beAttackCom.HP -= (int)damage;
             if (beAttackCom.HP < 0)
             {
@@ -375,6 +384,7 @@ namespace ET
             {
                 endDamage = 0;
             }
+
             Log.Debug($"damage {damage}");
             Log.Debug($"HealthShield {buff.HealthShield}");
 

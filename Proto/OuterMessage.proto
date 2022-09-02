@@ -602,6 +602,12 @@ message AttackEndAction
 {
 
 }
+message BuffDamageAction
+{
+	BuffInfo BuffInfo = 1;
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 2;
+	int32 DamageCount = 3;	//伤害值
+}
 message ActionMessage	
 {
 	// int32 ActionType = 1;	//动作类型
@@ -622,6 +628,8 @@ message ActionMessage
 	HideAttackMarkAction HideAttackMarkAction = 10;	//隐藏攻击标记动作
 	AttackBeganAction AttackBeganAction = 11;	//战斗开始
 	AttackEndAction AttackEndAction = 12;	//战斗结束
+	BuffDamageAction BuffDamageAction = 13;	//Buff 伤害动作
+
 	
 }
 

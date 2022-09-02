@@ -66,8 +66,9 @@
         FriendSingle = 3, //友方个体
         FriendGroup = 4, //友方群体
         All = 5, //全体
+        SingleSelf = 6, //单体自己
 
-        // #攻击类型,#范围类型 RangeType， 1，敌方单体，2地方群体3，我方个体4我方群体5，全体
+        // #攻击类型,#范围类型 RangeType， 1，敌方单体，2地方群体3，我方个体4我方群体5，全体，6 单体自己
     }
 
     public enum ActionMessagePlayType
@@ -84,5 +85,11 @@
         HeroAttack = 4, //英雄攻击
         UpdateBuffInfo = 5, //更新Buff
         GameProcess = 6, //游戏结算
+    }
+
+    public enum BuffIsCanCover
+    {
+        Can = 1, //buff 是否可以覆盖
+        Not = 2 //buff 不可以覆盖
     }
 }

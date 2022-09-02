@@ -216,6 +216,26 @@ namespace ET
             await Game.EventSystem.PublishAsync(new EventType.PlayDiamondContentAnim() { IShow = true });
         }
 
+        public static async ETTask ProcessBuffDamageAction(this RoomComponent self, ActionMessage actionMessage)
+        {
+            BuffDamageAction buffDamageAction = actionMessage.BuffDamageAction;
+            if (buffDamageAction == null)
+            {
+                return;
+            }
+
+            HeroCardComponent heroCardComponent = self.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>();
+            await Game.EventSystem.PublishAsync(new EventType.PlayBuffDamageAnim()
+            {
+                HeroCardComponent = heroCardComponent,
+                HeroCardDataComponentInfo = buffDamageAction.HeroCardDataComponentInfo,
+                BuffInfo = buffDamageAction.BuffInfo,
+                DamageCount = buffDamageAction.DamageCount
+            });
+
+            await ETTask.CompletedTask;
+        }
+
         public static async ETTask ProcessActionMessageEvent(this RoomComponent self, ActionMessage actionMessage)
         {
             await self.ProcessDiamondAction(actionMessage);
@@ -228,6 +248,7 @@ namespace ET
             await self.ProcessAttackBeganEvent(actionMessage);
             await self.ProcessAttackEndEvent(actionMessage);
             await self.ProcessComboActionMessageEvent(actionMessage);
+            await self.ProcessBuffDamageAction(actionMessage);
             await self.ProcessActionMessage(actionMessage);
             await ETTask.CompletedTask;
         }

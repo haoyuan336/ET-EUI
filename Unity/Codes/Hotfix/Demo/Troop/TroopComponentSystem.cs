@@ -32,13 +32,16 @@ namespace ET
 
         public static async ETTask<List<HeroCard>> UnSetHeroFormTroop(this TroopComponent self, long heroId)
         {
-            HeroCard heroCard = await self.Parent.GetComponent<HeroCardComponent>().GetHeroCardsWithIdAsync(heroId);
-            if (heroCard == null)
-            {
-                return null;
-            }
+            HeroCardComponent heroCardComponent = self.Parent.GetComponent<HeroCardComponent>();
+            await heroCardComponent.UnSetHeroFromTroop(heroId);
+            // HeroCard heroCard = await heroCardComponent.GetHeroCardsWithIdAsync(heroId);
+            // if (heroCard == null)
+            // {
+            // return null;
+            // }
 
-            heroCard.TroopId = 0;
+            // heroCard.TroopId = 0;
+
             Troop troop = await self.GetCurrentTroopAsync();
             if (troop == null)
             {
@@ -53,8 +56,8 @@ namespace ET
         {
             //获取当前选择的队伍
             Troop troop = await self.GetCurrentTroopAsync();
-
-            List<HeroCard> heroCards = await self.Parent.GetComponent<HeroCardComponent>().GetHeroCardsWithTroopIdAsync(troop.Id);
+            HeroCardComponent heroCardComponent = self.Parent.GetComponent<HeroCardComponent>();
+            List<HeroCard> heroCards = await heroCardComponent.GetHeroCardsWithTroopIdAsync(troop.Id);
 
             int index = 0;
             for (int i = 0; i < 3; i++)
@@ -70,14 +73,15 @@ namespace ET
             {
                 HeroCard card = heroCards.Find(a => a.Id.Equals(heroId));
                 card.InTroopIndex = index;
+                heroCardComponent.ChangeList.Add(card);
                 return heroCards;
             }
 
-            HeroCard heroCard = await self.Parent.GetComponent<HeroCardComponent>().GetHeroCardsWithIdAsync(heroId);
+            HeroCard heroCard = await heroCardComponent.GetHeroCardsWithIdAsync(heroId);
 
             heroCard.TroopId = troop.Id;
             heroCard.InTroopIndex = index;
-
+            heroCardComponent.ChangeList.Add(heroCard);
             heroCards.Add(heroCard);
 
             return heroCards;

@@ -8,5 +8,6 @@ namespace ET
         // public List<HeroCard> CurrentTurnAttackList = new List<HeroCard>();
         public int CurrentTime = 0;
 
+        public List<HeroCard> ChangeList = new List<HeroCard>();
     }
 }

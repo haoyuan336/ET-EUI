@@ -18,6 +18,7 @@ namespace ET
             Game.Scene.AddComponent<CoroutineLockComponent>();
             // 加载配置\
             Game.Scene.AddComponent<AddressableComponent>();
+            Game.Scene.AddComponent<AnimationToolComponent>();
             
             // AddressableComponent.Instance.LoadAssetByPathAsync<UnityEngine.GameObject>("DlgMainScene");
 

@@ -328,26 +328,14 @@ namespace ET
             Log.Debug($"filter index{index}");
             if (m2CGetAllHeroCardListResponse.Error == ErrorCode.ERR_Success)
             {
-                Dictionary<int, List<HeroCardInfo>> map = new Dictionary<int, List<HeroCardInfo>>();
                 self.HeroCardInfos = m2CGetAllHeroCardListResponse.HeroCardInfos;
                 self.HeroCount = self.HeroCardInfos.Count;
                 self.View.E_BagCountText.text = $"{self.HeroCount}/{self.BagCount}";
-
-                //根据当前类型，过滤一下列表
-                // if (self.BagType != HeroBagType.HeroAndMaterial)
-                // {
-                //     //过滤调与背包类型不符的 元素
-                //     self.HeroCardInfos.RemoveAll(a =>
-                //     {
-                //         var config = HeroConfigCategory.Instance.Get(a.ConfigId);
-                //         if (config.MaterialType == (int) self.BagType)
-                //         {
-                //             return false;
-                //         }
-                //
-                //         return true;
-                //     });
-                // }
+                
+                self.HeroCardInfos.Sort((a,b) =>
+                {
+                    return b.Level - a.Level;
+                });
 
                 if (index != 5)
                 {

@@ -10,6 +10,12 @@
             // }
             DiamondComponent diamondComponent = session.ZoneScene().CurrentScene().AddComponent<DiamondComponent>();
             session.ZoneScene().CurrentScene().AddComponent<RoomComponent>();
+
+            await Game.EventSystem.PublishAsync(new EventType.InitObjectPool()
+            {
+                Scene = session.ZoneScene()
+            });
+            
             diamondComponent.InitMapWithMessage(message);
             await ETTask.CompletedTask;
         }

@@ -69,12 +69,14 @@ namespace ET
             {
                 return;
             }
+
             foreach (var buffInfo in buffInfos)
             {
-                if (buffInfo.RoundCount ==0)
+                if (buffInfo.RoundCount == 0)
                 {
                     continue;
                 }
+
                 switch (buffInfo.ConfigId)
                 {
                     case 110:
@@ -99,15 +101,60 @@ namespace ET
             text.fontStyle = FontStyle.Bold;
             Vector2 startPos = self.GameObject.transform.position;
             text.color = component.IsCritical? Color.red : Color.green;
-            float time = 0;
-            while (time < 1)
+            // float time = 0;
+            // while (time < 1)
+            // {
+            //     var vec = Vector2.Lerp(startPos, startPos + new Vector2(0, 100), time);
+            //     text.transform.position = vec;
+            //     text.transform.localScale = Vector3.one + Vector3.one * Mathf.Sin(Mathf.PI * (time + 0.01f));
+            //     time += Time.deltaTime;
+            //     await TimerComponent.Instance.WaitFrameAsync();
+            // }
+
+            ETTask task = ETTask.Create();
+
+            AnimationToolComponent.Instance.MoveAction(new MoveActionItem()
             {
-                var vec = Vector2.Lerp(startPos, startPos + new Vector2(0, 100), time);
-                text.transform.position = vec;
-                text.transform.localScale = Vector3.one + Vector3.one * Mathf.Sin(Mathf.PI * (time + 0.01f));
-                time += Time.deltaTime;
-                await TimerComponent.Instance.WaitFrameAsync();
-            }
+                Time = 1,
+                CurrentPos = startPos,
+                EndPos = startPos + new Vector2(0, 100),
+                Task = task,
+                Speed = 1,
+                GameObject = text.gameObject,
+            });
+            
+            AnimationToolComponent.Instance.ScaleAction(new ScaleActionItem()
+            {
+                Time = 1,
+                CurrentScale = Vector3.one,
+                EndScale = Vector3.one * 2,
+                Speed = 1,
+                GameObject = text.gameObject
+
+            });
+
+            // self.MoveActionItems.Add(new MoveActionItem()
+            // {
+            //     Time = 1,
+            //     CurrentPos = startPos,
+            //     EndPos = startPos + new Vector2(0, 100),
+            //     Task = task,
+            //     Speed = 1,
+            //     GameObject = text.gameObject,
+            //     MoveActionType = MoveActionType.Normal
+            //     // public float CurrentTime = 0;
+            //     // public float Time;
+            //     // public Vector3 CurrentPos;
+            //     // public Quaternion CurrentQuat;
+            //     // public Quaternion EndQuat;
+            //     // public Vector3 EndPos;
+            //     // public ETTask Task;
+            //     // public float Speed;
+            //     // public GameObject GameObject;
+            //     // public MoveActionType MoveActionType = MoveActionType.Invalide;
+            //     // public StateType StateType = StateType.Active;
+            // });
+            await task.GetAwaiter();
 
             GameObject.Destroy(text);
         }

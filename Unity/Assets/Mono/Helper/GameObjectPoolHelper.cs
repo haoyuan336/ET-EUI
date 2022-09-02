@@ -11,6 +11,45 @@ namespace ET
     {
         private static Dictionary<string, GameObjectPool> poolDict = new Dictionary<string, GameObjectPool>();
 
+        public static async ETTask InitPoolAsync(string poolName, int size, PoolInflationType type = PoolInflationType.DOUBLE)
+        {
+            ETTask task = ETTask.Create();
+            if (poolDict.ContainsKey(poolName))
+            {
+                task.SetResult();
+                return;
+            }
+
+            try
+            {
+                Log.Debug($"init poll {poolName}");
+                AsyncOperationHandle handle = GetGameObjectByResType(poolName);
+                handle.Completed += (result) =>
+                {
+                    if (result.Status == AsyncOperationStatus.Succeeded)
+                    {
+                        GameObject gameObject = handle.Result as GameObject;
+                        poolDict[poolName] = new GameObjectPool(poolName, gameObject, GameObject.Find("Global/PoolRoot"),
+                            size, type);
+                    }
+
+                    task.SetResult();
+                };
+                // handle.WaitForCompletion();
+                // Debug.Log($"load  handler {handle.Status}");
+                // GameObject result = (GameObject) handle.Result;
+                // poolDict[poolName] = new GameObjectPool(poolName, result, GameObject.Find("Global/PoolRoot"),
+                //     size, type);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                task.SetResult();
+            }
+
+            await task.GetAwaiter();
+        }
+
         public static void InitPool(string poolName, int size, PoolInflationType type = PoolInflationType.DOUBLE)
         {
             if (poolDict.ContainsKey(poolName))
@@ -31,7 +70,7 @@ namespace ET
                     AsyncOperationHandle handle = GetGameObjectByResType(poolName);
                     handle.WaitForCompletion();
                     Debug.Log($"load  handler {handle.Status}");
-                    GameObject result = (GameObject) handle.Result;
+                    GameObject result = (GameObject)handle.Result;
                     poolDict[poolName] = new GameObjectPool(poolName, result, GameObject.Find("Global/PoolRoot"),
                         size, type);
                 }
@@ -151,6 +190,11 @@ namespace ET
 
             ReturnObjectToPool(t.gameObject);
         }
+
+        // public static async ETTask<GameObject> GetGameObjectByResTypeAsync(string poolName)
+        // {
+        //     return  Addressables.LoadAssetAsync<GameObject>()
+        // }
 
         public static AsyncOperationHandle GetGameObjectByResType(string poolName)
         {

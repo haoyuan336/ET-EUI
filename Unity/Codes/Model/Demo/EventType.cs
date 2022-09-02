@@ -6,6 +6,18 @@ namespace ET
 {
     namespace EventType
     {
+        public struct PlayBuffDamageAnim
+        {
+            public HeroCardComponent HeroCardComponent;
+            public HeroCardDataComponentInfo HeroCardDataComponentInfo;
+            public BuffInfo BuffInfo;
+            public int DamageCount;
+
+        }
+        public struct InitObjectPool
+        {
+            public Scene Scene;
+        }
         public struct PlayAudioEffect
         {
             public string AudioStr;

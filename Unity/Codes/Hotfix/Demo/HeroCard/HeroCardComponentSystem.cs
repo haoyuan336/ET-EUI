@@ -20,14 +20,14 @@ namespace ET
     {
         public override void Update(HeroCardComponent self)
         {
-            self.CurrentTime += 1;
-            if (self.CurrentTime >= ConstValue.AutoSaveTime)
-            {
-                self.CurrentTime = 0;
-#if SERVER
-                self.SaveData();
-#endif
-            }
+            //             self.CurrentTime += 1;
+            //             if (self.CurrentTime >= ConstValue.AutoSaveTime)
+            //             {
+            //                 self.CurrentTime = 0;
+            // #if SERVER
+            //                 self.SaveData();
+            // #endif
+            //             }
         }
     }
 
@@ -37,7 +37,7 @@ namespace ET
         {
 #if SERVER
             // Log.Warning("销毁钱调用");
-            self.SaveData();
+            // self.SaveData();
 #endif
         }
     }
@@ -47,6 +47,7 @@ namespace ET
         public override void Destroy(HeroCardComponent self)
         {
 #if SERVER
+            self.SaveData();
 #endif
         }
     }
@@ -60,6 +61,11 @@ namespace ET
             List<HeroCard> heroCards = await self.GetAllHeroCardAsync();
             foreach (var heroCard in heroCards)
             {
+                if (heroCard.IsShow)
+                {
+                    self.ChangeList.Add(heroCard);
+                }
+
                 heroCard.IsShow = false;
             }
 
@@ -67,6 +73,7 @@ namespace ET
             if (targetHeroCard != null)
             {
                 targetHeroCard.IsShow = true;
+                self.ChangeList.Add(targetHeroCard);
                 return true;
             }
 
@@ -94,6 +101,20 @@ namespace ET
             return newHeroCards;
         }
 
+        public static async ETTask UnSetHeroFromTroop(this HeroCardComponent self, long heroId)
+        {
+            List<HeroCard> heroCards = await self.GetAllHeroCardAsync();
+            HeroCard heroCard = heroCards.Find(a => { return a.Id.Equals(heroId); });
+            if (heroCard == null)
+            {
+                return;
+            }
+
+            heroCard.TroopId = 0;
+            self.ChangeList.Add(heroCard);
+            await ETTask.CompletedTask;
+        }
+
         public static HeroCard UpdateHeroStar(this HeroCardComponent self, long heroId, long materialHeroId)
         {
             // long account = request.Account;
@@ -116,6 +137,7 @@ namespace ET
             materialHeroCard.State = (int)StateType.Destroy;
 
             heroCard.Star += 1;
+            self.ChangeList.Add(heroCard);
             return heroCard;
         }
 
@@ -129,6 +151,7 @@ namespace ET
             }
 
             heroCard.Rank++;
+            self.ChangeList.Add(heroCard);
             return heroCard;
         }
 
@@ -153,6 +176,7 @@ namespace ET
                 item.Count -= needExp;
             }
 
+            self.ChangeList.Add(heroCard);
             return heroCard;
         }
 
@@ -164,19 +188,26 @@ namespace ET
                 heroCard.IsLock = isLock;
             }
 
+            self.ChangeList.Add(heroCard);
+
             return heroCard;
         }
 
         // [Obsolete("Obsolete")]
         public static void SaveData(this HeroCardComponent self)
         {
-            List<HeroCard> heroCards = self.GetChilds<HeroCard>();
-            if (heroCards != null)
+            // List<HeroCard> heroCards = self.GetChilds<HeroCard>();
+            // if (heroCards != null)
+            // {
+            //     foreach (var heroCard in heroCards)
+            //     {
+            //         DBManagerComponent.Instance.GetZoneDB(self.DomainZone()).Save(heroCard).Coroutine();
+            //     }
+            // }
+
+            foreach (var heroCard in self.ChangeList)
             {
-                foreach (var heroCard in heroCards)
-                {
-                    DBManagerComponent.Instance.GetZoneDB(self.DomainZone()).Save(heroCard).Coroutine();
-                }
+                DBManagerComponent.Instance.GetZoneDB(self.DomainZone()).Save(heroCard).Coroutine();
             }
         }
 
@@ -221,6 +252,7 @@ namespace ET
             heroCard.ConfigId = heroConfigs[randomIndex].Id;
             heroCard.OwnerId = accountId;
             self.AddChild(heroCard);
+            self.ChangeList.Add(heroCard);
             //存储技能  基础技能
             return heroCard;
             // // HeroCard heroCard = unit.AddChild<HeroCard, int>(key);

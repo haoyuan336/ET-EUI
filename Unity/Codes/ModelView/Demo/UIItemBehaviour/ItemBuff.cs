@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace ET
 {
-	public partial class Scroll_ItemBuff : Entity,IAwake,IDestroy
+	public partial class Scroll_ItemBuff : Entity,IAwake,IDestroy 
 	{
 		private bool isCacheNode = false;
 		public void SetCacheMode(bool isCache)
@@ -16,6 +16,30 @@ namespace ET
 			this.uiTransform = trans;
 			return this;
 		}
+
+		public UnityEngine.UI.Text E_BuffNameText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_BuffNameText == null )
+     				{
+		    			this.m_E_BuffNameText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_BuffName");
+     				}
+     				return this.m_E_BuffNameText;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_BuffName");
+     			}
+     		}
+     	}
 
 		public UnityEngine.UI.Text E_CountText
      	{
@@ -43,10 +67,12 @@ namespace ET
 
 		public void DestroyWidget()
 		{
+			this.m_E_BuffNameText = null;
 			this.m_E_CountText = null;
 			this.uiTransform = null;
 		}
 
+		private UnityEngine.UI.Text m_E_BuffNameText = null;
 		private UnityEngine.UI.Text m_E_CountText = null;
 		public Transform uiTransform = null;
 	}

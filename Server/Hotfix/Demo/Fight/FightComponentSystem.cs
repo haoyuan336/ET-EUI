@@ -357,6 +357,11 @@ namespace ET
             }
         }
 
+        public static void ProcessSettlementBuffRoundLogic(this FightComponent self, Unit unit, ActionMessage actionMessage)
+        {
+            //处理结算 buff 回合
+        }
+
         public static void ProcessAddRoundAngry(this FightComponent self, ActionMessage actionMessage)
         {
             if (!self.CheckIsHaveCrash(actionMessage))
@@ -470,7 +475,7 @@ namespace ET
                 }
 
                 // self.ProcessBuffLogic(beAttackHeroCard, skill);
-                attackHero.ProcessBuffLogic(beAttackHeroCard, skill);
+                attackHero.ProcessAttachBuffLogic(beAttackHeroCard, skill);
                 // attackHero.AttackTarget(beAttackHeroCard, 0, skill);
                 attackHero.ProcessMainFightLogic(beAttackHeroCard, skill);
                 List<BuffInfo> buffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos();
@@ -508,10 +513,13 @@ namespace ET
             Unit beUnit = self.GetBeAttackUnit(unit);
             self.ProcessAngryAttackLogic(actionMessage, beUnit, unit);
             self.ProcessReBackNormalAttackLogic(actionMessage, beUnit, unit);
-            ActionMessage message = self.ProcessBuffRoundLogic(beUnit);
-            actionMessage.ActionMessages.Add(message);
             //todo 处理反击逻辑
             //产看动作队列里面是否存在消除动作
+            ActionMessage message = self.ProcessBuffRoundLogic(unit);
+            if (message.ActionMessages.Count > 0)
+            {
+                actionMessage.ActionMessages.Add(message);
+            }
         }
 
         public static HeroCard GetTurnAttackHero(this FightComponent self, Unit unit)
@@ -570,7 +578,7 @@ namespace ET
             self.ProcessNormalAttackLogic(actionMessage, unit, beUnit, makeSureAttackMessage);
             Log.Debug("处理攻击逻辑");
             // self.ProcessBuffLogic();
-            ActionMessage message = self.ProcessBuffRoundLogic(unit);
+            ActionMessage message = self.ProcessBuffRoundLogic(beUnit);
             if (message.ActionMessages.Count > 0)
             {
                 actionMessage.ActionMessages.Add(message);
@@ -583,12 +591,40 @@ namespace ET
 
             ActionMessage actionMessage = new ActionMessage()
             {
-                PlayType = (int)ActionMessagePlayType.Sync, ActionMessages = new List<ActionMessage>()
+                PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>()
             };
+            // ActionMessage action = new ActionMessage() { PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>() };
+            foreach (var heroCard in heroCards)
+            {
+                // heroCard.ProcessBuffLogic();
+                ActionMessage buffAction = heroCard.ProcessBuffRoundLogic();
+                if (buffAction != null)
+                {
+                    actionMessage.ActionMessages.Add(buffAction);
+                }
+
+                // BuffComponent buffComponent = heroCard.GetComponent<BuffComponent>();
+                // List<Buff> buffs = buffComponent.GetChilds<Buff>();
+                //
+                //
+                // buffComponent.ProcessRoundLogic();
+                // var message = new ActionMessage()
+                // {
+                //     UpdateHeroBuffInfo = new UpdateHeroBuffInfo()
+                //     {
+                //         HeroId = heroCard.Id,
+                //         BuffInfos = buffComponent.GetBuffInfos(),
+                //         HeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo()
+                //     }
+                // };
+                // actionMessage.ActionMessages.Add(message);
+            }
+
             foreach (var heroCard in heroCards)
             {
                 BuffComponent buffComponent = heroCard.GetComponent<BuffComponent>();
-                buffComponent.ProcessRoundLogic();
+                // List<Buff> buffs = buffComponent.GetChilds<Buff>();
+                // buffComponent.ProcessRoundLogic();
                 var message = new ActionMessage()
                 {
                     UpdateHeroBuffInfo = new UpdateHeroBuffInfo()
@@ -649,7 +685,7 @@ namespace ET
 
                     //
                     // self.ProcessBuffLogic(beAttackHeroCard, skill);
-                    heroCard.ProcessBuffLogic(beAttackHeroCard, skill);
+                    heroCard.ProcessAttachBuffLogic(beAttackHeroCard, skill);
                     List<BuffInfo> buffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos();
                     heroBufferInfos.Add(new HeroBuffInfo() { HeroId = beAttackHeroCard.Id, BuffInfos = buffInfos });
                     heroCard.ProcessMainFightLogic(beAttackHeroCard, skill);
@@ -733,7 +769,7 @@ namespace ET
 
                 Skill skill = heroCard.GetComponent<HeroCardDataComponent>().MakeSureSkill(self.GetFirstCrashCount(actionMessage));
                 SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
-                Log.Warning($"skillconfig id {skill.ConfigId}");
+                // Log.Warning($"skillconfig id {skill.ConfigId}");
                 List<HeroCard> beAttackHeroCards = self.GetBeAttackHeroCards(beUnit, unit, heroCard, skill);
                 BuffComponent buffComponent = heroCard.GetComponent<BuffComponent>();
 
@@ -759,7 +795,7 @@ namespace ET
 
                     // self.ProcessBuffLogic(beAttackHeroCard, skill);
                     // self.ProcessBuffLogic()
-                    heroCard.ProcessBuffLogic(beAttackHeroCard, skill);
+                    heroCard.ProcessAttachBuffLogic(beAttackHeroCard, skill);
                     List<BuffInfo> buffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos();
                     heroBuffInfos.Add(new HeroBuffInfo() { HeroId = beAttackHeroCard.Id, BuffInfos = buffInfos });
                     heroCard.ProcessMainFightLogic(beAttackHeroCard, skill);
@@ -877,6 +913,10 @@ namespace ET
                     Log.Debug("FriendGroup");
 
                     heroCards = self.GetBeAttackUnitAllLiveHeroCards(attactUnit);
+                    break;
+                case (int)SkillRangeType.SingleSelf:
+                    Log.Debug("attack self");
+                    heroCards.Add(heroCard);
                     break;
                 case (int)SkillRangeType.All:
                     Log.Debug("All");
