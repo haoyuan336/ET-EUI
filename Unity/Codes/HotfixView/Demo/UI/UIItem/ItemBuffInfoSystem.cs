@@ -19,6 +19,10 @@ namespace ET
         {
             BuffConfig buffConfig = BuffConfigCategory.Instance.Get(info.ConfigId);
             GameObject gameObject = GameObjectPoolHelper.GetObjectFromPool("ItemBuff", true, 5);
+            if (gameObject == null)
+            {
+                return;
+            }
             gameObject.transform.localScale = Vector2.one;
             self.uiTransform = gameObject.transform;
             // self.E_CountText.text = $"X{info.RoundCount}";

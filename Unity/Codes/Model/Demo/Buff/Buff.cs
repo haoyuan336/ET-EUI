@@ -8,7 +8,8 @@ namespace ET
         public int Damage = 0; //伤害值  
         public int HealthShield = 0; //生命值护盾
         // public int AlRoundCount = 0; //已经进行了几个回合
-        public int CastAttackPower = 0; //施法者的攻击力值
-        public long AttachHeroId = 0;   //施加buff 的英雄
+        // public int CastAttackPower = 0; //施法者的攻击力值
+        // public long AttachHeroId = 0;   //施加buff 的英雄
+        public HeroCard AttachHeroCard; //施法者英雄
     }
 }

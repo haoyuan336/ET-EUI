@@ -38,7 +38,7 @@ namespace ET
             // self.AlRoundCount++;
             if (deductionSelfTotalHealthRate > 0)
             {
-                var hp = heroCardDataComponent.HP * deductionSelfTotalHealthRate;
+                var hp = heroCardDataComponent.HP * deductionSelfTotalHealthRate; //扣除当前血量的百分比
                 float oldHp = heroCardDataComponent.HP;
                 float endHp = oldHp - hp;
                 if (endHp < 0)
@@ -58,9 +58,11 @@ namespace ET
             float deductionAttackAttackHealthRate = buffConfig.DeductionAttackAttackHealthRate / 100.0f * self.OverlabCount; //施法者攻击力百分比
             if (deductionAttackAttackHealthRate > 0)
             {
-                float damage = self.CastAttackPower * deductionAttackAttackHealthRate;
+                float planeDamage = self.AttachHeroCard.GetComponent<HeroCardDataComponent>().GetHeroPlaneAttack();
+                // float damage = self.AttachHeroId;
+                // float damage = self.CastAttackPower * deductionAttackAttackHealthRate;
                 float oldHp = heroCardDataComponent.HP;
-                float endHp = oldHp - damage;
+                float endHp = oldHp - planeDamage;
                 if (endHp < 0)
                 {
                     endHp = 0;
@@ -74,6 +76,21 @@ namespace ET
                 };
                 actionMessage.BuffDamageAction = buffDamageAction;
             }
+
+            var toDeath = buffConfig.IsToDeath;
+            if (toDeath == (int)ToDeathType.Death)
+            {
+                float dmage = heroCardDataComponent.HP;
+                heroCardDataComponent.HP = 0;
+                var buffDamageAction = new BuffDamageAction()
+                {
+                    BuffInfo = self.GetBuffInfo(), HeroCardDataComponentInfo = heroCardDataComponent.GetInfo(), DamageCount = (int)dmage
+                };
+                actionMessage.BuffDamageAction = buffDamageAction;
+
+                // heroCardDataComponent.HP = 0;
+            }
+
             if (self.RoundCount == -1)
             {
                 self.Dispose();

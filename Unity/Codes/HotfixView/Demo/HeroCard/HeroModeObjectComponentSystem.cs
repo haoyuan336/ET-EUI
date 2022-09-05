@@ -231,7 +231,8 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
-        public static async ETTask PlayBuffDamageAnimator(this HeroModeObjectCompoent self, BuffInfo buffInfo, HeroCardDataComponentInfo heroCardDataComponentInfo)
+        public static async ETTask PlayBuffDamageAnimator(this HeroModeObjectCompoent self, BuffInfo buffInfo,
+        HeroCardDataComponentInfo heroCardDataComponentInfo)
         {
             BuffConfig buffConfig = BuffConfigCategory.Instance.Get(buffInfo.ConfigId);
             self.PlayBuffBeAttackEffect(buffInfo).Coroutine();
@@ -245,7 +246,13 @@ namespace ET
             HeroCardInfoObjectComponent heroCardInfoObjectComponent = self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>();
             heroCardInfoObjectComponent.ShowDamageViewAnim(heroCardDataComponentInfo);
             heroCardInfoObjectComponent.UpdateHPView(heroCardDataComponentInfo);
-            await ETTask.CompletedTask;
+            // await ETTask.CompletedTask;
+            await TimerComponent.Instance.WaitAsync(1000);
+            if (heroCardDataComponentInfo.HP <= 0)
+            {
+                self.HeroMode.GetComponent<Animator>().SetBool("Dead", true);
+                self.SetDeadState();
+            }
         }
 
         public static async ETTask PlayBuffDamageAnim(this HeroModeObjectCompoent self, HeroCardDataComponentInfo heroCardDataComponentInfo,
@@ -256,6 +263,7 @@ namespace ET
             {
                 return;
             }
+
             heroCardDataComponentInfo.Damage = damageBuff;
 
             self.PlayBuffBeAttackEffect(buffInfo).Coroutine();
@@ -407,7 +415,7 @@ namespace ET
             GameObjectPoolHelper.ReturnObjectToPool(effect);
         }
 
-        public static async void ShowBuffEffect(this HeroModeObjectCompoent self, List<BuffInfo> buffInfos)
+        public static async void ShowBuffEffect(this HeroModeObjectCompoent self, List<BuffInfo> buffInfos, HeroCardDataComponentInfo heroCardDataComponentInfo)
         {
             //展示buff 特效
 
@@ -418,6 +426,11 @@ namespace ET
 
             self.BuffEffectList.Clear();
             self.ClearBuffState();
+            if (heroCardDataComponentInfo.HP <= 0)
+            {
+                return;
+            }
+                    
             if (buffInfos == null)
             {
                 return;
@@ -477,7 +490,7 @@ namespace ET
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(componentInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowDamageViewAnim(componentInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowBuffViewInfo(buffInfos, componentInfo);
-            self.ShowBuffEffect(buffInfos);
+            self.ShowBuffEffect(buffInfos,componentInfo);
 
             if (componentInfo.HP <= 0)
             {
@@ -495,7 +508,9 @@ namespace ET
             {
                 GameObjectPoolHelper.ReturnObjectToPool(buff);
             }
+            self.Parent.GetComponent<HeroCardInfoObjectComponent>().SetDeadState();
 
+            
             self.BuffEffectList.Clear();
         }
 

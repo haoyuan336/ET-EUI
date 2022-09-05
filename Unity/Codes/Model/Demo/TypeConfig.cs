@@ -92,4 +92,34 @@
         Can = 1, //buff 是否可以覆盖
         Not = 2 //buff 不可以覆盖
     }
+
+    public enum IsCanAttackType
+    {
+        Can = 1, //可以攻击 
+        Not = 0, //不可以攻击
+    }
+
+    public enum FrozenType
+    {
+        Frozen = 1, //冰冻
+        NotFrozen = 0, //非冰冻
+    }
+
+    public enum ToDeathType
+    {
+        Death = 1,
+        Not = 0,
+    }
+
+    public enum ProvocationType
+    {
+        Provocation = 1,
+        Not = 0,
+    }
+
+    public enum AvoidDeathType
+    {
+        AvoidDeath = 1,
+        Not = 0,
+    }
 }

@@ -83,6 +83,25 @@ namespace ET
             return HeroHelper.GetHeroBaseDefence(self.GetParent<HeroCard>().GetMessageInfo());
         }
 
+        public static float GetHeroPlaneAttack(this HeroCardDataComponent self)
+        {
+            //获取英雄的面板攻击力
+            float baseAttack = self.GetHeroBaseAttack(); //角色的基础攻击
+            float weaponAttack = self.GetParent<HeroCard>().GetWeaponBaseValueByType(WordBarType.Attack); // 装备的基础攻击
+            float weaponAttackAddition = self.GetParent<HeroCard>().GetWeaponBaseValueByType(WordBarType.AttackAddition); //装备的攻击力加成
+            float planeAttack = (baseAttack + weaponAttack) * (1 + weaponAttackAddition / 10000); //面板攻击力
+            return planeAttack;
+        }
+
+        public static float GetHeroPlaneDefence(this HeroCardDataComponent self)
+        {
+            float baseDefence = self.GetHeroBaseDefence(); //被攻击对象的基础防御力
+            float weaponDefence = self.GetParent<HeroCard>().GetWeaponBaseValueByType(WordBarType.Defecnce); //被攻击对象的装备防御力
+            float weaponDefecceAddition = self.GetParent<HeroCard>().GetWeaponBaseValueByType(WordBarType.DefenceAddition); //被攻击对象的装备防御力加成
+            float planeDefence = (baseDefence + weaponDefence) * (1 + weaponDefecceAddition / 10000); //被攻击对象的面板防御力
+            return planeDefence;
+        }
+
         public static int GetHeroBaseAttack(this HeroCardDataComponent self)
         {
             //计算英雄的基础伤害
@@ -99,9 +118,9 @@ namespace ET
             // HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
             float baseValue = value;
             baseValue = baseValue * growthCoefficient / 2; //基础值
-            baseValue = baseValue + baseValue * (rank) / 10; // 升阶后的成长值
+            baseValue += baseValue * (rank) / 10; // 升阶后的成长值
             var levelValue = baseValue * (0.03f + growthCoefficient / 1000.0f) * (level + 1);
-            baseValue = baseValue + levelValue; //升级后的成长值
+            baseValue += levelValue; //升级后的成长值
             var starValue = growthCoefficient * 100 * (star); //升星后的成长值
             return (int)Mathf.Ceil(baseValue + starValue);
         }
@@ -120,11 +139,13 @@ namespace ET
             {
                 return null;
             }
+
             Skill skill = self.Parent.GetComponent<SkillComponent>().MakeSureAngrySkill();
             self.CurrentSkillId = skill.Id;
             self.Angry = 0;
             return skill;
         }
+
         public static Skill MakeSureSkill(this HeroCardDataComponent self, int firstCrashCount)
         {
             Skill skill = self.Parent.GetComponent<SkillComponent>().MakeSureSkill(firstCrashCount);

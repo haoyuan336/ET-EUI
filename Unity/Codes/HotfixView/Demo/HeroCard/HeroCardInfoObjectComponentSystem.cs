@@ -60,6 +60,10 @@ namespace ET
 
     public static class HeroCardInfoObjectComponentSystem
     {
+        public static void SetDeadState(this HeroCardInfoObjectComponent self)
+        {
+            self.ESHeroCardInfoUI.SetBuffInfos(null);
+        }
         public static async void ShowBuffViewInfo(this HeroCardInfoObjectComponent self, List<BuffInfo> buffInfos,
         HeroCardDataComponentInfo heroCardDataComponentInfo)
         {

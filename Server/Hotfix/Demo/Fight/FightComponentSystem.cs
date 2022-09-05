@@ -462,6 +462,7 @@ namespace ET
                 return;
             }
 
+            // Log.Warning($"attack {attackHero.}");
             Skill skill = attackHero.GetComponent<HeroCardDataComponent>().MakeSureSkill(3);
             List<HeroCard> beAttackHeroCards = self.GetBeAttackHeroCards(beUnit, attackUnit, attackHero, skill);
             AttackAction attackAction = new AttackAction();
@@ -841,6 +842,26 @@ namespace ET
 */
         public static HeroCard GetSingleAttackHeroCard(this FightComponent self, HeroCard heroCard, Unit unit)
         {
+            //查看是否具有挑衅buff
+            List<Buff> buffs = heroCard.GetComponent<BuffComponent>().GetChilds<Buff>();
+            if (buffs != null)
+            {
+                Buff buff = buffs.Find(a =>
+                {
+                    BuffConfig buffConfig = BuffConfigCategory.Instance.Get(a.ConfigId);
+                    if (buffConfig.Provocation == (int)ProvocationType.Provocation)
+                    {
+                        return true;
+                    }
+
+                    return false;
+                });
+                if (buff != null)
+                {
+                    return buff.AttachHeroCard;
+                }
+            }
+
             var index = heroCard.InTroopIndex;
             int whileCount = 0;
             List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
