@@ -508,7 +508,10 @@ message GameLoseResultAction
 {
 	int64 LoseAccountId = 1;
 }
-
+message RecoveryAction
+{
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
+}
 message AttackAction
 {
 	// HeroCardInfo AttackHeroCardInfo = 1;
@@ -629,7 +632,7 @@ message ActionMessage
 	AttackBeganAction AttackBeganAction = 11;	//战斗开始
 	AttackEndAction AttackEndAction = 12;	//战斗结束
 	BuffDamageAction BuffDamageAction = 13;	//Buff 伤害动作
-
+	RecoveryAction RecoveryAction = 14;	//复活action
 	
 }
 
@@ -1026,6 +1029,7 @@ message HeroCardDataComponentInfo
 
 	SkillInfo CurrentSkillInfo = 13;	//技能info
 	bool IsCritical = 14;	//是否发生了暴击
+	int32 AddAngry = 15;	//增加的怒气值
 	// public int HP;  //当前的血量
 	// public int DiamondAttack;
 	// public int HeroAttack;

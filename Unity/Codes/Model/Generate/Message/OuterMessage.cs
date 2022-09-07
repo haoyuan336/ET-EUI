@@ -1088,6 +1088,15 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.RecoveryAction)]
+	[ProtoContract]
+	public partial class RecoveryAction: Object
+	{
+		[ProtoMember(1)]
+		public HeroCardDataComponentInfo HeroCardDataComponentInfo { get; set; }
+
+	}
+
 	[Message(OuterOpcode.AttackAction)]
 	[ProtoContract]
 	public partial class AttackAction: Object
@@ -1333,6 +1342,9 @@ namespace ET
 
 		[ProtoMember(13)]
 		public BuffDamageAction BuffDamageAction { get; set; }
+
+		[ProtoMember(14)]
+		public RecoveryAction RecoveryAction { get; set; }
 
 	}
 
@@ -2189,6 +2201,9 @@ namespace ET
 
 		[ProtoMember(14)]
 		public bool IsCritical { get; set; }
+
+		[ProtoMember(15)]
+		public int AddAngry { get; set; }
 
 // public int HP;  //当前的血量
 // public int DiamondAttack;

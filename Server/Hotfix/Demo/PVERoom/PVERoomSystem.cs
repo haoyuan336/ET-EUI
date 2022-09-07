@@ -147,7 +147,6 @@ namespace ET
             }
         }
 
-        
         public static async void PlayerScrollScreen(this PVERoom self, C2M_PlayerScrollScreen message)
         {
             FightComponent fightComponent = self.GetComponent<FightComponent>();
@@ -157,12 +156,20 @@ namespace ET
             ActionMessage makeSureAttackMessage = fightComponent.MakeSureAttackHeros(m2CSyncDiamondAction.ActionMessage);
             fightComponent.ProcessAddHeroCardAngryLogic(m2CSyncDiamondAction.ActionMessage);
             fightComponent.ProcessComboResult(m2CSyncDiamondAction.ActionMessage, makeSureAttackMessage);
-            m2CSyncDiamondAction.ActionMessage.ActionMessages.Add(new ActionMessage(){AttackBeganAction = new AttackBeganAction()});
+            if (makeSureAttackMessage != null)
+            {
+                m2CSyncDiamondAction.ActionMessage.ActionMessages.Add(new ActionMessage() { AttackBeganAction = new AttackBeganAction() });
+            }
+
             fightComponent.ProcessAttackLogic(m2CSyncDiamondAction.ActionMessage, makeSureAttackMessage); //处理攻击逻辑
             fightComponent.HideAttackTargetMark(m2CSyncDiamondAction.ActionMessage);
             fightComponent.ProcessReBackAttackLogic(m2CSyncDiamondAction.ActionMessage);
             fightComponent.ProcessAddRoundAngry(m2CSyncDiamondAction.ActionMessage);
-            m2CSyncDiamondAction.ActionMessage.ActionMessages.Add(new ActionMessage(){AttackEndAction = new AttackEndAction()});
+            if (makeSureAttackMessage != null)
+            {
+                m2CSyncDiamondAction.ActionMessage.ActionMessages.Add(new ActionMessage() { AttackEndAction = new AttackEndAction() });
+            }
+
             Unit loseUnit = fightComponent.CheckGameEndResult();
             //
             if (loseUnit != null)

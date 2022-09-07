@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace ET
@@ -191,7 +190,7 @@ namespace ET
 
                 //知道的buff 回合数直接归0；
                 findBuff.RoundCount = 0;
-                Log.Warning("找到了 条件机会，需要将原来buff剩余回合数归零");
+                Log.Debug("找到了 条件机会，需要将原来buff剩余回合数归零");
                 //条件符合，
             }
 
@@ -234,7 +233,22 @@ namespace ET
             for (int i = 0; i < buffConfigIds.Length; i++)
             {
                 // Log.Warning($"buffconfig id {buffConfigIds[i]}");
+                //根据buff 类型 检查，buff是减益还是增益
+
                 Buff buff = buffComponent.AddBuff(buffConfigIds[i], buffRounds[skill.Level - 1], skillConfig.BuffOverCount, self);
+                // Log.Warning($"skill health shield addition {skillConfig.HealthShieldAdditions}");
+                int[] healthShieldAdditions = skillConfig.HealthShieldAdditions;
+                if (healthShieldAdditions != null)
+                {
+                    float healthShieldAddition = healthShieldAdditions[skill.Level - 1] / 100.0f;
+                    buff.HealthShield = (int)(heroCardDataComponent.TotalHP * healthShieldAddition);
+                    // Log.Warning($"health shield {buff.HealthShield}");
+                }
+                // if (buff.Config.issh)
+                // {
+
+                // }
+
                 // Log.Warning($"add buff success {buff}");
                 // BuffConfig buffConfig = BuffConfigCategory.Instance.Get(buff.ConfigId);
                 // int attackAttackAddition = buffConfig.DeductionAttackAttackHealthRate;
@@ -243,6 +257,28 @@ namespace ET
                 // }
             }
 #endif
+        }
+
+        public static bool ProcessRecoveryLogic(this HeroCard self)
+        {
+            //处理复活逻辑
+
+            // heroCardDataComponent.HP = 
+
+            BuffComponent buffComponent = self.GetComponent<BuffComponent>();
+            List<Buff> buffs = buffComponent.GetChilds<Buff>();
+            buffs?.RemoveAll(a => a.RoundCount <= 0);
+            Buff buff = buffs?.Find(a => a.Config.IsRecovery == (int)RecoveryType.Recovery);
+            if (buff != null)
+            {
+                //todo 可以复活
+                HeroCardDataComponent heroCardDataComponent = self.GetComponent<HeroCardDataComponent>();
+                heroCardDataComponent.HP = (int)(heroCardDataComponent.TotalHP * buff.Config.RecoveryHealthAddition / 100.0f);
+
+                return true;
+            }
+
+            return false;
         }
 
         public static void ProcessMainFightLogic(this HeroCard self, HeroCard targetHeroCard, Skill skill)
@@ -283,31 +319,32 @@ namespace ET
         //     }
         // }
 
-        public static float GetDeBuffAttack(this HeroCard self, List<Buff> buffs, float planeAttack)
+        public static float GetBuffAttack(this HeroCard self, List<Buff> buffs, float planeAttack)
         {
             if (buffs == null)
             {
                 return planeAttack;
             }
 
-            int subAttackAddition = 0;
+            int attackAddition = 0;
             foreach (var buff in buffs)
             {
                 BuffConfig buffConfig = BuffConfigCategory.Instance.Get(buff.ConfigId);
-                subAttackAddition += buffConfig.AttackReduceRate;
+                attackAddition -= buffConfig.AttackReduceRate;
+                attackAddition += buffConfig.AttackMultRate;
             }
 
-            if (subAttackAddition > 100)
+            if (attackAddition > 100)
             {
-                subAttackAddition = 100;
+                attackAddition = 100;
             }
 
-            float endAttackAddition = planeAttack * subAttackAddition / 100.0f;
-            // return endAttackAddition;
-            return planeAttack - endAttackAddition;
+            float endAttackAddition = planeAttack + planeAttack * attackAddition / 100.0f;
+            // return planeAttack - endAttackAddition;
+            return endAttackAddition;
         }
 
-        public static float GetDeBuffSubDefence(this HeroCard self, List<Buff> buffs, float planeDefence)
+        public static float GetBuffDefence(this HeroCard self, List<Buff> buffs, float planeDefence)
         {
             if (buffs == null)
             {
@@ -318,10 +355,11 @@ namespace ET
             foreach (var buff in buffs)
             {
                 BuffConfig buffConfig = BuffConfigCategory.Instance.Get(buff.ConfigId);
-                defenceReduceRate += buffConfig.DefenceReduceRate;
+                defenceReduceRate -= buffConfig.DefenceReduceRate;
+                defenceReduceRate += buffConfig.DefenceMultRate;
             }
 
-            planeDefence -= planeDefence * defenceReduceRate / 100.0f;
+            planeDefence += planeDefence * defenceReduceRate / 100.0f;
             return planeDefence;
         }
 
@@ -330,18 +368,20 @@ namespace ET
             HeroCardDataComponent attackCom = self.GetComponent<HeroCardDataComponent>();
             HeroCardDataComponent beAttackCom = targetHeroCard.GetComponent<HeroCardDataComponent>();
             List<Buff> attackBuffs = self.GetComponent<BuffComponent>().GetChilds<Buff>();
+            attackBuffs?.RemoveAll(a => a.RoundCount <= 0);
             BuffComponent buffComponent = targetHeroCard.GetComponent<BuffComponent>();
             List<Buff> beAttackbuffs = buffComponent.GetChilds<Buff>();
-
+            beAttackbuffs?.RemoveAll(a => a.RoundCount <= 0);
             float planeAttack = attackCom.GetHeroPlaneAttack();
             //取出消除宝石combo加成
             planeAttack += (int)(planeAttack * comboAddition / 100.0f);
 
-            planeAttack = self.GetDeBuffAttack(attackBuffs, planeAttack);
+            planeAttack = self.GetBuffAttack(attackBuffs, planeAttack);
+            // planeAttack = self.GetAddBuff
 
             var domineeringValue = self.GetDomineering(); //霸气值
             float planeDefence = beAttackCom.GetHeroPlaneDefence();
-            planeDefence = self.GetDeBuffSubDefence(beAttackbuffs, planeDefence);
+            planeDefence = self.GetBuffDefence(beAttackbuffs, planeDefence);
             float attackBuff = 0; //攻击buff
             float attackDeBuff = 0; //攻击debuff
             float deffenceBuff = 0; //防御buff
@@ -372,7 +412,7 @@ namespace ET
             var oldHp = beAttackCom.HP;
             Log.Debug($"old hp {oldHp}");
             damage = self.ProcessBuffDamage(beAttackbuffs, damage);
-            // damage = self.HuDunBuffDamage(buffs, damage);
+            damage = self.HuDunBuffDamage(beAttackbuffs, damage);
             Log.Debug($"hudun damage {damage}");
 
             beAttackCom.HP -= (int)damage;
@@ -388,7 +428,8 @@ namespace ET
             //     beAttackCom.HP = 1;
             // }
 
-            beAttackCom.Angry += 5;
+            targetHeroCard.AddAngry(HeroConfigCategory.Instance.Get(targetHeroCard.ConfigId).BeAttackAddAngry);
+            // beAttackCom.AddAngry(HeroConfigCategory.Instance.Get(targetHeroCard.ConfigId).BeAttackAddAngry);
             damage = oldHp - beAttackCom.HP;
             Log.Debug($"damage {damage}");
             beAttackCom.Damage = (int)damage;
@@ -397,6 +438,32 @@ namespace ET
 #if SERVER
             // targetHeroCard.GetComponent<BuffComponent>().ProcessRoundLogic();
 #endif
+        }
+
+        public static void AddAngry(this HeroCard self, int addAngry)
+        {
+            HeroCardDataComponent heroCardDataComponent = self.GetComponent<HeroCardDataComponent>();
+
+            List<Buff> buffs = self.GetComponent<BuffComponent>().GetChilds<Buff>();
+            if (buffs != null)
+            {
+                int getAngryReduceRate = 0;
+                foreach (var buff in buffs)
+                {
+                    if (buff.RoundCount <= 0)
+                    {
+                        continue;
+                    }
+
+                    getAngryReduceRate += buff.Config.GetAngryReduceRate;
+                }
+
+                var subAngry = addAngry * getAngryReduceRate / 100.0f;
+                addAngry -= (int)subAngry;
+            }
+
+            heroCardDataComponent.Angry += addAngry;
+            heroCardDataComponent.AddAngry = addAngry;
         }
 
         public static void ProcessAvoidDeathBuff(this HeroCard self, List<Buff> buffs, HeroCardDataComponent heroCardDataComponent, int oldHp)
@@ -415,7 +482,7 @@ namespace ET
             {
                 BuffConfig config = BuffConfigCategory.Instance.Get(a.ConfigId);
 
-                if (config.IsAvoidDeath == (int)AvoidDeathType.AvoidDeath)
+                if (config.IsAvoidDeath == (int)AvoidDeathType.AvoidDeath && a.RoundCount > 0)
                 {
                     return true;
                 }
@@ -424,7 +491,6 @@ namespace ET
             });
             if (buff == null)
             {
-
                 return;
             }
 
@@ -459,47 +525,42 @@ namespace ET
 
             float addDamage = damage * allDamageMultRate / 100.0f;
             damage += addDamage;
+
+            if (buffs.Exists(a => a.Config.IsInvincible == (int)InvincibleType.Invincible))
+            {
+                damage = 1;
+            }
+
             return damage;
         }
 
-        // public static float HuDunBuffDamage(this HeroCard self, List<Buff> buffs, float damage)
-        // {
-        //     if (buffs == null)
-        //     {
-        //         return damage;
-        //     }
-        //
-        //     Buff buff = buffs.Find(a => a.ConfigId.Equals(110));
-        //     if (buff == null)
-        //     {
-        //         return damage;
-        //     }
-        //
-        //     if (buff.RoundCount == 0)
-        //     {
-        //         return damage;
-        //     }
-        //
-        //     float endDamage = damage - buff.HealthShield;
-        //
-        //     if (endDamage < 0)
-        //     {
-        //         endDamage = 0;
-        //     }
-        //
-        //     Log.Debug($"damage {damage}");
-        //     Log.Debug($"HealthShield {buff.HealthShield}");
-        //
-        //     buff.HealthShield = (int)(buff.HealthShield - damage);
-        //     Log.Debug($"health shield {buff.HealthShield}");
-        //     if (buff.HealthShield < 0)
-        //     {
-        //         buff.HealthShield = 0;
-        //         buff.RoundCount = 0;
-        //     }
-        //
-        //     return endDamage;
-        // }
+        public static float HuDunBuffDamage(this HeroCard self, List<Buff> buffs, float damage)
+        {
+            if (buffs == null)
+            {
+                return damage;
+            }
+
+            buffs.RemoveAll(a => a.RoundCount <= 0);
+            float endDamage = damage;
+            foreach (var buff in buffs)
+            {
+                if (endDamage <= buff.HealthShield)
+                {
+                    var endHp = buff.HealthShield - endDamage;
+                    buff.HealthShield = (int)endHp;
+                    return 0;
+                }
+
+                if (endDamage > buff.HealthShield)
+                {
+                    endDamage -= buff.HealthShield;
+                    buff.HealthShield = 0;
+                }
+            }
+
+            return endDamage;
+        }
 
         // public static bool GenXingBuff(this HeroCard self, List<Buff> buffs)
         // {

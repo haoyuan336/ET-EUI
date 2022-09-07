@@ -6,6 +6,11 @@ namespace ET
 {
     namespace EventType
     {
+        public struct PlayHeroRecoveryAnimEvent
+        {
+            public HeroCardComponent HeroCardComponent;
+            public HeroCardDataComponentInfo HeroCardDataComponentInfo;
+        }
         public struct PlayBuffDamageAnim
         {
             public HeroCardComponent HeroCardComponent;

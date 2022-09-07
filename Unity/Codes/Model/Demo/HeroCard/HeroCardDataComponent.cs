@@ -13,6 +13,10 @@ namespace ET
         public int Angry; //当前的怒气值
         public long CurrentSkillId;
         public int TotalHP;
+
+
+        public int AddAngry;
+
         // public int BeAttackPower;   //被攻击时候的攻击力
     }
 }

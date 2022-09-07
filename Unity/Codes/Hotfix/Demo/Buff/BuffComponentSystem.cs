@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ET.EventType;
+using ICSharpCode.SharpZipLib;
 
 namespace ET
 {
@@ -103,6 +104,28 @@ namespace ET
             //取出原有buff ，检查是否相克
             List<Buff> buffs = self.GetChilds<Buff>();
             buffs?.RemoveAll(a => a.RoundCount <= 0);
+            if (addBuffConfig.AddType == (int)BuffAddType.Sub)
+            {
+                //检查是否存在免疫buff
+                if (buffs != null)
+                {
+                    Buff buff = buffs.Find(a =>
+                    {
+                        BuffConfig config = BuffConfigCategory.Instance.Get(a.ConfigId);
+                        if (config.IsImmune == (int)ImmuneType.Immune)
+                        {
+                            return true;
+                        }
+
+                        return false;
+                    });
+                    if (buff != null)
+                    {
+                        return null;
+                    }
+                }
+            }
+
             Buff targetBuff = null;
             if (addBuffConfig.IsCanCover == (int)BuffIsCanCover.Can)
             {
@@ -156,16 +179,16 @@ namespace ET
             return actionMessage;
         }
 
-        public static void ActiveBuff(this BuffComponent self, BuffConfig buffConfig, int roundCount, int overCount, HeroCard heroCard)
-        {
-            int activeBuffIds = buffConfig.RoundFullActiveBuff;
-            //激活新buff
-            if (activeBuffIds != 0)
-            {
-                // int configId, int roundCount, int overCount, long heroId
-                self.AddBuff(activeBuffIds, roundCount, overCount, heroCard);
-            }
-        }
+        // public static void ActiveBuff(this BuffComponent self, BuffConfig buffConfig, int roundCount, int overCount, HeroCard heroCard)
+        // {
+        //     int activeBuffIds = buffConfig.RoundFullActiveBuff;
+        //     //激活新buff
+        //     if (activeBuffIds != 0)
+        //     {
+        //         // int configId, int roundCount, int overCount, long heroId
+        //         self.AddBuff(activeBuffIds, roundCount, overCount, heroCard);
+        //     }
+        // }
 
         public static bool GetIsCanAttack(this BuffComponent self)
         {
@@ -179,17 +202,17 @@ namespace ET
             {
                 BuffConfig buffConfig = BuffConfigCategory.Instance.Get(a.ConfigId);
 
-                if (buffConfig.IsCanAttack == (int)IsCanAttackType.Not)
+                if (buffConfig.IsCanAttack == (int)IsCanAttackType.Not && a.RoundCount > 0)
                 {
                     //存在不能发动攻击的buff
-                
+
                     return true;
                 }
 
-                if (buffConfig.IsFrozen == (int)FrozenType.Frozen)
+                if (buffConfig.IsFrozen == (int)FrozenType.Frozen && a.RoundCount > 0)
                 {
                     //存在冰冻的buff
-                
+
                     return true;
                 }
 
@@ -197,15 +220,28 @@ namespace ET
             });
         }
 
-        public static bool IsExistsBuff(this BuffComponent self, int configId)
+        public static bool GetIsInvisible(this BuffComponent self)
         {
             List<Buff> buffs = self.GetChilds<Buff>();
-            if (buffs != null)
+            if (buffs == null)
             {
-                return buffs.Exists(a => a.ConfigId.Equals(configId) && a.RoundCount > 0);
+                return false;
             }
 
-            return false;
+            return buffs.Exists(a => a.Config.IsInvisible == (int)InvisibleType.Invisible && a.RoundCount > 0);
+        }
+
+        public static bool GetIsExistDazzling(this BuffComponent self)
+        {
+            //todo 是否存在炫目buff
+            List<Buff> buffs = self.GetChilds<Buff>();
+            if (buffs == null)
+            {
+                return false;
+            }
+
+            return buffs.Exists(a => a.Config.IsDazzling == (int)DazzlingType.Dazzling && a.RoundCount > 0);
+            
         }
     }
 #endif

@@ -64,6 +64,7 @@ namespace ET
         {
             self.ESHeroCardInfoUI.SetBuffInfos(null);
         }
+
         public static async void ShowBuffViewInfo(this HeroCardInfoObjectComponent self, List<BuffInfo> buffInfos,
         HeroCardDataComponentInfo heroCardDataComponentInfo)
         {
@@ -126,7 +127,7 @@ namespace ET
                 Speed = 1,
                 GameObject = text.gameObject,
             });
-            
+
             AnimationToolComponent.Instance.ScaleAction(new ScaleActionItem()
             {
                 Time = 1,
@@ -134,7 +135,6 @@ namespace ET
                 EndScale = Vector3.one * 2,
                 Speed = 1,
                 GameObject = text.gameObject
-
             });
 
             // self.MoveActionItems.Add(new MoveActionItem()
@@ -172,15 +172,45 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
-        public static void UpdateAngryView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo info)
+        public static async void UpdateAngryView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo info)
         {
             self.ESHeroCardInfoUI.E_AngryBarImage.GetComponent<Image>().fillAmount = (float)info.Angry / self.HeroConfig.TotalAngry;
+            var gameObject = new GameObject();
+            Text text = gameObject.AddComponent<Text>();
+            text.transform.SetParent(GlobalComponent.Instance.NormalRoot);
+            Font obj = AddressableComponent.Instance.LoadAssetByPath<Font>("Assets/Res/font/SVM-font/SVN-Aaron Script.otf");
+            text.font = obj;
+            text.text = $"+{info.AddAngry}";
+            text.fontStyle = FontStyle.Bold;
+            text.fontSize = 60;
+            Vector2 startPos = self.GameObject.transform.position;
+            text.color = Color.yellow;
+            ETTask task = ETTask.Create();
+            AnimationToolComponent.Instance.MoveAction(new MoveActionItem()
+            {
+                Time = 1,
+                CurrentPos = startPos,
+                EndPos = startPos + new Vector2(startPos.x, 100),
+                Task = task,
+                Speed = 1,
+                GameObject = text.gameObject,
+            });
+
+            AnimationToolComponent.Instance.ScaleAction(new ScaleActionItem()
+            {
+                Time = 1,
+                CurrentScale = Vector3.one,
+                EndScale = Vector3.one * 2,
+                Speed = 1,
+                GameObject = text.gameObject
+            });
+            await task.GetAwaiter();
+            GameObject.Destroy(text);
         }
 
-        public static async ETTask InitAttackAdditionView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo info)
+        public static void InitAttackAdditionView(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo info)
         {
             self.ESHeroCardInfoUI.E_AttackBarImage.GetComponent<Image>().fillAmount = (float)info.DiamondAttackAddition / 200;
-            await ETTask.CompletedTask;
         }
 
         //todo 更新显示增加的攻击力加成

@@ -104,14 +104,16 @@ namespace ET
 		[ProtoMember(18)]
 		public int RoundAddAngry { get; set; }
 		[ProtoMember(19)]
-		public int InitAngry { get; set; }
+		public int BeAttackAddAngry { get; set; }
 		[ProtoMember(20)]
-		public int TotalAngry { get; set; }
+		public int InitAngry { get; set; }
 		[ProtoMember(21)]
+		public int TotalAngry { get; set; }
+		[ProtoMember(22)]
 		public int[] SkillIdList { get; set; }
-		[ProtoMember(23)]
-		public int HeroQuality { get; set; }
 		[ProtoMember(24)]
+		public int HeroQuality { get; set; }
+		[ProtoMember(25)]
 		public string HeroIconFrameImage { get; set; }
 
 	}

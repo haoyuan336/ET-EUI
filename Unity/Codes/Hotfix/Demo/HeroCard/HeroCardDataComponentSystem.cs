@@ -39,9 +39,17 @@ namespace ET
                 ConfigId = self.GetParent<HeroCard>().ConfigId,
                 Angry = self.Angry,
                 CurrentSkillId = self.CurrentSkillId,
-                CurrentSkillInfo = skill?.GetMessageInfo()
+                CurrentSkillInfo = skill?.GetMessageInfo(),
+                AddAngry = self.AddAngry
             };
         }
+
+        // public static void AddAngry(this HeroCardDataComponent self, int angry)
+        // {
+        //     //增加的怒气值
+        //     self.Angry += angry;
+        //     self.AddAngry = angry;
+        // }
 
         public static int GetHeroWeaponAttack(this HeroCardDataComponent self)
         {

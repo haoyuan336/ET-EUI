@@ -31,5 +31,7 @@ namespace ET
         public long CallTime = TimeHelper.ServerNow(); //召唤时间戳
         public bool IsLock = false; //是否被锁定 状态
         public bool IsShow = false; //是否在展示状态
+        
+
     }
 }

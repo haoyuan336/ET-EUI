@@ -34,9 +34,8 @@ namespace ET
             float deductionSelfTotalHealthRate = buffConfig.DeductionSelfTotalHealthRate / 100.0f * self.OverlabCount;
             HeroCardDataComponent heroCardDataComponent = heroCard.GetComponent<HeroCardDataComponent>();
 
-            self.RoundCount--;
             // self.AlRoundCount++;
-            if (deductionSelfTotalHealthRate > 0)
+            if (deductionSelfTotalHealthRate > 0 && self.RoundCount > 0)
             {
                 var hp = heroCardDataComponent.HP * deductionSelfTotalHealthRate; //扣除当前血量的百分比
                 float oldHp = heroCardDataComponent.HP;
@@ -56,7 +55,7 @@ namespace ET
             }
 
             float deductionAttackAttackHealthRate = buffConfig.DeductionAttackAttackHealthRate / 100.0f * self.OverlabCount; //施法者攻击力百分比
-            if (deductionAttackAttackHealthRate > 0)
+            if (deductionAttackAttackHealthRate > 0 && self.RoundCount > 0)
             {
                 float planeDamage = self.AttachHeroCard.GetComponent<HeroCardDataComponent>().GetHeroPlaneAttack();
                 // float damage = self.AttachHeroId;
@@ -78,7 +77,7 @@ namespace ET
             }
 
             var toDeath = buffConfig.IsToDeath;
-            if (toDeath == (int)ToDeathType.Death)
+            if (toDeath == (int)ToDeathType.Death && self.RoundCount > 0)
             {
                 float dmage = heroCardDataComponent.HP;
                 heroCardDataComponent.HP = 0;
@@ -91,6 +90,7 @@ namespace ET
                 // heroCardDataComponent.HP = 0;
             }
 
+            self.RoundCount--;
             if (self.RoundCount == -1)
             {
                 self.Dispose();

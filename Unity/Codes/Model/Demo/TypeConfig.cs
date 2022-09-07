@@ -111,15 +111,57 @@
         Not = 0,
     }
 
-    public enum ProvocationType
+    public enum ProvocationType //挑衅
     {
         Provocation = 1,
         Not = 0,
     }
 
-    public enum AvoidDeathType
+    public enum AvoidDeathType //免死
     {
         AvoidDeath = 1,
         Not = 0,
+    }
+
+    public enum ImmuneType //免疫
+    {
+        Immune = 1,
+        Not = 0
+    }
+
+    public enum BuffAddType //buff增益类型
+    {
+        Add = 1, //增益类型
+        Sub = 2, //减益类型
+    }
+
+    public enum PurifyType //净化类型
+    {
+        Purify = 1, //净化
+        Not = 2 //不净化
+    }
+
+    public enum InvincibleType
+    {
+        Invincible = 1, // 无敌
+        Not = 2, //不无敌
+    }
+
+    public enum RecoveryType
+    {
+        Recovery = 1, //复苏
+        Not = 2, //不可以复苏
+    }
+
+    public enum InvisibleType //是否为隐身状态
+    {
+        Invisible = 1, //隐身
+        Not = 0, //非隐身
+    }
+
+    public enum DazzlingType
+    {
+        Dazzling = 1, //炫目
+        Not = 0 //不炫目
     }
 }

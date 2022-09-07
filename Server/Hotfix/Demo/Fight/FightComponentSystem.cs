@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -201,7 +202,9 @@ namespace ET
 
                             foreach (var card in cards)
                             {
-                                card.GetComponent<HeroCardDataComponent>().Angry += self.LevelConfig.AngryCount;
+                                // card.GetComponent<HeroCardDataComponent>().Angry += self.LevelConfig.AngryCount;
+                                
+                                card.AddAngry(self.LevelConfig.AngryCount);
                                 AddItemAction addItemAction = new AddItemAction()
                                 {
                                     HeroCardInfo = card.GetMessageInfo(),
@@ -217,39 +220,39 @@ namespace ET
             }
         }
 
-        public static void ProcessAddHeroCardAngryLogic(this FightComponent self, List<DiamondActionItem> diamondActionItems)
-        {
-            // var count = 0;
-            foreach (var diamondActionItem in diamondActionItems)
-            {
-                Unit unit = self.GetCurrentAttackUnit();
-                //todo 处理增加卡牌怒气值的逻辑
-                List<DiamondAction> diamondActions = diamondActionItem.DiamondActions;
-                //取出与宝石的颜色相同的英雄
-                List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
-                foreach (var diamondAction in diamondActions)
-                {
-                    List<HeroCard> heros = heroCards.FindAll((a) =>
-                    {
-                        HeroConfig heroConfig = HeroConfigCategory.Instance.Get(a.ConfigId);
-                        return heroConfig.HeroColor == diamondAction.DiamondInfo.DiamondType && !a.GetIsDead();
-                    });
-                    List<AddItemAction> addAngryActions = new List<AddItemAction>();
-                    foreach (var heroCard in heros)
-                    {
-                        heroCard.GetComponent<HeroCardDataComponent>().Angry += self.LevelConfig.AngryCount;
-                        AddItemAction addItemAction = new AddItemAction()
-                        {
-                            HeroCardInfo = heroCard.GetMessageInfo(),
-                            HeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo()
-                        };
-                        addAngryActions.Add(addItemAction);
-                    }
-
-                    diamondAction.AddAngryActions = addAngryActions;
-                }
-            }
-        }
+        // public static void ProcessAddHeroCardAngryLogic(this FightComponent self, List<DiamondActionItem> diamondActionItems)
+        // {
+        //     // var count = 0;
+        //     foreach (var diamondActionItem in diamondActionItems)
+        //     {
+        //         Unit unit = self.GetCurrentAttackUnit();
+        //         //todo 处理增加卡牌怒气值的逻辑
+        //         List<DiamondAction> diamondActions = diamondActionItem.DiamondActions;
+        //         //取出与宝石的颜色相同的英雄
+        //         List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
+        //         foreach (var diamondAction in diamondActions)
+        //         {
+        //             List<HeroCard> heros = heroCards.FindAll((a) =>
+        //             {
+        //                 HeroConfig heroConfig = HeroConfigCategory.Instance.Get(a.ConfigId);
+        //                 return heroConfig.HeroColor == diamondAction.DiamondInfo.DiamondType && !a.GetIsDead();
+        //             });
+        //             List<AddItemAction> addAngryActions = new List<AddItemAction>();
+        //             foreach (var heroCard in heros)
+        //             {
+        //                 heroCard.GetComponent<HeroCardDataComponent>().Angry += self.LevelConfig.AngryCount;
+        //                 AddItemAction addItemAction = new AddItemAction()
+        //                 {
+        //                     HeroCardInfo = heroCard.GetMessageInfo(),
+        //                     HeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo()
+        //                 };
+        //                 addAngryActions.Add(addItemAction);
+        //             }
+        //
+        //             diamondAction.AddAngryActions = addAngryActions;
+        //         }
+        //     }
+        // }
 
         public static ActionMessage MakeSureAttackHeros(this FightComponent self, ActionMessage actionMessage)
         {
@@ -275,6 +278,11 @@ namespace ET
                         stack.Push(value);
                     }
                 }
+            }
+
+            if (diamondInfo == null)
+            {
+                return null;
             }
 
             Unit unit = self.GetCurrentAttackUnit();
@@ -306,6 +314,11 @@ namespace ET
 
         public static void ProcessComboResult(this FightComponent self, ActionMessage actionMessage, ActionMessage makeSureAttackMessage)
         {
+            if (makeSureAttackMessage == null)
+            {
+                return;
+            }
+
             Unit unit = self.GetCurrentAttackUnit();
             List<HeroCard> heroCards = new List<HeroCard>();
             foreach (var action in makeSureAttackMessage.ActionMessages)
@@ -382,7 +395,9 @@ namespace ET
                     if (!heroCard.GetIsDead())
                     {
                         HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
-                        heroCard.GetComponent<HeroCardDataComponent>().Angry += config.RoundAddAngry;
+                        // heroCard.GetComponent<HeroCardDataComponent>().Angry += config.RoundAddAngry;
+
+                        heroCard.AddAngry(config.RoundAddAngry);
                         AddRoundAngryItem.HeroCardDataComponentInfos.Add(heroCard.GetComponent<HeroCardDataComponent>().GetInfo());
 
                         UpdateHeroInfoAction updateHeroInfoAction = new UpdateHeroInfoAction()
@@ -468,6 +483,8 @@ namespace ET
             AttackAction attackAction = new AttackAction();
             List<HeroCardDataComponentInfo> beHeroCardDataComponentInfos = new List<HeroCardDataComponentInfo>();
             List<HeroBuffInfo> heroBufferInfos = new List<HeroBuffInfo>();
+            ActionMessage recoryMessageList =
+                    new ActionMessage() { PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>() };
             foreach (var beAttackHeroCard in beAttackHeroCards)
             {
                 if (beAttackHeroCard == null)
@@ -482,12 +499,19 @@ namespace ET
                 List<BuffInfo> buffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos();
                 heroBufferInfos.Add(new HeroBuffInfo() { BuffInfos = buffInfos });
                 beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
+
+                ActionMessage recoveryMessage = self.ProcessHeroRecoveryLogic(beAttackHeroCard);
+                if (recoveryMessage != null)
+                {
+                    recoryMessageList.ActionMessages.Add(recoveryMessage);
+                }
             }
 
             attackAction.AttackHeroCardDataComponentInfo = attackHero.GetComponent<HeroCardDataComponent>().GetInfo();
             attackAction.BeAttackHeroCardDataComponentInfos = beHeroCardDataComponentInfos;
             attackAction.HeroBuffInfos = heroBufferInfos;
-            ActionMessage attackMessage = new ActionMessage() { AttackAction = attackAction };
+            ActionMessage attackMessage = new ActionMessage() { AttackAction = attackAction, ActionMessages = new List<ActionMessage>() };
+            attackMessage.ActionMessages.Add(recoryMessageList);
             actionMessage.ActionMessages.Add(attackMessage);
         }
 
@@ -572,6 +596,11 @@ namespace ET
 
         public static void ProcessAttackLogic(this FightComponent self, ActionMessage actionMessage, ActionMessage makeSureAttackMessage)
         {
+            if (makeSureAttackMessage == null)
+            {
+                return;
+            }
+
             Unit unit = self.GetCurrentAttackUnit();
             Unit beUnit = self.GetBeAttackUnit(unit);
             //
@@ -641,6 +670,15 @@ namespace ET
             return actionMessage;
         }
 
+        public static bool CheckHeroIsInvisible(this FightComponent self, HeroCard heroCard)
+        {
+            //检查当前英雄是否隐身
+            BuffComponent buffComponent = heroCard.GetComponent<BuffComponent>();
+            var isInvisible = buffComponent.GetIsInvisible();
+            // Log.Warning($"check hero is invisible{isInvisible}");
+            return isInvisible;
+        }
+
         public static void ProcessAngryAttackLogic(this FightComponent self, ActionMessage actionMessage, Unit unit, Unit beUnit)
         {
             List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
@@ -666,7 +704,8 @@ namespace ET
                 {
                     BuffComponent buffComponent = heroCard.GetComponent<BuffComponent>();
                     //todo 集火功能生效 激活功能在炫目buff下无效
-                    if (self.CurrentBeAttackHeroCard != null && !self.CurrentBeAttackHeroCard.GetIsDead() && !buffComponent.IsExistsBuff(117))
+                    if (self.CurrentBeAttackHeroCard != null && !self.CurrentBeAttackHeroCard.GetIsDead() && !buffComponent.GetIsExistDazzling() &&
+                        !self.CheckHeroIsInvisible(self.CurrentBeAttackHeroCard))
                     {
                         beAttackHeroCards.RemoveAt(0);
                         beAttackHeroCards.Add(self.CurrentBeAttackHeroCard);
@@ -677,6 +716,8 @@ namespace ET
                 AttackAction attackAction = new AttackAction();
                 List<HeroCardDataComponentInfo> beHeroCardDataComponentInfos = new List<HeroCardDataComponentInfo>();
                 List<HeroBuffInfo> heroBufferInfos = new List<HeroBuffInfo>();
+                ActionMessage recoveryMessage =
+                        new ActionMessage() { PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>() };
                 foreach (var beAttackHeroCard in beAttackHeroCards)
                 {
                     if (beAttackHeroCard == null)
@@ -687,18 +728,55 @@ namespace ET
                     //
                     // self.ProcessBuffLogic(beAttackHeroCard, skill);
                     heroCard.ProcessAttachBuffLogic(beAttackHeroCard, skill);
+                    heroCard.ProcessMainFightLogic(beAttackHeroCard, skill);
                     List<BuffInfo> buffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos();
                     heroBufferInfos.Add(new HeroBuffInfo() { HeroId = beAttackHeroCard.Id, BuffInfos = buffInfos });
-                    heroCard.ProcessMainFightLogic(beAttackHeroCard, skill);
                     beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
+                    ActionMessage message = self.ProcessHeroRecoveryLogic(beAttackHeroCard);
+                    if (message != null)
+                    {
+                        recoveryMessage.ActionMessages.Add(message);
+                    }
                 }
 
                 //
                 attackAction.AttackHeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo();
                 attackAction.BeAttackHeroCardDataComponentInfos = beHeroCardDataComponentInfos;
                 attackAction.HeroBuffInfos = heroBufferInfos;
-                actionMessage.ActionMessages.Add(new ActionMessage() { AttackAction = attackAction });
+
+                ActionMessage attackMessage = new ActionMessage()
+                {
+                    PlayType = (int)ActionMessagePlayType.Async, AttackAction = attackAction, ActionMessages = new List<ActionMessage>()
+                };
+
+                attackMessage.ActionMessages.Add(recoveryMessage);
+
+                actionMessage.ActionMessages.Add(attackMessage);
             }
+        }
+
+        public static ActionMessage ProcessHeroRecoveryLogic(this FightComponent self, HeroCard beAttackHeroCard)
+        {
+            // HeroCardDataComponent heroCardDataComponent = beAttackHeroCard.GetComponent<Hero>()
+            bool isDead = beAttackHeroCard.GetIsDead();
+            if (isDead)
+            {
+                //查看一次英雄身上，是否具有复苏buff
+                bool isRecovery = beAttackHeroCard.ProcessRecoveryLogic();
+                if (isRecovery) //复活了
+                {
+                    ActionMessage actionMessage = new ActionMessage()
+                    {
+                        RecoveryAction = new RecoveryAction()
+                        {
+                            HeroCardDataComponentInfo = beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo()
+                        }
+                    };
+                    return actionMessage;
+                }
+            }
+
+            return null;
         }
 
         public static bool GetIsCanAttack(this FightComponent self, HeroCard heroCard)
@@ -774,7 +852,8 @@ namespace ET
                 List<HeroCard> beAttackHeroCards = self.GetBeAttackHeroCards(beUnit, unit, heroCard, skill);
                 BuffComponent buffComponent = heroCard.GetComponent<BuffComponent>();
 
-                if (self.CurrentBeAttackHeroCard != null && !self.CurrentBeAttackHeroCard.GetIsDead() && !buffComponent.IsExistsBuff(117))
+                if (self.CurrentBeAttackHeroCard != null && !self.CurrentBeAttackHeroCard.GetIsDead() && !buffComponent.GetIsExistDazzling() &&
+                    !self.CheckHeroIsInvisible(self.CurrentBeAttackHeroCard))
                 {
                     if (skillConfig.RangeType == (int)SkillRangeType.EnemySingle)
                     {
@@ -787,6 +866,10 @@ namespace ET
 
                 List<HeroCardDataComponentInfo> beHeroCardDataComponentInfos = new List<HeroCardDataComponentInfo>();
                 List<HeroBuffInfo> heroBuffInfos = new List<HeroBuffInfo>();
+                ActionMessage recoryMessage =
+                        new ActionMessage() { PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>() };
+                // ActionMessage updateBuffMessages =
+                        // new ActionMessage() { PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>() };
                 foreach (var beAttackHeroCard in beAttackHeroCards)
                 {
                     if (beAttackHeroCard == null)
@@ -797,17 +880,39 @@ namespace ET
                     // self.ProcessBuffLogic(beAttackHeroCard, skill);
                     // self.ProcessBuffLogic()
                     heroCard.ProcessAttachBuffLogic(beAttackHeroCard, skill);
+                    heroCard.ProcessMainFightLogic(beAttackHeroCard, skill);
                     List<BuffInfo> buffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos();
                     heroBuffInfos.Add(new HeroBuffInfo() { HeroId = beAttackHeroCard.Id, BuffInfos = buffInfos });
-                    heroCard.ProcessMainFightLogic(beAttackHeroCard, skill);
                     // heroCard.AttackTarget(beAttackHeroCard, heroCard.GetComponent<HeroCardDataComponent>().DiamondAttackAddition, skill);
                     beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
+                    // recoryMessage.ActionMessages.Add();
+
+                    // ActionMessage updateBuffMessage = new ActionMessage()
+                    // {
+                    //     UpdateHeroBuffInfo = new UpdateHeroBuffInfo()
+                    //     {
+                    //         HeroId = beAttackHeroCard.Id,
+                    //         HeroCardDataComponentInfo = beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo(),
+                    //         BuffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos()
+                    //     }
+                    // };
+                    // updateBuffMessages.ActionMessages.Add(updateBuffMessage);
+                    ActionMessage message = self.ProcessHeroRecoveryLogic(beAttackHeroCard);
+                    if (message != null)
+                    {
+                        recoryMessage.ActionMessages.Add(message);
+                    }
                 }
 
                 attackAction.AttackHeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo();
                 attackAction.BeAttackHeroCardDataComponentInfos = beHeroCardDataComponentInfos;
                 attackAction.HeroBuffInfos = heroBuffInfos;
-                var attackActionMessage = new ActionMessage() { AttackAction = attackAction };
+                var attackActionMessage = new ActionMessage()
+                {
+                    PlayType = (int)ActionMessagePlayType.Async, AttackAction = attackAction, ActionMessages = new List<ActionMessage>()
+                };
+                attackActionMessage.ActionMessages.Add(recoryMessage);
+                // attackActionMessage.ActionMessages.Add(updateBuffMessages);
                 actionMessage.ActionMessages.Add(attackActionMessage);
             }
         }
@@ -849,7 +954,7 @@ namespace ET
                 Buff buff = buffs.Find(a =>
                 {
                     BuffConfig buffConfig = BuffConfigCategory.Instance.Get(a.ConfigId);
-                    if (buffConfig.Provocation == (int)ProvocationType.Provocation)
+                    if (buffConfig.Provocation == (int)ProvocationType.Provocation && a.RoundCount > 0)
                     {
                         return true;
                     }

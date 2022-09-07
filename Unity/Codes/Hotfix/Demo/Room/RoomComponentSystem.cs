@@ -236,6 +236,21 @@ namespace ET
             await ETTask.CompletedTask;
         }
 
+        public static async ETTask ProcessRecoveryMessageEvent(this RoomComponent self, ActionMessage actionMessage)
+        {
+            RecoveryAction recoveryAction = actionMessage.RecoveryAction;
+            if (recoveryAction == null)
+            {
+                return;
+            }
+
+            HeroCardComponent heroCardComponent = self.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>();
+            await Game.EventSystem.PublishAsync(new EventType.PlayHeroRecoveryAnimEvent()
+            {
+                HeroCardComponent = heroCardComponent, HeroCardDataComponentInfo = recoveryAction.HeroCardDataComponentInfo
+            });
+        }
+
         public static async ETTask ProcessActionMessageEvent(this RoomComponent self, ActionMessage actionMessage)
         {
             await self.ProcessDiamondAction(actionMessage);
@@ -249,6 +264,7 @@ namespace ET
             await self.ProcessAttackEndEvent(actionMessage);
             await self.ProcessComboActionMessageEvent(actionMessage);
             await self.ProcessBuffDamageAction(actionMessage);
+            await self.ProcessRecoveryMessageEvent(actionMessage);
             await self.ProcessActionMessage(actionMessage);
             await ETTask.CompletedTask;
         }

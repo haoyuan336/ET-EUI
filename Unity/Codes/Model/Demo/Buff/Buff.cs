@@ -11,5 +11,6 @@ namespace ET
         // public int CastAttackPower = 0; //施法者的攻击力值
         // public long AttachHeroId = 0;   //施加buff 的英雄
         public HeroCard AttachHeroCard; //施法者英雄
+        public BuffConfig Config => BuffConfigCategory.Instance.Get(this.ConfigId);
     }
 }
