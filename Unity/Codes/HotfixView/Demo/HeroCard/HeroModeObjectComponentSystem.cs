@@ -18,12 +18,9 @@ namespace ET
     {
         public override async void Awake(HeroModeObjectCompoent self, HeroCard heroCard)
         {
-            Log.Debug($"hero card config id {heroCard.ConfigId}");
             //加载英雄模型
             HeroConfig heroConfig = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
             var heroModeStr = heroConfig.HeroMode;
-            Log.Debug($"hero mode name {heroConfig.HeroMode}");
-
             GameObject prefab = await AddressableComponent.Instance.LoadAssetByPathAsync<GameObject>(heroModeStr);
             self.HeroMode = GameObject.Instantiate(prefab);
             if (self.IsDisposed)
@@ -31,8 +28,6 @@ namespace ET
                 GameObject.Destroy(self.HeroMode);
                 return;
             }
-
-            // var distance = 1.5f;
             Vector3 pos = Vector3.zero;
             long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             if (heroCard.OwnerId.Equals(accountId))
@@ -42,22 +37,10 @@ namespace ET
             else
             {
                 pos = new Vector3(1.5f - heroCard.InTroopIndex * 1.5f, 0, -2.2f + 1);
-
-                // var levelNum = self.ZoneScene().GetComponent<PlayerComponent>().CurrentLevelNum;
-                // var levelConfig = LevelConfigCategory.Instance.Get(levelNum);
-                // var heroIdStr = levelConfig.HeroId;
-                // var count = heroIdStr.Split(',').Length;
-                // var distance = 1.5f;
-                // pos = new Vector3((count - 1) * distance * 0.5f - distance * heroCard.InTroopIndex, 0,
-                //     -2.2f * (heroCard.CampIndex == 0? -1 : 1) + 1);
             }
-
-            // Vector3 pos = new Vector3(-1.5f + heroCard.InTroopIndex * 1.5f, 0, -2.2f * (heroCard.CampIndex == 0? -1 : 1) + 1);
             self.HeroMode.transform.position = pos;
             self.HeroMode.transform.forward = heroCard.OwnerId.Equals(accountId)? Vector3.back : Vector3.forward;
             self.HeroModeInitPos = new Vector3(pos.x, pos.y, pos.z);
-
-            // heroCard.AddComponent<HeroCardInfoObjectComponent>();
             await ETTask.CompletedTask;
         }
     }

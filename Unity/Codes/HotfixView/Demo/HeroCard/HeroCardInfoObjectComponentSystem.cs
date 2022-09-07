@@ -18,11 +18,11 @@ namespace ET
                 UnityEngine.Object.Destroy(self.GameObject);
                 return;
             }
-
+            //
             self.HeroConfig = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
             self.ESHeroCardInfoUI = self.AddChildWithId<ESHeroCardInfoUI, Transform>(IdGenerater.Instance.GenerateId(), self.GameObject.transform);
             self.ESHeroCardInfoUI.SetInfo(heroCardInfo, heroCardDataComponentInfo);
-
+            //
             self.ESHeroCardInfoUI.E_AttackBarImage.fillAmount = heroCardDataComponentInfo.DiamondAttackAddition;
             self.UpdateAngryView(heroCardDataComponentInfo);
         }
@@ -178,7 +178,7 @@ namespace ET
             var gameObject = new GameObject();
             Text text = gameObject.AddComponent<Text>();
             text.transform.SetParent(GlobalComponent.Instance.NormalRoot);
-            Font obj = AddressableComponent.Instance.LoadAssetByPath<Font>("Assets/Res/font/SVM-font/SVN-Aaron Script.otf");
+            Font obj = await AddressableComponent.Instance.LoadAssetByPathAsync<Font>("Assets/Res/font/SVM-font/SVN-Aaron Script.otf");
             text.font = obj;
             text.text = $"+{info.AddAngry}";
             text.fontStyle = FontStyle.Bold;

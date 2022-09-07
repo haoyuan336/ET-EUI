@@ -51,8 +51,9 @@ namespace ET
                 HeroConfig config = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
                 heroCard.AddComponent<SkillComponent>();
                 heroCard.AddComponent<BuffComponent>();
-                HeroCardDataComponent heroCardDataComponent = heroCard.AddComponent<HeroCardDataComponent>();
-                heroCardDataComponent.Angry = config.InitAngry;
+                heroCard.AddComponent<HeroCardDataComponent>();
+                // heroCardDataComponent.Angry = config.InitAngry;
+                heroCard.AddAngry(config.InitAngry);
             }
         }
 
@@ -86,8 +87,9 @@ namespace ET
 
                 HeroConfig heroConfig = HeroConfigCategory.Instance.Get(heroCard.ConfigId);
                 Log.Debug("创建玩家的英雄实力");
-                HeroCardDataComponent heroCardDataComponent = heroCard.AddComponent<HeroCardDataComponent>();
-                heroCardDataComponent.Angry = heroConfig.InitAngry;
+                heroCard.AddComponent<HeroCardDataComponent>();
+                // heroCardDataComponent.Angry = heroConfig.InitAngry;
+                heroCard.AddAngry(heroConfig.InitAngry);
             }
 
             await ETTaskHelper.WaitAll(tasks);
@@ -203,7 +205,7 @@ namespace ET
                             foreach (var card in cards)
                             {
                                 // card.GetComponent<HeroCardDataComponent>().Angry += self.LevelConfig.AngryCount;
-                                
+
                                 card.AddAngry(self.LevelConfig.AngryCount);
                                 AddItemAction addItemAction = new AddItemAction()
                                 {
@@ -869,7 +871,7 @@ namespace ET
                 ActionMessage recoryMessage =
                         new ActionMessage() { PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>() };
                 // ActionMessage updateBuffMessages =
-                        // new ActionMessage() { PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>() };
+                // new ActionMessage() { PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>() };
                 foreach (var beAttackHeroCard in beAttackHeroCards)
                 {
                     if (beAttackHeroCard == null)

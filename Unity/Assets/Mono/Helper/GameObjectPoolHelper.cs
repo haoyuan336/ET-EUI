@@ -22,7 +22,7 @@ namespace ET
 
             try
             {
-                Log.Debug($"init poll {poolName}");
+                Log.Debug($"init poll async {poolName}");
                 AsyncOperationHandle handle = GetGameObjectByResType(poolName);
                 handle.Completed += (result) =>
                 {
