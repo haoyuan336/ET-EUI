@@ -28,6 +28,7 @@ namespace ET
                 GameObject.Destroy(self.HeroMode);
                 return;
             }
+
             Vector3 pos = Vector3.zero;
             long accountId = self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId;
             if (heroCard.OwnerId.Equals(accountId))
@@ -38,6 +39,7 @@ namespace ET
             {
                 pos = new Vector3(1.5f - heroCard.InTroopIndex * 1.5f, 0, -2.2f + 1);
             }
+
             self.HeroMode.transform.position = pos;
             self.HeroMode.transform.forward = heroCard.OwnerId.Equals(accountId)? Vector3.back : Vector3.forward;
             self.HeroModeInitPos = new Vector3(pos.x, pos.y, pos.z);
@@ -267,6 +269,7 @@ namespace ET
         AttackAction attackAction)
         {
             SkillInfo skillInfo = attackAction.AttackHeroCardDataComponentInfo.CurrentSkillInfo;
+            Log.Debug($"skill info {skillInfo.SkillConfigId}");
             SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skillInfo.SkillConfigId);
             var attackHeroCardDataComponerntInfo = attackAction.AttackHeroCardDataComponentInfo;
             var beHeroCardDataComponentInfos = attackAction.BeAttackHeroCardDataComponentInfos;
@@ -284,7 +287,7 @@ namespace ET
                     break;
                 case (int)SkillRangeType.FriendGroup:
                     Log.Debug("所有队友技能");
-                    await self.PlayAttackGroupAnim(heroCardComponent, attackHeroCardDataComponerntInfo, beHeroCardDataComponentInfos,
+                    await self.PlayFriendGroupCareAnim(heroCardComponent, attackHeroCardDataComponerntInfo, beHeroCardDataComponentInfos,
                         skillConfig, heroBuffInfos);
                     break;
                 case (int)SkillRangeType.SingleSelf:
@@ -293,6 +296,33 @@ namespace ET
 
                     break;
             }
+        }
+
+        public static async ETTask PlayFriendGroupCareAnim(this HeroModeObjectCompoent self, HeroCardComponent heroCardComponent,
+        HeroCardDataComponentInfo attackHeroCardDataComponentInfo, List<HeroCardDataComponentInfo> beAttaclHeroCardDataComponentInfos,
+        SkillConfig skillConfig, List<HeroBuffInfo> heroBufferInfos)
+        {
+            if (self.AttackMark != null)
+            {
+                self.AttackMark.SetActive(false);
+            }
+
+            string skillAnimStr = skillConfig.SkillAnimName;
+            self.HeroMode.GetComponent<Animator>().SetTrigger(skillAnimStr);
+            self.PlaySkillEffectWithConfig(skillConfig).Coroutine();
+            for (var i = 0; i < beAttaclHeroCardDataComponentInfos.Count; i++)
+            {
+                var info = beAttaclHeroCardDataComponentInfos[i];
+                var heroCard = heroCardComponent.GetChild<HeroCard>(info.HeroId);
+                heroCard.GetComponent<HeroModeObjectCompoent>()
+                        .PlayBeCareAnim(info, skillConfig, heroBufferInfos?[i].BuffInfos);
+            }
+
+            var skillTime = skillConfig.SkillTime;
+            await TimerComponent.Instance.WaitAsync(skillTime);
+            self.Parent.GetComponent<HeroCardInfoObjectComponent>().InitAttackAdditionView(attackHeroCardDataComponentInfo);
+            self.Parent.GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(attackHeroCardDataComponentInfo);
+            await ETTask.CompletedTask;
         }
 
         public static async ETTask PlayCareSelfAnim(this HeroModeObjectCompoent self, HeroCardComponent heroCardComponent,
@@ -467,6 +497,18 @@ namespace ET
             }
         }
 
+        public static async void PlayBeCareAnim(this HeroModeObjectCompoent self, HeroCardDataComponentInfo componentInfo, SkillConfig skillConfig,
+        List<BuffInfo> buffInfos = null)
+        {
+            await TimerComponent.Instance.WaitAsync(skillConfig.BeAttackAnimPlayTime);
+            Log.Debug("播放治愈效果");
+            // self.Parent.GetComponent<HeroCardObjectComponent>().UpdateHeroCardTextView(message.BeAttackHeroCardDataComponentInfo, message.CommonInfo);
+            self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().UpdateHPView(componentInfo);
+            self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowCareHPViewAnim(componentInfo);
+            self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowBuffViewInfo(buffInfos, componentInfo);
+            self.ShowBuffEffect(buffInfos, componentInfo);
+        }
+
         public static async ETTask PlayBeAttackAnim(this HeroModeObjectCompoent self, HeroCardDataComponentInfo componentInfo,
         SkillConfig skillConfig, List<BuffInfo> buffInfos = null)
         {
@@ -575,6 +617,7 @@ namespace ET
                         .PlayBeAttackAnim(info, skillConfig, heroBufferInfos?[i].BuffInfos).Coroutine();
                 // heroCard.GetComponent<HeroModeObjectCompoent>().PlayBeHitedEffect(skillConfig).Coroutine();
             }
+
             self.PlayGroupBeAttackEffect(skillConfig);
             // self.UpdateShowDataView(message.AttackHeroCardDataComponentInfo, message.CommonInfo);
             var skillTime = skillConfig.SkillTime;
@@ -587,7 +630,7 @@ namespace ET
             //         // self.PlayDeadAnim()
             //     }
             // }            
-            
+
             self.Parent.GetComponent<HeroCardInfoObjectComponent>().InitAttackAdditionView(attackHeroCardDataComponentInfo);
             self.Parent.GetComponent<HeroCardInfoObjectComponent>().UpdateAngryView(attackHeroCardDataComponentInfo);
             await ETTask.CompletedTask;

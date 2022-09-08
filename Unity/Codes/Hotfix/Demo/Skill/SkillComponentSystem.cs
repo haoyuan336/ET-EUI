@@ -21,27 +21,14 @@ namespace ET
                     skillType = SkillType.Skill2;
                     break;
             }
+            Log.Debug($"make sure skill {count}");
 
             List<Skill> skills = self.GetChilds<Skill>();
-
-            if (skills == null)
-            {
-                // Log.Warning("not skill ");
-            }
-
-            Skill skill = skills.Find(a =>
-            {
-                SkillConfig config = SkillConfigCategory.Instance.Get(a.ConfigId);
-                if (config.SkillType == (int)skillType)
-                {
-                    Log.Debug($"确定的技能type {config.SkillType}");
-                    return true;
-                }
-
-                return false;
-            });
+            Skill skill = skills.Find(a=>a.Config.SkillType == (int)skillType);
+            Log.Debug($"skill config id {skill.ConfigId}");
             if (skill == null)
             {
+                Log.Debug("未找到对应技能");
                 skill = skills[skills.Count - 1];
             }
 

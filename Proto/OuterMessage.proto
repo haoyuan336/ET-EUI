@@ -581,6 +581,7 @@ message CombeAction
 {
 	int32 CombeTime = 1;
 	int32 CrashCount = 2;
+	int32 CrashDiamondType = 3; 
 }
 message UpdateHeroInfoAction
 {
@@ -1030,6 +1031,7 @@ message HeroCardDataComponentInfo
 	SkillInfo CurrentSkillInfo = 13;	//技能info
 	bool IsCritical = 14;	//是否发生了暴击
 	int32 AddAngry = 15;	//增加的怒气值
+	int32 AddHP = 16;	//增加的血量值
 	// public int HP;  //当前的血量
 	// public int DiamondAttack;
 	// public int HeroAttack;

@@ -1231,6 +1231,9 @@ namespace ET
 		[ProtoMember(2)]
 		public int CrashCount { get; set; }
 
+		[ProtoMember(3)]
+		public int CrashDiamondType { get; set; }
+
 	}
 
 	[Message(OuterOpcode.UpdateHeroInfoAction)]
@@ -2204,6 +2207,9 @@ namespace ET
 
 		[ProtoMember(15)]
 		public int AddAngry { get; set; }
+
+		[ProtoMember(16)]
+		public int AddHP { get; set; }
 
 // public int HP;  //当前的血量
 // public int DiamondAttack;

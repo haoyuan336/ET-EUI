@@ -18,6 +18,7 @@ namespace ET
                 UnityEngine.Object.Destroy(self.GameObject);
                 return;
             }
+
             //
             self.HeroConfig = HeroConfigCategory.Instance.Get(heroCardInfo.ConfigId);
             self.ESHeroCardInfoUI = self.AddChildWithId<ESHeroCardInfoUI, Transform>(IdGenerater.Instance.GenerateId(), self.GameObject.transform);
@@ -91,6 +92,41 @@ namespace ET
             }
 
             await ETTask.CompletedTask;
+        }
+
+        public static async void ShowCareHPViewAnim(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo componentInfo)
+        {
+            Log.Debug($"add hp = {componentInfo.AddHP}");
+            var gameObject = new GameObject();
+            Text text = gameObject.AddComponent<Text>();
+            text.transform.SetParent(GlobalComponent.Instance.NormalRoot);
+            Font obj = AddressableComponent.Instance.LoadAssetByPath<Font>("Assets/Res/font/SVM-font/SVN-Aaron Script.otf");
+            text.font = obj;
+            text.text = $"+{componentInfo.AddHP}";
+            text.fontSize = componentInfo.IsCritical? 50 : 40;
+            text.fontStyle = FontStyle.Bold;
+            Vector2 startPos = self.GameObject.transform.position;
+            text.color = Color.green;
+            ETTask task = ETTask.Create();
+            AnimationToolComponent.Instance.MoveAction(new MoveActionItem()
+            {
+                Time = 1,
+                CurrentPos = startPos,
+                EndPos = startPos + new Vector2(0, 100),
+                Task = task,
+                Speed = 1,
+                GameObject = text.gameObject,
+            });
+            AnimationToolComponent.Instance.ScaleAction(new ScaleActionItem()
+            {
+                Time = 1,
+                CurrentScale = Vector3.one,
+                EndScale = Vector3.one * 2,
+                Speed = 1,
+                GameObject = text.gameObject
+            });
+            await task.GetAwaiter();
+            GameObject.Destroy(text);
         }
 
         public static async void ShowDamageViewAnim(this HeroCardInfoObjectComponent self, HeroCardDataComponentInfo component)

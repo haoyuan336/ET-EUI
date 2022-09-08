@@ -792,23 +792,19 @@ namespace ET
             Stack<ActionMessage> stack = new Stack<ActionMessage>();
             stack.Push(actionMessage);
             CombeAction combeAction = null;
-            while (stack.Count != 0 && combeAction == null)
+            while (stack.Count > 0)
             {
                 var action = stack.Pop();
-
-                for (int i = action.ActionMessages.Count - 1; i >= 0; i--)
+                if (action.CombeAction != null)
                 {
-                    var value = action.ActionMessages[i];
-                    if (value.CombeAction != null)
-                    {
-                        combeAction = value.CombeAction;
-                        break;
-                    }
+                    combeAction = action.CombeAction;
+                    break;
+                }
 
-                    if (value.ActionMessages.Count != 0)
-                    {
-                        stack.Push(value);
-                    }
+                for (var i = action.ActionMessages.Count - 1; i >= 0; i--)
+                {
+                    var message = action.ActionMessages[i];
+                    stack.Push(message);
                 }
             }
 

@@ -16,6 +16,7 @@ namespace ET
 
 
         public int AddAngry;
+        public int AddHP;
 
         // public int BeAttackPower;   //被攻击时候的攻击力
     }

@@ -57,6 +57,7 @@ namespace ET
                 rate = 0;
             }
 
+            Log.Warning($"暴击概率 {rate}");
             return rate;
         }
 
@@ -133,7 +134,7 @@ namespace ET
         public static float ProcessSkillDamageValue(this HeroCard self, Skill skill, float baseDamage, List<Buff> buffs)
         {
             SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
-            int[] damageRate = skillConfig.LevelDamages;
+            int[] damageRate = skillConfig.LevelDamages;    //等级伤害倍率
             if (skill.Level - 1 < damageRate.Length)
             {
                 var rate = damageRate[skill.Level - 1] / 100.0f;
@@ -300,24 +301,55 @@ namespace ET
             }
         }
 
+        public static void CareHealth(this HeroCard self, float careHealthCount)
+        {
+            HeroCardDataComponent heroCardDataComponent = self.GetComponent<HeroCardDataComponent>();
+
+            List<Buff> buffs = self.GetComponent<BuffComponent>().GetChilds<Buff>();
+
+            if (buffs != null)
+            {
+                int careHealthReduceRate = 0;
+                foreach (var buff in buffs)
+                {
+                    if (buff.RoundCount > 0)
+                    {
+                        careHealthReduceRate += buff.Config.CareHealthReduceRate;
+                    }
+                }
+
+                careHealthCount -= careHealthCount * careHealthReduceRate / 100.0f;
+            }
+
+            heroCardDataComponent.HP += (int)careHealthCount;
+            heroCardDataComponent.AddHP = (int)careHealthCount;
+        }
+
         public static void CareTarget(this HeroCard self, HeroCard targetHeroCard, Skill skill)
         {
             SkillConfig skillConfig = SkillConfigCategory.Instance.Get(skill.ConfigId);
             int[] careHealehs = skillConfig.CareHealths;
-            float rate = careHealehs[skill.Level - 1] / 100.0f;
+            float careHealehRate = careHealehs[skill.Level - 1] / 100.0f;
 
-            float endHp = targetHeroCard.GetComponent<HeroCardDataComponent>().HP * (1 + rate);
-            targetHeroCard.GetComponent<HeroCardDataComponent>().HP = (int)endHp;
+            // var cardHealthAddition = skillConfig.AttackCount;
+
+            float careHealthCount = 0;
+
+            float selfAttackAdditionHealthRate = skillConfig.SelfAttackAdditionHealths[skill.Level - 1] / 100.0f;
+
+            if (selfAttackAdditionHealthRate > 0)
+            {
+                careHealthCount += targetHeroCard.GetComponent<HeroCardDataComponent>().GetHeroPlaneAttack() * selfAttackAdditionHealthRate;
+            }
+
+            if (careHealehRate > 0)
+            {
+                // careHealthCount += 
+            }
+
+            self.GetComponent<HeroCardDataComponent>().DiamondAttackAddition = 0;
+            targetHeroCard.CareHealth(careHealthCount);
         }
-
-        // public static void ProcessBuffDamage(this HeroCard self, List<Buff> buffs, float dmage)
-        // {
-        //     foreach (var buff in buffs)
-        //     {
-        //         BuffConfig buffConfig = BuffConfigCategory.Instance.Get(buff.ConfigId);
-        //         
-        //     }
-        // }
 
         public static float GetBuffAttack(this HeroCard self, List<Buff> buffs, float planeAttack)
         {
@@ -375,10 +407,8 @@ namespace ET
             float planeAttack = attackCom.GetHeroPlaneAttack();
             //取出消除宝石combo加成
             planeAttack += (int)(planeAttack * comboAddition / 100.0f);
-
             planeAttack = self.GetBuffAttack(attackBuffs, planeAttack);
             // planeAttack = self.GetAddBuff
-
             var domineeringValue = self.GetDomineering(); //霸气值
             float planeDefence = beAttackCom.GetHeroPlaneDefence();
             planeDefence = self.GetBuffDefence(beAttackbuffs, planeDefence);
@@ -395,11 +425,9 @@ namespace ET
             {
                 damageAddition = 0;
             }
-
             damage += damage * damageAddition / 10000;
             //技能加成
             damage += self.ProcessSkillDamageValue(skill, damage, beAttackbuffs);
-
             var critical = self.GetCriticalHit(targetHeroCard); //暴击概率
             var isCritical = RandomHelper.RandomNumber(0, 10000) < critical;
             if (isCritical)
@@ -408,36 +436,22 @@ namespace ET
                 Log.Debug($"{critialDamage}");
                 damage *= 1 + 0.5f + (float)critialDamage / 10000;
             }
-
             var oldHp = beAttackCom.HP;
             Log.Debug($"old hp {oldHp}");
             damage = self.ProcessBuffDamage(beAttackbuffs, damage);
             damage = self.HuDunBuffDamage(beAttackbuffs, damage);
             Log.Debug($"hudun damage {damage}");
-
             beAttackCom.HP -= (int)damage;
             if (beAttackCom.HP < 0)
             {
                 beAttackCom.HP = 0;
             }
-
             self.ProcessAvoidDeathBuff(beAttackbuffs, beAttackCom, oldHp);
-
-            // if (beAttackCom.HP <= 0 && self.GenXingBuff(buffs))
-            // {
-            //     beAttackCom.HP = 1;
-            // }
-
             targetHeroCard.AddAngry(HeroConfigCategory.Instance.Get(targetHeroCard.ConfigId).BeAttackAddAngry);
-            // beAttackCom.AddAngry(HeroConfigCategory.Instance.Get(targetHeroCard.ConfigId).BeAttackAddAngry);
             damage = oldHp - beAttackCom.HP;
-            Log.Debug($"damage {damage}");
             beAttackCom.Damage = (int)damage;
             beAttackCom.IsCritical = isCritical;
             attackCom.DiamondAttackAddition = 0;
-#if SERVER
-            // targetHeroCard.GetComponent<BuffComponent>().ProcessRoundLogic();
-#endif
         }
 
         public static void AddAngry(this HeroCard self, int addAngry)

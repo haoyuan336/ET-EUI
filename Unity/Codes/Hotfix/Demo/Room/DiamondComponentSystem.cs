@@ -443,11 +443,14 @@ namespace ET
                         new ActionMessage() { PlayType = (int)ActionMessagePlayType.Sync, ActionMessages = new List<ActionMessage>() };
                 DiamondActionItem diamondActionItem = new DiamondActionItem();
                 diamondActionItem.CrashType = (int)CrashType.Normal;
+                int diamondTypeConfigId = 0;
                 foreach (var diamond in crashList)
                 {
+                    diamondTypeConfigId = diamond.ConfigId;
                     DiamondAction diamondAction = new DiamondAction();
                     diamondAction.ActionType = (int)DiamondActionType.Destory;
                     diamondAction.DiamondInfo = diamond.GetMessageInfo();
+                    
                     // self.Diamonds[diamond.LieIndex, diamond.HangIndex] = null;
                     self.SetDiamondToList(diamond.LieIndex, diamond.HangIndex, null);
                     diamond.Dispose();
@@ -462,7 +465,7 @@ namespace ET
                 diamondCrashActionMessage.ActionMessages.Add(diamondActionMessage);
                 diamondCrashActionMessage.ActionMessages.Add(new ActionMessage()
                 {
-                    CombeAction = new CombeAction() { CombeTime = self.ComboTime, CrashCount = crashList.Count }
+                    CombeAction = new CombeAction() { CombeTime = self.ComboTime, CrashCount = crashList.Count, CrashDiamondType = diamondTypeConfigId}
                 });
             }
 

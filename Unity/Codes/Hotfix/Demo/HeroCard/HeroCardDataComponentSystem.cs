@@ -40,7 +40,8 @@ namespace ET
                 Angry = self.Angry,
                 CurrentSkillId = self.CurrentSkillId,
                 CurrentSkillInfo = skill?.GetMessageInfo(),
-                AddAngry = self.AddAngry
+                AddAngry = self.AddAngry,
+                AddHP = self.AddHP
             };
         }
 
