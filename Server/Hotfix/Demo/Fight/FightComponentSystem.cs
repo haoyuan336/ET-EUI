@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MongoDB.Driver;
+using NLog.Targets;
+using UnityEngine;
 
 namespace ET
 {
@@ -502,7 +505,14 @@ namespace ET
                 heroBufferInfos.Add(new HeroBuffInfo() { BuffInfos = buffInfos });
                 beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
 
+
+                ActionMessage additionalDamageMessage = attackHero.ProcessAdditionalDamageLogic(beAttackHeroCard, skill);
+                if (additionalDamageMessage != null)
+                {
+                    recoryMessageList.ActionMessages.Add(additionalDamageMessage);
+                }
                 ActionMessage recoveryMessage = self.ProcessHeroRecoveryLogic(beAttackHeroCard);
+
                 if (recoveryMessage != null)
                 {
                     recoryMessageList.ActionMessages.Add(recoveryMessage);
@@ -734,6 +744,13 @@ namespace ET
                     List<BuffInfo> buffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos();
                     heroBufferInfos.Add(new HeroBuffInfo() { HeroId = beAttackHeroCard.Id, BuffInfos = buffInfos });
                     beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
+                  
+
+                    ActionMessage additionalDamageMessage = heroCard.ProcessAdditionalDamageLogic(beAttackHeroCard, skill);
+                    if (additionalDamageMessage != null)
+                    {
+                        recoveryMessage.ActionMessages.Add(additionalDamageMessage);
+                    }
                     ActionMessage message = self.ProcessHeroRecoveryLogic(beAttackHeroCard);
                     if (message != null)
                     {
@@ -866,8 +883,6 @@ namespace ET
                 List<HeroBuffInfo> heroBuffInfos = new List<HeroBuffInfo>();
                 ActionMessage recoryMessage =
                         new ActionMessage() { PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>() };
-                // ActionMessage updateBuffMessages =
-                // new ActionMessage() { PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>() };
                 foreach (var beAttackHeroCard in beAttackHeroCards)
                 {
                     if (beAttackHeroCard == null)
@@ -875,26 +890,18 @@ namespace ET
                         continue;
                     }
 
-                    // self.ProcessBuffLogic(beAttackHeroCard, skill);
-                    // self.ProcessBuffLogic()
                     heroCard.ProcessAttachBuffLogic(beAttackHeroCard, skill);
                     heroCard.ProcessMainFightLogic(beAttackHeroCard, skill);
                     List<BuffInfo> buffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos();
                     heroBuffInfos.Add(new HeroBuffInfo() { HeroId = beAttackHeroCard.Id, BuffInfos = buffInfos });
-                    // heroCard.AttackTarget(beAttackHeroCard, heroCard.GetComponent<HeroCardDataComponent>().DiamondAttackAddition, skill);
                     beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
-                    // recoryMessage.ActionMessages.Add();
+                  
 
-                    // ActionMessage updateBuffMessage = new ActionMessage()
-                    // {
-                    //     UpdateHeroBuffInfo = new UpdateHeroBuffInfo()
-                    //     {
-                    //         HeroId = beAttackHeroCard.Id,
-                    //         HeroCardDataComponentInfo = beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo(),
-                    //         BuffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos()
-                    //     }
-                    // };
-                    // updateBuffMessages.ActionMessages.Add(updateBuffMessage);
+                    ActionMessage additionalDamageMessage = heroCard.ProcessAdditionalDamageLogic(beAttackHeroCard, skill);
+                    if (additionalDamageMessage != null)
+                    {
+                        recoryMessage.ActionMessages.Add(additionalDamageMessage);
+                    }
                     ActionMessage message = self.ProcessHeroRecoveryLogic(beAttackHeroCard);
                     if (message != null)
                     {
@@ -1042,14 +1049,40 @@ namespace ET
                     Log.Debug("attack self");
                     heroCards.Add(heroCard);
                     break;
+
+                case (int)SkillRangeType.HealthLeast:
+                    Log.Warning("血量最少的 情况");
+                    heroCards.Add(self.GetHealthLeastHeroCards(heroCard, beUnit));
+                    break;
                 case (int)SkillRangeType.All:
                     Log.Debug("All");
-
                     heroCards = self.GetAllLiveHeroCard();
                     break;
             }
 
             return heroCards;
+        }
+
+        public static HeroCard GetHealthLeastHeroCards(this FightComponent self, HeroCard heroCard, Unit unit)
+        {
+            List<HeroCard> heroCards = unit.GetChilds<HeroCard>();
+            int leastHealth = int.MaxValue;
+            HeroCard target = null;
+            foreach (var card in heroCards)
+            {
+                if (card.GetIsDead())
+                {
+                    continue;
+                }
+
+                if (card.GetComponent<HeroCardDataComponent>().HP < leastHealth)
+                {
+                    leastHealth = card.GetComponent<HeroCardDataComponent>().HP;
+                    target = card;
+                }
+            }
+
+            return target;
         }
 
         public static Unit GetCurrentAttackUnit(this FightComponent self)

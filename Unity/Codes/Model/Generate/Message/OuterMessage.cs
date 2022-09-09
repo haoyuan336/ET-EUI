@@ -1349,6 +1349,18 @@ namespace ET
 		[ProtoMember(14)]
 		public RecoveryAction RecoveryAction { get; set; }
 
+		[ProtoMember(15)]
+		public AdditionDamageAction AdditionDamageAction { get; set; }
+
+	}
+
+	[Message(OuterOpcode.AdditionDamageAction)]
+	[ProtoContract]
+	public partial class AdditionDamageAction: Object
+	{
+		[ProtoMember(1)]
+		public HeroCardDataComponentInfo HeroCardDataComponentInfo { get; set; }
+
 	}
 
 	[Message(OuterOpcode.SkillInfo)]

@@ -4,6 +4,7 @@
     {
         Move = 1, //移动的英雄
         NoMove = 2, //非移动英雄
+        Flash = 3,  //闪现
     }
 
     public enum TargetPosMoveType

@@ -251,6 +251,22 @@ namespace ET
             });
         }
 
+        public static async ETTask ProcessAdditionalDamageEvent(this RoomComponent self, ActionMessage actionMessage)
+        {
+            AdditionDamageAction additionDamageAction = actionMessage.AdditionDamageAction;
+
+            if (additionDamageAction == null)
+            {
+                return;
+            }
+
+            HeroCardComponent heroCardComponent = self.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>();
+            await Game.EventSystem.PublishAsync(new EventType.PlayAdditionalDamageAnimEvent()
+            {
+                HeroCardComponent = heroCardComponent, HeroCardDataComponentInfo = additionDamageAction.HeroCardDataComponentInfo
+            });
+        }
+
         public static async ETTask ProcessActionMessageEvent(this RoomComponent self, ActionMessage actionMessage)
         {
             await self.ProcessDiamondAction(actionMessage);
@@ -265,6 +281,7 @@ namespace ET
             await self.ProcessComboActionMessageEvent(actionMessage);
             await self.ProcessBuffDamageAction(actionMessage);
             await self.ProcessRecoveryMessageEvent(actionMessage);
+            await self.ProcessAdditionalDamageEvent(actionMessage);
             await self.ProcessActionMessage(actionMessage);
             await ETTask.CompletedTask;
         }

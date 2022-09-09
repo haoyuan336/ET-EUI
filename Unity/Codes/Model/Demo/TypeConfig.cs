@@ -67,7 +67,7 @@
         FriendGroup = 4, //友方群体
         All = 5, //全体
         SingleSelf = 6, //单体自己
-
+        HealthLeast = 7, //血量最少
         // #攻击类型,#范围类型 RangeType， 1，敌方单体，2地方群体3，我方个体4我方群体5，全体，6 单体自己
     }
 
@@ -163,5 +163,17 @@
     {
         Dazzling = 1, //炫目
         Not = 0 //不炫目
+    }
+
+    public enum DirectkillType
+    {
+        Kill = 1, //直接看啥
+        Not = 0, // 不砍杀
+    }
+
+    public enum AdditionalDamageType
+    {
+        Damage = 1, //是否造成额外伤害
+        Not = 0, //无额外伤害
     }
 }

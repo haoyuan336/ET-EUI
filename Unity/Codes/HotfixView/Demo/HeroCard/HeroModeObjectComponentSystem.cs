@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ET
@@ -167,6 +168,15 @@ namespace ET
             }
         }
 
+        public static async ETTask PlayFlashToAnim(this HeroModeObjectCompoent self, Vector3 startPos, Vector3 targetPos)
+        {
+            await self.TurnTargetAnim(targetPos);
+
+            self.HeroMode.transform.position = targetPos;
+
+            await TimerComponent.Instance.WaitAsync(200);
+        }
+
         public static async ETTask PlayMoveToAnim(this HeroModeObjectCompoent self, Vector3 startPos, Vector3 targetPos)
         {
             await self.TurnTargetAnim(targetPos);
@@ -293,7 +303,9 @@ namespace ET
                 case (int)SkillRangeType.SingleSelf:
                     await self.PlayAttackGroupAnim(heroCardComponent, attackHeroCardDataComponerntInfo, beHeroCardDataComponentInfos, skillConfig,
                         heroBuffInfos);
-
+                    break;
+                case (int)SkillRangeType.HealthLeast:
+                    await self.PlaySingleAttackAnim(heroCardComponent, attackAction, skillConfig);
                     break;
             }
         }
@@ -362,18 +374,23 @@ namespace ET
                 return;
             }
 
-            await self.PlayMoveToAnim(self.HeroMode.transform.position, self.HeroModeInitPos);
+            switch (skillConfig.MoveType)
+            {
+                case (int)HeroMoveType.Move:
+                    await self.PlayMoveToAnim(self.HeroMode.transform.position, self.HeroModeInitPos);
+                    break;
+                case (int)HeroMoveType.NoMove:
+                    break;
+                case (int)HeroMoveType.Flash:
+                    await self.PlayFlashToAnim(self.HeroMode.transform.position, self.HeroModeInitPos);
+                    break;
+            }
 
             await ETTask.CompletedTask;
         }
 
         public static async ETTask MoveToEnemyTarget(this HeroModeObjectCompoent self, HeroCard beAttackHeroCard, SkillConfig skillConfig)
         {
-            if (skillConfig.MoveType == (int)HeroMoveType.NoMove)
-            {
-                return;
-            }
-
             HeroModeObjectCompoent beAttackHeroModeCom = beAttackHeroCard.GetComponent<HeroModeObjectCompoent>();
             var isCamp = self.GetParent<HeroCard>().OwnerId.Equals(self.ZoneScene().GetComponent<AccountInfoComponent>().AccountId);
 
@@ -381,6 +398,20 @@ namespace ET
                     : Vector3.back;
 
             var endPos = beAttackHeroModeCom.HeroMode.transform.position + offsetPos;
+
+            switch (skillConfig.MoveType)
+            {
+                case (int)HeroMoveType.NoMove:
+                    break;
+                case (int)HeroMoveType.Move:
+                    await self.PlayMoveToAnim(self.HeroModeInitPos, endPos);
+
+                    break;
+                case (int)HeroMoveType.Flash:
+                    await self.PlayFlashToAnim(self.HeroModeInitPos, endPos);
+                    break;
+            }
+
             switch (skillConfig.TargetPosType)
             {
                 case (int)TargetPosMoveType.Face:
@@ -390,8 +421,6 @@ namespace ET
                     endPos = (self.HeroMode.transform.position + beAttackHeroModeCom.HeroMode.transform.position) * 0.5f;
                     break;
             }
-
-            await self.PlayMoveToAnim(self.HeroModeInitPos, endPos);
         }
 
         public static async ETTask PlayBeHitedEffect(this HeroModeObjectCompoent self, SkillConfig skillConfig)
@@ -507,6 +536,12 @@ namespace ET
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowCareHPViewAnim(componentInfo);
             self.GetParent<HeroCard>().GetComponent<HeroCardInfoObjectComponent>().ShowBuffViewInfo(buffInfos, componentInfo);
             self.ShowBuffEffect(buffInfos, componentInfo);
+        }
+
+        public static async ETTask PlayBeAttackAnim(this HeroModeObjectCompoent self)
+        {
+            self.HeroMode.GetComponent<Animator>().SetTrigger("BeAttack");
+            await TimerComponent.Instance.WaitAsync(200);
         }
 
         public static async ETTask PlayBeAttackAnim(this HeroModeObjectCompoent self, HeroCardDataComponentInfo componentInfo,

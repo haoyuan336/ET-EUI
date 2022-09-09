@@ -634,7 +634,12 @@ message ActionMessage
 	AttackEndAction AttackEndAction = 12;	//战斗结束
 	BuffDamageAction BuffDamageAction = 13;	//Buff 伤害动作
 	RecoveryAction RecoveryAction = 14;	//复活action
+	AdditionDamageAction AdditionDamageAction = 15;	//额外伤害
 	
+}
+message AdditionDamageAction
+{
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
 }
 
 message SkillInfo

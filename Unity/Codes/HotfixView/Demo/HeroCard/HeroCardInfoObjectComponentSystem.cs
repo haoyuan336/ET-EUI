@@ -156,7 +156,7 @@ namespace ET
 
             AnimationToolComponent.Instance.MoveAction(new MoveActionItem()
             {
-                Time = 1,
+                Time = 5,
                 CurrentPos = startPos,
                 EndPos = startPos + new Vector2(0, 100),
                 Task = task,
@@ -166,7 +166,7 @@ namespace ET
 
             AnimationToolComponent.Instance.ScaleAction(new ScaleActionItem()
             {
-                Time = 1,
+                Time = 5,
                 CurrentScale = Vector3.one,
                 EndScale = Vector3.one * 2,
                 Speed = 1,
