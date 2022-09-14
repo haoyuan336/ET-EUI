@@ -50,6 +50,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Codes\Model\**\*.cs" />
+    <Reference Include="Unity.Addressables, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>Library\ScriptAssemblies\Unity.Addressables.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>Library\ScriptAssemblies\Unity.ResourceManager.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>./Temp/bin/Debug/UnityEngine.dll</HintPath>
     </Reference>
@@ -603,4 +609,20 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+
+    <ItemGroup>
+    <MySourceFiles Include="./Temp/bin/Debug/Unity.Mono/*.*" />
+  </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Codes\Model\Demo\Fight" />
+      <Folder Include="Codes\Model\Demo\PVERoom" />
+    </ItemGroup>
+  <Target Name="BeforeBuild">
+    <CallTarget Targets="CopyDll" />
+  </Target>
+  <Target Name="CopyDll">
+    <Message Text="Copy Unity.Mono dll" />
+    <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="./Temp/bin/Debug/" />
+  </Target>
 </Project>

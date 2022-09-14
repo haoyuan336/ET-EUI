@@ -1,0 +1,154 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Item
+  m_EditorClassIdentifier: 
+  m_GroupName: Item
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 28b830e6d9c2d43428f6866a17c2734f
+  m_SerializeEntries:
+  - m_GUID: fca3d448a4643c6439a52da1737d1a31
+    m_Address: ItemHeroCard
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - Pool
+    - UI
+  - m_GUID: ddce03f79b7708945bc29469cd9a3268
+    m_Address: ItemTroop
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - Pool
+    - UI
+  - m_GUID: ca89ccb5a36368e4a9f8599ae294d185
+    m_Address: ItemWeapon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+    - Pool
+  - m_GUID: 2e5b19d0c1eab234db4ce976dec11d8f
+    m_Address: ItemGoods
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+    - Pool
+  - m_GUID: 89e1a746c53b8164a874342a8cc9b4bd
+    m_Address: Assets/Bundles/UI/Common/ESHeroCard.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 65f3d8c42364df0478bd117b54736fc6
+    m_Address: Assets/Bundles/UI/Common/ESCommonWordBar.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 056424b1d28ece74fb74e4b2f56a260d
+    m_Address: Assets/Bundles/UI/Common/ESWeaponBagCommon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 6442c0ac9b944284fa0988a72c87d730
+    m_Address: ItemMail
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+    - Pool
+  - m_GUID: dc08ba20f6ff2264d92537d72a2be7a5
+    m_Address: ItemAward
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+    - Pool
+  - m_GUID: 84f6abd006e915e4abb6ce0f5bcce6dc
+    m_Address: ItemRecommend
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+    - Pool
+  - m_GUID: 531de8d40c7c9f9448c864cdae2595ec
+    m_Address: ItemAddFriendApply
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+    - Pool
+  - m_GUID: cfe2c33d2d203f343a0f57a56b4b5372
+    m_Address: ItemFriend
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+    - Pool
+  - m_GUID: dcd51c5841c2385408750274251fa185
+    m_Address: ItemChat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+    - All
+    - Pool
+  - m_GUID: 80efa961f632a3640bfe6e3516f10857
+    m_Address: ItemChooseHead
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+    - Pool
+  - m_GUID: ee05a36c94dafdb46802b10d279fff4a
+    m_Address: ItemTaskAward
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+    - Pool
+  - m_GUID: e4010721ff5ac004f9d71416152011c9
+    m_Address: ItemOwnAward
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 30b03c3c7198469459d7d73bcdb73612
+    m_Address: ItemGameCombo
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+    - Pool
+  - m_GUID: 4519d40b5e2c1498db639e163f9a83ca
+    m_Address: ItemBuff
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+    - Pool
+  - m_GUID: 8a389776439934cb98f2bc1d1400d8e0
+    m_Address: ItemAddText
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+    - Pool
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: edefc33150ceaa542be716e8082d9628, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b7fe1a2a1a45b3641813292fd88602ba, type: 2}
+    - {fileID: 11400000, guid: 092620ae696930d4685e5168c8d9cc8f, type: 2}

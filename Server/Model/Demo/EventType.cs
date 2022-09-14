@@ -40,5 +40,11 @@ namespace ET
 			public AOIEntity A;
 			public AOIEntity B;
 		}
+
+		public struct HeroDead
+		{
+			public HeroCard HeroCard;
+		}
+
 	}
 }

@@ -19,8 +19,77 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Actions\GameActionSystem.cs">
+      <Link>Demo\Actions\GameActionSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Buff\BuffComponentSystem.cs">
+      <Link>Demo\Buff\BuffComponentSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Buff\BuffSystem.cs">
+      <Link>Demo\Buff\BuffSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\ConstValue.cs">
+      <Link>Demo\ConstValue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Goods\GoodsSystem.cs">
+      <Link>Demo\Goods\GoodsSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\HeroCard\HeroCardComponentSystem.cs">
+      <Link>Demo\HeroCard\HeroCardComponentSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\HeroCard\HeroCardDataComponentSystem.cs">
+      <Link>Demo\HeroCard\HeroCardDataComponentSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\HeroCard\HeroCardSystem.cs">
+      <Link>Demo\HeroCard\HeroCardSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Item\ItemComponentSystem.cs">
+      <Link>Demo\Item\ItemComponentSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Item\ItemSystem.cs">
+      <Link>Demo\Item\ItemSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Mail\MailComponentSystem.cs">
+      <Link>Demo\Mail\MailComponentSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Mail\MailSystem.cs">
+      <Link>Demo\Mail\MailSystem.cs</Link>
+    </Compile>
     <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Move\MoveComponentSystem.cs">
       <Link>Demo\Move\MoveComponentSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Room\DiamondComponentSystem.cs">
+      <Link>Demo\Diamond\DiamondComponentSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Room\DiamondSystem.cs">
+      <Link>Demo\Diamond\DiamondSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\ServerInfo\ServerInfoSystem.cs">
+      <Link>Demo\ServerInfo\ServerInfoSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Skill\SkillComponentSystem.cs">
+      <Link>Demo\Skill\SkillComponentSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Skill\SkillSystem.cs">
+      <Link>Demo\Skill\SkillSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Task\GameTaskSystem.cs">
+      <Link>Demo\Task\GameTaskSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Troop\TroopComponentSystem.cs">
+      <Link>Demo\Troop\TroopComponentSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Troop\TroopSystem.cs">
+      <Link>Demo\Troop\TroopSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Weapon\WeaponComponentSystem.cs">
+      <Link>Demo\Weapon\WeaponComponentSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Weapon\WeponSystem.cs">
+      <Link>Demo\Weapon\WeponSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Weapon\WordBarSystem.cs">
+      <Link>Demo\Weapon\WordBarSystem.cs</Link>
     </Compile>
     <Compile Include="..\..\Unity\Codes\Hotfix\Module\Config\ConfigComponentSystem.cs">
       <Link>Module\Config\ConfigComponentSystem.cs</Link>
@@ -42,6 +111,14 @@
 
     <Compile Include="..\..\Unity\Codes\Hotfix\Module\Message\**\*.cs">
       <Link>Module\Message\%(RecursiveDir)%(FileName)%(Extension)</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Helper\HeroHelper.cs">
+      <Link>Demo\Helper\HeroHelper.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\HeroCard\HeroCardState.cs">
+      <Link>Demo\HeroCard\HeroCardState.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>

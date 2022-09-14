@@ -245,6 +245,7 @@ namespace ET
         
         static void ExportSheetJson(ExcelWorksheet worksheet, string name, Dictionary<string, HeadInfo> classField, ConfigType configType, StringBuilder sb)
         {
+            // Log.Debug($"ExportSheetJson  {name}");
             string configTypeStr = configType.ToString();
             for (int row = 6; row <= worksheet.Dimension.End.Row; ++row)
             {
@@ -298,6 +299,8 @@ namespace ET
         
         private static string Convert(string type, string value)
         {
+            
+            
             switch (type)
             {
                 case "int[]":
@@ -320,7 +323,7 @@ namespace ET
                 case "string":
                     return $"\"{value}\"";
                 default:
-                    throw new Exception($"不支持此类型: {type}");
+                    throw new Exception($"不支持此类型 {type}， {value}");
             }
         }
 #endregion

@@ -2,8 +2,8 @@
 
 namespace ET
 {
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-	public class EventAttribute: BaseAttribute
-	{
-	}
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class EventAttribute: BaseAttribute
+    {
+    }
 }

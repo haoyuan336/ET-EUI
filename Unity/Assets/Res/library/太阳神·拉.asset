@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 963d37fe4e1b0ac4fb0d104bb7d28504, type: 3}
+  m_Name: "\u592A\u9633\u795E\xB7\u62C9"
+  m_EditorClassIdentifier: 
+  HeroMode: {fileID: 4327338963984179186, guid: 42b9ae9bf8688be4d909d37e626c41dc,
+    type: 3}
+  HeroName: "\u592A\u9633\u795E"
+  skillConfigs:
+  - SkillName: Attack
+    SkillTime: 1.5
+    ShouJiTime: 1
+    effectPrefab: {fileID: 0}
+    EffectStartTime: 1
+    BeAttacckEffectPrefab: {fileID: 164316, guid: bec306058391bb84bb4d0cc47fcb6faf,
+      type: 3}
+    FlyEffectStartTime: 0.5
+    FlyEffectPrefab: {fileID: 183784, guid: 5ce77d6fb30288e43847ef16596243a7, type: 3}
+    MoveType: 2
+    TargetPosType: 1
+    BeHitedBoneName: 
+  - SkillName: Skill1
+    SkillTime: 1.5
+    ShouJiTime: 1
+    effectPrefab: {fileID: 0}
+    EffectStartTime: 1
+    BeAttacckEffectPrefab: {fileID: 119680, guid: ced15c38c39ea344197445b434352ad7,
+      type: 3}
+    FlyEffectStartTime: 0
+    FlyEffectPrefab: {fileID: 0}
+    MoveType: 2
+    TargetPosType: 1
+    BeHitedBoneName: 
+  - SkillName: Skill2
+    SkillTime: 2.2
+    ShouJiTime: 1
+    effectPrefab: {fileID: 0}
+    EffectStartTime: 0.3
+    BeAttacckEffectPrefab: {fileID: 164316, guid: bec306058391bb84bb4d0cc47fcb6faf,
+      type: 3}
+    FlyEffectStartTime: 0.5
+    FlyEffectPrefab: {fileID: 131600, guid: 7b38460b660bfdb48b0db16f33ba9765, type: 3}
+    MoveType: 2
+    TargetPosType: 1
+    BeHitedBoneName: 
+  - SkillName: BigSkill
+    SkillTime: 2.8
+    ShouJiTime: 2.2
+    effectPrefab: {fileID: 108820, guid: f943739c566bd904fa0a5e495ebd17c8, type: 3}
+    EffectStartTime: 2
+    BeAttacckEffectPrefab: {fileID: 0}
+    FlyEffectStartTime: 0
+    FlyEffectPrefab: {fileID: 0}
+    MoveType: 1
+    TargetPosType: 2
+    BeHitedBoneName: 

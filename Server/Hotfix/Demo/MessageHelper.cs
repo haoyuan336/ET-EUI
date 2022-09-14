@@ -8,11 +8,11 @@ namespace ET
     {
         public static void Broadcast(Unit unit, IActorMessage message)
         {
-            Dictionary<long, AOIEntity> dict = unit.GetBeSeePlayers();
-            foreach (AOIEntity u in dict.Values)
-            {
-                SendToClient(u.Unit, message);
-            }
+            // Dictionary<long, AOIEntity> dict = unit.GetBeSeePlayers();
+            // foreach (AOIEntity u in dict.Values)
+            // {
+            //     SendToClient(u.Unit, message);
+            // }
         }
         
         public static void SendToClient(Unit unit, IActorMessage message)

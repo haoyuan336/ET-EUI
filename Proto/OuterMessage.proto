@@ -6,6 +6,8 @@ message C2M_TestRequest // IActorLocationRequest
 {
 	int32 RpcId = 90;
 	string request = 1;
+	repeated string key = 2;
+	repeated string value = 3;
 }
 
 message M2C_TestResponse // IActorLocationResponse
@@ -34,6 +36,7 @@ message Actor_TransferResponse // IActorLocationResponse
 message C2G_EnterMap // IRequest
 {
 	int32 RpcId = 1;
+	int64 Account = 2;
 }
 
 message G2C_EnterMap // IResponse
@@ -238,4 +241,1520 @@ message M2C_TransferMap // IActorLocationResponse
 	int32 Error = 91;
 	string Message = 92;
 }
- 
+//ResponseType R2C_LoginTest
+message C2R_LoginTest //IRequest
+{
+	int32 RpcId = 90;
+	string Account = 1;
+	string Password = 2;
+}
+message R2C_LoginTest //IResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	string GateAddress = 1;
+	string key = 2;
+}
+
+message C2R_SayHello //IMessage
+{
+	string Hello = 1;
+}
+message R2C_SayGoodBye //IMessage
+{
+	string GoodBye = 1;
+}
+//ResponseType M2C_TestActorLocationResponse
+message C2M_TestActorLocationRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	string Content = 1;
+}
+
+message M2C_TestActorLocationResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	string Content = 1;
+}
+
+message C2M_TestActorLocationMessage	//IActorLocationMessage
+{
+	int32 RpcId = 90;
+	string Content = 1;
+}
+message M2C_TestActorMessage //IActorMessage
+{
+	string Content = 1;
+}
+
+// message C2M_MatchRoomActorLocationMessage //IActorLocationMessage
+// {
+// 	int32 RpcId = 90;
+// 	string Content = 1;
+// }
+// message M2C_SyncCurrentMatchingCount	//IActorMessage
+// {
+// 	int32 Content = 1;
+// }
+//ResponseType A2C_LoginAccount
+message C2A_LoginAccount //IRequest
+{
+	int32 RpcId = 90;
+	string AccountName = 1;
+	string Password = 2;
+}
+message A2C_LoginAccount //IResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	string Token = 1;
+	int64 AccountId = 2;
+}
+message ServerInfoProto
+{
+	int64 Id = 1;
+	int32 Status = 2;
+	string ServerName = 3;
+}
+
+//ResponseType A2C_GetServerInfo
+message C2A_GetServerInfo //IRequest
+{
+	int32 RpcId = 90;
+	string Token = 1;
+	int64 AccountId = 2;
+}
+message A2C_GetServerInfo //IResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated ServerInfoProto ServerInfoList = 1;
+}
+//ResponseType A2C_GetRealmKey
+message C2A_GetRealmKey //IRequest
+{
+	int32 RpcId = 90;
+	string Token = 1;
+	int64 ServerId = 2;
+	int64 AccountId = 3;
+}
+message A2C_GetRealmKey //IResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	string RealmKey = 1;
+	string RealmAddress = 2;
+}
+//ResponseType R2A_GetRealmKey
+message A2R_GetRealmKey //IActorRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message R2A_GetRealmKey	//IActorResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	string Token = 1;
+}
+//ResponseType R2C_LoginRealm
+message C2R_LoginRealm //IRequest
+{
+	int RpcId = 90;
+	int64 AccountId = 1;
+	string Token = 2;
+}
+message R2C_LoginRealm //IResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	string GateAddress = 1;
+	int64 GateKey = 2;
+}
+//ResponseType G2C_LoginGate
+message C2G_LoginGateRequeset //IRequest
+{
+	int RpcId = 90;
+	int64 GateKey = 1;
+	int64 AccountId = 2;
+}
+message G2C_LoginGateResponse //IResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	int64 PlayerId = 1;
+}
+//ResponseType M2C_MatchRoomResponse
+message C2M_MatchRoomRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+	int64 AccountId = 1;
+}
+message M2C_MatchRoomResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+//ResponseType M2C_CancelMatchRoomResponse
+message C2M_CancelMatchRoomRequest  //IActorLocationRequest
+{
+	int RpcId = 90;
+}
+
+message M2C_CancelMatchRoomResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+
+
+message DiamondInfo
+{
+	int64 Id = 1;
+	int32 HangIndex = 2;
+	int32 LieIndex = 3;
+	int32 DiamondType = 4;
+	int32 InitLieIndex = 5;
+	int32 InitHangIndex = 6;
+	int32 BoomType = 7;			
+	// int64 HeroCardId = 8;
+	// float HeroCardAddAttack = 9;
+	// float HeroCardEndAttack = 10;
+	// float HeroCardAddAngry = 11;
+	// float HeroCardEndAngry = 12;
+	HeroCardInfo HeroCardInfo = 8;
+	int32 ConfigId = 9;
+}
+message M2C_InitMapData //IActorMessage
+{
+	//初始化地图数据
+	int RpcId = 90;
+	repeated DiamondInfo DiamondInfo = 1;
+}
+
+//同步房间信息
+message M2C_SyncRoomInfo	//IActorMessage
+{
+	int RpcId = 90;	
+	int64 RoomId = 1;
+	int32 TurnIndex = 2;
+	int32 MySeatIndex = 3;
+	int32 SeatCount = 4;	//房间里面人物的总人数
+	int32 LevelNum = 5;	//当前房间的关卡数
+}
+message C2M_PlayerScrollScreen //IActorLocationMessage
+{
+	int RpcId = 90;
+	int32 StartX = 1;
+	int32 StartY = 2;
+
+	int32 DirType = 3;
+	int64 RoomId = 4;
+}
+message C2M_PlayerClickHeroMode //IActorLocationMessage
+{
+	int RpcId = 90;
+	int64 HeroId = 1;
+	int64 RoomId = 2;
+
+}
+
+message M2C_PlayerChooseAttackHero	//IActorMessage
+{
+	int RpcId = 90;
+	int64 HeroId = 1;
+}
+
+message M2C_ChangeCurrentTurnSeatIndex	//IActorMessage
+{
+	int RpcId = 90;
+	int32 CurrentTurnIndex = 1;
+}
+
+
+message DiamondAction
+{
+	//宝石的action
+	int32 ActionType = 1;
+	DiamondInfo DiamondInfo = 2;
+	// repeated AddItemAction AddAttackActions = 3;
+	repeated AddItemAction AddAngryActions = 4;
+}
+message MakeSureAttackHeroAction
+{
+	//确定发动攻击的英雄
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
+}
+message DiamondActionItem
+{
+	repeated DiamondAction DiamondActions = 1;
+	int32 CrashType = 2;		//消除类型，普通消除。特殊珠消除
+	// repeated AddItemAction AddAttackItemActions = 2;
+	// repeated AddItemAction AddAngryItemActions = 3;
+	repeated MakeSureAttackHeroAction MakeSureAttackHeroActions = 4;	
+}
+message GameLoseResultAction
+{
+	int64 LoseAccountId = 1;
+}
+message RecoveryAction
+{
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
+}
+message AttackAction
+{
+	// HeroCardInfo AttackHeroCardInfo = 1;
+	// HeroCardInfo BeAttackHeroCardInfo = 2;
+	repeated HeroBuffInfo HeroBuffInfos = 2;
+	repeated HeroCardDataComponentInfo BeAttackHeroCardDataComponentInfos = 3;
+	HeroCardDataComponentInfo AttackHeroCardDataComponentInfo = 4;
+
+}
+message HeroBuffInfo
+{
+	int64 HeroId = 2;
+	repeated BuffInfo BuffInfos = 1;
+}
+message AttackActionItem
+{
+	repeated AttackAction AttackActions = 1;
+	repeated HeroBuffInfo HeroBuffInfos = 2;
+}
+message AddItemAction
+{
+	repeated DiamondInfo DiamondInfos = 1;
+	HeroCardInfo HeroCardInfo = 2;
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 3;
+	CrashCommonInfo CrashCommonInfo = 4;
+}
+message InitHeroCardDataActionItem
+{
+	//初始化英雄卡牌的数据
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
+}
+message ComboActionItem 
+{
+	repeated AddItemAction AddAttackActions = 1;
+}
+message AddRoundAngryItem
+{
+
+	//增加每回合的怒气值
+	repeated HeroCardDataComponentInfo HeroCardDataComponentInfos = 1;
+}
+message UpdateHeroBuffInfoItem 
+{
+	repeated HeroBuffInfo HeroBuffInfos = 1;
+}
+message M2C_SyncDiamondAction //IActorMessage
+{
+	int32 RpcId = 90;
+	// repeated DiamondActionItem DiamondActionItems = 1;
+	// repeated AttackActionItem AttackActionItems = 2;
+	// // repeated InitHeroCardDataActionItem InitHeroCardDataActionItems = 3;
+	// GameLoseResultAction GameLoseResultAction = 4;
+	// ComboActionItem ComboActionItem = 5;
+	// AddRoundAngryItem AddRoundAngryItem = 6;
+	ActionMessage ActionMessage = 7;
+	// UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem = 8;	//更新英雄信息
+	// repeated ActionMessage ActionMessages = 7;
+	// UpdateHeroBuffInfoItem UpdateHeroBuffInfoItem = 7;
+	// repeated AddItemAction AddAttackItemActions = 4;
+	// repeated AddItemAction AddAngryItemActions = 5;
+}
+// message MakeSureAttackHeroAction
+// {
+// 	repeated int64 HeroIds = 1;
+// }
+message CombeAction 
+{
+	int32 CombeTime = 1;
+	int32 CrashCount = 2;
+	int32 CrashDiamondType = 3; 
+}
+message UpdateHeroInfoAction
+{
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
+	// repeated BuffInfo BuffInfos = 2;
+}
+message UpdateHeroBuffInfo
+{
+	int64 HeroId = 1;
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 3;
+	repeated BuffInfo BuffInfos = 2;
+}
+message HideAttackMarkAction
+{
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
+}
+message AttackBeganAction
+{
+
+}
+message AttackEndAction
+{
+
+}
+message BuffDamageAction
+{
+	BuffInfo BuffInfo = 1;
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 2;
+	int32 DamageCount = 3;	//伤害值
+}
+message ReduceAngryAction
+{
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;	//降低怒气值动作
+}
+message ActionMessage	
+{
+	// int32 ActionType = 1;	//动作类型
+	int32 PlayType = 1;	//播放类型
+	// DiamondActionItem DiamondActionItem = 2; //宝石动作
+	// AttackActionItem AttackActionItems = 3;	//攻击动作
+	// GameLoseResultAction GameLoseResultAction = 4;	//游戏结果
+	// ComboActionItem ComboActionItem = 5;	//连击特效
+	// AddRoundAngryItem AddRoundAngryItem = 6;	//增加怒气
+	DiamondAction DiamondAction = 2;	//宝石动作
+	AttackAction AttackAction = 3;	//攻击动作
+	MakeSureAttackHeroAction MakeSureAttackHeroAction = 4;	//确定攻击英雄
+	CombeAction CombeAction = 5;	//连击动作
+	UpdateHeroInfoAction UpdateHeroInfoAction = 6;//更新英雄信息
+	repeated ActionMessage ActionMessages = 7;
+	GameLoseResultAction GameLoseResultAction = 8;	//游戏结果
+	UpdateHeroBuffInfo UpdateHeroBuffInfo = 9; //更新buff信息
+	HideAttackMarkAction HideAttackMarkAction = 10;	//隐藏攻击标记动作
+	AttackBeganAction AttackBeganAction = 11;	//战斗开始
+	AttackEndAction AttackEndAction = 12;	//战斗结束
+	BuffDamageAction BuffDamageAction = 13;	//Buff 伤害动作
+	RecoveryAction RecoveryAction = 14;	//复活action
+	AdditionDamageAction AdditionDamageAction = 15;	//额外伤害
+	ReduceAngryAction ReduceAngryAction = 16;	//降低怒气值的动作
+	IncreaseSelfAngryAction IncreaseSelfAngryAction = 17;	//增加自己怒气值的 动作
+
+	
+
+}
+message IncreaseSelfAngryAction
+{
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
+}
+message AdditionDamageAction
+{
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
+}
+
+message SkillInfo
+{
+	//技能类型
+	int64 SkillId = 1;
+	string SkillName = 2;
+	int32 SkillType = 3;
+	int32 SkillConfigId = 4;
+	string SkillAnimName = 5;
+	int64 OwnerId = 6;
+
+}
+message HeroCardInfo
+{
+	int64 HeroId = 1;
+	string HeroName = 2;
+	int32 ConfigId = 3;
+	int64 OwnerId = 4;
+	int64 TroopId = 5;
+	int32 InTroopIndex = 6;
+	int32 CampIndex = 7;//阵营index
+	int32 HeroColor = 8;			//颜色属性	
+	// int64 CastSkillId = 9;	//技能类型
+	// float Attack = 10;	//当前的攻击力
+	// float HP = 11;			//血量
+	// repeated SkillInfo SkillInfos = 12; //技能列表
+	// float DiamondAttack = 13;			//宝石攻击力
+	// float Angry = 14;			//怒气值
+	// float Defence = 15;			//防御值
+	int32 Level = 16;	//等级
+	// float TotalHP = 17;	//总血量
+	int32 Star = 18;	//英雄的星级
+	int32 Count = 19;	//英雄个数
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 20;	//英雄的基础数据
+	int32 Rank = 21;		//英雄的阶数
+	int32 CurrentExp = 22;	//当前的经验值
+	bool IsLock = 23;	//是否锁定状态
+
+	// repeated long SkillIdList = 11;	//技能id
+}
+
+//ResponseType M2C_GetAllHeroCardListResponse
+message C2M_GetAllHeroCardListRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+	int64 Account = 1;
+	string Token = 3;
+	int32 BagType = 4;
+}
+message M2C_GetAllHeroCardListResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated HeroCardInfo HeroCardInfos = 1;
+}
+//ResponseType M2C_CallHeroCardResponse
+message C2M_CallHeroCardRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+}
+message M2C_CallHeroCardResponse	//IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	HeroCardInfo HeroCardInfo = 1;
+}
+
+message TroopInfo
+{
+	int64 TroopId = 1;
+	int32 Index = 2;
+}
+//ResponseType M2C_GetAllTroopInfosResponse
+message C2M_GetAllTroopInfosRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+}
+message M2C_GetAllTroopInfosResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated TroopInfo TroopInfos = 1;
+}
+//ResponseType M2C_CreateTroopResponse
+message C2M_CreateTroopRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message M2C_CreateTroopResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	TroopInfo TroopInfo = 1;
+}
+//ResponseType M2C_GetCurrentTroopHeroInfosResponse
+message C2M_GetCurrentTroopHeroInfosRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+}
+message M2C_GetCurrentTroopHeroInfosResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated HeroCardInfo HeroCardInfos = 1;
+}
+//ResponseType M2C_SetHeroToTroopResponse
+message C2M_SetHeroToTroopRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	// int64 TroopId = 1;
+	int64 HeroId = 2;
+	// int64 AccountId = 3;	
+	// int32 Index = 3;
+}
+message M2C_SetHeroToTroopResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated HeroCardInfo HeroCardInfos = 1;
+	
+}
+//ResponseType M2C_UnSetHeroFromTroopResponse
+message C2M_UnSetHeroFromTroopRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	// int64 TroopId = 1;
+	int64 HeroId = 2;
+	// int64 AccountId = 3;	
+	// int32 InTroopIndex = 3;
+}
+message M2C_UnSetHeroFromTroopResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated HeroCardInfo HeroCardInfos = 1;
+	
+}
+//ResponseType M2C_StartPVEGameResponse
+message C2M_StartPVEGameRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int64 TroopId = 2;	//队伍id
+
+}
+message M2C_StartPVEGameResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+message C2M_GameReadyMessage //IActorLocationMessage
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+
+message M2C_CreateHeroCardInRoom //IActorMessage
+{
+	repeated HeroCardInfo HeroCardInfos = 1;
+	repeated HeroCardDataComponentInfo HeroCardDataComponentInfos = 2;
+	repeated SkillInfo SkillInfos = 3;
+}
+// message C2M_PlayerReadyTurnRequest //IActorLocationRequest
+// {
+// 	int32 RpcId = 90;
+// 	int64 AccountId = 1;
+// 	int64 RoomId = 2;	//房间iD
+// }
+// message M2C_PlayerReadyTurnResponse //IActorLocationResponse
+// {
+// 	int32 RpcId = 90;
+// 	int32 Error = 91;
+// 	string Message = 92;
+// }
+message M2C_SyncHeroCardTurnData	//IActorMessage
+{
+	repeated HeroCardInfo HeroCardInfos = 1;
+}
+
+//ResponseType M2C_AddItemResponse
+message C2M_AddItemRequest	// IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int32 Count = 2;
+	int32 ConfigId = 3;
+}
+message M2C_AddItemResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	ItemInfo ItemInfo = 1;
+
+}
+
+//ResponseType M2C_GetGoldInfoResponse
+message C2M_GetGoldInfoRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message ItemInfo
+{
+	int64 ItemId = 1;
+	int32 ConfigId = 2;	//配置id
+	int32 Count = 3;	//个数
+}
+message M2C_GetGoldInfoResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	// int32 GoldCount = 1;		
+	// int32 PowerCount = 2;
+	// int32 DiamondCount = 3;
+	repeated ItemInfo ItemInfos = 1;	//道具个数信息
+}
+//ResponseType M2C_GetUserExpInfoResponse
+message C2M_GetUserExpInfoRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message M2C_GetUserExpInfoResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	int32 Exp = 1;			//升级所需要的经验值
+	int32 UserLevel = 2;	//英雄当前的等级
+	string UserName = 3;
+}
+//ResponseType M2C_BackGameToMainMenuResponse
+message C2M_BackGameToMainMenuRequest //IActorLocationRequest
+{
+	//退出游戏进入主页面
+	int32 RpcId = 90;
+	int64 Account = 1;
+	int64 RoomId = 2;
+
+}
+message M2C_BackGameToMainMenuResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+
+message WeaponInfo
+{
+	int64 WeaponId = 1;
+	int32 ConfigId = 2;
+	int32 Count = 3;
+	int32 Level = 4;
+	int64 OnWeaponHeroId = 5;
+	int32 CurrentExp = 6;	//装备当前剩余的经验值
+	
+
+}
+message GoodsInfo
+{
+	int64 GoodsId = 1;
+	int32 ConfigId = 2;
+}
+
+//ResponseType M2C_BuyGoodsResponse
+message C2M_BuyGoodsRequest	// IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int32 Count = 2;
+	int32 ConfigId = 3;
+}
+message M2C_BuyGoodsResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	GoodsInfo GoodsInfo = 1;
+	ItemInfo ItemInfo = 2;
+
+}
+
+//ResponseType M2C_BuyWeaponsResponse
+message C2M_BuyWeaponsRequest	// IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int32 Count = 2;
+	int32 ConfigId = 3;
+}
+message M2C_BuyWeaponsResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	WeaponInfo WeaponInfo = 2;
+
+}
+
+//ResponseType M2C_GetAllWeaponsResponse
+message C2M_GetAllWeaponsRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message M2C_GetAllWeaponsResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated WeaponInfo WeaponInfos = 1;
+}
+
+//ResponseType M2C_StrenthenHeroResponse
+message C2M_StrenthenHeroRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	HeroCardInfo TargetHeroCardInfo = 2;	//目标英雄信息
+	repeated HeroCardInfo ChooseHeroCardInfos = 3;	//选择的材料的信息
+}
+message M2C_StrenthenHeroResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	// repeated WeaponInfo WeaponInfos = 1;
+	HeroCardInfo HeroCardInfo = 1;	//升级完成的英雄信息
+}
+
+//ResponseType M2C_GetAllItemResponse
+message C2M_GetAllItemRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+}
+message M2C_GetAllItemResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated ItemInfo ItemInfos = 1;
+}
+//ResponseType M2C_GetItemInfoResponse
+message C2M_GetItemInfoRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int32 ConfigId = 2;
+}
+
+message M2C_GetItemInfoResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	ItemInfo ItemInfo = 1;
+}
+message CrashCommonInfo
+{
+	int32 FirstCrashCount = 1;	//首次消除的个数
+	int32 CommonCount = 2;	//消除的连击次数
+	int32 FirstCrashColor = 3;	//首次消除的颜色类型
+
+}
+message HeroCardDataComponentInfo
+{
+	int32 DiamondAttackAddition = 1;	// 钻石伤害加成
+	int32 HP = 2;	//当前的血量
+	// int32 HeroAttack = 3 ;	//英雄伤害
+	// int32 WeaponAttack = 4;	//装备伤害
+	// int32 SkillAttack = 5;	//技能伤害
+	int32 Damage = 6;	//普通伤害
+	// int32 CriticalDamage = 7;//暴击伤害
+	int32 ConfigId = 8;	//配置Id
+	int32 Angry = 9;	//当前的怒气值
+	int32 TotalHP = 10;	//总血量
+	int64 HeroId = 11;	//英雄ID
+	int64 CurrentSkillId = 12;	//当前需要施放的技能id
+
+	SkillInfo CurrentSkillInfo = 13;	//技能info
+	bool IsCritical = 14;	//是否发生了暴击
+	int32 AddAngry = 15;	//增加的怒气值
+	int32 AddHP = 16;	//增加的血量值
+	int32 SubAngry = 17;	//降低的怒气值
+	// public int HP;  //当前的血量
+	// public int DiamondAttack;
+	// public int HeroAttack;
+	// public int WeaponAttack;
+	// public int SkillAttack;
+	// public int NormalDamage;
+	// public int CriticalDamage; //暴击伤害
+
+}
+
+//ResponseType M2C_GetHeroCardByIdResponse
+message C2M_GetHeroCardByIdRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+	int64 Account = 1;
+	int64 HeroId = 2;
+}
+message M2C_GetHeroCardByIdResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	HeroCardInfo HeroCardInfo = 1;
+}
+//ResponseType M2C_UpdateHeroRankResponse
+message C2M_UpdateHeroRankRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+	int64 Account = 1;
+	int64 HeroId = 2;
+}
+message M2C_UpdateHeroRankResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	HeroCardInfo HeroCardInfo = 1;
+}
+//ResponseType M2C_UpdateHeroLevelResponse
+message C2M_UpdateHeroLevelRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+	int64 Account = 1;
+	int64 HeroId = 2;
+}
+message M2C_UpdateHeroLevelResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	HeroCardInfo HeroCardInfo = 1;
+}
+
+//ResponseType M2C_UpdateHeroStarResponse
+message C2M_UpdateHeroStarRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+	int64 Account = 1;
+	int64 HeroId = 2;
+	int64 MaterialHeroId = 3;	//材料id
+}
+message M2C_UpdateHeroStarResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	HeroCardInfo HeroCardInfo = 1;
+}
+//ResponseType M2C_UpdateOnWeaponResponse
+message C2M_UpdateOnWeaponRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+	int64 Account = 1;
+	int64 HeroId = 2;
+	int64 WeaponId = 3;	//材料id
+}
+message M2C_UpdateOnWeaponResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	HeroCardInfo HeroCardInfo = 1;
+	repeated WeaponInfo WeaponInfos = 2;	//已经装备了的装备信息
+}
+//ResponseType M2C_OffWeaponResponse
+message C2M_OffWeaponRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+	int64 Account = 1;
+	int64 HeroId = 2;
+	int64 WeaponId = 3;	//材料id
+}
+message M2C_OffWeaponResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	HeroCardInfo HeroCardInfo = 1;
+	repeated WeaponInfo WeaponInfos = 2;	//已经装备了的装备信息
+}
+//ResponseType M2C_GetOnWeaponsResponse
+message C2M_GetOnWeaponsRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+	int64 Account = 1;
+	int64 HeroId = 2;
+}
+message M2C_GetOnWeaponsResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated WeaponInfo WeaponInfos = 1;
+}
+//ResponseType M2C_GetWeaponWordBarsResponse
+message C2M_GetWeaponWordBarsRequest //IActorLocationRequest
+{
+	int RpcId = 90;
+	int64 Account = 1;
+	int64 WeaponId = 2;
+}
+message M2C_GetWeaponWordBarsResponse //IActorLocationResponse
+{
+	int RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated WordBarInfo WordBarInfos = 1;
+}
+message WordBarInfo
+{
+	int64 WordBarId = 1;
+	int64 OnwerId = 2;
+	int32 ConfigId = 3;
+	int32 Value = 4;
+	bool IsMain = 5;	//是否是主词条
+
+}
+
+//ResponseType M2C_StrengthenWeaponResponse
+message C2M_StrengthenWeaponRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	WeaponInfo TargetWeaponInfo = 2;	//目标英雄信息
+	repeated WeaponInfo ChooseWeaponInfos = 3;	//选择的材料的信息
+}
+message M2C_StrengthenWeaponResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	// repeated WeaponInfo WeaponInfos = 1;
+	WeaponInfo WeaponInfo = 1;	//升级完成的英雄信息
+}
+//ResponseType M2C_GetWordBarInfosWithWeaponListResponse
+message C2M_GetWordBarInfosWithWeaponListRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	repeated int64 WeaponInfoIds = 2;	//装备id的列表
+}
+message M2C_GetWordBarInfosWithWeaponListResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	// repeated WeaponInfo WeaponInfos = 1;
+	// WeaponInfo WeaponInfo = 1;	//升级完成的英雄信息
+	repeated WordBarInfo WordBarInfos = 1;	//词条信息
+}
+//ResponseType M2C_WeaponWordBarClearNormalResponse
+message C2M_WeaponWordBarClearNormalRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;	//装备 的普通洗练 请求
+	int64 AccountId = 1;
+	repeated int64 WordBarIds = 2;
+	int64 WeaponId = 3;
+}
+message M2C_WeaponWordBarClearNormalResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated WordBarInfo WordBarInfos = 1;
+}
+
+//ResponseType M2C_WeaponWordBarSpeicalClearResponse
+message C2M_WeaponWordBarSpeicalClearRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;	//装备 的普通洗练 请求
+	int64 AccountId = 1;
+	repeated int64 WordBarIds = 2;
+	int64 WeaponId = 3;
+}
+message M2C_WeaponWordBarSpeicalClearResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated WordBarInfo WordBarInfos = 1;
+}
+
+message MailInfo
+{
+
+	// public long ReceiveId; //发送者id
+	// public long SendId; //收者id
+	// public string SendTime; //发送时间
+	// public bool IsRead = false; //是否已读
+	// public bool IsGet = false; //是否已经领取
+	// public string SendName; //发送者名字
+
+
+	int64 MailId = 1;		//邮件id
+	int64 ReceiveId = 2;
+	int64 SendId = 3;
+	string SendName = 4;	//邮件来源
+	int64 SendTime = 5;	//邮件的发送时间
+	bool IsRead = 6;		//是否已读
+	bool IsGet = 7;	//是否领取
+	string Title = 8;	//邮件标题
+	string Content = 9;	//邮件内容
+	int32 MailType = 10;	//邮件类型
+}
+
+//ResponseType M2C_GetAllMailResponse
+message C2M_GetAllMailRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;	//装备 的普通洗练 请求
+	int64 AccountId = 1;
+}
+message M2C_GetAllMailResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated MailInfo MailInfos = 1;	//邮件列表
+}
+message C2M_RegisterNewMailBoxMessage //IActorLocationMessage
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;	//此玩家注册新邮箱
+}
+
+message M2C_SendMails // IActorMessage
+{
+	repeated MailInfo MailInfos = 1;	//邮件列表
+}
+
+//ResponseType M2C_ReadMailsResponse
+message C2M_ReadMailsRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	repeated int64 MailIds = 2;
+}
+message M2C_ReadMailsResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated MailInfo MailInfos = 1;
+}
+//ResponseType M2C_GetAllAwardInfoResponse
+message C2M_GetAllAwardInfoRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int64 OwnerId = 2;
+}
+message M2C_GetAllAwardInfoResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated HeroCardInfo HeroCardInfos = 1;
+	repeated WeaponInfo WeaponInfos = 2;
+	repeated ItemInfo ItemInfos = 3;
+}
+//ResponseType M2C_ReceiveAllAwardResponse
+message C2M_ReceiveAllAwardRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int64 OwnerId = 2;
+}
+message M2C_ReceiveAllAwardResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	MailInfo MailInfo = 1;
+}
+message AccountInfo
+{
+	int64 Account = 1;
+	string Name = 2;
+	string NickName = 3;
+	int64 LastLogonTime = 4;	//最近登录时间
+	int64 CreateTime = 5;	//创建时间
+	int32 PvELevelNumber = 6;
+	int64 ItemId = 7;	//道具info
+	// int32 HeadImageConfigId = 7;	//头像图片的配置Id
+	// int32 HeadFrameImageConfigId = 8;	//头像框的配置id
+	int64 CurrentTroopId = 9;	//当前选择的队伍id
+
+}
+//ResponseType M2C_GetFriendRecommendListResponse
+message C2M_GetFriendRecommendListRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+
+message M2C_GetFriendRecommendListResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated AccountInfo AccountInfos = 1;
+}
+//ResponseType M2C_AddFriendResponse
+message C2M_AddFriendRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+	AccountInfo TargetInfo = 2;
+}
+message M2C_AddFriendResponse 	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+//ResponseType M2C_GetFriendApplyListResponse
+message C2M_GetFriendApplyListRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message M2C_GetFriendApplyListResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated AccountInfo AccountInfo = 1;
+	repeated MailInfo MailInfo = 2;
+} 
+//ResponseType M2C_ProcessFriendApplyResponse
+message C2M_ProcessFriendApplyRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	AccountInfo AccountInfo = 2;
+	int32 ApplyProcessType = 3;	//处理类型
+}
+message M2C_ProcessFriendApplyResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+//ResponseType M2C_GetAllFriendsResponse
+message C2M_GetAllFriendsRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message M2C_GetAllFriendsResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated FriendInfo FriendInfos = 1;
+	repeated AccountInfo AccountInfos = 2;
+}
+message FriendInfo
+{
+	int64 FriendsId = 1;
+	int64 OwnerId = 2;
+	int64 FriendId = 3;
+	int64 CreateTime = 4;
+	bool IsGift = 5;
+}
+
+//ResponseType M2C_GiveGiftToFriendResponse
+message C2M_GiveGiftToFriendRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+	AccountInfo AccountInfo = 2;
+}
+message M2C_GiveGiftToFriendResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	FriendInfo FriendInfo = 4;
+
+}
+
+//ResponseType M2C_OneKeyGiveAndGetResponse
+message C2M_OneKeyGiveAndGetRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+}
+message M2C_OneKeyGiveAndGetResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated FriendInfo FriendInfos = 4;
+	ItemInfo PowerItemInfo = 5;	//体力道具信息
+	repeated int64 AccountIds = 6;	//赠送成功的玩家的id列表
+}
+
+message ChatInfo
+{
+
+	AccountInfo AccountInfo = 1;	//发送者个人信息
+	string ChatText = 2;
+}
+
+//ResponseType M2C_ChatToFriendResponse
+message C2M_ChatToFriendRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;	//自己的id
+	AccountInfo AccountInfo = 2;	//好友的信息
+	string ChatText = 3;	//
+}
+message M2C_ChatToFriendResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	ChatInfo ChatInfo = 1;	//聊天的内容
+}
+message M2C_ReceiveChatFromFriend	//IActorMessage
+{
+	ChatInfo ChatInfo = 1;
+}
+//ResponseType M2C_GetAccountInfoWidthAccointIdResponse
+message C2M_GetAccountInfoWithAccountIdRequest //IActorLocationRequest 
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;	
+}
+message M2C_GetAccountInfoWidthAccointIdResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	AccountInfo AccountInfo = 1;
+}
+
+//ResponseType M2C_GetPlayerOwnHeroTypeCountResponse
+message C2M_GetPlayerOwnHeroTypeCountRequest // IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;	
+}
+message M2C_GetPlayerOwnHeroTypeCountResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	int32 Count = 1;
+}
+
+//ResponseType M2C_ChangePlayerHeadOrFrameResponse
+message C2M_ChangePlayerHeadOrFrameRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int64 ItemId = 3;	//道具id	
+	int32 HeadType = 2;
+	// int32 ConfigId = 3; 
+}
+message M2C_ChangePlayerHeadOrFrameResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	AccountInfo AccountInfo = 1;
+}
+
+//ResponseType M2C_SearchAccountWithNameResponse
+message C2M_SearchAccountWithNameRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	string Name = 2;
+
+}
+message M2C_SearchAccountWithNameResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated AccountInfo AccountInfos = 1;
+}
+//ResponseType M2C_DelAllReadMailResponse
+message C2M_DelAllReadMailRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+}
+message M2C_DelAllReadMailResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated MailInfo MailInfos = 1;
+}
+message GameTaskInfo
+{
+	int64 TaskId = 1;
+	int32 TaskState = 2;	//任务状态
+	int32 ConfigId = 3;	//配置id
+	int64 CreateTime = 4;	//创建时间
+	int32 ActionCount = 5;	//动作完成的次数
+
+}
+
+//ResponseType M2C_GetTaskInfoWithConfigIdResponse
+message C2M_GetTaskInfoWithConfigIdReqeust //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int32 ConfigId = 2;
+}
+message M2C_GetTaskInfoWithConfigIdResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	GameTaskInfo GameTaskInfo = 1;
+}
+//ResponseType M2C_GetActivePointValueByConfigIdResponse
+message C2M_GetActivePointValueByConfigIdRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int32 ConfigId = 2;
+}
+message M2C_GetActivePointValueByConfigIdResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	int32 Value = 1;
+}
+//ResponseType M2C_GetGameTaskAwardResponse
+message C2M_GetGameTaskAwardRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 AccountId = 1;
+	int64 TaskId = 2;
+}
+message M2C_GetGameTaskAwardResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated ItemInfo ItemInfos = 1;	//获得的任务奖励列表
+	GameTaskInfo GameTaskInfo = 2;	//任务信息
+}
+
+//ResponseType M2C_EnterNextLevelPvEGameResponse
+message C2M_EnterNextLevelPvEGameRequest //IActorLocationRequest
+{
+	//需要退出当前游戏
+	int32 RpcId = 90;
+	int64 Account = 1;
+	int64 RoomId = 2;
+
+}
+message M2C_EnterNextLevelPvEGameResponse	//IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+//ResponseType M2C_EnterChangeTempSceneResponse
+message C2M_EnterChangeTempSceneRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+	int64 RoomId = 2;
+}
+message M2C_EnterChangeTempSceneResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+//ResponseType M2C_PlayerChooseLevelNumResponse
+message C2M_PlayerChooseLevelNumRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+	int32 LevelNum = 2;
+}
+message M2C_PlayerChooseLevelNumResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+//ResponseType M2C_LockHeroCardResponse
+message C2M_LockHeroCardRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+	int64 HeroId = 2;
+	bool Lock = 3;
+}
+message M2C_LockHeroCardResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+
+message M2C_MatchPVPSuccess	//IActorMessage
+{
+	int RpcId = 90;
+	int64 RoomId = 1;
+	repeated int64 AccountIds = 2;	//匹配到的玩家id 
+}
+
+//ResponseType M2C_ReadyToPVPRoomResponse
+message C2M_ReadyToPVPRoomRequest	//IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 Account = 1;
+}
+message M2C_ReadyToPVPRoomResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+//ResponseType M2C_GetCurrentTroopIndexResponse
+message C2M_GetCurrentTroopIndexRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+}
+message M2C_GetCurrentTroopIndexResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	int32 CurrentTroopIndex = 1;
+}
+//ResponseType M2C_PlayerChooseTroopIndexResponse
+message C2M_PlayerChooseTroopIndexRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int32 Index = 1;
+}
+message M2C_PlayerChooseTroopIndexResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	repeated HeroCardInfo HeroCardInfo  = 1;
+}
+message M2C_CreateHeroModeMessage //IActorMessage
+{
+	//创建英雄模型的消息
+	HeroCardInfo HeroCardInfo = 1;
+}
+//ResponseType M2C_GetCurrentShowHeroCardInfoResponse
+message C2M_GetCurrentShowHeroCardInfoRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+
+}
+message M2C_GetCurrentShowHeroCardInfoResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+	HeroCardInfo HeroCardInfo = 1;
+}
+//ResponseType M2C_SetCurrentShowHeroCardInfoResponse
+message C2M_SetCurrentShowHeroCardInfoRequest //IActorLocationRequest
+{
+	int32 RpcId = 90;
+	int64 HeroId = 1;
+}
+message M2C_SetCurrentShowHeroCardInfoResponse //IActorLocationResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
+message BuffInfo
+{
+	int64 BuffId = 1;
+	int32 ConfigId = 2;
+	int32 RoundCount = 3;	//剩余回合数
+	int32 HealthShield = 4;	//血量护盾
+	int32 OverLabCount = 5;//层数
+}

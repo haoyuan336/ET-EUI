@@ -75,14 +75,8 @@ namespace ET
 		public int Type { get; set; }
 		[ProtoMember(4)]
 		public string Name { get; set; }
-		[ProtoMember(5)]
-		public string Desc { get; set; }
-		[ProtoMember(6)]
-		public int Position { get; set; }
-		[ProtoMember(7)]
-		public int Height { get; set; }
-		[ProtoMember(8)]
-		public int Weight { get; set; }
+		[ProtoMember(9)]
+		public int IsAI { get; set; }
 
 	}
 }

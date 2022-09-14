@@ -9,9 +9,13 @@ namespace ET
             zoneScene.AddComponent<UIPathComponent>();
             zoneScene.AddComponent<UIEventComponent>();
             zoneScene.AddComponent<RedDotComponent>();
-            zoneScene.AddComponent<ResourcesLoaderComponent>();
+            zoneScene.AddComponent<CameraComponent>();
+            zoneScene.AddComponent<AudioComponent>();
+            // zoneScene.AddComponent<ResourcesLoaderComponent>();
         
-            zoneScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Login);
+            // zoneScene.AddComponent<>()
+            await zoneScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_Login);
+            // zoneScene.GetComponent<UIComponent>().ShowWindow(WindowID.WindowID_MatchButton);
             await ETTask.CompletedTask;
         }
     }

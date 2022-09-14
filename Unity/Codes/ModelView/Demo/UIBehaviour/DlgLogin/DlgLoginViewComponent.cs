@@ -5,6 +5,40 @@ namespace ET
 {
 	public  class DlgLoginViewComponent : Entity,IAwake,IDestroy 
 	{
+		public UnityEngine.UI.Button E_CancelButton
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_CancelButton == null )
+     			{
+		    		this.m_E_CancelButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Sprite_BackGround/E_Cancel");
+     			}
+     			return this.m_E_CancelButton;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_CancelImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_CancelImage == null )
+     			{
+		    		this.m_E_CancelImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Sprite_BackGround/E_Cancel");
+     			}
+     			return this.m_E_CancelImage;
+     		}
+     	}
+
 		public UnityEngine.UI.Button E_LoginButton
      	{
      		get
@@ -36,6 +70,40 @@ namespace ET
 		    		this.m_E_LoginImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Sprite_BackGround/E_Login");
      			}
      			return this.m_E_LoginImage;
+     		}
+     	}
+
+		public UnityEngine.UI.Button E_FaceBookLoginButton
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_FaceBookLoginButton == null )
+     			{
+		    		this.m_E_FaceBookLoginButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Sprite_BackGround/E_FaceBookLogin");
+     			}
+     			return this.m_E_FaceBookLoginButton;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_FaceBookLoginImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_FaceBookLoginImage == null )
+     			{
+		    		this.m_E_FaceBookLoginImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Sprite_BackGround/E_FaceBookLogin");
+     			}
+     			return this.m_E_FaceBookLoginImage;
      		}
      	}
 
@@ -109,8 +177,12 @@ namespace ET
 
 		public void DestroyWidget()
 		{
+			this.m_E_CancelButton = null;
+			this.m_E_CancelImage = null;
 			this.m_E_LoginButton = null;
 			this.m_E_LoginImage = null;
+			this.m_E_FaceBookLoginButton = null;
+			this.m_E_FaceBookLoginImage = null;
 			this.m_E_AccountInputField = null;
 			this.m_E_AccountImage = null;
 			this.m_E_PasswordInputField = null;
@@ -118,8 +190,12 @@ namespace ET
 			this.uiTransform = null;
 		}
 
+		private UnityEngine.UI.Button m_E_CancelButton = null;
+		private UnityEngine.UI.Image m_E_CancelImage = null;
 		private UnityEngine.UI.Button m_E_LoginButton = null;
 		private UnityEngine.UI.Image m_E_LoginImage = null;
+		private UnityEngine.UI.Button m_E_FaceBookLoginButton = null;
+		private UnityEngine.UI.Image m_E_FaceBookLoginImage = null;
 		private UnityEngine.UI.InputField m_E_AccountInputField = null;
 		private UnityEngine.UI.Image m_E_AccountImage = null;
 		private UnityEngine.UI.InputField m_E_PasswordInputField = null;

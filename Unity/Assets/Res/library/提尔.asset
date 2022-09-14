@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 963d37fe4e1b0ac4fb0d104bb7d28504, type: 3}
+  m_Name: "\u63D0\u5C14"
+  m_EditorClassIdentifier: 
+  HeroMode: {fileID: 3241533595050223511, guid: 9b4d1cb4bd7cd1149892289fa88bd522,
+    type: 3}
+  HeroName: "\u63D0\u5C14"
+  skillConfigs:
+  - SkillName: Attack
+    SkillTime: 1.5
+    ShouJiTime: 1
+    effectPrefab: {fileID: 196908, guid: f1863590ec46b5c42a387fcc4ed4574f, type: 3}
+    EffectStartTime: 1
+    BeAttacckEffectPrefab: {fileID: 0}
+    FlyEffectStartTime: 0
+    FlyEffectPrefab: {fileID: 0}
+    MoveType: 0
+    TargetPosType: 1
+    BeHitedBoneName: 
+  - SkillName: Skill1
+    SkillTime: 1.5
+    ShouJiTime: 1
+    effectPrefab: {fileID: 192962, guid: ba09a14e24da2be4992ff6648a47e964, type: 3}
+    EffectStartTime: 1
+    BeAttacckEffectPrefab: {fileID: 0}
+    FlyEffectStartTime: 0
+    FlyEffectPrefab: {fileID: 0}
+    MoveType: 0
+    TargetPosType: 1
+    BeHitedBoneName: 
+  - SkillName: Skill2
+    SkillTime: 2.2
+    ShouJiTime: 1.2
+    effectPrefab: {fileID: 0}
+    EffectStartTime: 2
+    BeAttacckEffectPrefab: {fileID: 198646, guid: 7e72f72774dc27842b26912e3ccf78e2,
+      type: 3}
+    FlyEffectStartTime: 0
+    FlyEffectPrefab: {fileID: 0}
+    MoveType: 0
+    TargetPosType: 1
+    BeHitedBoneName: 
+  - SkillName: BigSkill
+    SkillTime: 2.8
+    ShouJiTime: 2.2
+    effectPrefab: {fileID: 0}
+    EffectStartTime: 2.3
+    BeAttacckEffectPrefab: {fileID: 173570, guid: db521008c00d93c49a7c32091c39cb44,
+      type: 3}
+    FlyEffectStartTime: 0
+    FlyEffectPrefab: {fileID: 0}
+    MoveType: 0
+    TargetPosType: 1
+    BeHitedBoneName: 

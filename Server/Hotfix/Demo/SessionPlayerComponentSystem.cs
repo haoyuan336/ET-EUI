@@ -2,8 +2,11 @@
 
 namespace ET
 {
+	
 	public static class SessionPlayerComponentSystem
 	{
+		
+		
 		public class SessionPlayerComponentDestroySystem: DestroySystem<SessionPlayerComponent>
 		{
 			public override void Destroy(SessionPlayerComponent self)

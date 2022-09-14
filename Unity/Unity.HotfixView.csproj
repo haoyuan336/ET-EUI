@@ -50,6 +50,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Codes\HotfixView\**\*.cs" />
+    <Reference Include="System.Resources.ResourceManager, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.27f1c1\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Resources.ResourceManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Addressables, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>Library\ScriptAssemblies\Unity.Addressables.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>Library\ScriptAssemblies\Unity.ResourceManager.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>./Temp/bin/Debug/UnityEngine.dll</HintPath>
     </Reference>
@@ -175,6 +184,9 @@
     </Reference>
     <Reference Include="UnityEngine.TilemapModule">
       <HintPath>./Temp/bin/Debug/UnityEngine.TilemapModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
       <HintPath>./Temp/bin/Debug/UnityEngine.UIModule.dll</HintPath>

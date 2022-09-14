@@ -218,7 +218,8 @@ namespace ET
 
             Type type = component.GetType();
 
-            OneTypeSystems oneTypeSystems = this.typeSystems.GetOneTypeSystems(type);;
+            OneTypeSystems oneTypeSystems = this.typeSystems.GetOneTypeSystems(type);
+            ;
             if (component is ILoad)
             {
                 if (oneTypeSystems.ContainsKey(typeof (ILoadSystem)))
@@ -286,7 +287,7 @@ namespace ET
                 }
             }
         }
-        
+
         // GetComponentSystem
         public void GetComponent(Entity entity, Entity component)
         {
@@ -313,7 +314,7 @@ namespace ET
                 }
             }
         }
-        
+
         // AddComponentSystem
         public void AddComponent(Entity entity, Entity component)
         {
@@ -333,6 +334,32 @@ namespace ET
                 try
                 {
                     addComponentSystem.Run(entity, component);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }
+        }
+
+        public async ETTask AwakeAsync(Entity component)
+        {
+            List<object> iAwakeSystems = this.typeSystems.GetSystems(component.GetType(), typeof (IAwakeSystemAsync));
+            if (iAwakeSystems == null)
+            {
+                return;
+            }
+
+            foreach (IAwakeSystemAsync aAwakeSystem in iAwakeSystems)
+            {
+                if (aAwakeSystem == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    await aAwakeSystem.Run(component);
                 }
                 catch (Exception e)
                 {
@@ -511,6 +538,32 @@ namespace ET
             ObjectHelper.Swap(ref this.loaders, ref this.loaders2);
         }
 
+        public void BeforeDestroy(Entity component)
+        {
+            List<object> iBeforeDestorySystems = this.typeSystems.GetSystems(component.GetType(), typeof (IBeforeDestroySystem));
+            if (iBeforeDestorySystems == null)
+            {
+                return;
+            }
+
+            foreach (IBeforeDestroySystem iBeforeDestorySystem in iBeforeDestorySystems)
+            {
+                if (iBeforeDestorySystem == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    iBeforeDestorySystem.Run(component);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }
+        }
+
         public void Destroy(Entity component)
         {
             List<object> iDestroySystems = this.typeSystems.GetSystems(component.GetType(), typeof (IDestroySystem));
@@ -620,7 +673,7 @@ namespace ET
         public async ETTask PublishAsync<T>(T a) where T : struct
         {
             List<object> iEvents;
-            if (!this.allEvents.TryGetValue(typeof(T), out iEvents))
+            if (!this.allEvents.TryGetValue(typeof (T), out iEvents))
             {
                 return;
             }
@@ -664,6 +717,7 @@ namespace ET
                     Log.Error($"event error: {obj.GetType().Name}");
                     continue;
                 }
+
                 aEvent.Handle(a).Coroutine();
             }
         }

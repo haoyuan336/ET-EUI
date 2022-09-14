@@ -1,0 +1,373 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Dlg
+  m_EditorClassIdentifier: 
+  m_GroupName: Dlg
+  m_Data:
+    m_SerializedData: []
+  m_GUID: e20e4104d931462418d76c4f15ced3fb
+  m_SerializeEntries:
+  - m_GUID: c291809cebe94124d90890c07e9939a2
+    m_Address: DlgGameUI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: d1a032eceeaca7244a337f7401a868b8
+    m_Address: DlgGameWinUI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 835fb089b4f38a642b92cc2c9c81538f
+    m_Address: DlgHelper
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: ea771c0703e9d9b47bf65443f77093bb
+    m_Address: DlgLobby
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: a87e203f6599b18489cb615ec32b682d
+    m_Address: DlgLogin
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 72a69a6885669a447b3e32f99fede9c9
+    m_Address: DlgMatchButton
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 619d0e2eeb2dc6b44a73c32c2bafe17f
+    m_Address: DlgRedDot
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 839a14cbe6724514f80e14234c631988
+    m_Address: DlgRoomInfo
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 56107bbbdd8f0834fbd66b9c085a7b31
+    m_Address: DlgAccountInfo
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 4fa355c2bce983948a0e9ad33197d59e
+    m_Address: DlgBagLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 4af627f8ad8c2594d8d1275f5211fee1
+    m_Address: DlgFormationUI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 03e7de8a9ec21c14e8baba8fbd721bf5
+    m_Address: DlgGoldInfoUI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: e92ac57bda31a52438ca71208cb4ad24
+    m_Address: DlgMainScene
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: a2eb6ef25d5a90642837014028a4dbf9
+    m_Address: DlgMainSceneBg
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: df0b86f52bab3fc449eea81ab70fffaa
+    m_Address: DlgMainSceneMenu
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: db15e1563d8cab144ae7c7ca39e3fba7
+    m_Address: DlgMessageTaskActiveInfo
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 9054a5228d99a71408ecc3e98bcca359
+    m_Address: DlgSettingUI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 01c699b4b93f9714daac4c1e98e89934
+    m_Address: DlgCallHeroLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: f1c6c9a06c5802848aab7fc22bc15f3a
+    m_Address: DlgHeroInfoLayerUI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 4512d47d1e237bd4a9fdc56183e40347
+    m_Address: DlgShowHeroInfoLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: f71e127061c34624a8c9f96eea7ed76e
+    m_Address: DlgLoadingLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 74474432d63742646b16e2afddb0856f
+    m_Address: DlgGameLoaseUI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: fcf3a0185fc6fbf419e7cc170fa5f527
+    m_Address: DlgStore
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 2450d39bea897844aa0d4f1d3e36c456
+    m_Address: DlgPowerNotEnoughAlert
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: d8b02a433b8b7e449a9e7c9833a5fb27
+    m_Address: DlgGameLevelLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: e727946f9f1a88845a2aecf9e7dd93d7
+    m_Address: DlgExitGameAlert
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: c6964a4d7db68c54da75023e653df98c
+    m_Address: DlgBuyAlert
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 3e73cd8a627856b418eb7fe2c17a2f8d
+    m_Address: DlgWeaponStrengthenLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: d8227d547b4e31948ac303e7cffb11a0
+    m_Address: DlgAddSubPlane
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: fe6b988507a8eff429942770151d790f
+    m_Address: DlgAllHeroBagLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 2327091d3c9fa1e46a626cfb7ab21277
+    m_Address: DlgHeroStrengthenLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 258160371f4aafa49952a5dd5099e079
+    m_Address: DlgEditorTroopLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 4b3898bc1b8c1cc47a339baf73095295
+    m_Address: DlgBackButton
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: d672d166d82b9074c8ff693b6ff39eef
+    m_Address: DlgWeaponInfoLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: a306e77608e6f044bb14e820a70f0336
+    m_Address: DlgUpdateHeroRankLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 4192cf5a1fc8fb54b8c925351ef18cff
+    m_Address: DlgUpdateHeroStarLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 83d971dbaa3d8174690f279f16340f92
+    m_Address: DlgHeroStrengthenPreviewLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 64baded7bb3c2ed49922493df6863f3a
+    m_Address: DlgHeroWeaponPreviewLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 9ff7993fb7da79e4b9c3a652e8331b92
+    m_Address: DlgChooseWeaponLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 67a780ed5c4b6be4fbada30803e716ae
+    m_Address: DlgWeaponStrengthenPreviewLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 121dba4dae7ba3f469a5c2acd276ab68
+    m_Address: DlgWeaponClearLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: f5a252923e552d146aa23650d089d299
+    m_Address: DlgWeaponSpecialClearLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 9002d4c031f61f24d8d1b7c42fed00c8
+    m_Address: DlgMailLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 4331d9b4f57fe484f9cb5b0b5865c7b9
+    m_Address: DlgMailInfoLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 28b8760af9e879e4c91fa1707c8d0476
+    m_Address: DlgFriendLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 5b02ff692925f8f4bab90b57c48d3036
+    m_Address: DlgSearchUserLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 73988c60551eb254c9b23c66d64e0e39
+    m_Address: DlgAlertLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 0dd6ca5b30ec3654a9ad1096e0e64a00
+    m_Address: DlgFriendChatLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 458e1f14b04d1434292a9f48c892929f
+    m_Address: DlgUserInfoLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: ee0db22fafb917948b2fd171581370a3
+    m_Address: DlgChooseHeadImageLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 7abad564ecd649d4f9d62708e50ec1bd
+    m_Address: DlgDayTaskLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: d5359b2118e49c846ac7fa4ebe2cc832
+    m_Address: DlgTaskLabelLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 95217d3121c3305499074a40b8f3e445
+    m_Address: DlgOwnAwardTipsLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+    - All
+  - m_GUID: bfb35c5350496b44bb41fca9154aafcc
+    m_Address: DlgGameLevelStoryLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 017f5207837954fec8742d8467f32604
+    m_Address: DlgPVPSceneLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: e1b49114129954e08bf50dd9709e2e16
+    m_Address: DlgPVPFightPrepareLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 599310a8290914d5cb04ff6a14b7580d
+    m_Address: DlgPVESceneLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  - m_GUID: 1e8078ac79a614c05b98f5f8a9a339b3
+    m_Address: DlgPVPMatchFightLayer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - UI
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: edefc33150ceaa542be716e8082d9628, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: abaac03e324fc23479a4f2fb9858dfdf, type: 2}
+    - {fileID: 11400000, guid: 855c4b62d3246554b9ce855289a8a1a2, type: 2}

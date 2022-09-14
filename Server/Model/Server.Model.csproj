@@ -26,8 +26,156 @@
       <Link>Core\%(RecursiveDir)%(FileName)%(Extension)</Link>
     </Compile>
 
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Actions\GameAction.cs">
+      <Link>Demo\Actions\GameAction.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Buff\Buff.cs">
+      <Link>Demo\Buff\Buff.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Buff\BuffComponent.cs">
+      <Link>Demo\Buff\BuffComponent.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\CountType.cs">
+      <Link>Demo\CountType.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\CrashCommonType.cs">
+      <Link>Demo\CrashCommonType.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\DiamondActionType.cs">
+      <Link>Demo\DiamondActionType.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\GoodsType.cs">
+      <Link>Demo\GoodsType.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Goods\Goods.cs">
+      <Link>Demo\Goods\Goods.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Helper\CustomHelper.cs">
+      <Link>Demo\Helper\CustomHelper.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Helper\WeaponHelper.cs">
+      <Link>Demo\Helper\WeaponHelper.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\HeroBagType.cs">
+      <Link>Demo\HeroBagType.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\HeroCard\HeroCard.cs">
+      <Link>Demo\HeroCard\HeroCard.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\HeroCard\HeroCardComponent.cs">
+      <Link>Demo\HeroCard\HeroCardComponent.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\HeroCard\HeroCardDataComponent.cs">
+      <Link>Demo\HeroCard\HeroCardDataComponent.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Item\Item.cs">
+      <Link>Demo\Item\Item.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Item\ItemComponent.cs">
+      <Link>Demo\Item\ItemComponent.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Mail\Mail.cs">
+      <Link>Demo\Mail\Mail.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Mail\MailComponent.cs">
+      <Link>Demo\Mail\MailComponent.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Room\BoomType.cs">
+      <Link>Demo\Room\BoomType.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Room\Diamond.cs">
+      <Link>Demo\Diamond\Diamond.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Room\DiamondComponent.cs">
+      <Link>Demo\Diamond\DiamondComponent.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Room\DirectionType.cs">
+      <Link>Demo\Room\DirectionType.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Room\ScrollDirType.cs">
+      <Link>Demo\Room\ScrollDirType.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\ServerInfo\ServerInfo.cs">
+      <Link>Demo\ServerInfo\ServerInfo.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\ServerInfo\ServerInfosComponent.cs">
+      <Link>Demo\ServerInfo\ServerInfosComponent.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Skill\Skill.cs">
+      <Link>Demo\Skill\Skill.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Skill\SkillComponent.cs">
+      <Link>Demo\Skill\SkillComponent.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Skill\SkillType.cs">
+      <Link>Demo\Skill\SkillType.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\StateType.cs">
+      <Link>Demo\StateType.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Task\GameTask.cs">
+      <Link>Demo\Task\GameTask.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Troop\Troop.cs">
+      <Link>Demo\Troop\Troop.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Troop\TroopComponent.cs">
+      <Link>Demo\Troop\TroopComponent.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\TypeConfig.cs">
+      <Link>Demo\TypeConfig.cs</Link>
+    </Compile>
+
     <Compile Include="..\..\Unity\Codes\Model\Demo\Unit\UnitType.cs">
       <Link>Demo\Unit\UnitType.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\WeaponType.cs">
+      <Link>Demo\WeaponType.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Weapon\Weapon.cs">
+      <Link>Demo\Weapon\Weapon.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Weapon\WeaponComponent.cs">
+      <Link>Demo\Weapon\WeaponComponent.cs</Link>
+    </Compile>
+
+    <Compile Include="..\..\Unity\Codes\Model\Demo\Weapon\WordBar.cs">
+      <Link>Demo\Weapon\WordBar.cs</Link>
     </Compile>
 
     <Compile Include="..\..\Unity\Codes\Model\Module\Recast\**\*.cs">

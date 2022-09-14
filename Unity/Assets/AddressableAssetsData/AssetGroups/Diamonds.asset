@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Diamonds
+  m_EditorClassIdentifier: 
+  m_GroupName: Diamonds
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 83e79a4122aa65944acc317c5100810c
+  m_SerializeEntries:
+  - m_GUID: 8ca0f8f8c266a544d81a7afa6cdfdaff
+    m_Address: Elemenet_dark
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - DiamondPrefabs
+  - m_GUID: 46c4e1a7bfd8db14382412ec6450ce4b
+    m_Address: Elemenet_fire
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - DiamondPrefabs
+  - m_GUID: 1b4e7234e4c1a8b4e9f250865ec230a4
+    m_Address: Elemenet_light
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - DiamondPrefabs
+  - m_GUID: d89dad2d948b855438800e043845c27d
+    m_Address: Elemenet_water
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - DiamondPrefabs
+  - m_GUID: 5f7c9bfc826be50419f50d3e7e2fa8ef
+    m_Address: Elemenet_wind
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - DiamondPrefabs
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: edefc33150ceaa542be716e8082d9628, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 286101edf877ea54fa082a930298fc83, type: 2}
+    - {fileID: 11400000, guid: 8d67b9fad25e70144be6435d8aedbc05, type: 2}

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace ET
 {
     [ObjectSystem]
@@ -5,6 +7,7 @@ namespace ET
     {
         public override void Awake(ConfigComponent self)
         {
+            Log.Debug("ConfigComponent_SetConfigLoader_Awake");
             self.ConfigLoader = new ConfigLoader();
         }
     }

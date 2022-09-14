@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: baozhawenli111
+  m_Shader: {fileID: 4800000, guid: af06cb75b07bc6746b93afe3b546e1b5, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _node_308
+        second:
+          m_Texture: {fileID: 2800000, guid: 4133841bdd24bf2449cabd82105d4742, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _node_7328
+        second:
+          m_Texture: {fileID: 2800000, guid: 6b929f541453c88429deb25fc7783c40, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Cutoff
+        second: 0.5
+      data:
+        first:
+          name: _node_6820
+        second: 3
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 0.5360041, g: 0.44852942, b: 1, a: 1}

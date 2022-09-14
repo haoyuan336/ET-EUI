@@ -1,0 +1,229 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Config
+  m_EditorClassIdentifier: 
+  m_GroupName: Config
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 650414ec10fe8a843b1c4a2bbf41f69c
+  m_SerializeEntries:
+  - m_GUID: 42a2112f033a61743b6817e91ccf67b8
+    m_Address: Assets/Bundles/Config/UserUpdateLevelConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: affb403c04ff54145a6516614287757d
+    m_Address: Assets/Bundles/Config/UnitConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: dffd70b3d6af25a458e87604ef2327d4
+    m_Address: Assets/Bundles/Config/SkillConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: 9192d5a0217be4a49ab9c7d273bc8abb
+    m_Address: Assets/Bundles/Config/HeroQualityTypeConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: ec8e1cc073da5994c98c7d19a60669c3
+    m_Address: Assets/Bundles/Config/StartSceneConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: e91adfb0f650c6d488d7ebc726cd5db7
+    m_Address: Assets/Bundles/Config/AIConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: 28575eb562d88154cad17f1dc9b09e06
+    m_Address: Assets/Bundles/Config/HeroUpdateLevelConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: 1ff4023365b0f8940a054ced16f4fecf
+    m_Address: Assets/Bundles/Config/ServerInfoConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: bddf411cd14e4834086d236a16b53654
+    m_Address: Assets/Bundles/Config/DiamondTypeConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: 0ecaceb114e185442b451ec3eaebdb58
+    m_Address: Assets/Bundles/Config/TroopCountConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: 7597d23f005a77a4e8d15e92d896509d
+    m_Address: Assets/Bundles/Config/HeroConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: 35489b064b1f2574ebc326b5dbbd8bb8
+    m_Address: Assets/Bundles/Config/StartMachineConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: bbaedbf09ebb88e4ca4f92b5d1ef5822
+    m_Address: Assets/Bundles/Config/GameInitMapCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: 2d5368e1989425e4482f555826745b77
+    m_Address: Assets/Bundles/Config/WeaponsConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: 791fd1c7af9eb26438e42f113957f8df
+    m_Address: Assets/Bundles/Config/PvPLevelConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: 0d38a0c14ef55fc47b3b4ecb1dde283a
+    m_Address: Assets/Bundles/Config/StartZoneConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: d73b06e33d6ffe248a5a596067311787
+    m_Address: Assets/Bundles/Config/ItemConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: 0431ec9b70d2fe149b825fb43992913c
+    m_Address: Assets/Bundles/Config/LevelConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: e9d8c3f0c2f265c41b98b0244aed72ea
+    m_Address: Assets/Bundles/Config/EnemyHeroConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: d5af6a21e36906245b1217a398a13431
+    m_Address: Assets/Bundles/Config/CallHeroConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: 70b61b352ba04d549b713aa4e4050a7c
+    m_Address: Assets/Bundles/Config/StartProcessConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: 4db238d31fdf1874aa82b344d7b7d764
+    m_Address: Assets/Bundles/Config/ElementConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: 2f38347e14996c345aa63ef48d3d3054
+    m_Address: Assets/Bundles/Config/GoodsConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: 66d04b97583164549846a0b176f58175
+    m_Address: Assets/Bundles/Config/CrashCommonAddConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - Config
+  - m_GUID: 8ed8e5878eee52044b4c5ea573b05481
+    m_Address: Assets/Bundles/Config/HeroLevelExpConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: ff2bc40d084d649479ad87fa40d11123
+    m_Address: Assets/Bundles/Config/WeaponWordBarsConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: c87de0f9896684e43872cbc128f5cafe
+    m_Address: Assets/Bundles/Config/WeaponLevelExpConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: f4a5c40f6cee0b0448c2b1de6fc852de
+    m_Address: Assets/Bundles/Config/AwardConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: c1b94f94197b15e499fac5c54cbc2bbe
+    m_Address: Assets/Bundles/Config/PlayerHeadImageResConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: 6ee0e925fa09b7440a535a33257dd317
+    m_Address: Assets/Bundles/Config/TaskConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: ff80db67b06a56048b4fc5a917f22090
+    m_Address: Assets/Bundles/Config/ActionConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - Config
+  - m_GUID: 352a9941a0aa35d45a29d11ab8e8ee23
+    m_Address: Assets/Bundles/Config/SentenceConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  - m_GUID: e0e6fd7f5ee8e40e3ac3877640e929d7
+    m_Address: Assets/Bundles/Config/ComboConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - All
+    - Config
+  - m_GUID: 8a970d37d12cd4e0280247b5c1a8d6b8
+    m_Address: Assets/Bundles/Config/BuffConfigCategory.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config
+    - All
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: edefc33150ceaa542be716e8082d9628, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 239fc890a34703249bdbcc974fb11acd, type: 2}
+    - {fileID: 11400000, guid: 87a9f56846d1a8a4c8f0f353f4133dfa, type: 2}

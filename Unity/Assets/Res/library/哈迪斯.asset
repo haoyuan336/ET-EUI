@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 963d37fe4e1b0ac4fb0d104bb7d28504, type: 3}
+  m_Name: "\u54C8\u8FEA\u65AF"
+  m_EditorClassIdentifier: 
+  HeroMode: {fileID: 3737155474553193152, guid: 6ffd21e01e4b64774897d6547d5abb6f,
+    type: 3}
+  HeroName: 
+  skillConfigs:
+  - SkillName: Attack
+    SkillTime: 1.5
+    ShouJiTime: 1
+    effectPrefab: {fileID: 1430155729748872330, guid: a310a7d9f9155de4faad20cbf16150fb,
+      type: 3}
+    EffectStartTime: 0.2
+    BeAttacckEffectPrefab: {fileID: 8850010110324251871, guid: b99dae832bac0594f89b1a0cde568c56,
+      type: 3}
+    BeAttackEffectPlayTime: 1
+    FlyEffectStartTime: 0.6
+    FlyEffectPrefab: {fileID: 1330518495050144495, guid: 8f9cc08d1d74d0c478a55315363a91e4,
+      type: 3}
+    MoveType: 2
+    TargetPosType: 0
+    BeHitedBoneName: Bip001 Spine2
+  - SkillName: Skill1
+    SkillTime: 1.5
+    ShouJiTime: 1
+    effectPrefab: {fileID: 9196697232539284638, guid: 7209ba32bbe40c247b4d05c33f40288e,
+      type: 3}
+    EffectStartTime: 0
+    BeAttacckEffectPrefab: {fileID: 8850010110324251871, guid: b99dae832bac0594f89b1a0cde568c56,
+      type: 3}
+    BeAttackEffectPlayTime: 1
+    FlyEffectStartTime: 0
+    FlyEffectPrefab: {fileID: 0}
+    MoveType: 2
+    TargetPosType: 1
+    BeHitedBoneName: 
+  - SkillName: Skill2
+    SkillTime: 1.5
+    ShouJiTime: 1.5
+    effectPrefab: {fileID: 1722692392518603508, guid: 79d8ece054165374e9515ce6126e63c9,
+      type: 3}
+    EffectStartTime: 0.4
+    BeAttacckEffectPrefab: {fileID: 3464538296917548761, guid: 5a250fbb3222dda47aea34763394877a,
+      type: 3}
+    BeAttackEffectPlayTime: 0.8
+    FlyEffectStartTime: 0
+    FlyEffectPrefab: {fileID: 0}
+    MoveType: 1
+    TargetPosType: 1
+    BeHitedBoneName: Bip001 Spine1
+  - SkillName: BigSkill
+    SkillTime: 4
+    ShouJiTime: 3.6
+    effectPrefab: {fileID: 2239726737886820056, guid: 3f2cf838efd8bf64a8935ab9acbc3df4,
+      type: 3}
+    EffectStartTime: 0
+    BeAttacckEffectPrefab: {fileID: 7639056509578938592, guid: b0c161aaf8a4c5b4ab130624582c176e,
+      type: 3}
+    BeAttackEffectPlayTime: 3
+    FlyEffectStartTime: 0
+    FlyEffectPrefab: {fileID: 0}
+    MoveType: 2
+    TargetPosType: 1
+    BeHitedBoneName: 

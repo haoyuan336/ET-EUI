@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 963d37fe4e1b0ac4fb0d104bb7d28504, type: 3}
+  m_Name: "\u5B99\u65AF"
+  m_EditorClassIdentifier: 
+  HeroMode: {fileID: 8786088972195638389, guid: be1d2e8d4123b6a40a7652e6a9a24a7f,
+    type: 3}
+  HeroName: "\u5B99\u65AF"
+  skillConfigs:
+  - SkillName: Attack
+    SkillTime: 2
+    ShouJiTime: 1
+    effectPrefab: {fileID: 0}
+    EffectStartTime: 2
+    BeAttacckEffectPrefab: {fileID: 106854, guid: e84dc47e1007a834faf46d6b6451ac37,
+      type: 3}
+    FlyEffectStartTime: 0.5
+    FlyEffectPrefab: {fileID: 178842, guid: 18e6cdd4bb8bead40b7430f48f01bff5, type: 3}
+    MoveType: 2
+    TargetPosType: 1
+    BeHitedBoneName: Bip001
+  - SkillName: Skill1
+    SkillTime: 2
+    ShouJiTime: 1
+    effectPrefab: {fileID: 0}
+    EffectStartTime: 1
+    BeAttacckEffectPrefab: {fileID: 111780, guid: 871ec6474a8696247be77d6b487ae143,
+      type: 3}
+    FlyEffectStartTime: 0
+    FlyEffectPrefab: {fileID: 0}
+    MoveType: 2
+    TargetPosType: 1
+    BeHitedBoneName: 
+  - SkillName: Skill2
+    SkillTime: 2
+    ShouJiTime: 0.8
+    effectPrefab: {fileID: 174238, guid: 056790f301e26d843828b5045497849f, type: 3}
+    EffectStartTime: 0.8
+    BeAttacckEffectPrefab: {fileID: 127070, guid: cdaa9e1ddbf3a3642ae2a87c3f50eaad,
+      type: 3}
+    FlyEffectStartTime: 0
+    FlyEffectPrefab: {fileID: 0}
+    MoveType: 1
+    TargetPosType: 1
+    BeHitedBoneName: 
+  - SkillName: BigSkill
+    SkillTime: 3
+    ShouJiTime: 2
+    effectPrefab: {fileID: 0}
+    EffectStartTime: 2
+    BeAttacckEffectPrefab: {fileID: 153766, guid: b4a9a2b429cf80b4cb70a2a5a19fdfca,
+      type: 3}
+    FlyEffectStartTime: 0
+    FlyEffectPrefab: {fileID: 0}
+    MoveType: 2
+    TargetPosType: 1
+    BeHitedBoneName: 

@@ -1,25 +1,44 @@
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using ILRuntime.Runtime.Intepreter;
 using UnityEngine;
 
 namespace ET
 {
     public class ConfigLoader: IConfigLoader
     {
-        public void GetAllConfigBytes(Dictionary<string, byte[]> output)
+        public async ETTask GetAllConfigBytes(Dictionary<string, byte[]> output)
         {
-            Dictionary<string, UnityEngine.Object> keys = ResourcesComponent.Instance.GetBundleAll("config.unity3d");
+            Log.Debug("load all config bytes");
+            // Dictionary<string, UnityEngine.Object> keys = ResourcesComponent.Instance.GetBundleAll("config.unity3d");
+            List<UnityEngine.Object> resultList =
+                    await AddressableComponent.Instance.LoadAssetsByLabelAsync<UnityEngine.Object>("Config", (handller) => { });
 
-            foreach (var kv in keys)
+            Log.Debug($"result count {resultList.Count}");
+
+            foreach (var result in resultList)
             {
-                TextAsset v = kv.Value as TextAsset;
-                string key = kv.Key;
-                output[key] = v.bytes;
+                TextAsset v = result as TextAsset;
+                // Log.Debug($"text asset {v.name}");
+                output[v.name] = v.bytes;
             }
+            Log.Debug("config load complete");
+            // await ETTask.CompletedTask;
+
+            // foreach (var kv in keys)
+            // {
+            //     TextAsset v = kv.Value as TextAsset;
+            //     string key = kv.Key;
+            //     output[key] = v.bytes;
+            // }
         }
 
         public byte[] GetOneConfigBytes(string configName)
         {
-            TextAsset v = ResourcesComponent.Instance.GetAsset("config.unity3d", configName) as TextAsset;
+            // TextAsset v = ResourcesComponent.Instance.GetAsset("config.unity3d", configName) as TextAsset;
+            // return v.bytes;
+            TextAsset v = AddressableComponent.Instance.LoadAssetByPath<TextAsset>(configName);
             return v.bytes;
         }
     }

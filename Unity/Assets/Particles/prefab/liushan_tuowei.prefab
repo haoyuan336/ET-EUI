@@ -1,0 +1,209 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &187820
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 487820}
+  - 114: {fileID: 11487820}
+  - 114: {fileID: 11487822}
+  m_Layer: 0
+  m_Name: liushan_tuowei
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &487820
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 187820}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!114 &11487820
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 187820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b298e0a1ca2e7a74a8c2224f26654eb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TrailData:
+    TrailMaterial: {fileID: 2100000, guid: 713dc844ca050274cbec050d4d1a2f06, type: 2}
+    Lifetime: .400000006
+    SizeOverLife:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: .521734715
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+    ColorOverLife:
+      key0:
+        serializedVersion: 2
+        rgba: 4294942025
+      key1:
+        serializedVersion: 2
+        rgba: 16753993
+      key2:
+        serializedVersion: 2
+        rgba: 0
+      key3:
+        serializedVersion: 2
+        rgba: 0
+      key4:
+        serializedVersion: 2
+        rgba: 0
+      key5:
+        serializedVersion: 2
+        rgba: 0
+      key6:
+        serializedVersion: 2
+        rgba: 0
+      key7:
+        serializedVersion: 2
+        rgba: 0
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    MaterialTileLength: 0
+    StretchToFit: 0
+    UseForwardOverride: 1
+    ForwardOverride: {x: -1, y: 0, z: 0}
+    ForwardOverideRelative: 1
+  Emit: 1
+  MaxNumberOfPoints: 50
+  MinVertexDistance: .100000001
+--- !u!114 &11487822
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 187820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91b31812cb56733479199a2402d044a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TrailData:
+    TrailMaterial: {fileID: 2100000, guid: b9c15939437a78b42bcde3554decbf0f, type: 2}
+    Lifetime: .300000012
+    SizeOverLife:
+      serializedVersion: 2
+      m_Curve:
+      - time: 1.73617154e-05
+        value: .26673606
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - time: .0979213417
+        value: .366999209
+        inSlope: -.66496706
+        outSlope: -.66496706
+        tangentMode: 0
+      - time: .987552106
+        value: .0033743158
+        inSlope: -.27107498
+        outSlope: -.27107498
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+    ColorOverLife:
+      key0:
+        serializedVersion: 2
+        rgba: 4294940220
+      key1:
+        serializedVersion: 2
+        rgba: 16743983
+      key2:
+        serializedVersion: 2
+        rgba: 0
+      key3:
+        serializedVersion: 2
+        rgba: 0
+      key4:
+        serializedVersion: 2
+        rgba: 0
+      key5:
+        serializedVersion: 2
+        rgba: 0
+      key6:
+        serializedVersion: 2
+        rgba: 0
+      key7:
+        serializedVersion: 2
+        rgba: 0
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    MaterialTileLength: 0
+    StretchToFit: 0
+    UseForwardOverride: 1
+    ForwardOverride: {x: -1, y: 0, z: 0}
+    ForwardOverideRelative: 1
+  Emit: 1
+  MaxNumberOfPoints: 50
+  MinVertexDistance: .100000001
+  RandomForceScale: 4
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 187820}
+  m_IsPrefabParent: 1
+  m_IsExploded: 1

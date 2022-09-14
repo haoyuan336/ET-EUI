@@ -8,7 +8,7 @@ namespace ET
         public override void Awake(GlobalComponent self)
         {
             GlobalComponent.Instance = self;
-            
+
             self.Global = GameObject.Find("/Global").transform;
             self.Unit = GameObject.Find("/Global/UnitRoot").transform;
             self.UI = GameObject.Find("/Global/UIRoot").transform;
@@ -16,7 +16,12 @@ namespace ET
             self.PopUpRoot = GameObject.Find("Global/UIRoot/PopUpRoot").transform;
             self.FixedRoot = GameObject.Find("Global/UIRoot/FixedRoot").transform;
             self.OtherRoot = GameObject.Find("Global/UIRoot/OtherRoot").transform;
-            self.PoolRoot =  GameObject.Find("Global/PoolRoot").transform;
+            self.PoolRoot = GameObject.Find("Global/PoolRoot").transform;
+            self.GameUIRoot = GameObject.Find("Global/UIRoot/GameUIRoot").transform;
+
+            self.DiamondContent = GameObject.Find("Global/DiamondContent").transform;
+            self.EffectAudioSourceRoot = GameObject.Find("Global/UIRoot/EffectAudioResourceRoot").transform;
+            self.MusicAudioSourceRoot = GameObject.Find("Global/UIRoot/MusicAudioSourceRoot").transform;
         }
     }
 }
