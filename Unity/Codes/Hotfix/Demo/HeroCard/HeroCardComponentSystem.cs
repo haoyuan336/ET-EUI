@@ -205,8 +205,9 @@ namespace ET
             //     }
             // }
 
-            foreach (var heroCard in self.ChangeList)
+            for (int i = 0; i < self.ChangeList.Count; i++)
             {
+                var heroCard = self.ChangeList[i];
                 DBManagerComponent.Instance.GetZoneDB(self.DomainZone()).Save(heroCard).Coroutine();
             }
         }

@@ -23,7 +23,7 @@ namespace ET
     {
         public static BuffInfo GetBuffInfo(this Buff self)
         {
-            return new BuffInfo() { BuffId = self.Id, ConfigId = self.ConfigId, RoundCount = self.RoundCount, HealthShield = self.HealthShield };
+            return new BuffInfo() { BuffId = self.Id, ConfigId = self.ConfigId, RoundCount = self.RoundCount, HealthShield = self.HealthShield, OverLabCount = self.OverlabCount};
         }
 
         public static ActionMessage ProcessRound(this Buff self, HeroCard heroCard)

@@ -65,15 +65,41 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.Text E_OverLabCountText
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if (this.isCacheNode)
+     			{
+     				if( this.m_E_OverLabCountText == null )
+     				{
+		    			this.m_E_OverLabCountText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_OverLabCount");
+     				}
+     				return this.m_E_OverLabCountText;
+     			}
+     			else
+     			{
+		    		return UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"E_OverLabCount");
+     			}
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_E_BuffNameText = null;
 			this.m_E_CountText = null;
+			this.m_E_OverLabCountText = null;
 			this.uiTransform = null;
 		}
 
 		private UnityEngine.UI.Text m_E_BuffNameText = null;
 		private UnityEngine.UI.Text m_E_CountText = null;
+		private UnityEngine.UI.Text m_E_OverLabCountText = null;
 		public Transform uiTransform = null;
 	}
 }

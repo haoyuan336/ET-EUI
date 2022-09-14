@@ -351,7 +351,6 @@ namespace ET
         SkillConfig skillConfig)
         {
             // HeroCardComponent heroCardComponent = message.HeroCardComponent;
-            Log.Warning($"BeAttackHeroCardDataComponentInfos {attackAction.BeAttackHeroCardDataComponentInfos.Count}");
             HeroCardDataComponentInfo beHeroCardDataComponentInfo = attackAction.BeAttackHeroCardDataComponentInfos[0];
             HeroCard beAttackHeroCard = heroCardComponent.GetChild<HeroCard>(beHeroCardDataComponentInfo.HeroId);
             HeroCardDataComponentInfo attackHeroCardDataComponerntInfo = attackAction.AttackHeroCardDataComponentInfo;

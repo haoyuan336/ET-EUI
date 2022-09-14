@@ -272,7 +272,7 @@ namespace ET
             BuffComponent buffComponent = self.GetComponent<BuffComponent>();
             List<Buff> buffs = buffComponent.GetChilds<Buff>();
             buffs?.RemoveAll(a => a.RoundCount <= 0);
-            Buff buff = buffs?.Find(a => a.Config.IsRecovery == (int)RecoveryType.Recovery);
+            Buff buff = buffs?.Find(a => a.Config.IsRecovery == (int)RecoveryType.Recovery && a.RoundCount > 0);
             if (buff != null)
             {
                 //todo 可以复活
@@ -548,6 +548,7 @@ namespace ET
             Log.Debug($"old hp {oldHp}");
             damage = self.ProcessBuffDamage(beAttackbuffs, damage);
             damage = self.HuDunBuffDamage(beAttackbuffs, damage);
+            damage = self.ProcessIncreaseDamageLogic(beAttackbuffs, skill, damage);
             Log.Debug($"hudun damage {damage}");
             beAttackCom.HP -= (int)damage;
             if (beAttackCom.HP < 0)
@@ -563,6 +564,65 @@ namespace ET
             beAttackCom.Damage = (int)damage;
             beAttackCom.IsCritical = isCritical;
             attackCom.DiamondAttackAddition = 0;
+        }
+
+        public static float ProcessIncreaseDamageLogic(this HeroCard self, List<Buff> buffs, Skill skill, float damage)
+        {
+            if (buffs == null)
+            {
+                return damage;
+            }
+
+            var IncreaseDamages = skill.Config.IncreaseDamageRates;
+            if (IncreaseDamages == null)
+            {
+                return damage;
+            }
+
+            var rate = IncreaseDamages[skill.Level - 1] / 100.0f;
+            damage += damage * rate;
+            return damage;
+        }
+
+        public static ActionMessage ProcessReduceAngryLogic(this HeroCard self, HeroCard beAttackHeroCard, Skill skill)
+        {
+            var beAttackCom = beAttackHeroCard.GetComponent<HeroCardDataComponent>();
+            var buffComponent = beAttackHeroCard.GetComponent<BuffComponent>();
+
+            List<Buff> buffs = buffComponent.GetChilds<Buff>();
+            if (buffs == null)
+            {
+                return null;
+            }
+
+            int[] reduceAngrys = skill.Config.ReduceAngrys;
+            if (reduceAngrys == null)
+            {
+                return null;
+            }
+
+            int reduceAngry = reduceAngrys[skill.Level - 1];
+            int condition = skill.Config.ReduceAngrySelfBuffCondition;
+
+            if (buffs.Exists(a => a.ConfigId.Equals(condition) && a.RoundCount > 0))
+            {
+                int oldAngry = beAttackCom.Angry;
+                beAttackCom.Angry -= reduceAngry;
+                if (beAttackCom.Angry < 0)
+                {
+                    beAttackCom.Angry = 0;
+                }
+
+                int subAngry = oldAngry - beAttackCom.Angry;
+                beAttackCom.SubAngry = subAngry;
+                ActionMessage actionMessage = new ActionMessage()
+                {
+                    ReduceAngryAction = new ReduceAngryAction() { HeroCardDataComponentInfo = beAttackCom.GetInfo() }
+                };
+                return actionMessage;
+            }
+
+            return null;
         }
 
         public static bool ProcessDirectSkillLogic(this HeroCard self, HeroCardDataComponent attackComponent, HeroCardDataComponent beAttackComponent,
@@ -804,6 +864,11 @@ namespace ET
             int colorType = config.HeroColor;
             var diamondConfig = DiamondTypeConfigCategory.Instance.GetAll().Values.ToList().Find(a => { return a.ColorId.Equals(colorType); });
             return diamondConfig;
+        }
+
+        public static HeroCardDataComponentInfo GetHeroCardDataInfo(this HeroCard self)
+        {
+            return self.GetComponent<HeroCardDataComponent>().GetInfo();
         }
     }
 }

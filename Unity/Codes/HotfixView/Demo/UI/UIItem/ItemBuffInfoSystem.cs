@@ -23,12 +23,14 @@ namespace ET
             {
                 return;
             }
+
             gameObject.transform.localScale = Vector2.one;
             self.uiTransform = gameObject.transform;
             // self.E_CountText.text = $"X{info.RoundCount}";
 
             self.E_BuffNameText.text = buffConfig.buffName;
             self.E_CountText.text = $"x{info.RoundCount}";
+            self.E_OverLabCountText.text = $"x{info.OverLabCount}";
             self.uiTransform.GetComponent<Image>().sprite =
                     await AddressableComponent.Instance.LoadSpriteAtlasByPathNameAsync(buffConfig.SpriteAtlas, buffConfig.ImageStr);
             gameObject.transform.SetParent(parent);

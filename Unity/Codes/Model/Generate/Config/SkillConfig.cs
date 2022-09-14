@@ -72,96 +72,102 @@ namespace ET
 		[ProtoMember(1)]
 		public int Id { get; set; }
 		[ProtoMember(2)]
-		public int TargetPosType { get; set; }
-		[ProtoMember(3)]
-		public int MoveType { get; set; }
-		[ProtoMember(4)]
-		public int RangeType { get; set; }
-		[ProtoMember(5)]
-		public int MaxAttackCount { get; set; }
-		[ProtoMember(6)]
 		public string OwnerHeroName { get; set; }
+		[ProtoMember(3)]
+		public int TargetPosType { get; set; }
+		[ProtoMember(4)]
+		public int MoveType { get; set; }
+		[ProtoMember(5)]
+		public int RangeType { get; set; }
+		[ProtoMember(6)]
+		public int MaxAttackCount { get; set; }
 		[ProtoMember(7)]
-		public int IncreaseAngry { get; set; }
+		public int DoubleAttackTargetBuffCondition { get; set; }
 		[ProtoMember(8)]
-		public int IncreaseAngrySelfBuffCondition { get; set; }
+		public int IncreaseSelfAngry { get; set; }
 		[ProtoMember(9)]
-		public int[] IncreaseDamageRate { get; set; }
+		public int IncreaseAngrySelfBuffCondition { get; set; }
 		[ProtoMember(10)]
-		public int IncreaseDamageTargetBuffCondition { get; set; }
+		public int[] IncreaseDamageRates { get; set; }
 		[ProtoMember(11)]
-		public int[] ReduceAngry { get; set; }
+		public int IncreaseDamageTargetBuffCondition { get; set; }
 		[ProtoMember(12)]
-		public int ReduceAngrySelfBuffCondition { get; set; }
+		public int[] ReduceAngrys { get; set; }
 		[ProtoMember(13)]
-		public int IsPurify { get; set; }
+		public int ReduceAngrySelfBuffCondition { get; set; }
 		[ProtoMember(14)]
-		public int[] AdditionalHealthDamageRates { get; set; }
+		public int IsPurify { get; set; }
 		[ProtoMember(15)]
-		public int IsAdditionalDamage { get; set; }
+		public int[] AdditionalHealthDamageRates { get; set; }
 		[ProtoMember(16)]
-		public int AdditionalDamageEnemyBuffCondition { get; set; }
+		public int IsAdditionalDamage { get; set; }
 		[ProtoMember(17)]
-		public int IsKill { get; set; }
+		public int AdditionalDamageEnemyBuffCondition { get; set; }
 		[ProtoMember(18)]
-		public int[] KillConditions { get; set; }
+		public int IsKill { get; set; }
 		[ProtoMember(19)]
-		public int KillSuccessActiveSelfBuff { get; set; }
+		public int[] KillConditions { get; set; }
 		[ProtoMember(20)]
-		public int[] SelfAttackAdditionHealths { get; set; }
+		public int KillSuccessActiveSelfBuff { get; set; }
 		[ProtoMember(21)]
-		public int[] CareHealths { get; set; }
+		public int[] SelfAttackAdditionHealths { get; set; }
 		[ProtoMember(22)]
-		public int[] LevelDamages { get; set; }
+		public int[] CareHealths { get; set; }
 		[ProtoMember(23)]
-		public int[] LevelBuffRoundCounts { get; set; }
+		public int ExtendBuffRoundCount { get; set; }
 		[ProtoMember(24)]
-		public int ActiveBuffCondition { get; set; }
+		public int ExtendBuffRoundCountComdition { get; set; }
 		[ProtoMember(25)]
-		public int[] BuffConfigIds { get; set; }
+		public int[] LevelDamages { get; set; }
 		[ProtoMember(26)]
-		public int BuffOverCount { get; set; }
+		public int[] LevelBuffRoundCounts { get; set; }
 		[ProtoMember(27)]
-		public int[] HealthShieldAdditions { get; set; }
+		public int ActiveBuffCondition { get; set; }
 		[ProtoMember(28)]
-		public int[] BuffDamageAdditions { get; set; }
+		public int[] BuffConfigIds { get; set; }
 		[ProtoMember(29)]
-		public int BuffDamageAdditionCondition { get; set; }
+		public int BuffOverCount { get; set; }
+		[ProtoMember(30)]
+		public int[] HealthShieldAdditions { get; set; }
+		[ProtoMember(31)]
+		public int[] BuffDamageAdditions { get; set; }
 		[ProtoMember(32)]
-		public int SkillType { get; set; }
-		[ProtoMember(33)]
-		public string SkillName { get; set; }
-		[ProtoMember(34)]
-		public string SkillAnimName { get; set; }
+		public int BuffDamageAdditionCondition { get; set; }
 		[ProtoMember(35)]
-		public int SkillTime { get; set; }
+		public int SkillType { get; set; }
 		[ProtoMember(36)]
-		public int BeAttackAnimPlayTime { get; set; }
+		public string SkillName { get; set; }
 		[ProtoMember(37)]
-		public string SkillEffect { get; set; }
+		public string SkillAnimName { get; set; }
 		[ProtoMember(38)]
-		public string SkillEffectBoneName { get; set; }
+		public int SkillTime { get; set; }
 		[ProtoMember(39)]
-		public string SkillEffect2 { get; set; }
+		public int BeAttackAnimPlayTime { get; set; }
 		[ProtoMember(40)]
-		public string SkillEffectBioneName2 { get; set; }
+		public string SkillEffect { get; set; }
 		[ProtoMember(41)]
-		public int SkillEffectTime { get; set; }
+		public string SkillEffectBoneName { get; set; }
 		[ProtoMember(42)]
-		public int EffectStartTime { get; set; }
+		public string SkillEffect2 { get; set; }
 		[ProtoMember(43)]
-		public string BeAttackEffect { get; set; }
+		public string SkillEffectBioneName2 { get; set; }
 		[ProtoMember(44)]
-		public int BeAttackEffectStartTime { get; set; }
+		public int SkillEffectTime { get; set; }
 		[ProtoMember(45)]
-		public int BeAttackEffectTime { get; set; }
+		public int EffectStartTime { get; set; }
 		[ProtoMember(46)]
-		public int FlyEffectStartTime { get; set; }
+		public string BeAttackEffect { get; set; }
 		[ProtoMember(47)]
-		public string FlyEffect { get; set; }
+		public int BeAttackEffectStartTime { get; set; }
 		[ProtoMember(48)]
-		public string BeAttackBoneName { get; set; }
+		public int BeAttackEffectTime { get; set; }
 		[ProtoMember(49)]
+		public int FlyEffectStartTime { get; set; }
+		[ProtoMember(50)]
+		public string FlyEffect { get; set; }
+		[ProtoMember(51)]
+		public string BeAttackBoneName { get; set; }
+		[ProtoMember(52)]
 		public int AttackCount { get; set; }
 
 	}

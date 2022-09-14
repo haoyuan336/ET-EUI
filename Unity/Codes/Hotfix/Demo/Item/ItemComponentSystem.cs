@@ -20,17 +20,17 @@ namespace ET
         public override void Destroy(ItemComponent self)
         {
             // Log.Warning("组件销毁时候 ，储存一次数据");
-            // self.SaveData();
-        }
-    }
-
-    public class ItemComponentBeforeDestroySystem: BeforeDestroySystem<ItemComponent>
-    {
-        public override void BeforeDestroy(ItemComponent self)
-        {
             self.SaveData();
         }
     }
+
+    // public class ItemComponentBeforeDestroySystem: BeforeDestroySystem<ItemComponent>
+    // {
+    //     public override void BeforeDestroy(ItemComponent self)
+    //     {
+    //         self.SaveData();
+    //     }
+    // }
 
     public class ItemComponentUpdateSystem: UpdateSystem<ItemComponent>
     {
@@ -50,7 +50,6 @@ namespace ET
     public static class ItemComponentSystem
     {
 #if SERVER
-
 
         public static Item GetChildByConfigId(this ItemComponent self, int configId)
         {
@@ -91,24 +90,19 @@ namespace ET
                     };
                     items.Add(item);
                     self.AddChild(item);
+                    self.ChangeData.Add(item);
                     //保存一下
-                    DBManagerComponent.Instance.GetZoneDB(self.DomainZone()).Save(item).Coroutine();
                 }
             }
 
             return items;
-            // await ETTask.CompletedTask;
         }
 
         public static void SaveData(this ItemComponent self)
         {
-            List<Item> items = self.GetChilds<Item>();
-            if (items != null)
+            foreach (var item in self.ChangeData)
             {
-                foreach (var item in items)
-                {
-                    DBManagerComponent.Instance.GetZoneDB(self.DomainZone()).Save(item).Coroutine();
-                }
+                DBManagerComponent.Instance.GetZoneDB(self.DomainZone()).Save(item).Coroutine();
             }
         }
 

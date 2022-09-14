@@ -505,17 +505,23 @@ namespace ET
                 heroBufferInfos.Add(new HeroBuffInfo() { BuffInfos = buffInfos });
                 beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
 
-
                 ActionMessage additionalDamageMessage = attackHero.ProcessAdditionalDamageLogic(beAttackHeroCard, skill);
                 if (additionalDamageMessage != null)
                 {
                     recoryMessageList.ActionMessages.Add(additionalDamageMessage);
                 }
+
                 ActionMessage recoveryMessage = self.ProcessHeroRecoveryLogic(beAttackHeroCard);
 
                 if (recoveryMessage != null)
                 {
                     recoryMessageList.ActionMessages.Add(recoveryMessage);
+                }
+
+                ActionMessage reduceAngryMessage = attackHero.ProcessReduceAngryLogic(beAttackHeroCard, skill);
+                if (reduceAngryMessage != null)
+                {
+                    recoryMessageList.ActionMessages.Add(reduceAngryMessage);
                 }
             }
 
@@ -744,17 +750,29 @@ namespace ET
                     List<BuffInfo> buffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos();
                     heroBufferInfos.Add(new HeroBuffInfo() { HeroId = beAttackHeroCard.Id, BuffInfos = buffInfos });
                     beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
-                  
 
                     ActionMessage additionalDamageMessage = heroCard.ProcessAdditionalDamageLogic(beAttackHeroCard, skill);
                     if (additionalDamageMessage != null)
                     {
                         recoveryMessage.ActionMessages.Add(additionalDamageMessage);
                     }
+
                     ActionMessage message = self.ProcessHeroRecoveryLogic(beAttackHeroCard);
                     if (message != null)
                     {
                         recoveryMessage.ActionMessages.Add(message);
+                    }
+
+                    ActionMessage reduceAngryMessage = heroCard.ProcessReduceAngryLogic(beAttackHeroCard, skill);
+                    if (reduceAngryMessage != null)
+                    {
+                        recoveryMessage.ActionMessages.Add(reduceAngryMessage);
+                    }
+
+                    ActionMessage doubleAttackMessage = self.DoubleAttackLogic(heroCard, beAttackHeroCard, skill);
+                    if (doubleAttackMessage != null)
+                    {
+                        recoveryMessage.ActionMessages.Add(doubleAttackMessage);
                     }
                 }
 
@@ -762,17 +780,49 @@ namespace ET
                 attackAction.AttackHeroCardDataComponentInfo = heroCard.GetComponent<HeroCardDataComponent>().GetInfo();
                 attackAction.BeAttackHeroCardDataComponentInfos = beHeroCardDataComponentInfos;
                 attackAction.HeroBuffInfos = heroBufferInfos;
-
                 ActionMessage attackMessage = new ActionMessage()
                 {
                     PlayType = (int)ActionMessagePlayType.Async, AttackAction = attackAction, ActionMessages = new List<ActionMessage>()
                 };
-
                 attackMessage.ActionMessages.Add(recoveryMessage);
-
                 actionMessage.ActionMessages.Add(attackMessage);
+                ActionMessage AddAngrySkillMessage = self.ProcessAddSelfAngrySkillLogic(heroCard, skill);
+                if (AddAngrySkillMessage != null)
+                {
+                    actionMessage.ActionMessages.Add(AddAngrySkillMessage);
+                }
             }
         }
+
+        public static ActionMessage ProcessAddSelfAngrySkillLogic(this FightComponent self, HeroCard attackHeroCard, Skill skill)
+        {
+            List<Buff> buffs = attackHeroCard.GetComponent<BuffComponent>().GetChilds<Buff>();
+            if (buffs == null)
+            {
+                return null;
+            }
+
+            if (buffs.Exists(a => a.ConfigId.Equals(skill.Config.IncreaseAngrySelfBuffCondition) && a.RoundCount > 0))
+            {
+                // 给自己增加怒气值
+                // attackHeroCard.AddAngry(skill.Config.IncreaseSelfAngry);
+
+                HeroCardDataComponent heroCardDataComponent = attackHeroCard.GetComponent<HeroCardDataComponent>();
+
+                heroCardDataComponent.Angry += skill.Config.IncreaseSelfAngry;
+                heroCardDataComponent.AddAngry = skill.Config.IncreaseSelfAngry;
+                
+                ActionMessage actionMessage = new ActionMessage();
+
+                IncreaseSelfAngryAction action = new IncreaseSelfAngryAction() { HeroCardDataComponentInfo = attackHeroCard.GetHeroCardDataInfo() };
+                actionMessage.IncreaseSelfAngryAction = action;
+
+                return actionMessage;
+            }
+
+            return null;
+        }
+        // public static 
 
         public static ActionMessage ProcessHeroRecoveryLogic(this FightComponent self, HeroCard beAttackHeroCard)
         {
@@ -895,17 +945,23 @@ namespace ET
                     List<BuffInfo> buffInfos = beAttackHeroCard.GetComponent<BuffComponent>().GetBuffInfos();
                     heroBuffInfos.Add(new HeroBuffInfo() { HeroId = beAttackHeroCard.Id, BuffInfos = buffInfos });
                     beHeroCardDataComponentInfos.Add(beAttackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo());
-                  
 
                     ActionMessage additionalDamageMessage = heroCard.ProcessAdditionalDamageLogic(beAttackHeroCard, skill);
                     if (additionalDamageMessage != null)
                     {
                         recoryMessage.ActionMessages.Add(additionalDamageMessage);
                     }
+
                     ActionMessage message = self.ProcessHeroRecoveryLogic(beAttackHeroCard);
                     if (message != null)
                     {
                         recoryMessage.ActionMessages.Add(message);
+                    }
+
+                    ActionMessage reduceAngryMessage = heroCard.ProcessReduceAngryLogic(beAttackHeroCard, skill);
+                    if (reduceAngryMessage != null)
+                    {
+                        recoryMessage.ActionMessages.Add(reduceAngryMessage);
                     }
                 }
 
@@ -917,9 +973,75 @@ namespace ET
                     PlayType = (int)ActionMessagePlayType.Async, AttackAction = attackAction, ActionMessages = new List<ActionMessage>()
                 };
                 attackActionMessage.ActionMessages.Add(recoryMessage);
+
                 // attackActionMessage.ActionMessages.Add(updateBuffMessages);
                 actionMessage.ActionMessages.Add(attackActionMessage);
             }
+        }
+
+        public static ActionMessage DoubleAttackLogic(this FightComponent self, HeroCard attackHeroCard, HeroCard beAttackHerocard, Skill skill)
+        {
+            //多次攻击的逻辑
+            if (skill.Config.MaxAttackCount > 1)
+            {
+                //最大攻击次数
+                List<Buff> buffs = beAttackHerocard.GetComponent<BuffComponent>().GetChilds<Buff>();
+                if (buffs == null)
+                {
+                    return null;
+                }
+
+                Buff buff = buffs.Find(a => a.ConfigId.Equals(skill.Config.DoubleAttackTargetBuffCondition) && a.RoundCount > 0);
+                //不符合多次攻击的条件
+                if (buff == null)
+                {
+                    return null;
+                }
+
+                Log.Warning($"over lab count {buff.OverlabCount}");
+                int attackCount = Math.Min(3, buff.OverlabCount);
+
+                ActionMessage actionMessage =
+                        new ActionMessage() { PlayType = (int)ActionMessagePlayType.Async, ActionMessages = new List<ActionMessage>() };
+
+                HeroCardDataComponent heroCardDataComponent = beAttackHerocard.GetComponent<HeroCardDataComponent>();
+                var damage = heroCardDataComponent.Damage;
+                for (int i = 0; i < attackCount; i++)
+                {
+                    heroCardDataComponent.HP -= damage;
+                    if (heroCardDataComponent.HP < 0)
+                    {
+                        heroCardDataComponent.HP = 0;
+                    }
+
+                    List<HeroCardDataComponentInfo> heroCardDataComponentInfos = new List<HeroCardDataComponentInfo>();
+                    heroCardDataComponentInfos.Add(beAttackHerocard.GetComponent<HeroCardDataComponent>().GetInfo());
+                    List<HeroBuffInfo> heroBuffInfos = new List<HeroBuffInfo>();
+
+                    HeroBuffInfo heroBuffInfo = new HeroBuffInfo()
+                    {
+                        HeroId = beAttackHerocard.Id, BuffInfos = beAttackHerocard.GetComponent<BuffComponent>().GetBuffInfos()
+                    };
+                    heroBuffInfos.Add(heroBuffInfo);
+                    //进行多次攻击
+                    AttackAction action = new AttackAction()
+                    {
+                        AttackHeroCardDataComponentInfo = attackHeroCard.GetComponent<HeroCardDataComponent>().GetInfo(),
+                        BeAttackHeroCardDataComponentInfos = heroCardDataComponentInfos,
+                        HeroBuffInfos = heroBuffInfos
+                    };
+                    ActionMessage attackMessage = new ActionMessage() { AttackAction = action };
+                    actionMessage.ActionMessages.Add(attackMessage);
+                    if (heroCardDataComponent.HP < 0)
+                    {
+                        break;
+                    }
+                }
+
+                return actionMessage;
+            }
+
+            return null;
         }
 
         public static Unit GetBeAttackUnit(this FightComponent self, Unit unit)

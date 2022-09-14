@@ -11,12 +11,14 @@ namespace ET
         public int Damage;
         public bool IsCritical;
         public int Angry; //当前的怒气值
+        
         public long CurrentSkillId;
         public int TotalHP;
 
 
         public int AddAngry;
         public int AddHP;
+        public int SubAngry;    //降低怒气值
 
         // public int BeAttackPower;   //被攻击时候的攻击力
     }

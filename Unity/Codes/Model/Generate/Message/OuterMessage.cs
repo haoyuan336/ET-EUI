@@ -1297,6 +1297,15 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.ReduceAngryAction)]
+	[ProtoContract]
+	public partial class ReduceAngryAction: Object
+	{
+		[ProtoMember(1)]
+		public HeroCardDataComponentInfo HeroCardDataComponentInfo { get; set; }
+
+	}
+
 	[Message(OuterOpcode.ActionMessage)]
 	[ProtoContract]
 	public partial class ActionMessage: Object
@@ -1351,6 +1360,21 @@ namespace ET
 
 		[ProtoMember(15)]
 		public AdditionDamageAction AdditionDamageAction { get; set; }
+
+		[ProtoMember(16)]
+		public ReduceAngryAction ReduceAngryAction { get; set; }
+
+		[ProtoMember(17)]
+		public IncreaseSelfAngryAction IncreaseSelfAngryAction { get; set; }
+
+	}
+
+	[Message(OuterOpcode.IncreaseSelfAngryAction)]
+	[ProtoContract]
+	public partial class IncreaseSelfAngryAction: Object
+	{
+		[ProtoMember(1)]
+		public HeroCardDataComponentInfo HeroCardDataComponentInfo { get; set; }
 
 	}
 
@@ -2222,6 +2246,9 @@ namespace ET
 
 		[ProtoMember(16)]
 		public int AddHP { get; set; }
+
+		[ProtoMember(17)]
+		public int SubAngry { get; set; }
 
 // public int HP;  //当前的血量
 // public int DiamondAttack;
@@ -3838,6 +3865,9 @@ namespace ET
 
 		[ProtoMember(4)]
 		public int HealthShield { get; set; }
+
+		[ProtoMember(5)]
+		public int OverLabCount { get; set; }
 
 	}
 

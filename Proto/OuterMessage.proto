@@ -612,6 +612,10 @@ message BuffDamageAction
 	HeroCardDataComponentInfo HeroCardDataComponentInfo = 2;
 	int32 DamageCount = 3;	//伤害值
 }
+message ReduceAngryAction
+{
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;	//降低怒气值动作
+}
 message ActionMessage	
 {
 	// int32 ActionType = 1;	//动作类型
@@ -635,7 +639,15 @@ message ActionMessage
 	BuffDamageAction BuffDamageAction = 13;	//Buff 伤害动作
 	RecoveryAction RecoveryAction = 14;	//复活action
 	AdditionDamageAction AdditionDamageAction = 15;	//额外伤害
+	ReduceAngryAction ReduceAngryAction = 16;	//降低怒气值的动作
+	IncreaseSelfAngryAction IncreaseSelfAngryAction = 17;	//增加自己怒气值的 动作
+
 	
+
+}
+message IncreaseSelfAngryAction
+{
+	HeroCardDataComponentInfo HeroCardDataComponentInfo = 1;
 }
 message AdditionDamageAction
 {
@@ -1037,6 +1049,7 @@ message HeroCardDataComponentInfo
 	bool IsCritical = 14;	//是否发生了暴击
 	int32 AddAngry = 15;	//增加的怒气值
 	int32 AddHP = 16;	//增加的血量值
+	int32 SubAngry = 17;	//降低的怒气值
 	// public int HP;  //当前的血量
 	// public int DiamondAttack;
 	// public int HeroAttack;
@@ -1743,4 +1756,5 @@ message BuffInfo
 	int32 ConfigId = 2;
 	int32 RoundCount = 3;	//剩余回合数
 	int32 HealthShield = 4;	//血量护盾
+	int32 OverLabCount = 5;//层数
 }

@@ -28,7 +28,7 @@ namespace ET
 #if SERVER
             skill = self.GetParent<HeroCard>().GetComponent<SkillComponent>().GetChild<Skill>(self.CurrentSkillId);
 #endif
-            return new HeroCardDataComponentInfo()
+            var info = new HeroCardDataComponentInfo()
             {
                 HeroId = self.GetParent<HeroCard>().Id,
                 HP = self.HP,
@@ -41,8 +41,15 @@ namespace ET
                 CurrentSkillId = self.CurrentSkillId,
                 CurrentSkillInfo = skill?.GetMessageInfo(),
                 AddAngry = self.AddAngry,
-                AddHP = self.AddHP
+                AddHP = self.AddHP,
+                SubAngry = self.SubAngry
             };
+
+            self.AddAngry = 0;
+            self.AddHP = 0;
+            self.SubAngry = 0;
+            
+            return info;
         }
 
         // public static void AddAngry(this HeroCardDataComponent self, int angry)

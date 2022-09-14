@@ -267,6 +267,36 @@ namespace ET
             });
         }
 
+        public static async ETTask ProcessReduceAngryEvent(this RoomComponent self, ActionMessage actionMessage)
+        {
+            ReduceAngryAction reduceAngryAction = actionMessage.ReduceAngryAction;
+            if (reduceAngryAction == null)
+            {
+                return;
+            }
+
+            HeroCardComponent heroCardComponent = self.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>();
+            await Game.EventSystem.PublishAsync(new EventType.PlayReduceAngryEvent()
+            {
+                HeroCardComponent = heroCardComponent, HeroCardDataComponentInfo = reduceAngryAction.HeroCardDataComponentInfo
+            });
+        }
+
+        public static async ETTask ProcessIncreaseSelfAngryAction(this RoomComponent self, ActionMessage actionMessage)
+        {
+            IncreaseSelfAngryAction increaseSelfAngryAction = actionMessage.IncreaseSelfAngryAction;
+            if (increaseSelfAngryAction == null)
+            {
+                return;
+            }
+
+            HeroCardComponent heroCardComponent = self.ZoneScene().CurrentScene().GetComponent<HeroCardComponent>();
+            await Game.EventSystem.PublishAsync(new EventType.PlayIncreaseSelfAngryEvent()
+            {
+                HeroCardComponent = heroCardComponent, HeroCardDataComponentInfo = increaseSelfAngryAction.HeroCardDataComponentInfo
+            });
+        }
+
         public static async ETTask ProcessActionMessageEvent(this RoomComponent self, ActionMessage actionMessage)
         {
             await self.ProcessDiamondAction(actionMessage);
@@ -282,6 +312,8 @@ namespace ET
             await self.ProcessBuffDamageAction(actionMessage);
             await self.ProcessRecoveryMessageEvent(actionMessage);
             await self.ProcessAdditionalDamageEvent(actionMessage);
+            await self.ProcessReduceAngryEvent(actionMessage);
+            await self.ProcessIncreaseSelfAngryAction(actionMessage);
             await self.ProcessActionMessage(actionMessage);
             await ETTask.CompletedTask;
         }

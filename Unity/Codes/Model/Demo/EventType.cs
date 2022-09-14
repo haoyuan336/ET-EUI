@@ -6,6 +6,16 @@ namespace ET
 {
     namespace EventType
     {
+        public struct PlayIncreaseSelfAngryEvent
+        {
+            public HeroCardComponent HeroCardComponent;
+            public HeroCardDataComponentInfo HeroCardDataComponentInfo;
+        }
+        public struct PlayReduceAngryEvent
+        {
+            public HeroCardComponent HeroCardComponent;
+            public HeroCardDataComponentInfo HeroCardDataComponentInfo;
+        }
         public struct PlayAdditionalDamageAnimEvent
         {
             public HeroCardComponent HeroCardComponent;
